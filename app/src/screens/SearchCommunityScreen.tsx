@@ -9,11 +9,18 @@ import { showAlert } from "../functions";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { CommunityStackParamList } from "../types";
+
+type SearchCommunityNavigationProp = NativeStackNavigationProp<
+  CommunityStackParamList,
+  "SearchCommunity"
+>;
 
 const SearchCommunitieScreen = () => {
   const { t } = useTranslation("community");
   const toast = useToast();
-  const navigation = useNavigation();
+  const navigation = useNavigation<SearchCommunityNavigationProp>();
   const [searchResult, setSearchResult] = useState<SearchCommunitiesResponse>();
 
   const {
@@ -43,6 +50,13 @@ const SearchCommunitieScreen = () => {
     await mutateAsyncSearchCommunities(text);
   }, []);
 
+  const communityChatNavigationHandler = useCallback(
+    (communityId: number, communityName: string | null) => {
+      navigation.navigate("CommunityChat", { communityId, communityName });
+    },
+    []
+  );
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -52,6 +66,7 @@ const SearchCommunitieScreen = () => {
       searchResult={searchResult}
       searchCommunities={searchCommunities}
       isLoadingSearchCommunity={isLoadingSearchCommunity}
+      communityChatNavigationHandler={communityChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

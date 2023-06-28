@@ -58,6 +58,7 @@ const SignInTemplate = memo(
               top="12"
               left="3"
               onPress={goBackNavigationHandler}
+              text={t("back")}
             />
             <VStack w="70%" space="5">
               <Heading

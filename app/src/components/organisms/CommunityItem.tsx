@@ -25,7 +25,7 @@ const CommunityItem = memo(
     return (
       <Pressable
         onPress={() =>
-          communityChatNavigationHandler(item?.communityId, item?.communityName)
+          communityChatNavigationHandler(item.communityId, item.communityName)
         }
       >
         <HStack

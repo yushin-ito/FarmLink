@@ -8,17 +8,21 @@ import {
   IconButton,
   Icon,
   FlatList,
-  Text,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
-import { GetCommunitiesResponse} from "../../hooks/community/query";
+import { GetCommunitiesResponse } from "../../hooks/community/query";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
+import SearchCommunityItem from "../organisms/SearchCommunityItem";
 
 type SearchCommunityTemplateProps = {
   searchResult: GetCommunitiesResponse | undefined;
   searchCommunities: (query: string) => void;
   isLoadingSearchCommunity: boolean;
+  communityChatNavigationHandler: (
+    communityId: number,
+    communityName: string | null
+  ) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -29,6 +33,7 @@ type FormValues = {
 const SearchCommunityTemplate = ({
   searchResult,
   searchCommunities,
+  communityChatNavigationHandler,
   goBackNavigationHandler,
 }: SearchCommunityTemplateProps) => {
   const { control, reset } = useForm<FormValues>();
@@ -90,7 +95,12 @@ const SearchCommunityTemplate = ({
             w="100%"
             px="9"
             data={searchResult}
-            renderItem={({ item }) => <Text>{item.communityName}</Text>}
+            renderItem={({ item }) => (
+              <SearchCommunityItem
+                item={item}
+                communityChatNavigationHandler={communityChatNavigationHandler}
+              />
+            )}
             keyExtractor={(item) => item.communityId.toString()}
           />
         </VStack>

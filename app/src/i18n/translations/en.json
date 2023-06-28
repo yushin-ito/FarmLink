@@ -28,7 +28,7 @@
     "verifyEmail": "Verification email sent",
     "notExistProfile": "No profile",
     "enterMessage": "Enter message",
-    "permitRequestCam": "Please grant camera permission",
+    "back": "Back",
     "anyError": "An error occurred"
   },
   "map": {

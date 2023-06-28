@@ -28,7 +28,7 @@
     "verifyEmail": "認証メールを送信しました",
     "notExistProfile": "プロフィールがありません",
     "enterMessage": "メッセージを入力",
-    "permitRequestCam": "設定からカメラの許可をオンにしてください",
+    "back": "戻る",
     "fetchError": "データの取得に失敗しました"
   },
   "map": {

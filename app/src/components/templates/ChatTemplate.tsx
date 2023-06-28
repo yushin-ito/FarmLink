@@ -4,12 +4,9 @@ import {
   FlatList,
   HStack,
   Heading,
-  Icon,
-  IconButton,
   KeyboardAvoidingView,
   Spinner,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
 import React from "react";
 import { Platform } from "react-native";
 import ChatItem from "../organisms/ChatItem";
@@ -18,6 +15,7 @@ import { GetCommunityChatsResponse } from "../../hooks/community/query";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
 import { GetDMChatsResponse } from "../../hooks/dm/query";
+import BackButton from "../molecules/BackButton";
 
 type ChatTemplateProps = {
   title: string | null;
@@ -68,16 +66,9 @@ const ChatTemplate = ({
           alignItems="center"
           justifyContent="space-between"
         >
-          <HStack alignItems="center">
-            <IconButton
-              onPress={goBackNavigationHandler}
-              icon={<Icon as={<Feather />} title="chevron-left" size="6" />}
-              variant="unstyled"
-              _pressed={{
-                opacity: 0.5,
-              }}
-            />
-            <Heading>{title}</Heading>
+          <HStack alignItems="center" space="3">
+            <BackButton onPress={goBackNavigationHandler} />
+            <Heading fontSize="2xl">{title}</Heading>
           </HStack>
           <Avatar user={user} onPress={settingNavigationHandler} />
         </HStack>
