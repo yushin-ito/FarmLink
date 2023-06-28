@@ -32,7 +32,8 @@
     "anyError": "An error occurred"
   },
   "map": {
-    "permitRequestGPS": "Please grant GPS permission"
+    "permitRequestGPS": "Please grant GPS permission",
+    "anyError": "An error occurred"
   },
   "community": {
     "community": "Community",

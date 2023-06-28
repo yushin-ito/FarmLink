@@ -68,7 +68,7 @@ const RoomListScreen = () => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequest")}
+          text={t("permitRequestCam")}
         />
       );
     },

@@ -32,7 +32,8 @@
     "fetchError": "データの取得に失敗しました"
   },
   "map": {
-    "permitRequestGPS": "設定から位置情報の許可をオンにしてください"
+    "permitRequestGPS": "設定から位置情報の許可をオンにしてください",
+    "anyError": "エラーが発生しました"
   },
   "community": {
     "community": "コミュニティ",

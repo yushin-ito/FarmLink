@@ -2,9 +2,9 @@ import { useState, useCallback } from "react";
 import * as Location from "expo-location";
 
 type UseLocationType = {
-  onSuccess: (location: Location.LocationObject) => void;
-  onError: (error: Error) => void;
-  onDisable: () => void;
+  onSuccess?: (location: Location.LocationObject) => void;
+  onError?: (error: Error) => void;
+  onDisable?: () => void;
 };
 
 const useLocation = ({ onSuccess, onError, onDisable }: UseLocationType) => {

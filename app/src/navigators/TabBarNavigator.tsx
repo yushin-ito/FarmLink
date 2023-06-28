@@ -18,7 +18,12 @@ const TabBar = createBottomTabNavigator<TabBarParamList>();
 
 const getTabBarStyle = (route: Partial<Route<string, object | undefined>>) => {
   const routeName = getFocusedRouteNameFromRoute(route);
-  if (routeName === "Chat" || routeName === "SearchCommunity")
+  if (
+    routeName === "CommunityChat" ||
+    routeName === "SearchCommunity" ||
+    routeName === "FarmCamera" ||
+    routeName === "DMChat"
+  )
     return false;
 
   return true;
@@ -33,6 +38,7 @@ const TabBarNavigator = () => {
 
   return (
     <TabBar.Navigator
+      initialRouteName="FarmNavigator"
       screenOptions={({ route }) => ({
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
