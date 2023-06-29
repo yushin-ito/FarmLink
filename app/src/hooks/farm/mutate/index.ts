@@ -7,7 +7,7 @@ export type PostFarmResponse = Awaited<ReturnType<typeof postFarm>>;
 export type DeleteFarmResponse = Awaited<
   ReturnType<typeof deleteFarm>
 >;
-export type SearchFarmssearchFarmsResponse = Awaited<
+export type SearchFarmsResponse = Awaited<
   ReturnType<typeof searchFarms>
 >;
 
@@ -67,7 +67,7 @@ export const useDeleteFarm = ({
 export const useSearchFarms = ({
   onSuccess,
   onError,
-}: UseMutationResult<SearchFarmssearchFarmsResponse, PostgrestError>) =>
+}: UseMutationResult<SearchFarmsResponse, PostgrestError>) =>
   useMutation({
     mutationFn: searchFarms,
     onSuccess,

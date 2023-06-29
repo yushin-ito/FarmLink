@@ -12,11 +12,11 @@ const PostCommunityModal = () => {
   const toast = useToast();
   const { t } = useTranslation("community");
   const navigation = useNavigation();
-  const { fetchNextPage } = useInfiniteQueryCommunities();
+  const { refetch } = useInfiniteQueryCommunities();
 
   const { mutateAsync, isLoading } = usePostCommunity({
     onSuccess: async () => {
-      await fetchNextPage();
+      await refetch();
     },
     onError: () => {
       navigation.goBack();

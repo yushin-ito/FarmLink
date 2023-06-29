@@ -18,11 +18,12 @@ import { useInfiniteQueryCommunityChats } from "../hooks/community/query";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
 
-type CommunityChatRouteProp = RouteProp<
+type CommunityChatNavigationProp = NativeStackNavigationProp<
   CommunityStackParamList,
   "CommunityChat"
 >;
-type CommunityChatNavigationProp = NativeStackNavigationProp<
+
+type CommunityChatRouteProp = RouteProp<
   CommunityStackParamList,
   "CommunityChat"
 >;

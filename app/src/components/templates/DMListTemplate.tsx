@@ -70,6 +70,7 @@ const DMListTemplate = ({
       <FlatList
         w="100%"
         px="9"
+        mb="20"
         data={dms}
         onEndReached={readMore}
         onEndReachedThreshold={0.3}
@@ -85,10 +86,7 @@ const DMListTemplate = ({
         )}
         keyExtractor={(item) => item.dmId.toString()}
         refreshControl={
-          <RefreshControl
-            refreshing={isRefetchingDMs}
-            onRefresh={refetchDMs}
-          />
+          <RefreshControl refreshing={isRefetchingDMs} onRefresh={refetchDMs} />
         }
       />
       <CircleButton

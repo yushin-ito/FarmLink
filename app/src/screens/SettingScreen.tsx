@@ -20,7 +20,7 @@ type SettingNavigationProp = NativeStackNavigationProp<
 
 const RoomListScreen = () => {
   const toast = useToast();
-  const { t } = useTranslation("auth");
+  const { t } = useTranslation("setting");
   const navigation = useNavigation<SettingNavigationProp>();
   const { session } = useAuth();
   const { data: user, refetch } = useQueryUser(session?.user.id);
@@ -59,7 +59,7 @@ const RoomListScreen = () => {
   const { pickImageByCamera, pickImageByLibrary } = useImage({
     onSuccess: async ({ base64, type }) => {
       if (session?.user && base64 && type) {
-        await mutateAsyncPostAvatar({ base64, type, userId: session?.user.id });
+        await mutateAsyncPostAvatar({ base64, type, userId: session.user.id });
       }
     },
     onDisable: () => {

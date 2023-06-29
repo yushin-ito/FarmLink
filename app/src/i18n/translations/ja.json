@@ -24,7 +24,6 @@
     "signInWithFacebook": "Facebookでサインイン",
     "signinError": "サインインに失敗しました",
     "signupError": "サインアップに失敗しました",
-    "signoutError": "サインアウトに失敗しました",
     "verifyEmail": "認証メールを送信しました",
     "notExistProfile": "プロフィールがありません",
     "enterMessage": "メッセージを入力",
@@ -32,7 +31,7 @@
     "fetchError": "データの取得に失敗しました"
   },
   "map": {
-    "permitRequestGPS": "設定から位置情報の許可をオンにしてください",
+    "permitRequestGPS": "位置情報を許可してください",
     "anyError": "エラーが発生しました"
   },
   "community": {
@@ -47,7 +46,7 @@
     "communityNameMaxLength": "コミュニティ名は20文字以内で入力してください",
     "create": "作成",
     "enterMessage": "メッセージを入力",
-    "permitRequestCam": "設定からカメラの許可をオンにしてください",
+    "permitRequestCam": "カメラを許可してください",
     "anyError": "エラーが発生しました",
     "search": "検索"
   },
@@ -69,7 +68,7 @@
     "anyError": "エラーが発生しました",
     "createDM": "DMを作成",
     "deleteDM": "DM削除",
-    "permitRequestCam": "設定からカメラの許可をオンにしてください",
+    "permitRequestCam": "カメラを許可してください",
     "askDeleteDM": "DMを削除してもよろしいですか",
     "cancel": "キャンセル",
     "delete": "削除",
@@ -94,6 +93,8 @@
     "displayNameMaxLength": "ユーザー名は20文字以内で入力してください",
     "profileRequired": "プロフィールを入力してください",
     "profileMaxLength": "プロフィールは30文字以内で入力してください",
+    "permitRequestCam": "カメラを許可してください",
+    "signoutError": "サインアウトに失敗しました",
     "save": "保存"
   }
 }

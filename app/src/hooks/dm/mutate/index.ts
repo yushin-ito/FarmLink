@@ -6,7 +6,7 @@ import { decode } from "base64-arraybuffer";
 
 export type PostDMResponse = Awaited<ReturnType<typeof postDM>>;
 export type DeleteDMResponse = Awaited<ReturnType<typeof deleteDM>>;
-export type SearchDMResponse = Awaited<ReturnType<typeof searchDM>>;
+export type SearchDMsResponse = Awaited<ReturnType<typeof searchDMs>>;
 export type PostDMChatResponse = Awaited<ReturnType<typeof postDMChat>>;
 export type PostDMImageResponse = Awaited<ReturnType<typeof postDMImage>>;
 
@@ -27,7 +27,7 @@ const deleteDM = async (dmId: number) => {
   return data;
 };
 
-const searchDM = async (text: string) => {
+const searchDMs = async (text: string) => {
   const { data, error } = await supabase
     .from("dm")
     .select()
@@ -100,12 +100,12 @@ export const useDeleteDM = ({
     onError,
   });
 
-export const useSearchDM = ({
+export const useSearchDMs = ({
   onSuccess,
   onError,
-}: UseMutationResult<SearchDMResponse, PostgrestError>) =>
+}: UseMutationResult<SearchDMsResponse, PostgrestError>) =>
   useMutation({
-    mutationFn: searchDM,
+    mutationFn: searchDMs,
     onSuccess,
     onError,
   });

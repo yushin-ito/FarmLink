@@ -74,7 +74,7 @@ const DMListScreen = () => {
   }, []);
 
   const searchDMNavigationHandler = useCallback(() => {
-    // navigation.navigate("SearchDM");
+    navigation.navigate("SearchDM");
   }, []);
 
   return (

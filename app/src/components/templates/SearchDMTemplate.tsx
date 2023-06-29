@@ -12,18 +12,15 @@ import {
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
-import { GetCommunitiesResponse } from "../../hooks/community/query";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
-import SearchCommunityItem from "../organisms/SearchCommunityItem";
+import SearchDMItem from "../organisms/SearchDMItem";
+import { SearchDMsResponse } from "../../hooks/dm/mutate";
 
-type SearchCommunityTemplateProps = {
-  searchResult: GetCommunitiesResponse | undefined;
-  searchCommunities: (query: string) => void;
-  isLoadingSearchCommunities: boolean;
-  communityChatNavigationHandler: (
-    communityId: number,
-    communityName: string | null
-  ) => void;
+type SearchDMTemplateProps = {
+  searchResult: SearchDMsResponse | undefined;
+  searchDMs: (query: string) => void;
+  isLoadingSearchDMs: boolean;
+  dmChatNavigationHandler: (dmId: number, dmName: string | null) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -31,13 +28,13 @@ type FormValues = {
   query: string;
 };
 
-const SearchCommunityTemplate = ({
+const SearchDMTemplate = ({
   searchResult,
-  searchCommunities,
-  isLoadingSearchCommunities,
-  communityChatNavigationHandler,
+  searchDMs,
+  isLoadingSearchDMs,
+  dmChatNavigationHandler,
   goBackNavigationHandler,
-}: SearchCommunityTemplateProps) => {
+}: SearchDMTemplateProps) => {
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -79,7 +76,7 @@ const SearchCommunityTemplate = ({
                   value={value}
                   onChangeText={(text) => {
                     onChange(text);
-                    searchCommunities(text);
+                    searchDMs(text);
                   }}
                 />
               )}
@@ -93,7 +90,7 @@ const SearchCommunityTemplate = ({
               }}
             />
           </HStack>
-          {isLoadingSearchCommunities ? (
+          {isLoadingSearchDMs ? (
             <Spinner color="muted.400" />
           ) : (
             <FlatList
@@ -101,14 +98,12 @@ const SearchCommunityTemplate = ({
               px="9"
               data={searchResult}
               renderItem={({ item }) => (
-                <SearchCommunityItem
+                <SearchDMItem
                   item={item}
-                  communityChatNavigationHandler={
-                    communityChatNavigationHandler
-                  }
+                  dmChatNavigationHandler={dmChatNavigationHandler}
                 />
               )}
-              keyExtractor={(item) => item.communityId.toString()}
+              keyExtractor={(item) => item.dmId.toString()}
             />
           )}
         </VStack>
@@ -116,4 +111,4 @@ const SearchCommunityTemplate = ({
     </TouchableWithoutFeedback>
   );
 };
-export default SearchCommunityTemplate;
+export default SearchDMTemplate;

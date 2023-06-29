@@ -24,7 +24,6 @@
     "signout": "Sign out",
     "signinError": "Sign in failed",
     "signupError": "Sign up failed",
-    "signoutError": "Sign out failed",
     "verifyEmail": "Verification email sent",
     "notExistProfile": "No profile",
     "enterMessage": "Enter message",
@@ -94,6 +93,8 @@
     "displayNameMaxLength": "User name must be 20 or less",
     "profileRequired": "Profile is required",
     "profileMaxLength": "Profile must be 30 or less",
+    "permitRequestCam": "Please grant camera permission",
+    "signoutError": "Sign out failed",
     "save": "Save"
   }
 }

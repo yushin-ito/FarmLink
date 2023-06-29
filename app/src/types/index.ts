@@ -29,6 +29,8 @@ export type CommunityStackParamList = {
 
 export type MapStackParamList = {
   Map: undefined;
+  SearchFarm: undefined;
+  FarmDetail: { farmId: number };
 };
 
 export type FarmStackParamList = {
@@ -42,6 +44,7 @@ export type DMStackParamList = {
   DMList: undefined;
   DMChat: { dmId: number; dmName: string | null };
   PostDM: undefined;
+  SearchDM: undefined
   SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
 

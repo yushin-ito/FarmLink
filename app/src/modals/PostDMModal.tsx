@@ -12,11 +12,11 @@ const PostDMModal = () => {
   const toast = useToast();
   const { t } = useTranslation("dm");
   const navigation = useNavigation();
-  const { fetchNextPage } = useInfiniteQueryDMs();
+  const { refetch } = useInfiniteQueryDMs();
 
   const { mutateAsync, isLoading } = usePostDM({
     onSuccess: async () => {
-      await fetchNextPage();
+      await refetch();
     },
     onError: () => {
       navigation.goBack();

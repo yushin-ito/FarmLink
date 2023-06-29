@@ -11,17 +11,18 @@ type MapTemplateProps = {
   position: LocationObject | undefined;
   getCurrentPosition: () => Promise<void>;
   isLoadingPosition: boolean;
+  searchFarmNavigationHandler: () => void;
 };
 
 const MapTemplate = ({
   position,
   getCurrentPosition,
   isLoadingPosition,
+  searchFarmNavigationHandler,
 }: MapTemplateProps) => {
   const mapRef = useRef<MapView | null>(null);
 
   useEffect(() => {
-    console.log(position);
     if (mapRef.current && position) {
       mapRef.current.animateToRegion({
         latitude: position.coords.latitude,
@@ -60,7 +61,7 @@ const MapTemplate = ({
         top="16"
         isReadOnly
         alignSelf="center"
-        onPressIn={() => {}}
+        onPressIn={searchFarmNavigationHandler}
       />
       <CircleButton
         position="absolute"

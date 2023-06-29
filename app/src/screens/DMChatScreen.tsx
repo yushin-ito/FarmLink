@@ -15,11 +15,12 @@ import { useInfiniteQueryDMChats } from "../hooks/dm/query";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
 
-type DMChatRouteProp = RouteProp<DMStackParamList, "DMChat">;
 type DMChatNavigationProp = NativeStackNavigationProp<
   DMStackParamList,
   "DMChat"
 >;
+
+type DMChatRouteProp = RouteProp<DMStackParamList, "DMChat">;
 
 const DMChatScreen = () => {
   const { t } = useTranslation("dm");

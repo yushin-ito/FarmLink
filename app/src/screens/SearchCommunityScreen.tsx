@@ -25,7 +25,7 @@ const SearchCommunitieScreen = () => {
 
   const {
     mutateAsync: mutateAsyncSearchCommunities,
-    isLoading: isLoadingSearchCommunity,
+    isLoading: isLoadingSearchCommunities,
   } = useSearchCommunities({
     onSuccess: (data) => {
       setSearchResult(data);
@@ -65,7 +65,7 @@ const SearchCommunitieScreen = () => {
     <SearchCommunityTemplate
       searchResult={searchResult}
       searchCommunities={searchCommunities}
-      isLoadingSearchCommunity={isLoadingSearchCommunity}
+      isLoadingSearchCommunities={isLoadingSearchCommunities}
       communityChatNavigationHandler={communityChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

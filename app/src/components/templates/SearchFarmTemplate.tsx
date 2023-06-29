@@ -12,18 +12,15 @@ import {
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
-import { GetCommunitiesResponse } from "../../hooks/community/query";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
-import SearchCommunityItem from "../organisms/SearchCommunityItem";
+import SearchFarmItem from "../organisms/SearchFarmItem";
+import { SearchFarmsResponse } from "../../hooks/farm/mutate";
 
-type SearchCommunityTemplateProps = {
-  searchResult: GetCommunitiesResponse | undefined;
-  searchCommunities: (query: string) => void;
-  isLoadingSearchCommunities: boolean;
-  communityChatNavigationHandler: (
-    communityId: number,
-    communityName: string | null
-  ) => void;
+type SearchFarmTemplateProps = {
+  searchResult: SearchFarmsResponse | undefined;
+  searchFarms: (query: string) => void;
+  isLoadingSearchFarms: boolean;
+  farmDetailNavigationHandler: (farmId: number) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -31,13 +28,13 @@ type FormValues = {
   query: string;
 };
 
-const SearchCommunityTemplate = ({
+const SearchFarmTemplate = ({
   searchResult,
-  searchCommunities,
-  isLoadingSearchCommunities,
-  communityChatNavigationHandler,
+  searchFarms,
+  isLoadingSearchFarms,
+  farmDetailNavigationHandler,
   goBackNavigationHandler,
-}: SearchCommunityTemplateProps) => {
+}: SearchFarmTemplateProps) => {
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -79,7 +76,7 @@ const SearchCommunityTemplate = ({
                   value={value}
                   onChangeText={(text) => {
                     onChange(text);
-                    searchCommunities(text);
+                    searchFarms(text);
                   }}
                 />
               )}
@@ -93,7 +90,7 @@ const SearchCommunityTemplate = ({
               }}
             />
           </HStack>
-          {isLoadingSearchCommunities ? (
+          {isLoadingSearchFarms ? (
             <Spinner color="muted.400" />
           ) : (
             <FlatList
@@ -101,14 +98,12 @@ const SearchCommunityTemplate = ({
               px="9"
               data={searchResult}
               renderItem={({ item }) => (
-                <SearchCommunityItem
+                <SearchFarmItem
                   item={item}
-                  communityChatNavigationHandler={
-                    communityChatNavigationHandler
-                  }
+                  farmDetailNavigationHandler={farmDetailNavigationHandler}
                 />
               )}
-              keyExtractor={(item) => item.communityId.toString()}
+              keyExtractor={(item) => item.farmId.toString()}
             />
           )}
         </VStack>
@@ -116,4 +111,4 @@ const SearchCommunityTemplate = ({
     </TouchableWithoutFeedback>
   );
 };
-export default SearchCommunityTemplate;
+export default SearchFarmTemplate;

@@ -64,6 +64,7 @@ const FarmListTemplate = ({
       <FlatList
         w="100%"
         px="9"
+        mb="20"
         data={farms}
         renderItem={({ item }) => (
           <FarmItem

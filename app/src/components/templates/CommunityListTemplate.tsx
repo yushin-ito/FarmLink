@@ -73,6 +73,7 @@ const CommunityListTemplate = ({
       <FlatList
         w="100%"
         px="9"
+        mb="20"
         data={communities}
         onEndReached={readMore}
         onEndReachedThreshold={0.3}
@@ -83,7 +84,7 @@ const CommunityListTemplate = ({
           <CommunityItem
             item={item}
             deleteCommunity={deleteCommunity}
-           communityChatNavigationHandler={communityChatNavigationHandler}
+            communityChatNavigationHandler={communityChatNavigationHandler}
           />
         )}
         keyExtractor={(item) => item.communityId.toString()}
