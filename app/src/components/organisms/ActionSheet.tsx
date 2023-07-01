@@ -19,7 +19,7 @@ const ActionSheet = memo(
   }: ActionSheetProps) => {
     const { t } = useTranslation("setting");
     return (
-      <NativeBaseActionSheet isOpen={isOpen} onClose={onClose} size="full">
+      <NativeBaseActionSheet isOpen={isOpen} onClose={onClose}>
         <NativeBaseActionSheet.Content>
           <NativeBaseActionSheet.Item
             startIcon={<Icon as={<Feather />} name="camera" size="6" />}

@@ -36,7 +36,11 @@ const getCommunityChats = async (
     throw error;
   }
 
-  return data;
+  return data.map((item) =>
+    Array.isArray(item.user)
+      ? { ...item, user: item.user[0] }
+      : { ...item, user: item.user }
+  );
 };
 
 export const useInfiniteQueryCommunities = () => {

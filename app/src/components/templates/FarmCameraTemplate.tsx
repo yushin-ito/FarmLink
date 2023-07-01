@@ -3,9 +3,8 @@ import React from "react";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
 import BackButton from "../molecules/BackButton";
-
 type FarmCameraTemplateProps = {
-  title: string | null
+  title: string | null;
   user: GetUserResponse | null | undefined;
   goBackNavigationHandler: () => void;
   settingNavigationHandler: () => void;
@@ -30,9 +29,14 @@ const FarmCameraTemplate = ({
           <BackButton onPress={goBackNavigationHandler} />
           <Heading fontSize="2xl">{title}</Heading>
         </HStack>
-        <Avatar user={user} onPress={settingNavigationHandler} />
+        <Avatar
+          text={user?.displayName?.charAt(0)}
+          avatarUrl={user?.avatarUrl}
+          updatedAt={user?.updatedAt}
+          hue={user?.hue}
+          onPress={settingNavigationHandler}
+        />
       </HStack>
-      
     </Box>
   );
 };

@@ -12,47 +12,48 @@ import React from "react";
 import CircleButton from "../molecules/CircleButton";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import CommunityItem from "../organisms/CommunityItem";
+import TalkItem from "../organisms/TalkItem";
 import { RefreshControl } from "react-native";
 import Avatar from "../molecules/Avatar";
 import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
-import { GetCommunitiesResponse } from "../../hooks/community/query";
+import { GetTalksResponse } from "../../hooks/talk/query";
 
-type CommunityListTemplateProps = {
+type TalkListTemplateProps = {
   user: GetUserResponse | null | undefined;
-  communities: GetCommunitiesResponse | null | undefined;
-  isLoadingCommunities: boolean;
-  isRefetchingCommunities: boolean;
+  talks: GetTalksResponse | null | undefined;
+  isLoadingTalks: boolean;
+  isRefetchingTalks: boolean;
   hasMore: boolean | undefined;
-  refetchCommunities: () => Promise<void>;
-  deleteCommunity: (communityId: number) => Promise<void>;
+  refetchTalks: () => Promise<void>;
+  deleteTalk: (talkId: number) => Promise<void>;
   readMore: () => void;
-  communityChatNavigationHandler: (
-    communityId: number,
-    communityName: string | null
+  talkChatNavigationHandler: (
+    talkId: number,
+    displayName: string | null | undefined
   ) => void;
-  postCommunityNavigationHandler: () => void;
+  postTalkNavigationHandler: () => void;
   settingNavigationHandler: () => void;
-  searchCommunityNavigationHandler: () => void;
+  searchTalkNavigationHandler: () => void;
 };
 
-const CommunityListTemplate = ({
+const TalkListTemplate = ({
   user,
-  communities,
-  isLoadingCommunities,
-  isRefetchingCommunities,
+  talks,
+  isLoadingTalks,
+  isRefetchingTalks,
   hasMore,
-  refetchCommunities,
+  refetchTalks,
+  deleteTalk,
   readMore,
-  communityChatNavigationHandler,
-  postCommunityNavigationHandler,
+  talkChatNavigationHandler,
+  postTalkNavigationHandler,
   settingNavigationHandler,
-  searchCommunityNavigationHandler,
-}: CommunityListTemplateProps) => {
-  const { t } = useTranslation("community");
+  searchTalkNavigationHandler,
+}: TalkListTemplateProps) => {
+  const { t } = useTranslation("talk");
 
-  if (isLoadingCommunities) {
+  if (isLoadingTalks) {
     return (
       <Center flex={1}>
         <Spinner color="muted.400" />
@@ -64,7 +65,7 @@ const CommunityListTemplate = ({
     <Box flex={1} safeAreaTop>
       <VStack space="3" px="9" py="6">
         <HStack alignItems="center" justifyContent="space-between">
-          <Heading>{t("community")}</Heading>
+          <Heading>{t("talk")}</Heading>
           <Avatar
             text={user?.displayName?.charAt(0)}
             avatarUrl={user?.avatarUrl}
@@ -73,29 +74,30 @@ const CommunityListTemplate = ({
             onPress={settingNavigationHandler}
           />
         </HStack>
-        <SearchBar isReadOnly onPressIn={searchCommunityNavigationHandler} />
+        <SearchBar isReadOnly onPressIn={searchTalkNavigationHandler} />
       </VStack>
       <FlatList
         w="100%"
         px="9"
         mb="20"
-        data={communities}
+        data={talks}
         onEndReached={readMore}
         onEndReachedThreshold={0.3}
         ListFooterComponent={
           <Center>{hasMore && <Spinner color="muted.400" />}</Center>
         }
         renderItem={({ item }) => (
-          <CommunityItem
+          <TalkItem
             item={item}
-            communityChatNavigationHandler={communityChatNavigationHandler}
+            deleteTalk={deleteTalk}
+            talkChatNavigationHandler={talkChatNavigationHandler}
           />
         )}
-        keyExtractor={(item) => item.communityId.toString()}
+        keyExtractor={(item) => item.talkId.toString()}
         refreshControl={
           <RefreshControl
-            refreshing={isRefetchingCommunities}
-            onRefresh={refetchCommunities}
+            refreshing={isRefetchingTalks}
+            onRefresh={refetchTalks}
           />
         }
       />
@@ -103,7 +105,7 @@ const CommunityListTemplate = ({
         position="absolute"
         bottom="24"
         right="8"
-        onPress={postCommunityNavigationHandler}
+        onPress={postTalkNavigationHandler}
       >
         <Icon as={<Feather name="plus" />} size="4xl" color="white" />
       </CircleButton>
@@ -111,4 +113,4 @@ const CommunityListTemplate = ({
   );
 };
 
-export default CommunityListTemplate;
+export default TalkListTemplate;

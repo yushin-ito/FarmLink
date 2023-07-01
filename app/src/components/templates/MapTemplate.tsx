@@ -1,7 +1,7 @@
 import { Box, Icon, Spinner } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import CircleButton from "../molecules/CircleButton";
 import { LocationObject } from "expo-location";
@@ -43,6 +43,7 @@ const MapTemplate = ({
         }}
         loadingEnabled
         showsCompass={false}
+        provider={PROVIDER_GOOGLE}
       >
         {position && (
           <Marker coordinate={position.coords}>

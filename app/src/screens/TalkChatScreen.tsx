@@ -5,43 +5,43 @@ import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import ChatTemplate from "../components/templates/ChatTemplate";
-import { usePostDMChat, usePostDMImage } from "../hooks/dm/mutate";
+import { usePostTalkChat, usePostTalkImage } from "../hooks/talk/mutate";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { DMStackParamList } from "../types";
-import useDMChat from "../hooks/dm/useDMChat";
+import { TalkStackParamList } from "../types";
+import useTalkChat from "../hooks/talk/useTalkChat";
 import useAuth from "../hooks/auth/useAuth";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useInfiniteQueryDMChats } from "../hooks/dm/query";
+import { useInfiniteQueryTalkChats } from "../hooks/talk/query";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
 
-type DMChatNavigationProp = NativeStackNavigationProp<
-  DMStackParamList,
-  "DMChat"
+type TalkChatNavigationProp = NativeStackNavigationProp<
+  TalkStackParamList,
+  "TalkChat"
 >;
 
-type DMChatRouteProp = RouteProp<DMStackParamList, "DMChat">;
+type TalkChatRouteProp = RouteProp<TalkStackParamList, "TalkChat">;
 
-const DMChatScreen = () => {
-  const { t } = useTranslation("dm");
+const TalkChatScreen = () => {
+  const { t } = useTranslation("Talk");
   const toast = useToast();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
-  const { params } = useRoute<DMChatRouteProp>();
-  const navigation = useNavigation<DMChatNavigationProp>();
+  const { params } = useRoute<TalkChatRouteProp>();
+  const navigation = useNavigation<TalkChatNavigationProp>();
   const {
     data: chats,
     isLoading: isLoadingChats,
     hasNextPage: hasMore,
     fetchNextPage,
     refetch,
-  } = useInfiniteQueryDMChats(params.dmId);
+  } = useInfiniteQueryTalkChats(params.TalkId);
 
-  useDMChat(params.dmId, async () => {
+  useTalkChat(params.TalkId, async () => {
     await refetch();
   });
 
-  const { mutateAsync: mutateAsyncPostChat } = usePostDMChat({
+  const { mutateAsync: mutateAsyncPostChat } = usePostTalkChat({
     onError: () => {
       showAlert(
         toast,
@@ -54,7 +54,7 @@ const DMChatScreen = () => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostImage } = usePostDMImage({
+  const { mutateAsync: mutateAsyncPostImage } = usePostTalkImage({
     onSuccess: async () => {
       await refetch();
     },
@@ -76,7 +76,7 @@ const DMChatScreen = () => {
         await mutateAsyncPostImage({
           base64: base64,
           type: type,
-          dmId: params.dmId,
+          talkId: params.talkId,
           authorId: session?.user.id,
         });
       }
@@ -106,7 +106,7 @@ const DMChatScreen = () => {
   const postChat = useCallback(async (message: string) => {
     await mutateAsyncPostChat({
       message,
-      dmId: params.dmId,
+      TalkId: params.talkId,
       authorId: session?.user.id,
     });
   }, []);
@@ -121,7 +121,7 @@ const DMChatScreen = () => {
 
   return (
     <ChatTemplate
-      title={params.dmName}
+      title={params.talkName}
       user={user}
       chats={chats}
       pickImageByCamera={pickImageByCamera}
@@ -136,4 +136,4 @@ const DMChatScreen = () => {
   );
 };
 
-export default DMChatScreen;
+export default TalkChatScreen;

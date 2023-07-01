@@ -62,8 +62,10 @@ const SettingTemplate = ({
         <HStack my="4" alignItems="center">
           <Box w="30%">
             <Avatar
-              onPress={onOpen}
-              user={user}
+              text={user?.displayName?.charAt(0)}
+              avatarUrl={user?.avatarUrl}
+              updatedAt={user?.updatedAt}
+              hue={user?.hue}
               isLoading={isLoadingPostAvatar}
               size="16"
               fontSize="2xl"
@@ -80,6 +82,7 @@ const SettingTemplate = ({
                   <Icon as={<Feather />} name="camera" size="3" color="white" />
                 </Center>
               }
+              onPress={onOpen}
             />
           </Box>
           <VStack w="70%">

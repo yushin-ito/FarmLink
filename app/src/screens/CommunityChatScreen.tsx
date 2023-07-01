@@ -7,7 +7,7 @@ import Alert from "../components/molecules/Alert";
 import ChatTemplate from "../components/templates/ChatTemplate";
 import {
   usePostCommunityChat,
-  usePostCommunityImage,
+  usePostCommunityChatImage,
 } from "../hooks/community/mutate";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { CommunityStackParamList } from "../types";
@@ -60,7 +60,7 @@ const CommunityChatScreen = () => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostImage } = usePostCommunityImage({
+  const { mutateAsync: mutateAsyncPostImage } = usePostCommunityChatImage({
     onSuccess: async () => {
       await refetch();
     },

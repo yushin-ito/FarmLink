@@ -7,11 +7,13 @@ import {
   Center,
   Spinner,
 } from "native-base";
-import { GetUserResponse } from "../../hooks/user/query";
 import { supabaseUrl } from "../../supabase";
 
 type AvatarProps = {
-  user: GetUserResponse | null | undefined;
+  text?: string | null;
+  avatarUrl?: string | null;
+  updatedAt?: string | null;
+  hue?: string | null;
   isLoading?: boolean;
   size?: string;
   fontSize?: string;
@@ -20,14 +22,16 @@ type AvatarProps = {
 
 const Avatar = memo(
   ({
-    user,
+    text,
+    avatarUrl,
+    updatedAt,
+    hue,
     isLoading,
     size = "10",
     fontSize = "md",
     badge,
     ...props
   }: AvatarProps & IPressableProps) => {
-    
     if (isLoading) {
       return (
         <Center size={size}>
@@ -47,14 +51,14 @@ const Avatar = memo(
           <NativeBaseAvatar
             size={size}
             source={{
-              uri: user?.avatarUrl?.match(supabaseUrl)
-                ? user.avatarUrl + `?${user?.updatedAt}`
-                : user?.avatarUrl ?? undefined,
+              uri: avatarUrl?.match(supabaseUrl)
+                ? avatarUrl + `?${updatedAt}`
+                : avatarUrl ?? undefined,
             }}
-            bg={user?.avatarUrl ? "muted.300" : `hsl(${user?.hue}, 60%, 60%)`}
+            bg={avatarUrl ? "muted.300" : `hsl(${hue}, 60%, 60%)`}
           >
             <Text color="white" fontSize={fontSize}>
-              {user?.displayName?.charAt(0)}
+              {text}
             </Text>
             {badge}
           </NativeBaseAvatar>

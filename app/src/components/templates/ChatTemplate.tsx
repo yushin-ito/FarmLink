@@ -14,13 +14,13 @@ import ChatBar from "../organisms/ChatBar";
 import { GetCommunityChatsResponse } from "../../hooks/community/query";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
-import { GetDMChatsResponse } from "../../hooks/dm/query";
+import { GetTalkChatsResponse } from "../../hooks/talk/query";
 import BackButton from "../molecules/BackButton";
 
 type ChatTemplateProps = {
   title: string | null;
   user: GetUserResponse | null | undefined;
-  chats: GetCommunityChatsResponse | GetDMChatsResponse | undefined;
+  chats: GetCommunityChatsResponse | GetTalkChatsResponse | undefined;
   isLoadingChats: boolean;
   hasMore: boolean | undefined;
   pickImageByCamera: () => Promise<void>;
@@ -70,7 +70,13 @@ const ChatTemplate = ({
             <BackButton onPress={goBackNavigationHandler} />
             <Heading fontSize="2xl">{title}</Heading>
           </HStack>
-          <Avatar user={user} onPress={settingNavigationHandler} />
+          <Avatar
+            text={user?.displayName?.charAt(0)}
+            avatarUrl={user?.avatarUrl}
+            updatedAt={user?.updatedAt}
+            hue={user?.hue}
+            onPress={settingNavigationHandler}
+          />
         </HStack>
         <FlatList
           w="100%"
@@ -83,7 +89,7 @@ const ChatTemplate = ({
             <Center>{hasMore && <Spinner color="muted.400" />}</Center>
           }
           renderItem={({ item }) => (
-            <ChatItem item={item} isAuthor={item.authorId === user} />
+            <ChatItem item={item} isAuthor={item.authorId === user?.userId} />
           )}
           keyExtractor={(item) => item.chatId.toString()}
         />

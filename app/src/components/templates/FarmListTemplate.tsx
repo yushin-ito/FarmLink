@@ -58,7 +58,13 @@ const FarmListTemplate = ({
       <VStack space="3" px="9" pt="6" pb="12">
         <HStack alignItems="center" justifyContent="space-between">
           <Heading>{t("myFarm")}</Heading>
-          <Avatar user={user} onPress={settingNavigationHandler} />
+          <Avatar
+            text={user?.displayName?.charAt(0)}
+            avatarUrl={user?.avatarUrl}
+            updatedAt={user?.updatedAt}
+            hue={user?.hue}
+            onPress={settingNavigationHandler}
+          />
         </HStack>
       </VStack>
       <FlatList

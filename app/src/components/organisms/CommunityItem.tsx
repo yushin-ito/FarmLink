@@ -1,13 +1,11 @@
 import React, { memo } from "react";
-import { Feather } from "@expo/vector-icons";
-import { HStack, Icon, IconButton, Pressable, Text } from "native-base";
+import { Box, HStack, Pressable, Text, VStack } from "native-base";
 import { GetCommunitiesResponse } from "../../hooks/community/query";
-import { Alert } from "react-native";
+import Avatar from "../molecules/Avatar";
 import { useTranslation } from "react-i18next";
 
 type CommunityItemProps = {
   item: GetCommunitiesResponse[number];
-  deleteCommunity: (communityId: number) => Promise<void>;
   communityChatNavigationHandler: (
     communityId: number,
     communityName: string | null
@@ -15,13 +13,8 @@ type CommunityItemProps = {
 };
 
 const CommunityItem = memo(
-  ({
-    item,
-    deleteCommunity,
-    communityChatNavigationHandler,
-  }: CommunityItemProps) => {
+  ({ item, communityChatNavigationHandler }: CommunityItemProps) => {
     const { t } = useTranslation("community");
-
     return (
       <Pressable
         onPress={() =>
@@ -30,37 +23,36 @@ const CommunityItem = memo(
       >
         <HStack
           mb="5"
-          p="5"
+          p="4"
+          space="2"
           bg="white"
           shadow="1"
-          rounded="lg"
+          rounded="xl"
           alignItems="center"
-          justifyContent="space-between"
         >
-          <Text bold fontSize="md">
-            {item.communityName}
-          </Text>
-          <IconButton
-            onPress={() =>
-              Alert.alert(t("deleteCommunity"), t("askDeleteCommunity"), [
-                {
-                  text: t("cancel"),
-                  style: "cancel",
-                },
-                {
-                  text: t("delete"),
-                  onPress: async () => await deleteCommunity(item.communityId),
-                  style: "destructive",
-                },
-              ])
-            }
-            _pressed={{
-              opacity: 0.5,
-            }}
-            icon={<Icon as={<Feather />} name="trash" size="5" />}
-            variant="ghost"
-            colorScheme="muted"
-          />
+          <Box w="20%" h="100%" justifyContent="center">
+            <Avatar
+              size="md"
+              disabled
+              text={item?.communityName?.charAt(0)}
+              avatarUrl={item?.imageUrl}
+              updatedAt={item?.updatedAt}
+              hue={item?.hue}
+            />
+          </Box>
+          <VStack w="80%">
+            <Text bold fontSize="md">
+              {item.communityName}
+            </Text>
+            <Text color="muted.600" fontSize="xs">
+              {item.communityDiscription}
+            </Text>
+            <Box pt="2">
+              <Text fontSize="xs">
+                {t("category")}:{" " + item.category}
+              </Text>
+            </Box>
+          </VStack>
         </HStack>
       </Pressable>
     );

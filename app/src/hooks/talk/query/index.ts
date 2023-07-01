@@ -3,42 +3,50 @@ import { useInfiniteQuery } from "react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { useMemo } from "react";
 
-export type GetDMsResponse = Awaited<ReturnType<typeof getDMs>>;
-export type GetDMChatsResponse = Awaited<ReturnType<typeof getDMChats>>;
+export type GetTalksResponse = Awaited<ReturnType<typeof getTalks>>;
+export type GetTalkChatsResponse = Awaited<ReturnType<typeof getTalkChats>>;
 
-const getDMs = async (from: number, to: number) => {
+const getTalks = async (from: number, to: number) => {
   const { data, error } = await supabase
-    .from("dm")
-    .select("*")
+    .from("talk")
+    .select("*, user(*)")
     .order("createdAt", { ascending: false })
     .range(from, to);
   if (error) {
     throw error;
   }
 
-  return data;
+  return data.map((item) =>
+    Array.isArray(item.user)
+      ? { ...item, user: item.user[0] }
+      : { ...item, user: item.user }
+  );
 };
 
-const getDMChats = async (dmId: number, from: number, to: number) => {
+const getTalkChats = async (talkId: number, from: number, to: number) => {
   const { data, error } = await supabase
     .from("chat")
     .select("*, user(*)")
-    .eq("dmId", dmId)
+    .eq("talkId", talkId)
     .order("createdAt", { ascending: false })
     .range(from, to);
   if (error) {
     throw error;
   }
 
-  return data;
+  return data.map((item) =>
+    Array.isArray(item.user)
+      ? { ...item, user: item.user[0] }
+      : { ...item, user: item.user }
+  );
 };
 
-export const useInfiniteQueryDMs = () => {
+export const useInfiniteQueryTalks = () => {
   const PAGE_COUNT = 15;
-  const query = useInfiniteQuery<GetDMsResponse, PostgrestError>({
-    queryKey: "dms",
+  const query = useInfiniteQuery<GetTalksResponse, PostgrestError>({
+    queryKey: "talks",
     queryFn: async ({ pageParam = 0 }) => {
-      return await getDMs(pageParam, pageParam + PAGE_COUNT - 1);
+      return await getTalks(pageParam, pageParam + PAGE_COUNT - 1);
     },
     getNextPageParam: (lastPage, pages) => {
       if (lastPage && lastPage.length === PAGE_COUNT) {
@@ -58,12 +66,12 @@ export const useInfiniteQueryDMs = () => {
   return { ...query, data };
 };
 
-export const useInfiniteQueryDMChats = (dmId: number) => {
+export const useInfiniteQueryTalkChats = (talkId: number) => {
   const PAGE_COUNT = 15;
-  const query = useInfiniteQuery<GetDMChatsResponse, PostgrestError>({
-    queryKey: dmId.toString(),
+  const query = useInfiniteQuery<GetTalkChatsResponse, PostgrestError>({
+    queryKey: talkId.toString(),
     queryFn: async ({ pageParam = 0 }) => {
-      return await getDMChats(dmId, pageParam, pageParam + PAGE_COUNT - 1);
+      return await getTalkChats(talkId, pageParam, pageParam + PAGE_COUNT - 1);
     },
     getNextPageParam: (lastPage, pages) => {
       if (lastPage && lastPage.length === PAGE_COUNT) {

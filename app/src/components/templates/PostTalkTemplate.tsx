@@ -23,22 +23,22 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 
-type PostDMTemplateProps = {
+type PostTalkTemplateProps = {
   isLoading: boolean;
-  postDM: (DMName: string) => Promise<void>;
+  postTalk: (userId: string) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
 
 type FormValues = {
-  dmName: string;
+  TalkName: string;
 };
 
-const PostDMTemplate = ({
+const PostTalkTemplate = ({
   isLoading,
-  postDM,
+  postTalk,
   goBackNavigationHandler,
-}: PostDMTemplateProps) => {
-  const { t } = useTranslation("dm");
+}: PostTalkTemplateProps) => {
+  const { t } = useTranslation("talk");
   const {
     control,
     handleSubmit,
@@ -65,7 +65,7 @@ const PostDMTemplate = ({
                   opacity: 0.5,
                 }}
               />
-              <Heading textAlign="center">{t("createDM")}</Heading>
+              <Heading textAlign="center">{t("createTalk")}</Heading>
               <IconButton
                 onPress={goBackNavigationHandler}
                 icon={<Icon as={<Feather name="x" />} size="6" />}
@@ -76,10 +76,10 @@ const PostDMTemplate = ({
               />
             </HStack>
             <VStack mx="10">
-              <FormControl isInvalid={"dmName" in errors}>
-                <FormControl.Label>{t("dmName")}</FormControl.Label>
+              <FormControl isInvalid={"TalkName" in errors}>
+                <FormControl.Label>{t("search")}</FormControl.Label>
                 <Controller
-                  name="dmName"
+                  name="TalkName"
                   control={control}
                   render={({ field: { value, onChange } }) => {
                     return (
@@ -112,8 +112,8 @@ const PostDMTemplate = ({
                               <Icon as={<Feather name="alert-circle" />} />
                             }
                           >
-                            {errors.dmName && (
-                              <Text>{errors.dmName.message}</Text>
+                            {errors.TalkName && (
+                              <Text>{errors.TalkName.message}</Text>
                             )}
                           </FormControl.ErrorMessage>
                           <Text color="muted.600">
@@ -124,11 +124,7 @@ const PostDMTemplate = ({
                     );
                   }}
                   rules={{
-                    required: t("dmNameRequired"),
-                    maxLength: {
-                      value: 20,
-                      message: t("dmNameMaxLength"),
-                    },
+   
                   }}
                 />
               </FormControl>
@@ -141,7 +137,7 @@ const PostDMTemplate = ({
             colorScheme="brand"
             isLoading={isLoading}
             onPress={handleSubmit(async (data) => {
-              await postDM(data.dmName);
+              await postTalk(data.TalkName);
               goBackNavigationHandler();
             })}
           >
@@ -153,4 +149,4 @@ const PostDMTemplate = ({
   );
 };
 
-export default PostDMTemplate;
+export default PostTalkTemplate;

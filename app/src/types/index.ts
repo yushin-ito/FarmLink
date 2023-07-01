@@ -15,7 +15,7 @@ export type TabBarParamList = {
   MapNavigator: undefined;
   CommunityNavigator: undefined;
   FarmNavigator: undefined;
-  DMNavigator: undefined;
+  TalkNavigator: undefined;
   SettingNavigator: undefined;
 };
 
@@ -40,11 +40,11 @@ export type FarmStackParamList = {
   SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
 
-export type DMStackParamList = {
-  DMList: undefined;
-  DMChat: { dmId: number; dmName: string | null };
-  PostDM: undefined;
-  SearchDM: undefined
+export type TalkStackParamList = {
+  TalkList: undefined;
+  TalkChat: { talkId: number; displayName: string | null | undefined };
+  PostTalk: undefined;
+  SearchTalk: undefined
   SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
 

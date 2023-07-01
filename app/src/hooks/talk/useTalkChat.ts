@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { supabase } from "../../supabase";
 
-const useDMChat = (dmId: number, refetch: () => Promise<void>) => {
+const useTalkChat = (talkId: number, refetch: () => Promise<void>) => {
   useEffect(() => {
     const channel = supabase
       .channel("chat")
@@ -11,7 +11,7 @@ const useDMChat = (dmId: number, refetch: () => Promise<void>) => {
           event: "*",
           schema: "public",
           table: "chat",
-          filter: `dmId=eq.${dmId}`,
+          filter: `talkId=eq.${talkId}`,
         },
         async () => {
           await refetch();
@@ -22,7 +22,7 @@ const useDMChat = (dmId: number, refetch: () => Promise<void>) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [dmId]);
+  }, [talkId]);
 };
 
-export default useDMChat;
+export default useTalkChat;

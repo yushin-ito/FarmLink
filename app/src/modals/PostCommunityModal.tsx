@@ -31,9 +31,21 @@ const PostCommunityModal = () => {
     },
   });
 
-  const postCommunity = useCallback(async (communityName: string) => {
-    await mutateAsync({ communityName });
-  }, []);
+  const postCommunity = useCallback(
+    async (
+      communityName: string,
+      communityDiscription: string,
+      category: string
+    ) => {
+      await mutateAsync({
+        communityName,
+        communityDiscription,
+        category,
+        hue: Math.floor(Math.random() * 360).toString(),
+      });
+    },
+    []
+  );
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

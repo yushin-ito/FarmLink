@@ -13,14 +13,17 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
-import SearchDMItem from "../organisms/SearchDMItem";
-import { SearchDMsResponse } from "../../hooks/dm/mutate";
+import SearchTalkItem from "../organisms/SearchTalkItem";
+import { SearchTalksResponse } from "../../hooks/talk/mutate";
 
-type SearchDMTemplateProps = {
-  searchResult: SearchDMsResponse | undefined;
-  searchDMs: (query: string) => void;
-  isLoadingSearchDMs: boolean;
-  dmChatNavigationHandler: (dmId: number, dmName: string | null) => void;
+type SearchTalkTemplateProps = {
+  searchResult: SearchTalksResponse | undefined;
+  searchTalks: (query: string) => void;
+  isLoadingSearchTalks: boolean;
+  talkChatNavigationHandler: (
+    talkId: number,
+    displayName: string | null | undefined
+  ) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -28,13 +31,13 @@ type FormValues = {
   query: string;
 };
 
-const SearchDMTemplate = ({
+const SearchTalkTemplate = ({
   searchResult,
-  searchDMs,
-  isLoadingSearchDMs,
-  dmChatNavigationHandler,
+  searchTalks,
+  isLoadingSearchTalks,
+  talkChatNavigationHandler,
   goBackNavigationHandler,
-}: SearchDMTemplateProps) => {
+}: SearchTalkTemplateProps) => {
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -76,7 +79,7 @@ const SearchDMTemplate = ({
                   value={value}
                   onChangeText={(text) => {
                     onChange(text);
-                    searchDMs(text);
+                    searchTalks(text);
                   }}
                 />
               )}
@@ -90,7 +93,7 @@ const SearchDMTemplate = ({
               }}
             />
           </HStack>
-          {isLoadingSearchDMs ? (
+          {isLoadingSearchTalks ? (
             <Spinner color="muted.400" />
           ) : (
             <FlatList
@@ -98,12 +101,12 @@ const SearchDMTemplate = ({
               px="9"
               data={searchResult}
               renderItem={({ item }) => (
-                <SearchDMItem
+                <SearchTalkItem
                   item={item}
-                  dmChatNavigationHandler={dmChatNavigationHandler}
+                  talkChatNavigationHandler={talkChatNavigationHandler}
                 />
               )}
-              keyExtractor={(item) => item.dmId.toString()}
+              keyExtractor={(item) => item.talkId.toString()}
             />
           )}
         </VStack>
@@ -111,4 +114,4 @@ const SearchDMTemplate = ({
     </TouchableWithoutFeedback>
   );
 };
-export default SearchDMTemplate;
+export default SearchTalkTemplate;

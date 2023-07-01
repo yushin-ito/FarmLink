@@ -1,20 +1,20 @@
 import React, { useCallback } from "react";
-import PostDMTemplate from "../components/templates/PostDMTemplate";
+import PostTalkTemplate from "../components/templates/PostTalkTemplate";
 import { useNavigation } from "@react-navigation/native";
-import { useInfiniteQueryDMs } from "../hooks/dm/query";
+import { useInfiniteQueryTalks } from "../hooks/talk/query";
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
-import { usePostDM } from "../hooks/dm/mutate";
+import { usePostTalk } from "../hooks/talk/mutate";
 import { useTranslation } from "react-i18next";
 
-const PostDMModal = () => {
+const PostTalkModal = () => {
   const toast = useToast();
-  const { t } = useTranslation("dm");
+  const { t } = useTranslation("talk");
   const navigation = useNavigation();
-  const { refetch } = useInfiniteQueryDMs();
+  const { refetch } = useInfiniteQueryTalks();
 
-  const { mutateAsync, isLoading } = usePostDM({
+  const { mutateAsync, isLoading } = usePostTalk({
     onSuccess: async () => {
       await refetch();
     },
@@ -31,9 +31,9 @@ const PostDMModal = () => {
     },
   });
 
-  const postDM = useCallback(async (dmName: string) => {
+  const postTalk = useCallback(async (userId: string) => {
     await mutateAsync({
-      dmName,
+      userId,
     });
   }, []);
 
@@ -42,12 +42,12 @@ const PostDMModal = () => {
   }, []);
 
   return (
-    <PostDMTemplate
+    <PostTalkTemplate
       isLoading={isLoading}
-      postDM={postDM}
+      postTalk={postTalk}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );
 };
 
-export default PostDMModal;
+export default PostTalkModal;

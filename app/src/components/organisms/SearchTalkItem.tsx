@@ -1,25 +1,33 @@
 import React from "react";
-import { SearchDMsResponse } from "../../hooks/dm/mutate";
+import { SearchTalksResponse } from "../../hooks/talk/mutate";
 import { Divider, HStack, Pressable, Text, Icon, Box } from "native-base";
 import { Feather } from "@expo/vector-icons";
 
-type SearchDMItemProps = {
-  item: SearchDMsResponse[number];
-  dmChatNavigationHandler: (dmId: number, dmName: string | null) => void;
+type SearchTalkItemProps = {
+  item: SearchTalksResponse[number];
+  talkChatNavigationHandler: (
+    talkId: number,
+    talkName: string | null | undefined
+  ) => void;
 };
 
-const SearchDMItem = ({ item, dmChatNavigationHandler }: SearchDMItemProps) => {
+const SearchtalkItem = ({
+  item,
+  talkChatNavigationHandler,
+}: SearchTalkItemProps) => {
   return (
     <Box>
       <Pressable
-        onPress={() => dmChatNavigationHandler(item.dmId, item.dmName)}
+        onPress={() =>
+          talkChatNavigationHandler(item.talkId, item.user?.displayName)
+        }
         my="1"
         alignItems="center"
         rounded="md"
         _pressed={{ bg: "muted.300" }}
       >
         <HStack w="100%" px="1" py="3" justifyContent="space-between">
-          <Text>{item?.dmName}</Text>
+          <Text>{item?.user?.displayName}</Text>
           <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
         </HStack>
       </Pressable>
@@ -28,4 +36,4 @@ const SearchDMItem = ({ item, dmChatNavigationHandler }: SearchDMItemProps) => {
   );
 };
 
-export default SearchDMItem;
+export default SearchtalkItem;

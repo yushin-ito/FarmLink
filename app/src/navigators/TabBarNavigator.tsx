@@ -7,12 +7,12 @@ import { Platform } from "react-native";
 import { TabBarParamList } from "../types";
 import MapNavigator from "./MapNavigator";
 import FarmNavigator from "./FarmNavigator";
-import DMNavigator from "./DMNavigator";
 import SettingNavigator from "./SettingNavigator";
 import CommunityNavigator from "./CommunityNavigator";
 import { enableScreens } from "react-native-screens";
 import { Route, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import CircleButton from "../components/molecules/CircleButton";
+import TalkNavigator from "./TalkNavigator";
 
 const TabBar = createBottomTabNavigator<TabBarParamList>();
 
@@ -106,8 +106,8 @@ const TabBarNavigator = () => {
         }}
       />
       <TabBar.Screen
-        name="DMNavigator"
-        component={DMNavigator}
+        name="TalkNavigator"
+        component={TalkNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
