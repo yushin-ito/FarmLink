@@ -14,6 +14,7 @@ import {
   Switch,
   Spinner,
   Center,
+  Link,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import MapView, { Marker } from "react-native-maps";
@@ -21,19 +22,19 @@ import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SearchDeviceResponse } from "../../hooks/device/mutate";
-import { LocationObject } from "expo-location";
-import CircleButton from "../molecules/CircleButton";
+import { Position } from "../../hooks/sdk/useLocation";
 
 type PostFarmTemplateProps = {
   isLoadingPostFarm: boolean;
   isLoadingPosition: boolean;
   searchResult: SearchDeviceResponse | undefined;
-  position: LocationObject | undefined;
+  position: Position | undefined;
   getCurrentPosition: () => Promise<void>;
   postFarm: (
     farmName: string,
     deviceId: string,
-    description: string
+    description: string,
+    isPrivate: boolean
   ) => Promise<void>;
   searchDevice: (query: string) => Promise<void>;
   goBackNavigationHandler: () => void;
@@ -164,54 +165,42 @@ const PostFarmTemplate = ({
                 control={control}
                 render={({ field: { value, onChange } }) => {
                   return (
-                    <VStack>
-                      <Input
-                        returnKeyType="done"
-                        InputRightElement={
-                          <IconButton
-                            onPress={() => setValue("deviceId", "")}
-                            icon={
-                              <Icon
-                                as={<Feather name="x" />}
-                                size="4"
-                                color="muted.400"
-                              />
-                            }
-                            variant="unstyled"
-                            _pressed={{
-                              opacity: 0.5,
-                            }}
-                          />
-                        }
-                        value={value}
-                        onChangeText={async (text) => {
-                          onChange(text);
-                          await searchDevice(text);
-                        }}
-                      />
-                      <HStack mt="1" justifyContent="space-between">
-                        <FormControl.ErrorMessage
-                          leftIcon={
-                            <Icon as={<Feather name="alert-circle" />} />
+                    <Input
+                      returnKeyType="done"
+                      InputRightElement={
+                        <IconButton
+                          onPress={() => setValue("deviceId", "")}
+                          icon={
+                            <Icon
+                              as={<Feather name="x" />}
+                              size="4"
+                              color="muted.400"
+                            />
                           }
-                        >
-                          {errors.deviceId && (
-                            <Text>{errors.deviceId.message}</Text>
-                          )}
-                        </FormControl.ErrorMessage>
-                        <Text color="muted.600">
-                          {value?.length ? value.length : 0} / 20
-                        </Text>
-                      </HStack>
-                    </VStack>
+                          variant="unstyled"
+                          _pressed={{
+                            opacity: 0.5,
+                          }}
+                        />
+                      }
+                      value={value}
+                      onChangeText={async (text) => {
+                        onChange(text);
+                        await searchDevice(text);
+                      }}
+                    />
                   );
                 }}
                 rules={{
-                  required: t("deviceIdRequired"),
                   validate: () =>
                     searchResult ? undefined : t("invalidDeviceId"),
                 }}
               />
+              <FormControl.ErrorMessage
+                leftIcon={<Icon as={<Feather name="alert-circle" />} />}
+              >
+                {errors.deviceId && <Text>{errors.deviceId.message}</Text>}
+              </FormControl.ErrorMessage>
             </FormControl>
             <HStack mt="4" alignItems="center" justifyContent="space-between">
               <Text fontSize="md" bold color="muted.600">
@@ -224,36 +213,6 @@ const PostFarmTemplate = ({
             </HStack>
             {!isPrivate && (
               <VStack mt="6" space="6">
-                {isLoadingPosition ? (
-                  <Center h="40" bg="muted.200" rounded="xl">
-                    <Spinner color="muted.400" />
-                  </Center>
-                ) : (
-                  <MapView
-                    ref={mapRef}
-                    mapType="hybrid"
-                    style={{
-                      width: "100%",
-                      height: 160,
-                      borderRadius: 12,
-                      opacity: isLoadingPosition ? 0.5 : 1,
-                    }}
-                    loadingBackgroundColor="#e5e5e5"
-                    loadingEnabled
-                    showsCompass={false}
-                  >
-                    {position && (
-                      <Marker coordinate={position.coords}>
-                        <Icon
-                          as={<MaterialIcons />}
-                          name="location-pin"
-                          size="3xl"
-                          color="red.500"
-                        />
-                      </Marker>
-                    )}
-                  </MapView>
-                )}
                 <FormControl isInvalid={"description" in errors}>
                   <FormControl.Label>{t("discription")}</FormControl.Label>
                   <Controller
@@ -293,17 +252,71 @@ const PostFarmTemplate = ({
                     }}
                   />
                 </FormControl>
+                <VStack space="1">
+                  <HStack justifyContent="space-between">
+                    <Text bold color="muted.600">
+                      {t("setPosition")}
+                    </Text>
+                    <Link
+                      _text={{ color: "brand.600" }}
+                      onPress={async () => await getCurrentPosition()}
+                    >
+                      {t("refetch")}
+                    </Link>
+                  </HStack>
+                  {isLoadingPosition ? (
+                    <Center h="40" bg="muted.200" rounded="xl">
+                      <Spinner color="muted.400" />
+                    </Center>
+                  ) : (
+                    <MapView
+                      ref={mapRef}
+                      mapType="hybrid"
+                      style={{
+                        width: "100%",
+                        height: 160,
+                        borderRadius: 12,
+                        opacity: isLoadingPosition ? 0.5 : 1,
+                      }}
+                      loadingBackgroundColor="#e5e5e5"
+                      loadingEnabled
+                      showsCompass={false}
+                    >
+                      {position && (
+                        <Marker coordinate={position.coords}>
+                          <Icon
+                            as={<MaterialIcons />}
+                            name="location-pin"
+                            size="xl"
+                            color="red.500"
+                          />
+                        </Marker>
+                      )}
+                    </MapView>
+                  )}
+                  {!isLoadingPosition && (
+                    <Text color="muted.600">{`${t("address")}: ${
+                      position?.address.city
+                    }${position?.address.name}`}</Text>
+                  )}
+                </VStack>
               </VStack>
             )}
           </VStack>
           <Button
+            mt="16"
             mx="10"
             size="lg"
             rounded="xl"
             colorScheme="brand"
             isLoading={isLoadingPostFarm}
             onPress={handleSubmit(async (data) => {
-              await postFarm(data.farmName, data.deviceId, data.description);
+              await postFarm(
+                data.farmName,
+                data.deviceId,
+                data.description,
+                isPrivate
+              );
             })}
           >
             {t("create")}

@@ -18,7 +18,7 @@ const PostFarmModal = () => {
   const { session } = useAuth();
   const { refetch } = useQueryFarms(session?.user.id);
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse>();
-  
+
   const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
     usePostFarm({
       onSuccess: async () => {
@@ -54,7 +54,11 @@ const PostFarmModal = () => {
     },
   });
 
-  const { position, getCurrentPosition, isLoading: isLoadingLocation } = useLocation({
+  const {
+    position,
+    getCurrentPosition,
+    isLoading: isLoadingLocation,
+  } = useLocation({
     onDisable: () => {
       showAlert(
         toast,
@@ -86,12 +90,20 @@ const PostFarmModal = () => {
   }, []);
 
   const postFarm = useCallback(
-    async (farmName: string, deviceId: string, description: string) => {
+    async (
+      farmName: string,
+      deviceId: string,
+      description: string,
+      isPrivate: boolean
+    ) => {
       await mutateAsyncPostFarm({
         farmName,
         deviceId,
         description,
         ownerId: session?.user.id,
+        isPrivate,
+        longitude: isPrivate ? null : position?.coords.longitude,
+        latitude: isPrivate ? null : position?.coords.latitude,
       });
     },
     []
