@@ -7,6 +7,7 @@ import {
   Spinner,
   Icon,
   FlatList,
+  Text,
 } from "native-base";
 import React from "react";
 import { RefreshControl } from "react-native";
@@ -79,6 +80,17 @@ const FarmListTemplate = ({
             farmCameraNavigationHandler={farmCameraNavigationHandler}
           />
         )}
+        ListEmptyComponent={
+          <Text
+            bold
+            lineHeight="2xl"
+            fontSize="md"
+            textAlign="center"
+            color="muted.600"
+          >
+            {t("notExistFarm")}
+          </Text>
+        }
         keyExtractor={(item) => item.farmId.toString()}
         refreshControl={
           <RefreshControl

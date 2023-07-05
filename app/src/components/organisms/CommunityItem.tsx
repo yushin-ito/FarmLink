@@ -30,7 +30,7 @@ const CommunityItem = memo(
           rounded="xl"
           alignItems="center"
         >
-          <Box w="20%" h="100%" justifyContent="center">
+          <Box w="20%">
             <Avatar
               size="md"
               disabled
@@ -44,8 +44,8 @@ const CommunityItem = memo(
             <Text bold fontSize="md">
               {item.communityName}
             </Text>
-            <Text color="muted.600" fontSize="xs">
-              {item.communityDiscription}
+            <Text color="muted.600" fontSize="xs" numberOfLines={3} ellipsizeMode="tail">
+              {item.description}
             </Text>
             <Box pt="2">
               <Text fontSize="xs">

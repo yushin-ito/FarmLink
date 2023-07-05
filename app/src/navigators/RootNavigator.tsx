@@ -3,7 +3,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import useAuth from "../hooks/auth/useAuth";
-import TabBarNavigator from "./TabBarNavigator";
+import TabNavigator from "./TabNavigator";
 import AuthNavigator from "./AuthNavigator";
 import { Center, Spinner, useToast } from "native-base";
 import { showAlert } from "../functions";
@@ -41,7 +41,7 @@ const RootNavigator = () => {
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
       {session && session?.user.id ? (
-        <RootStack.Screen name="TabBarNavigator" component={TabBarNavigator} />
+        <RootStack.Screen name="TabNavigator" component={TabNavigator} />
       ) : (
         <RootStack.Screen name="AuthNavigator" component={AuthNavigator} />
       )}

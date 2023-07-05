@@ -24,10 +24,8 @@ type TalkListTemplateProps = {
   talks: GetTalksResponse | null | undefined;
   isLoadingTalks: boolean;
   isRefetchingTalks: boolean;
-  hasMore: boolean | undefined;
   refetchTalks: () => Promise<void>;
   deleteTalk: (talkId: number) => Promise<void>;
-  readMore: () => void;
   talkChatNavigationHandler: (
     talkId: number,
     displayName: string | null | undefined
@@ -42,10 +40,8 @@ const TalkListTemplate = ({
   talks,
   isLoadingTalks,
   isRefetchingTalks,
-  hasMore,
   refetchTalks,
   deleteTalk,
-  readMore,
   talkChatNavigationHandler,
   postTalkNavigationHandler,
   settingNavigationHandler,
@@ -81,11 +77,6 @@ const TalkListTemplate = ({
         px="9"
         mb="20"
         data={talks}
-        onEndReached={readMore}
-        onEndReachedThreshold={0.3}
-        ListFooterComponent={
-          <Center>{hasMore && <Spinner color="muted.400" />}</Center>
-        }
         renderItem={({ item }) => (
           <TalkItem
             item={item}

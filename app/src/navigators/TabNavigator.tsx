@@ -1,49 +1,46 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-import { Feather } from "@expo/vector-icons";
+import { Ionicons, SimpleLineIcons, AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon, Image } from "native-base";
-import { Platform } from "react-native";
-import { TabBarParamList } from "../types";
+import { Icon, Image, Text } from "native-base";
+import { TabParamList } from "../types";
 import MapNavigator from "./MapNavigator";
 import FarmNavigator from "./FarmNavigator";
 import SettingNavigator from "./SettingNavigator";
 import CommunityNavigator from "./CommunityNavigator";
-import { enableScreens } from "react-native-screens";
 import { Route, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import CircleButton from "../components/molecules/CircleButton";
 import TalkNavigator from "./TalkNavigator";
+import { useTranslation } from "react-i18next";
 
-const TabBar = createBottomTabNavigator<TabBarParamList>();
+const Tab = createBottomTabNavigator<TabParamList>();
 
-const getTabBarStyle = (route: Partial<Route<string, object | undefined>>) => {
+const getTabStyle = (route: Partial<Route<string, object | undefined>>) => {
   const routeName = getFocusedRouteNameFromRoute(route);
   if (
+    routeName === "SearchMap" ||
     routeName === "CommunityChat" ||
     routeName === "SearchCommunity" ||
-    routeName === "FarmCamera" ||
-    routeName === "DMChat"
+    routeName === "TalkChat" ||
+    routeName === "SearchTalk" ||
+    routeName === "FarmCamera"
   )
     return false;
 
   return true;
 };
 
-const TabBarNavigator = () => {
-  useEffect(() => {
-    if (Platform.OS === "ios") {
-      enableScreens(false);
-    }
-  }, []);
+const TabNavigator = () => {
+  const { t } = useTranslation(["map", "community", "talk", "setting"]);
 
   return (
-    <TabBar.Navigator
+    <Tab.Navigator
       initialRouteName="FarmNavigator"
       screenOptions={({ route }) => ({
-        tabBarHideOnKeyboard: true,
+        tabHideOnKeyboard: true,
         tabBarStyle: {
           position: "absolute",
-          display: getTabBarStyle(route) ? "flex" : "none",
+          display: getTabStyle(route) ? "flex" : "none",
           borderTopWidth: 0,
           shadowColor: "#414141",
           shadowOffset: {
@@ -53,44 +50,53 @@ const TabBarNavigator = () => {
           shadowOpacity: 0.25,
           shadowRadius: 4,
           elevation: 0,
-          height: 80,
-          paddingTop: 8,
+          paddingTop: 12,
           paddingHorizontal: 10,
           borderTopRightRadius: 20,
           borderTopLeftRadius: 20,
         },
-        tabBarShowLabel: false,
         headerShown: false,
       })}
     >
-      <TabBar.Screen
+      <Tab.Screen
         name="MapNavigator"
         component={MapNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              as={<Feather />}
-              name="map-pin"
-              size={focused ? "xl" : "lg"}
+              as={<SimpleLineIcons />}
+              name="location-pin"
+              size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
             />
           ),
+          tabBarLabel: ({ focused }) => (
+            <Text fontSize="xs" color={focused ? "brand.600" : "muted.400"}>
+              {t("map:search")}
+            </Text>
+          ),
         }}
       />
-      <TabBar.Screen
+      <Tab.Screen
         name="CommunityNavigator"
         component={CommunityNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              as={<Feather name="message-circle" />}
-              size={focused ? "xl" : "lg"}
+              as={<AntDesign />}
+              name="team"
+              size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
             />
           ),
+          tabBarLabel: ({ focused }) => (
+            <Text fontSize="xs" color={focused ? "brand.600" : "muted.400"}>
+              {t("community:community")}
+            </Text>
+          ),
         }}
       />
-      <TabBar.Screen
+      <Tab.Screen
         name="FarmNavigator"
         component={FarmNavigator}
         options={{
@@ -105,36 +111,46 @@ const TabBarNavigator = () => {
           ),
         }}
       />
-      <TabBar.Screen
+      <Tab.Screen
         name="TalkNavigator"
         component={TalkNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              as={<Feather />}
-              name="edit"
-              size={focused ? "xl" : "lg"}
+              as={<Ionicons />}
+              name="ios-chatbubble-ellipses-outline"
+              size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
             />
           ),
+          tabBarLabel: ({ focused }) => (
+            <Text fontSize="xs" color={focused ? "brand.600" : "muted.400"}>
+              {t("talk:talk")}
+            </Text>
+          ),
         }}
       />
-      <TabBar.Screen
+      <Tab.Screen
         name="SettingNavigator"
         component={SettingNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              as={<Feather />}
-              name="user"
-              size={focused ? "xl" : "lg"}
+              as={<Ionicons />}
+              name="ios-settings-outline"
+              size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
             />
           ),
+          tabBarLabel: ({ focused }) => (
+            <Text fontSize="xs" color={focused ? "brand.600" : "muted.400"}>
+              {t("setting:setting")}
+            </Text>
+          ),
         }}
       />
-    </TabBar.Navigator>
+    </Tab.Navigator>
   );
 };
 
-export default TabBarNavigator;
+export default TabNavigator;

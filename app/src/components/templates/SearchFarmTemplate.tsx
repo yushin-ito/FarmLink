@@ -18,7 +18,7 @@ import { SearchFarmsResponse } from "../../hooks/farm/mutate";
 
 type SearchFarmTemplateProps = {
   searchResult: SearchFarmsResponse | undefined;
-  searchFarms: (query: string) => void;
+  searchFarms: (query: string) => Promise<void>;
   isLoadingSearchFarms: boolean;
   farmDetailNavigationHandler: (farmId: number) => void;
   goBackNavigationHandler: () => void;
@@ -39,14 +39,7 @@ const SearchFarmTemplate = ({
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box
-        flex={1}
-        pt="4"
-        pb="12"
-        px="2"
-        justifyContent="space-between"
-        safeAreaTop
-      >
+      <Box flex={1} pt="4" px="2" safeAreaTop>
         <VStack space="7">
           <HStack px="5" alignItems="center" justifyContent="space-between">
             <Controller
@@ -95,7 +88,7 @@ const SearchFarmTemplate = ({
           ) : (
             <FlatList
               w="100%"
-              px="9"
+              px="6"
               data={searchResult}
               renderItem={({ item }) => (
                 <SearchFarmItem

@@ -4,7 +4,6 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
-#include <base64.h>
 
 #include "env.h"
 
@@ -76,13 +75,12 @@ void setup() {
 
   Serial.println("Capture completed.");
 
-  base64 base64;
-  String payload = base64.encode(fb->buf, fb->len);
-
   WiFiClientSecure client;
   client.setInsecure();
 
   HTTPClient http;
+
+
   http.begin(client, String(SUPABASE_URL) + "/storage/v1/object/image/avatar/image.jpg");
   http.addHeader("Content-Type", "image/jpeg");
   http.addHeader("apikey", String(SUPABASE_KEY));
@@ -90,8 +88,8 @@ void setup() {
   http.addHeader("Connection", "close");
 
   int http_code = http.sendRequest("POST", fb->buf, fb->len);
-
   http.end();
+
   client.stop();
 
   esp_camera_fb_return(fb);

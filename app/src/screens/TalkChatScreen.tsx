@@ -23,7 +23,7 @@ type TalkChatNavigationProp = NativeStackNavigationProp<
 type TalkChatRouteProp = RouteProp<TalkStackParamList, "TalkChat">;
 
 const TalkChatScreen = () => {
-  const { t } = useTranslation("Talk");
+  const { t } = useTranslation("talk");
   const toast = useToast();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
@@ -35,9 +35,9 @@ const TalkChatScreen = () => {
     hasNextPage: hasMore,
     fetchNextPage,
     refetch,
-  } = useInfiniteQueryTalkChats(params.TalkId);
+  } = useInfiniteQueryTalkChats(params.talkId);
 
-  useTalkChat(params.TalkId, async () => {
+  useTalkChat(params.talkId, async () => {
     await refetch();
   });
 
@@ -106,7 +106,7 @@ const TalkChatScreen = () => {
   const postChat = useCallback(async (message: string) => {
     await mutateAsyncPostChat({
       message,
-      TalkId: params.talkId,
+      talkId: params.talkId,
       authorId: session?.user.id,
     });
   }, []);
@@ -121,7 +121,7 @@ const TalkChatScreen = () => {
 
   return (
     <ChatTemplate
-      title={params.talkName}
+      title={params.displayName}
       user={user}
       chats={chats}
       pickImageByCamera={pickImageByCamera}

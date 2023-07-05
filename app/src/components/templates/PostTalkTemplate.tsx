@@ -1,133 +1,127 @@
-import React from "react";
-import {
-  Keyboard,
-  Platform,
-  TouchableWithoutFeedback,
-  useWindowDimensions,
-} from "react-native";
+import React, { useState } from "react";
+import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import {
-  Button,
-  KeyboardAvoidingView,
+  FlatList,
   Box,
   VStack,
-  Heading,
-  Text,
-  FormControl,
   HStack,
   IconButton,
   Icon,
+  Spinner,
+  Heading,
+  Button,
+  KeyboardAvoidingView,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import Input from "../molecules/Input";
+import SearchUserItem from "../organisms/SearchUserItem";
+import { SearchUsersResponse } from "../../hooks/user/mutate";
+import SearchBar from "../organisms/SearchBar";
 
 type PostTalkTemplateProps = {
-  isLoading: boolean;
-  postTalk: (userId: string) => Promise<void>;
+  searchResult: SearchUsersResponse | undefined;
+  isLoadingSearchUsers: boolean;
+  isLoadingPostTalk: boolean;
+  searchUsers: (query: string) => Promise<void>;
+  postTalk: (recieverId: string) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
 
 type FormValues = {
-  TalkName: string;
+  query: string;
 };
 
 const PostTalkTemplate = ({
-  isLoading,
+  searchResult,
+  isLoadingSearchUsers,
+  isLoadingPostTalk,
+  searchUsers,
   postTalk,
   goBackNavigationHandler,
 }: PostTalkTemplateProps) => {
   const { t } = useTranslation("talk");
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<FormValues>();
-  const { height } = useWindowDimensions();
+  const { control, reset } = useForm<FormValues>();
+  const [recieverId, setRecieverId] = useState<string>("");
 
   return (
     <KeyboardAvoidingView
       flex={1}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={height / 15}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Box flex={1} pt="6" pb="12" px="2" justifyContent="space-between">
-          <VStack space="7">
+        <Box flex={1} pb="10" justifyContent="space-between" safeAreaTop>
+          <VStack space="3">
             <HStack alignItems="center" justifyContent="space-between">
               <IconButton
-                onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="chevron-left" />} size="6" />}
+                p="6"
+                onPressIn={goBackNavigationHandler}
+                icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
                 variant="unstyled"
-                _pressed={{
-                  opacity: 0.5,
-                }}
               />
               <Heading textAlign="center">{t("createTalk")}</Heading>
               <IconButton
+                p="6"
                 onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="x" />} size="6" />}
+                icon={<Icon as={<Feather name="x" />} size="xl" />}
                 variant="unstyled"
-                _pressed={{
-                  opacity: 0.5,
-                }}
               />
             </HStack>
-            <VStack mx="10">
-              <FormControl isInvalid={"TalkName" in errors}>
-                <FormControl.Label>{t("search")}</FormControl.Label>
-                <Controller
-                  name="TalkName"
-                  control={control}
-                  render={({ field: { value, onChange } }) => {
-                    return (
-                      <VStack>
-                        <Input
-                          autoFocus
-                          returnKeyType="done"
-                          InputRightElement={
-                            <IconButton
-                              onPress={() => reset()}
-                              icon={
-                                <Icon
-                                  as={<Feather name="x" />}
-                                  size="4"
-                                  color="muted.400"
-                                />
-                              }
-                              variant="unstyled"
-                              _pressed={{
-                                opacity: 0.5,
-                              }}
-                            />
-                          }
-                          value={value}
-                          onChangeText={onChange}
-                        />
-                        <HStack mt="1" justifyContent="space-between">
-                          <FormControl.ErrorMessage
-                            leftIcon={
-                              <Icon as={<Feather name="alert-circle" />} />
-                            }
-                          >
-                            {errors.TalkName && (
-                              <Text>{errors.TalkName.message}</Text>
-                            )}
-                          </FormControl.ErrorMessage>
-                          <Text color="muted.600">
-                            {value?.length ? value.length : 0} / 20
-                          </Text>
-                        </HStack>
-                      </VStack>
-                    );
-                  }}
-                  rules={{
-   
-                  }}
+            <VStack space="4">
+              <Controller
+                name="query"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <SearchBar
+                    mx="10"
+                    autoFocus
+                    returnKeyType="search"
+                    placeholder={t("searchUser")}
+                    InputRightElement={
+                      <IconButton
+                        onPress={() => reset()}
+                        icon={
+                          <Icon
+                            as={<Feather name="x" />}
+                            size="4"
+                            color="muted.400"
+                          />
+                        }
+                        variant="unstyled"
+                        _pressed={{
+                          opacity: 0.5,
+                        }}
+                      />
+                    }
+                    value={value}
+                    onChangeText={(text) => {
+                      onChange(text);
+                      searchUsers(text);
+                    }}
+                  />
+                )}
+              />
+              {isLoadingSearchUsers ? (
+                <Spinner color="muted.400" />
+              ) : (
+                <FlatList
+                  px="10"
+                  data={searchResult}
+                  renderItem={({ item }) => (
+                    <SearchUserItem
+                      item={item}
+                      onPress={() =>
+                        setRecieverId(
+                          item.userId !== recieverId ? item.userId : ""
+                        )
+                      }
+                      selected={item.userId === recieverId}
+                    />
+                  )}
+                  keyExtractor={(item) => item.userId.toString()}
                 />
-              </FormControl>
+              )}
             </VStack>
           </VStack>
           <Button
@@ -135,11 +129,11 @@ const PostTalkTemplate = ({
             size="lg"
             rounded="xl"
             colorScheme="brand"
-            isLoading={isLoading}
-            onPress={handleSubmit(async (data) => {
-              await postTalk(data.TalkName);
-              goBackNavigationHandler();
-            })}
+            isLoading={isLoadingPostTalk}
+            isDisabled={!recieverId}
+            onPress={async () => {
+              await postTalk(recieverId);
+            }}
           >
             {t("create")}
           </Button>

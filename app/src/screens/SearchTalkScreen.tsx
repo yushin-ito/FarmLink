@@ -1,13 +1,10 @@
 import React, { useCallback, useState } from "react";
 import SearchTalkTemplate from "../components/templates/SearchTalkTemplate";
 import { useNavigation } from "@react-navigation/native";
-import { SearchTalksResponse, useSearchTalks } from "../hooks/talk/mutate";
-import { showAlert } from "../functions";
-import { useToast } from "native-base";
-import { useTranslation } from "react-i18next";
-import Alert from "../components/molecules/Alert";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TalkStackParamList } from "../types";
+import { GetTalksResponse, useQueryTalks } from "../hooks/talk/query";
+import useAuth from "../hooks/auth/useAuth";
 
 type SearchTalkNavigationProp = NativeStackNavigationProp<
   TalkStackParamList,
@@ -15,40 +12,29 @@ type SearchTalkNavigationProp = NativeStackNavigationProp<
 >;
 
 const SearchTalkscreen = () => {
-  const { t } = useTranslation("talk");
-  const toast = useToast();
   const navigation = useNavigation<SearchTalkNavigationProp>();
-  const [searchResult, setSearchResult] = useState<SearchTalksResponse>();
-
-  const {
-    mutateAsync: mutateAsyncSearchTalks,
-    isLoading: isLoadingSearchTalks,
-  } = useSearchTalks({
-    onSuccess: (data) => {
-      setSearchResult(data);
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
-        />
-      );
-    },
-  });
+  const [searchResult, setSearchResult] = useState<GetTalksResponse>();
+  const { session } = useAuth();
+  const { data } = useQueryTalks(session?.user.id);
 
   const searchTalks = useCallback(async (text: string) => {
     if (text === "") {
       setSearchResult([]);
       return;
     }
-    await mutateAsyncSearchTalks(text);
+    setSearchResult(
+      data?.filter(
+        (item) =>
+          item.to?.displayName
+            ?.toUpperCase()
+            .indexOf(text.trim().toUpperCase()) !== -1
+      )
+    );
   }, []);
 
   const talkChatNavigationHandler = useCallback(
     (talkId: number, displayName: string | null | undefined) => {
+      navigation.goBack();
       navigation.navigate("TalkChat", { talkId, displayName });
     },
     []
@@ -62,7 +48,6 @@ const SearchTalkscreen = () => {
     <SearchTalkTemplate
       searchResult={searchResult}
       searchTalks={searchTalks}
-      isLoadingSearchTalks={isLoadingSearchTalks}
       talkChatNavigationHandler={talkChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

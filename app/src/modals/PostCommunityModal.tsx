@@ -17,6 +17,7 @@ const PostCommunityModal = () => {
   const { mutateAsync, isLoading } = usePostCommunity({
     onSuccess: async () => {
       await refetch();
+      navigation.goBack();
     },
     onError: () => {
       navigation.goBack();
@@ -34,12 +35,12 @@ const PostCommunityModal = () => {
   const postCommunity = useCallback(
     async (
       communityName: string,
-      communityDiscription: string,
+      description: string,
       category: string
     ) => {
       await mutateAsync({
         communityName,
-        communityDiscription,
+        description,
         category,
         hue: Math.floor(Math.random() * 360).toString(),
       });

@@ -1,26 +1,29 @@
-import { supabase } from "../../../supabase";
-import { useInfiniteQuery } from "react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { useMemo } from "react";
+import { supabase } from "../../../supabase";
+import { useInfiniteQuery, useQuery } from "react-query";
+import { Talk, User } from "../../../types/db";
 
 export type GetTalksResponse = Awaited<ReturnType<typeof getTalks>>;
 export type GetTalkChatsResponse = Awaited<ReturnType<typeof getTalkChats>>;
 
-const getTalks = async (from: number, to: number) => {
+const getTalks = async (userId: string | undefined) => {
   const { data, error } = await supabase
     .from("talk")
-    .select("*, user(*)")
+    .select(`*, to:recieverId(*), from:senderId(*)`)
+    .or(`senderId.eq.${userId},recieverId.eq.${userId}`)
     .order("createdAt", { ascending: false })
-    .range(from, to);
+    .returns<(Talk["Row"] & { to: User["Row"]; from: User["Row"] })[]>();
   if (error) {
     throw error;
   }
 
-  return data.map((item) =>
-    Array.isArray(item.user)
-      ? { ...item, user: item.user[0] }
-      : { ...item, user: item.user }
-  );
+  return data.map((item) => {
+    if (item.recieverId === userId) {
+      return { ...item, to: item.from, from: item.from };
+    }
+    return item;
+  });
 };
 
 const getTalkChats = async (talkId: number, from: number, to: number) => {
@@ -41,30 +44,11 @@ const getTalkChats = async (talkId: number, from: number, to: number) => {
   );
 };
 
-export const useInfiniteQueryTalks = () => {
-  const PAGE_COUNT = 15;
-  const query = useInfiniteQuery<GetTalksResponse, PostgrestError>({
+export const useQueryTalks = (userId: string | undefined) =>
+  useQuery({
     queryKey: "talks",
-    queryFn: async ({ pageParam = 0 }) => {
-      return await getTalks(pageParam, pageParam + PAGE_COUNT - 1);
-    },
-    getNextPageParam: (lastPage, pages) => {
-      if (lastPage && lastPage.length === PAGE_COUNT) {
-        return pages.map((page) => page).flat().length;
-      }
-    },
+    queryFn: async () => await getTalks(userId),
   });
-
-  const data = useMemo(
-    () =>
-      query.data?.pages
-        .flatMap((page) => page)
-        .filter((page): page is NonNullable<typeof page> => page !== null),
-    [query.data]
-  );
-
-  return { ...query, data };
-};
 
 export const useInfiniteQueryTalkChats = (talkId: number) => {
   const PAGE_COUNT = 15;
@@ -79,7 +63,6 @@ export const useInfiniteQueryTalkChats = (talkId: number) => {
       }
     },
   });
-
   const data = useMemo(
     () =>
       query.data?.pages

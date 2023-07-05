@@ -19,6 +19,7 @@ const PostProfileModal = () => {
   const { mutateAsync, isLoading } = usePostUser({
     onSuccess: async () => {
       await refetch();
+      navigation.goBack();
     },
     onError: () => {
       navigation.goBack();

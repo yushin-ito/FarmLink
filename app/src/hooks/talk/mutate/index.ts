@@ -6,7 +6,6 @@ import { decode } from "base64-arraybuffer";
 
 export type PostTalkResponse = Awaited<ReturnType<typeof postTalk>>;
 export type DeleteTalkResponse = Awaited<ReturnType<typeof deleteTalk>>;
-export type SearchTalksResponse = Awaited<ReturnType<typeof searchTalks>>;
 export type PostTalkChatResponse = Awaited<ReturnType<typeof postTalkChat>>;
 export type PostTalkImageResponse = Awaited<ReturnType<typeof postTalkImage>>;
 
@@ -28,21 +27,6 @@ const deleteTalk = async (talkId: number) => {
     throw error;
   }
   return data;
-};
-
-const searchTalks = async (text: string) => {
-  const { data, error } = await supabase
-    .from("talk")
-    .select("*, user(*)")
-    .ilike("talkName", `%${text}%`);
-  if (error) {
-    throw error;
-  }
-  return data.map((item) =>
-    Array.isArray(item.user)
-      ? { ...item, user: item.user[0] }
-      : { ...item, user: item.user }
-  );
 };
 
 const postTalkChat = async (chat: Chat["Insert"]) => {
@@ -103,16 +87,6 @@ export const useDeleteTalk = ({
 }: UseMutationResult<DeleteTalkResponse, PostgrestError>) =>
   useMutation({
     mutationFn: deleteTalk,
-    onSuccess,
-    onError,
-  });
-
-export const useSearchTalks = ({
-  onSuccess,
-  onError,
-}: UseMutationResult<SearchTalksResponse, PostgrestError>) =>
-  useMutation({
-    mutationFn: searchTalks,
     onSuccess,
     onError,
   });

@@ -21,7 +21,7 @@ const TalkItem = memo(
     return (
       <Pressable
         onPress={() =>
-          talkChatNavigationHandler(item?.talkId, item?.user?.displayName)
+          talkChatNavigationHandler(item?.talkId, item?.from?.displayName)
         }
       >
         <HStack
@@ -34,7 +34,7 @@ const TalkItem = memo(
           justifyContent="space-between"
         >
           <Text bold fontSize="md">
-            {item.user?.displayName}
+            {item.to?.displayName}
           </Text>
           <IconButton
             onPress={() =>

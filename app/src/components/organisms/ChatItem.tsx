@@ -11,7 +11,6 @@ type ChatItemProps = {
 };
 
 const ChatItem = memo(({ item, isAuthor }: ChatItemProps) => {
-
   return (
     <HStack
       w="100%"

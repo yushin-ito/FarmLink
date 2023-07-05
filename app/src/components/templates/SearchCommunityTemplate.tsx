@@ -18,7 +18,7 @@ import SearchCommunityItem from "../organisms/SearchCommunityItem";
 
 type SearchCommunityTemplateProps = {
   searchResult: GetCommunitiesResponse | undefined;
-  searchCommunities: (query: string) => void;
+  searchCommunities: (query: string) => Promise<void>;
   isLoadingSearchCommunities: boolean;
   communityChatNavigationHandler: (
     communityId: number,
@@ -42,14 +42,7 @@ const SearchCommunityTemplate = ({
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box
-        flex={1}
-        pt="4"
-        pb="12"
-        px="2"
-        justifyContent="space-between"
-        safeAreaTop
-      >
+      <Box flex={1} pt="4" px="2" safeAreaTop>
         <VStack space="7">
           <HStack px="5" alignItems="center" justifyContent="space-between">
             <Controller
@@ -98,7 +91,7 @@ const SearchCommunityTemplate = ({
           ) : (
             <FlatList
               w="100%"
-              px="9"
+              px="6"
               data={searchResult}
               renderItem={({ item }) => (
                 <SearchCommunityItem

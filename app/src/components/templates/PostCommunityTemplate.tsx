@@ -21,7 +21,7 @@ type PostCommunityTemplateProps = {
   isLoading: boolean;
   postCommunity: (
     communityName: string,
-    communityDiscription: string,
+    description: string,
     category: string
   ) => Promise<void>;
   goBackNavigationHandler: () => void;
@@ -29,7 +29,7 @@ type PostCommunityTemplateProps = {
 
 type FormValues = {
   communityName: string;
-  communityDiscription: string;
+  description: string;
   category: string;
 };
 
@@ -42,7 +42,6 @@ const PostCommunityTemplate = ({
   const {
     control,
     handleSubmit,
-    reset,
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
@@ -63,22 +62,15 @@ const PostCommunityTemplate = ({
     <Box flex={1} safeAreaTop>
       <HStack
         w="100%"
-        position="absolute"
-        top="10"
-        alignSelf="center"
         alignItems="center"
         justifyContent="space-between"
-        bg="rgb(242, 242, 242)"
-        zIndex={2}
+        bg="muted.100"
       >
         <IconButton
           p="6"
           onPressIn={goBackNavigationHandler}
           icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
           variant="unstyled"
-          _pressed={{
-            opacity: 0.5,
-          }}
         />
         <Heading textAlign="center">{t("createCommunity")}</Heading>
         <IconButton
@@ -86,14 +78,11 @@ const PostCommunityTemplate = ({
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" />}
           variant="unstyled"
-          _pressed={{
-            opacity: 0.5,
-          }}
         />
       </HStack>
       <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Box flex={1} pb="16" justifyContent="space-between">
-          <VStack pt="20" px="10" space="6">
+          <VStack px="10" space="6">
             <FormControl isInvalid={"communityName" in errors}>
               <FormControl.Label>{t("communityName")}</FormControl.Label>
               <Controller
@@ -106,7 +95,7 @@ const PostCommunityTemplate = ({
                         returnKeyType="done"
                         InputRightElement={
                           <IconButton
-                            onPress={() => reset()}
+                            onPress={() => setValue("communityName", "")}
                             icon={
                               <Icon
                                 as={<Feather name="x" />}
@@ -149,10 +138,10 @@ const PostCommunityTemplate = ({
                 }}
               />
             </FormControl>
-            <FormControl isInvalid={"communityDiscription" in errors}>
+            <FormControl isInvalid={"description" in errors}>
               <FormControl.Label>{t("discription")}</FormControl.Label>
               <Controller
-                name="communityDiscription"
+                name="description"
                 control={control}
                 render={({ field: { value, onChange } }) => {
                   return (
@@ -169,8 +158,8 @@ const PostCommunityTemplate = ({
                             <Icon as={<Feather name="alert-circle" />} />
                           }
                         >
-                          {errors.communityDiscription && (
-                            <Text>{errors.communityDiscription.message}</Text>
+                          {errors.description && (
+                            <Text>{errors.description.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
@@ -191,7 +180,7 @@ const PostCommunityTemplate = ({
             </FormControl>
             <VStack>
               <FormControl.Label>{t("category")}</FormControl.Label>
-              <HStack pt="1" space="2">
+              <HStack pt="1" space="3">
                 {categores.map((category, index) => (
                   <Button
                     key={index}
@@ -220,10 +209,9 @@ const PostCommunityTemplate = ({
             onPress={handleSubmit((data) => {
               postCommunity(
                 data.communityName,
-                data.communityDiscription,
+                data.description,
                 data.category
               );
-              goBackNavigationHandler();
             })}
           >
             {t("create")}

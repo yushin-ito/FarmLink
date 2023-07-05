@@ -206,7 +206,6 @@ const PostProfileTemplate = ({
             isLoading={isLoading}
             onPress={handleSubmit(async (data) => {
               await postUser(data.displayName, data.introduction);
-              goBackNavigationHandler();
             })}
           >
             {t("save")}

@@ -1,7 +1,7 @@
 import { Box, Icon, Spinner } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import CircleButton from "../molecules/CircleButton";
 import { LocationObject } from "expo-location";
@@ -20,7 +20,7 @@ const MapTemplate = ({
   isLoadingPosition,
   searchFarmNavigationHandler,
 }: MapTemplateProps) => {
-  const mapRef = useRef<MapView | null>(null);
+  const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
     if (mapRef.current && position) {
@@ -37,13 +37,13 @@ const MapTemplate = ({
     <Box flex={1}>
       <MapView
         ref={mapRef}
+        mapType="hybrid"
         style={{
           flex: 1,
           opacity: isLoadingPosition ? 0.5 : 1,
         }}
         loadingEnabled
         showsCompass={false}
-        provider={PROVIDER_GOOGLE}
       >
         {position && (
           <Marker coordinate={position.coords}>

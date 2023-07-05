@@ -52,6 +52,7 @@ const SearchCommunitieScreen = () => {
 
   const communityChatNavigationHandler = useCallback(
     (communityId: number, communityName: string | null) => {
+      navigation.goBack();
       navigation.navigate("CommunityChat", { communityId, communityName });
     },
     []

@@ -1,13 +1,13 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import * as Location from "expo-location";
 
 type UseLocationType = {
-  onSuccess?: (location: Location.LocationObject) => void;
   onError?: (error: Error) => void;
   onDisable?: () => void;
 };
 
-const useLocation = ({ onSuccess, onError, onDisable }: UseLocationType) => {
+const useLocation = ({ onError, onDisable }: UseLocationType) => {
+  const [position, setPosition] = useState<Location.LocationObject>();
   const [isLoading, setIsLoading] = useState(false);
 
   const getCurrentPosition = useCallback(async () => {
@@ -19,7 +19,7 @@ const useLocation = ({ onSuccess, onError, onDisable }: UseLocationType) => {
         return;
       }
       const location = await Location.getCurrentPositionAsync();
-      onSuccess && onSuccess(location);
+      setPosition(location);
     } catch (error) {
       if (error instanceof Error) {
         onError && onError(error);
@@ -29,7 +29,11 @@ const useLocation = ({ onSuccess, onError, onDisable }: UseLocationType) => {
     }
   }, []);
 
-  return { getCurrentPosition, isLoading };
+  useEffect(() => {
+    (async () => await getCurrentPosition())();
+  }, []);
+
+  return { position, getCurrentPosition, isLoading };
 };
 
 export default useLocation;

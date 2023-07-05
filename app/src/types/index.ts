@@ -2,7 +2,7 @@ import { NavigatorScreenParams } from "@react-navigation/native";
 
 export type RootStackParamList = {
   AuthNavigator: undefined;
-  TabBarNavigator: undefined;
+  TabNavigator: undefined;
 };
 
 export type AuthStackParamList = {
@@ -11,7 +11,7 @@ export type AuthStackParamList = {
   SignUp: undefined;
 };
 
-export type TabBarParamList = {
+export type TabParamList = {
   MapNavigator: undefined;
   CommunityNavigator: undefined;
   FarmNavigator: undefined;

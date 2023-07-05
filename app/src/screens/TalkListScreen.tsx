@@ -3,7 +3,7 @@ import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
-import { useInfiniteQueryTalks } from "../hooks/talk/query";
+import { useQueryTalks } from "../hooks/talk/query";
 import { useDeleteTalk } from "../hooks/talk/mutate";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -27,9 +27,7 @@ const TalkListScreen = () => {
     data: talks,
     isLoading: isLoadingTalks,
     refetch,
-    hasNextPage,
-    fetchNextPage,
-  } = useInfiniteQueryTalks();
+  } = useQueryTalks(session?.user.id);
   const [isRefetchingTalks, setIsRefetchingTalks] = useState(false);
 
   const { mutateAsync: mutateAsyncDeleteTalk } = useDeleteTalk({
@@ -48,7 +46,7 @@ const TalkListScreen = () => {
     },
   });
 
-  const refetchTalk = useCallback(async () => {
+  const refetchTalks = useCallback(async () => {
     setIsRefetchingTalks(true);
     await refetch();
     setIsRefetchingTalks(false);
@@ -83,9 +81,7 @@ const TalkListScreen = () => {
       user={user}
       isLoadingTalks={isLoadingTalks}
       isRefetchingTalks={isRefetchingTalks}
-      hasMore={hasNextPage}
-      readMore={fetchNextPage}
-      refetchTalks={refetchTalk}
+      refetchTalks={refetchTalks}
       deleteTalk={deleteTalk}
       talkChatNavigationHandler={talkChatNavigationHandler}
       postTalkNavigationHandler={postTalkNavigationHandler}

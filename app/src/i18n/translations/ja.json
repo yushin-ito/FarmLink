@@ -31,6 +31,7 @@
     "fetchError": "データの取得に失敗しました"
   },
   "map": {
+    "search": "探す",
     "permitRequestGPS": "位置情報を許可してください",
     "anyError": "エラーが発生しました"
   },
@@ -43,9 +44,9 @@
     "delete": "削除",
     "icon": "アイコン",
     "communityName": "コミュニティ名",
-    "discription": "詳細",
     "communityNameRequired": "コミュニティ名を入力してください",
     "communityNameMaxLength": "コミュニティ名は20文字以内で入力してください",
+    "discription": "詳細",
     "discriptionRequired": "詳細を入力してください",
     "discriptionMaxLength": "詳細は100文字以内で入力してください",
     "create": "作成",
@@ -72,15 +73,24 @@
     "askDeleteFarm": "農園を削除してもよろしいですか",
     "cancel": "キャンセル",
     "delete": "削除",
+    "notExistFarm": "右下のボタンからデバイスを接続して\n農園を管理してみましょう!",
     "farmName": "農園名",
     "farmNameRequired": "農園名を入力してください",
     "farmNameMaxLength": "農園名は20文字以内で入力してください",
+    "doPublic": "ほかのユーザーに公開する",
+    "permitRequestGPS": "位置情報を許可してください",
+    "deviceId": "デバイスID",
+    "invalidDeviceId": "デバイスIDが無効です",
+    "discription": "詳細",
+    "discriptionRequired": "詳細を入力してください",
+    "discriptionMaxLength": "詳細は100文字以内で入力してください",
     "create": "作成"
   },
   "talk": {
     "talk": "トーク",
     "anyError": "エラーが発生しました",
     "createTalk": "トークを作成",
+    "searchUser": "ユーザーを検索",
     "deleteTalk": "トーク削除",
     "permitRequestCam": "カメラを許可してください",
     "askDeleteTalk": "トークを削除してもよろしいですか",

@@ -48,6 +48,7 @@ const SearchFarmScreen = () => {
   }, []);
 
   const farmDetailNavigationHandler = useCallback((farmId: number) => {
+    navigation.goBack();
     navigation.navigate("FarmDetail", { farmId });
   }, []);
 

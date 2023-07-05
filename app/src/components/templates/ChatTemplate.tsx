@@ -18,7 +18,7 @@ import { GetTalkChatsResponse } from "../../hooks/talk/query";
 import BackButton from "../molecules/BackButton";
 
 type ChatTemplateProps = {
-  title: string | null;
+  title: string | null | undefined;
   user: GetUserResponse | null | undefined;
   chats: GetCommunityChatsResponse | GetTalkChatsResponse | undefined;
   isLoadingChats: boolean;

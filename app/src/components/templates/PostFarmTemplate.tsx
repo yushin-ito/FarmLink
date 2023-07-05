@@ -1,15 +1,8 @@
-import React from "react";
-import {
-  Keyboard,
-  Platform,
-  TouchableWithoutFeedback,
-  useWindowDimensions,
-} from "react-native";
-import { Feather } from "@expo/vector-icons";
+import React, { useEffect, useRef, useState } from "react";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 
 import {
   Button,
-  KeyboardAvoidingView,
   Box,
   VStack,
   Heading,
@@ -18,138 +11,306 @@ import {
   HStack,
   IconButton,
   Icon,
+  Switch,
+  Spinner,
+  Center,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
+import MapView, { Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { SearchDeviceResponse } from "../../hooks/device/mutate";
+import { LocationObject } from "expo-location";
+import CircleButton from "../molecules/CircleButton";
 
 type PostFarmTemplateProps = {
-  isLoading: boolean;
-  postFarm: (FarmName: string) => Promise<void>;
+  isLoadingPostFarm: boolean;
+  isLoadingPosition: boolean;
+  searchResult: SearchDeviceResponse | undefined;
+  position: LocationObject | undefined;
+  getCurrentPosition: () => Promise<void>;
+  postFarm: (
+    farmName: string,
+    deviceId: string,
+    description: string
+  ) => Promise<void>;
+  searchDevice: (query: string) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
 
 type FormValues = {
   farmName: string;
+  deviceId: string;
+  private: boolean;
+  description: string;
 };
 
 const PostFarmTemplate = ({
-  isLoading,
+  isLoadingPostFarm,
+  isLoadingPosition,
+  position,
+  getCurrentPosition,
+  searchResult,
   postFarm,
+  searchDevice,
   goBackNavigationHandler,
 }: PostFarmTemplateProps) => {
   const { t } = useTranslation("farm");
   const {
     control,
     handleSubmit,
-    reset,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const { height } = useWindowDimensions();
+  const [isPrivate, setIsPrivate] = useState(true);
+  const mapRef = useRef<MapView>(null);
+
+  useEffect(() => {
+    if (mapRef.current && position) {
+      mapRef.current.animateToRegion({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      });
+    }
+  }, [position, isPrivate, isLoadingPosition]);
 
   return (
-    <KeyboardAvoidingView
-      flex={1}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={height / 15}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Box flex={1} pt="6" pb="12" px="2" justifyContent="space-between">
-          <VStack space="7">
-            <HStack alignItems="center" justifyContent="space-between">
-              <IconButton
-                onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="chevron-left" />} size="6" />}
-                variant="unstyled"
-                _pressed={{
-                  opacity: 0.5,
+    <Box flex={1} safeAreaTop>
+      <HStack
+        w="100%"
+        alignItems="center"
+        justifyContent="space-between"
+        bg="muted.100"
+      >
+        <IconButton
+          p="6"
+          onPressIn={goBackNavigationHandler}
+          icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+          variant="unstyled"
+        />
+        <Heading textAlign="center">{t("createFarm")}</Heading>
+        <IconButton
+          p="6"
+          onPress={goBackNavigationHandler}
+          icon={<Icon as={<Feather name="x" />} size="xl" />}
+          variant="unstyled"
+        />
+      </HStack>
+      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <Box flex={1} pb="16" justifyContent="space-between">
+          <VStack px="10" space="6">
+            <FormControl isInvalid={"farmName" in errors}>
+              <FormControl.Label>{t("farmName")}</FormControl.Label>
+              <Controller
+                name="farmName"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <VStack>
+                      <Input
+                        returnKeyType="done"
+                        InputRightElement={
+                          <IconButton
+                            onPress={() => setValue("farmName", "")}
+                            icon={
+                              <Icon
+                                as={<Feather name="x" />}
+                                size="4"
+                                color="muted.400"
+                              />
+                            }
+                            variant="unstyled"
+                            _pressed={{
+                              opacity: 0.5,
+                            }}
+                          />
+                        }
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                      <HStack mt="1" justifyContent="space-between">
+                        <FormControl.ErrorMessage
+                          leftIcon={
+                            <Icon as={<Feather name="alert-circle" />} />
+                          }
+                        >
+                          {errors.farmName && (
+                            <Text>{errors.farmName.message}</Text>
+                          )}
+                        </FormControl.ErrorMessage>
+                        <Text color="muted.600">
+                          {value?.length ? value.length : 0} / 20
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  );
+                }}
+                rules={{
+                  required: t("farmNameRequired"),
+                  maxLength: {
+                    value: 20,
+                    message: t("farmNameMaxLength"),
+                  },
                 }}
               />
-              <Heading textAlign="center">{t("createFarm")}</Heading>
-              <IconButton
-                onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="x" />} size="6" />}
-                variant="unstyled"
-                _pressed={{
-                  opacity: 0.5,
+            </FormControl>
+            <FormControl isInvalid={"deviceId" in errors}>
+              <FormControl.Label>{t("deviceId")}</FormControl.Label>
+              <Controller
+                name="deviceId"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <VStack>
+                      <Input
+                        returnKeyType="done"
+                        InputRightElement={
+                          <IconButton
+                            onPress={() => setValue("deviceId", "")}
+                            icon={
+                              <Icon
+                                as={<Feather name="x" />}
+                                size="4"
+                                color="muted.400"
+                              />
+                            }
+                            variant="unstyled"
+                            _pressed={{
+                              opacity: 0.5,
+                            }}
+                          />
+                        }
+                        value={value}
+                        onChangeText={async (text) => {
+                          onChange(text);
+                          await searchDevice(text);
+                        }}
+                      />
+                      <HStack mt="1" justifyContent="space-between">
+                        <FormControl.ErrorMessage
+                          leftIcon={
+                            <Icon as={<Feather name="alert-circle" />} />
+                          }
+                        >
+                          {errors.deviceId && (
+                            <Text>{errors.deviceId.message}</Text>
+                          )}
+                        </FormControl.ErrorMessage>
+                        <Text color="muted.600">
+                          {value?.length ? value.length : 0} / 20
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  );
                 }}
+                rules={{
+                  required: t("deviceIdRequired"),
+                  validate: () =>
+                    searchResult ? undefined : t("invalidDeviceId"),
+                }}
+              />
+            </FormControl>
+            <HStack mt="4" alignItems="center" justifyContent="space-between">
+              <Text fontSize="md" bold color="muted.600">
+                {t("doPublic")}
+              </Text>
+              <Switch
+                colorScheme="brand"
+                onValueChange={(value) => setIsPrivate(!value)}
               />
             </HStack>
-            <VStack mx="10">
-              <FormControl isInvalid={"farmName" in errors}>
-                <FormControl.Label>{t("farmName")}</FormControl.Label>
-                <Controller
-                  name="farmName"
-                  control={control}
-                  render={({ field: { value, onChange } }) => {
-                    return (
-                      <VStack>
-                        <Input
-                          autoFocus
-                          returnKeyType="done"
-                          InputRightElement={
-                            <IconButton
-                              onPress={() => reset()}
-                              icon={
-                                <Icon
-                                  as={<Feather name="x" />}
-                                  size="4"
-                                  color="muted.400"
-                                />
-                              }
-                              variant="unstyled"
-                              _pressed={{
-                                opacity: 0.5,
-                              }}
-                            />
-                          }
-                          value={value}
-                          onChangeText={onChange}
+            {!isPrivate && (
+              <VStack mt="6" space="6">
+                {isLoadingPosition ? (
+                  <Center h="40" bg="muted.200" rounded="xl">
+                    <Spinner color="muted.400" />
+                  </Center>
+                ) : (
+                  <MapView
+                    ref={mapRef}
+                    mapType="hybrid"
+                    style={{
+                      width: "100%",
+                      height: 160,
+                      borderRadius: 12,
+                      opacity: isLoadingPosition ? 0.5 : 1,
+                    }}
+                    loadingBackgroundColor="#e5e5e5"
+                    loadingEnabled
+                    showsCompass={false}
+                  >
+                    {position && (
+                      <Marker coordinate={position.coords}>
+                        <Icon
+                          as={<MaterialIcons />}
+                          name="location-pin"
+                          size="3xl"
+                          color="red.500"
                         />
-                        <HStack mt="1" justifyContent="space-between">
-                          <FormControl.ErrorMessage
-                            leftIcon={
-                              <Icon as={<Feather name="alert-circle" />} />
-                            }
-                          >
-                            {errors.farmName && (
-                              <Text>{errors.farmName.message}</Text>
-                            )}
-                          </FormControl.ErrorMessage>
-                          <Text color="muted.600">
-                            {value?.length ? value.length : 0} / 20
-                          </Text>
-                        </HStack>
-                      </VStack>
-                    );
-                  }}
-                  rules={{
-                    required: t("farmNameRequired"),
-                    maxLength: {
-                      value: 20,
-                      message: t("farmNameMaxLength"),
-                    },
-                  }}
-                />
-              </FormControl>
-            </VStack>
+                      </Marker>
+                    )}
+                  </MapView>
+                )}
+                <FormControl isInvalid={"description" in errors}>
+                  <FormControl.Label>{t("discription")}</FormControl.Label>
+                  <Controller
+                    name="description"
+                    control={control}
+                    render={({ field: { value, onChange } }) => {
+                      return (
+                        <VStack>
+                          <Input
+                            h="48"
+                            multiline
+                            value={value}
+                            onChangeText={onChange}
+                          />
+                          <HStack mt="1" justifyContent="space-between">
+                            <FormControl.ErrorMessage
+                              leftIcon={
+                                <Icon as={<Feather name="alert-circle" />} />
+                              }
+                            >
+                              {errors.description && (
+                                <Text>{errors.description.message}</Text>
+                              )}
+                            </FormControl.ErrorMessage>
+                            <Text color="muted.600">
+                              {value?.length ? value.length : 0} / 100
+                            </Text>
+                          </HStack>
+                        </VStack>
+                      );
+                    }}
+                    rules={{
+                      maxLength: {
+                        value: 100,
+                        message: t("discriptionMaxLength"),
+                      },
+                    }}
+                  />
+                </FormControl>
+              </VStack>
+            )}
           </VStack>
           <Button
             mx="10"
             size="lg"
             rounded="xl"
             colorScheme="brand"
-            isLoading={isLoading}
+            isLoading={isLoadingPostFarm}
             onPress={handleSubmit(async (data) => {
-              await postFarm(data.farmName);
-              goBackNavigationHandler();
+              await postFarm(data.farmName, data.deviceId, data.description);
             })}
           >
             {t("create")}
           </Button>
         </Box>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
+    </Box>
   );
 };
 
