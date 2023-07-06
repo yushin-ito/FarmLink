@@ -80,7 +80,6 @@ void setup() {
 
   HTTPClient http;
 
-
   http.begin(client, String(SUPABASE_URL) + "/storage/v1/object/image/avatar/image.jpg");
   http.addHeader("Content-Type", "image/jpeg");
   http.addHeader("apikey", String(SUPABASE_KEY));

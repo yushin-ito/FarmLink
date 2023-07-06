@@ -1,22 +1,24 @@
 import React, { memo } from "react";
-import { Box, HStack, Text } from "native-base";
+import { Box, HStack, Text, VStack } from "native-base";
 import { GetCommunityChatsResponse } from "../../hooks/community/query";
 import AutoHeightImage from "../molecules/AutoHeightImage";
 import Avatar from "../molecules/Avatar";
 import { GetTalkChatsResponse } from "../../hooks/talk/query";
+import { getTimeDistance } from "../../functions";
 
 type ChatItemProps = {
   item: GetCommunityChatsResponse[number] | GetTalkChatsResponse[number];
   isAuthor: boolean;
+  locale: string | null;
 };
 
-const ChatItem = memo(({ item, isAuthor }: ChatItemProps) => {
+const ChatItem = memo(({ item, isAuthor, locale }: ChatItemProps) => {
   return (
     <HStack
       w="100%"
+      mb="5"
       space="2"
       justifyContent={!isAuthor ? "flex-start" : "flex-end"}
-      mb="5"
     >
       {!isAuthor && (
         <Avatar
@@ -28,25 +30,33 @@ const ChatItem = memo(({ item, isAuthor }: ChatItemProps) => {
         />
       )}
       {item?.message && (
-        <Box
+        <VStack
           maxW="70%"
-          px="2"
-          py="1"
-          bg="white"
-          shadow="1"
-          roundedTop="lg"
-          roundedBottomRight={!isAuthor ? "lg" : "0"}
-          roundedBottomLeft={!isAuthor ? "0" : "lg"}
+          space="1"
+          alignItems={!isAuthor ? "flex-end" : "flex-start"}
         >
-          <Text bold fontSize="md">
-            {item.message}
+          <Box
+            px="2"
+            py="1"
+            bg="white"
+            shadow="1"
+            roundedTop="lg"
+            roundedBottomRight={!isAuthor ? "lg" : "0"}
+            roundedBottomLeft={!isAuthor ? "0" : "lg"}
+          >
+            <Text bold fontSize="md">
+              {item.message}
+            </Text>
+          </Box>
+          <Text mx="1" fontSize="xs" color="muted.600">
+            {getTimeDistance(item.createdAt, locale)}
           </Text>
-        </Box>
+        </VStack>
       )}
       {item?.imageUrl && (
-        <Box w="100%" alignItems={!isAuthor ? "flex-start" : "flex-end"}>
+        <VStack w="100%" alignItems={!isAuthor ? "flex-start" : "flex-end"}>
           <AutoHeightImage ratio={0.7} source={{ uri: item.imageUrl }} />
-        </Box>
+        </VStack>
       )}
     </HStack>
   );

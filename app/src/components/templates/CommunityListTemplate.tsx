@@ -88,7 +88,12 @@ const CommunityListTemplate = ({
         renderItem={({ item }) => (
           <CommunityItem
             item={item}
-            communityChatNavigationHandler={communityChatNavigationHandler}
+            onPress={() =>
+              communityChatNavigationHandler(
+                item.communityId,
+                item.communityName
+              )
+            }
           />
         )}
         keyExtractor={(item) => item.communityId.toString()}

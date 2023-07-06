@@ -77,7 +77,9 @@ const FarmListTemplate = ({
           <FarmItem
             item={item}
             deleteFarm={deleteFarm}
-            farmCameraNavigationHandler={farmCameraNavigationHandler}
+            onPress={() =>
+              farmCameraNavigationHandler(item.farmId, item.farmName)
+            }
           />
         )}
         ListEmptyComponent={

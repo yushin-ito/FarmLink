@@ -1,42 +1,32 @@
 import React, { memo } from "react";
-import { Feather } from "@expo/vector-icons";
-import { HStack, Icon, IconButton, Pressable, Text } from "native-base";
+import { Center, HStack,  Pressable, Text } from "native-base";
 import { GetTalksResponse } from "../../hooks/talk/query";
 import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
+import Avatar from "../molecules/Avatar";
+import { Swipeable } from "react-native-gesture-handler";
 
 type TalkItemProps = {
   item: GetTalksResponse[number];
   deleteTalk: (talkId: number) => Promise<void>;
-  talkChatNavigationHandler: (
-    talkId: number,
-    talkName: string | null | undefined
-  ) => void;
+  onPress: () => void;
 };
 
-const TalkItem = memo(
-  ({ item, deleteTalk, talkChatNavigationHandler }: TalkItemProps) => {
-    const { t } = useTranslation("talk");
+const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
+  const { t } = useTranslation("talk");
 
-    return (
-      <Pressable
-        onPress={() =>
-          talkChatNavigationHandler(item?.talkId, item?.from?.displayName)
-        }
-      >
-        <HStack
-          mb="5"
-          p="5"
-          bg="white"
-          shadow="1"
-          rounded="lg"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Text bold fontSize="md">
-            {item.to?.displayName}
-          </Text>
-          <IconButton
+  return (
+    <Pressable
+      onPress={onPress}
+      _pressed={{ opacity: 0.8 }}
+      mb="2"
+      rounded="lg"
+      bg="white"
+      shadow="1"
+    >
+      <Swipeable
+        renderRightActions={() => (
+          <Pressable
             onPress={() =>
               Alert.alert(t("deleteTalk"), t("askDeleteTalk"), [
                 {
@@ -53,14 +43,31 @@ const TalkItem = memo(
             _pressed={{
               opacity: 0.5,
             }}
-            icon={<Icon as={<Feather />} name="trash" size="5" />}
-            variant="ghost"
-            colorScheme="muted"
+          >
+            <Center h="100%" px="5" roundedRight="lg" bg="red.500">
+              <Text color="white" bold fontSize="md">
+                {t("delete")}
+              </Text>
+            </Center>
+          </Pressable>
+        )}
+      >
+        <HStack px="5" py="3" alignItems="center" space="2">
+          <Avatar
+            disabled
+            text={item?.to.displayName?.charAt(0)}
+            avatarUrl={item?.to.avatarUrl}
+            updatedAt={item?.to.updatedAt}
+            hue={item?.to.hue}
+            size="9"
           />
+          <Text bold fontSize="md">
+            {item.to?.displayName}
+          </Text>
         </HStack>
-      </Pressable>
-    );
-  }
-);
+      </Swipeable>
+    </Pressable>
+  );
+});
 
 export default TalkItem;

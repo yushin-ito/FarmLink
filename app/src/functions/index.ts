@@ -1,10 +1,9 @@
 import { IToastService } from "native-base/lib/typescript/components/composites/Toast";
 import * as Linking from "expo-linking";
+import { formatDistance } from "date-fns";
+import { ja, enUS } from "date-fns/locale";
 
-export const showAlert = (
-  toast: IToastService,
-  Alert: React.ReactNode
-) => {
+export const showAlert = (toast: IToastService, Alert: React.ReactNode) => {
   if (!toast.isActive(1)) {
     toast.show({
       id: 1,
@@ -24,4 +23,13 @@ export const getSessionFromLink = (link: string) => {
     };
   }
   return null;
+};
+
+export const getTimeDistance = (date: string, locale: string | null) => {
+  const localeJP = locale === "ja" || locale?.startsWith("ja-");
+  const distance = formatDistance(new Date(), new Date(date), {
+    locale: localeJP ? ja : enUS,
+  });
+
+  return distance;
 };

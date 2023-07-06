@@ -83,7 +83,9 @@ const SearchTalkTemplate = ({
             renderItem={({ item }) => (
               <SearchTalkItem
                 item={item}
-                talkChatNavigationHandler={talkChatNavigationHandler}
+                onPress={() =>
+                  talkChatNavigationHandler(item.talkId, item.to.displayName)
+                }
               />
             )}
             keyExtractor={(item) => item.talkId.toString()}

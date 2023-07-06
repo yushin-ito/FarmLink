@@ -6,57 +6,53 @@ import { useTranslation } from "react-i18next";
 
 type CommunityItemProps = {
   item: GetCommunitiesResponse[number];
-  communityChatNavigationHandler: (
-    communityId: number,
-    communityName: string | null
-  ) => void;
+  onPress: () => void;
 };
 
-const CommunityItem = memo(
-  ({ item, communityChatNavigationHandler }: CommunityItemProps) => {
-    const { t } = useTranslation("community");
-    return (
-      <Pressable
-        onPress={() =>
-          communityChatNavigationHandler(item.communityId, item.communityName)
-        }
+const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
+  const { t } = useTranslation("community");
+  return (
+    <Pressable onPress={onPress} _pressed={{ opacity: 0.8 }}>
+      <HStack
+        mb="5"
+        p="4"
+        space="2"
+        bg="white"
+        shadow="1"
+        rounded="xl"
+        alignItems="center"
       >
-        <HStack
-          mb="5"
-          p="4"
-          space="2"
-          bg="white"
-          shadow="1"
-          rounded="xl"
-          alignItems="center"
-        >
-          <Box w="20%">
-            <Avatar
-              size="md"
-              disabled
-              text={item?.communityName?.charAt(0)}
-              avatarUrl={item?.imageUrl}
-              updatedAt={item?.updatedAt}
-              hue={item?.hue}
-            />
+        <Box w="20%">
+          <Avatar
+            size="md"
+            disabled
+            text={item?.communityName?.charAt(0)}
+            avatarUrl={item?.imageUrl}
+            updatedAt={item?.updatedAt}
+            hue={item?.hue}
+          />
+        </Box>
+        <VStack w="80%">
+          <Text bold fontSize="md">
+            {item.communityName}
+          </Text>
+          <Text
+            color="muted.600"
+            fontSize="xs"
+            numberOfLines={3}
+            ellipsizeMode="tail"
+          >
+            {item.description}
+          </Text>
+          <Box pt="2">
+            <Text fontSize="xs">
+              {t("category")}:{" " + item.category}
+            </Text>
           </Box>
-          <VStack w="80%">
-            <Text bold fontSize="md">
-              {item.communityName}
-            </Text>
-            <Text color="muted.600" fontSize="xs" numberOfLines={3} ellipsizeMode="tail">
-              {item.description}
-            </Text>
-            <Box pt="2">
-              <Text fontSize="xs">
-                {t("category")}:{" " + item.category}
-              </Text>
-            </Box>
-          </VStack>
-        </HStack>
-      </Pressable>
-    );
-  }
-);
+        </VStack>
+      </HStack>
+    </Pressable>
+  );
+});
 
 export default CommunityItem;

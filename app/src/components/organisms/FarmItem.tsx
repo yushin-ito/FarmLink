@@ -8,59 +8,50 @@ import { useTranslation } from "react-i18next";
 type FarmItemProps = {
   item: GetFarmsResponse[number];
   deleteFarm: (farmId: number) => Promise<void>;
-  farmCameraNavigationHandler: (
-    farmId: number,
-    farmName: string | null
-  ) => void;
+  onPress: () => void;
 };
 
-const FarmItem = memo(
-  ({ item, deleteFarm, farmCameraNavigationHandler }: FarmItemProps) => {
-    const { t } = useTranslation("farm");
+const FarmItem = memo(({ item, deleteFarm, onPress }: FarmItemProps) => {
+  const { t } = useTranslation("farm");
 
-    return (
-      <Pressable
-        onPress={() =>
-          farmCameraNavigationHandler(item?.farmId, item?.farmName)
-        }
+  return (
+    <Pressable onPress={onPress} _pressed={{ opacity: 0.8 }}>
+      <HStack
+        mb="5"
+        p="5"
+        bg="white"
+        shadow="1"
+        rounded="lg"
+        alignItems="center"
+        justifyContent="space-between"
       >
-        <HStack
-          mb="5"
-          p="5"
-          bg="white"
-          shadow="1"
-          rounded="lg"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Text bold fontSize="md">
-            {item.farmName}
-          </Text>
-          <IconButton
-            onPress={() =>
-              Alert.alert(t("deleteFarm"), t("askDeleteFarm"), [
-                {
-                  text: t("cancel"),
-                  style: "cancel",
-                },
-                {
-                  text: t("delete"),
-                  onPress: async () => await deleteFarm(item.farmId),
-                  style: "destructive",
-                },
-              ])
-            }
-            _pressed={{
-              opacity: 0.5,
-            }}
-            icon={<Icon as={<Feather />} name="trash" size="5" />}
-            variant="ghost"
-            colorScheme="muted"
-          />
-        </HStack>
-      </Pressable>
-    );
-  }
-);
+        <Text bold fontSize="md">
+          {item.farmName}
+        </Text>
+        <IconButton
+          onPress={() =>
+            Alert.alert(t("deleteFarm"), t("askDeleteFarm"), [
+              {
+                text: t("cancel"),
+                style: "cancel",
+              },
+              {
+                text: t("delete"),
+                onPress: async () => await deleteFarm(item.farmId),
+                style: "destructive",
+              },
+            ])
+          }
+          _pressed={{
+            opacity: 0.5,
+          }}
+          icon={<Icon as={<Feather />} name="trash" size="5" />}
+          variant="ghost"
+          colorScheme="muted"
+        />
+      </HStack>
+    </Pressable>
+  );
+});
 
 export default FarmItem;

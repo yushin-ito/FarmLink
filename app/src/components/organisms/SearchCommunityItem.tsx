@@ -1,39 +1,48 @@
-import React from "react";
+import React, { memo } from "react";
 import { SearchCommunitiesResponse } from "../../hooks/community/mutate";
-import { Divider, HStack, Pressable, Text, Icon, Box } from "native-base";
+import { Divider, HStack, Pressable, Text, Icon } from "native-base";
 import { Feather } from "@expo/vector-icons";
+import Avatar from "../molecules/Avatar";
 
 type SearchCommunityItemProps = {
   item: SearchCommunitiesResponse[number];
-  communityChatNavigationHandler: (
-    communityId: number,
-    communityName: string | null
-  ) => void;
+  onPress: () => void;
 };
 
-const SearchCommunityItem = ({
-  item,
-  communityChatNavigationHandler,
-}: SearchCommunityItemProps) => {
-  return (
-    <Box>
+const SearchCommunityItem = memo(
+  ({ item, onPress }: SearchCommunityItemProps) => {
+    return (
       <Pressable
-        onPress={() =>
-          communityChatNavigationHandler(item.communityId, item.communityName)
-        }
+        onPress={onPress}
         my="1"
         alignItems="center"
         rounded="md"
         _pressed={{ bg: "muted.300" }}
       >
-        <HStack w="100%" px="1" py="3" justifyContent="space-between">
-          <Text>{item?.communityName}</Text>
+        <HStack
+          w="100%"
+          p="2"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <HStack alignItems="center" space="2">
+            <Avatar
+              text={item?.communityName?.charAt(0)}
+              avatarUrl={item?.imageUrl}
+              updatedAt={item?.updatedAt}
+              hue={item?.hue}
+              size="9"
+            />
+            <Text bold fontSize="md">
+              {item?.communityName}
+            </Text>
+          </HStack>
           <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
         </HStack>
+        <Divider />
       </Pressable>
-      <Divider />
-    </Box>
-  );
-};
+    );
+  }
+);
 
 export default SearchCommunityItem;

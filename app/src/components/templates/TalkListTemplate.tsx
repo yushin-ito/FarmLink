@@ -81,7 +81,9 @@ const TalkListTemplate = ({
           <TalkItem
             item={item}
             deleteTalk={deleteTalk}
-            talkChatNavigationHandler={talkChatNavigationHandler}
+            onPress={() =>
+              talkChatNavigationHandler(item.talkId, item.to.displayName)
+            }
           />
         )}
         keyExtractor={(item) => item.talkId.toString()}

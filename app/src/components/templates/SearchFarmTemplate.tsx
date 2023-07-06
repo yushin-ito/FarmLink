@@ -93,7 +93,7 @@ const SearchFarmTemplate = ({
               renderItem={({ item }) => (
                 <SearchFarmItem
                   item={item}
-                  farmDetailNavigationHandler={farmDetailNavigationHandler}
+                  onPress={() => farmDetailNavigationHandler(item.farmId)}
                 />
               )}
               keyExtractor={(item) => item.farmId.toString()}

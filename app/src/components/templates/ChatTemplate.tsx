@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Spinner,
 } from "native-base";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Platform } from "react-native";
 import ChatItem from "../organisms/ChatItem";
 import ChatBar from "../organisms/ChatBar";
@@ -16,6 +16,7 @@ import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
 import { GetTalkChatsResponse } from "../../hooks/talk/query";
 import BackButton from "../molecules/BackButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type ChatTemplateProps = {
   title: string | null | undefined;
@@ -31,6 +32,8 @@ type ChatTemplateProps = {
   settingNavigationHandler: () => void;
 };
 
+type Locale = "ja" | "en" | null;
+
 const ChatTemplate = ({
   title,
   user,
@@ -44,6 +47,15 @@ const ChatTemplate = ({
   goBackNavigationHandler,
   settingNavigationHandler,
 }: ChatTemplateProps) => {
+  const [locale, setLocale] = useState<Locale>(null);
+
+  useEffect(() => {
+    (async () => {
+      const locale = await AsyncStorage.getItem("@locale");
+      setLocale(locale as Locale);
+    })();
+  }, []);
+
   if (isLoadingChats) {
     return (
       <Center flex={1}>
@@ -89,7 +101,11 @@ const ChatTemplate = ({
             <Center>{hasMore && <Spinner color="muted.400" />}</Center>
           }
           renderItem={({ item }) => (
-            <ChatItem item={item} isAuthor={item.authorId === user?.userId} />
+            <ChatItem
+              item={item}
+              isAuthor={item.authorId === user?.userId}
+              locale={locale}
+            />
           )}
           keyExtractor={(item) => item.chatId.toString()}
         />

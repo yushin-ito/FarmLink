@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { GetTalksResponse } from "../../hooks/talk/query";
 import { Divider, HStack, Pressable, Text, Icon } from "native-base";
 import { Feather } from "@expo/vector-icons";
@@ -6,21 +6,16 @@ import Avatar from "../molecules/Avatar";
 
 type SearchTalkItemProps = {
   item: GetTalksResponse[number];
-  talkChatNavigationHandler: (
-    talkId: number,
-    talkName: string | null | undefined
-  ) => void;
+  onPress: () => void;
 };
 
-const SearchTalkItem = ({
+const SearchTalkItem = memo(({
   item,
-  talkChatNavigationHandler,
+  onPress
 }: SearchTalkItemProps) => {
   return (
     <Pressable
-      onPress={() =>
-        talkChatNavigationHandler(item.talkId, item.from.displayName)
-      }
+      onPress={onPress}
       my="1"
       alignItems="center"
       rounded="md"
@@ -44,6 +39,6 @@ const SearchTalkItem = ({
       <Divider w="95%" />
     </Pressable>
   );
-};
+})
 
 export default SearchTalkItem;

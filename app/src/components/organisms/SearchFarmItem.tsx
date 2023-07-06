@@ -1,21 +1,18 @@
-import React from "react";
+import React, { memo } from "react";
 import { SearchFarmsResponse } from "../../hooks/farm/mutate";
 import { Divider, HStack, Pressable, Text, Icon, Box } from "native-base";
 import { Feather } from "@expo/vector-icons";
 
 type SearchFarmItemProps = {
   item: SearchFarmsResponse[number];
-  farmDetailNavigationHandler: (farmId: number) => void;
+  onPress: () => void;
 };
 
-const SearchFarmItem = ({
-  item,
-  farmDetailNavigationHandler,
-}: SearchFarmItemProps) => {
+const SearchFarmItem = memo(({ item, onPress }: SearchFarmItemProps) => {
   return (
     <Box>
       <Pressable
-        onPress={() => farmDetailNavigationHandler(item.farmId)}
+        onPress={onPress}
         my="1"
         alignItems="center"
         rounded="md"
@@ -29,6 +26,6 @@ const SearchFarmItem = ({
       <Divider />
     </Box>
   );
-};
+})
 
 export default SearchFarmItem;

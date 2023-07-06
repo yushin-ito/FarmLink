@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { SearchUsersResponse } from "../../hooks/user/mutate";
 import { Divider, HStack, Pressable, Text, Icon, Center } from "native-base";
 import { Feather } from "@expo/vector-icons";
@@ -10,7 +10,7 @@ type SearchUserItemProps = {
   selected: boolean;
 };
 
-const SearchUserItem = ({ item, onPress, selected }: SearchUserItemProps) => {
+const SearchUserItem = memo(({ item, onPress, selected }: SearchUserItemProps) => {
   return (
     <Pressable
       onPress={onPress}
@@ -45,6 +45,6 @@ const SearchUserItem = ({ item, onPress, selected }: SearchUserItemProps) => {
       <Divider />
     </Pressable>
   );
-};
+})
 
 export default SearchUserItem;

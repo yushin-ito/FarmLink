@@ -88,7 +88,7 @@ const PostFarmTemplate = ({
       >
         <IconButton
           p="6"
-          onPressIn={goBackNavigationHandler}
+          onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
           variant="unstyled"
         />

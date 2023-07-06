@@ -96,8 +96,11 @@ const SearchCommunityTemplate = ({
               renderItem={({ item }) => (
                 <SearchCommunityItem
                   item={item}
-                  communityChatNavigationHandler={
-                    communityChatNavigationHandler
+                  onPress={() =>
+                    communityChatNavigationHandler(
+                      item.communityId,
+                      item.communityName
+                    )
                   }
                 />
               )}
