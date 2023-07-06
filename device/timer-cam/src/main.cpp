@@ -1,5 +1,7 @@
 #include "esp_camera.h"
 #include "camera_pins.h"
+#include "battery.h"
+#include "bmm8563.h"
 
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -7,7 +9,10 @@
 
 #include "env.h"
 
+#define SLEEP_TIME 1 * 60 // X分
+
 const char* bucket = "image";
+const char* directory = "device";
 
 bool init_camera(void) {
   camera_config_t config;
@@ -53,6 +58,7 @@ bool init_camera(void) {
 void setup() {
   Serial.begin(115200);
 
+  // WiFi接続
   WiFi.begin(SSID, PASSWORD);
   Serial.print("WiFi connecting...");
   while (WiFi.status() != WL_CONNECTED) {
@@ -64,6 +70,8 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   init_camera();
+  bat_init();
+  bmm8563_init(); // https://esp32.com/viewtopic.php?t=21030
 
   camera_fb_t* fb = esp_camera_fb_get();
 
@@ -72,29 +80,42 @@ void setup() {
     delay(1000);
     ESP.restart();
   }
-
   Serial.println("Capture completed.");
 
   WiFiClientSecure client;
   client.setInsecure();
 
   HTTPClient http;
+  int http_code;
 
-  http.begin(client, String(SUPABASE_URL) + "/storage/v1/object/image/avatar/image.jpg");
+  // 画像をストレージに送信
+  http.begin(client, String(SUPABASE_URL) + "/storage/v1/object/" + String(bucket) + "/" + String(directory) + "/" + String(UUID) + ".jpg");
   http.addHeader("Content-Type", "image/jpeg");
   http.addHeader("apikey", String(SUPABASE_KEY));
   http.addHeader("Authorization", "Bearer " + String(SUPABASE_KEY));
   http.addHeader("Connection", "close");
-
-  int http_code = http.sendRequest("POST", fb->buf, fb->len);
+  http_code = http.sendRequest("PUT", fb->buf, fb->len);
+  if (http_code > 0) {
+    String response = http.getString();
+    Serial.print("Code: ");
+    Serial.println(http_code);
+    Serial.print("Response: ");
+    Serial.println(response);
+  }
+  else {
+    Serial.print("Error: ");
+    Serial.println(http_code);
+  }
   http.end();
-
   client.stop();
 
   esp_camera_fb_return(fb);
-  delay(5000);
+
+  bmm8563_setTimerIRQ(SLEEP_TIME);
+
+  esp_sleep_enable_timer_wakeup(SLEEP_TIME * 1000000UL);
+  esp_deep_sleep_start();
 }
 
 void loop() {
-  delay(5 * 1000);
 }
