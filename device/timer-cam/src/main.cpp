@@ -13,6 +13,7 @@
 
 const char* bucket = "image";
 const char* directory = "device";
+const char* table = "device";
 
 bool init_camera(void) {
   camera_config_t config;
@@ -89,29 +90,52 @@ void setup() {
   int http_code;
 
   // 画像をストレージに送信
-  http.begin(client, String(SUPABASE_URL) + "/storage/v1/object/" + String(bucket) + "/" + String(directory) + "/" + String(UUID) + ".jpg");
-  http.addHeader("Content-Type", "image/jpeg");
-  http.addHeader("apikey", String(SUPABASE_KEY));
-  http.addHeader("Authorization", "Bearer " + String(SUPABASE_KEY));
-  http.addHeader("Connection", "close");
-  http_code = http.sendRequest("PUT", fb->buf, fb->len);
-  if (http_code > 0) {
-    String response = http.getString();
-    Serial.print("Code: ");
-    Serial.println(http_code);
-    Serial.print("Response: ");
-    Serial.println(response);
+  if (http.begin(client, String(SUPABASE_URL) + "/storage/v1/object/" + String(bucket) + "/" + String(directory) + "/" + String(UUID) + ".jpg")) {
+    http.addHeader("Content-Type", "image/jpeg");
+    http.addHeader("apikey", String(SUPABASE_KEY));
+    http.addHeader("Authorization", "Bearer " + String(SUPABASE_KEY));
+    http.addHeader("Connection", "close");
+    http_code = http.sendRequest("PUT", fb->buf, fb->len);
+    if (http_code > 0) {
+      String response = http.getString();
+      Serial.print("code: ");
+      Serial.println(http_code);
+      Serial.print("response: ");
+      Serial.println(response);
+    }
+    else {
+      Serial.print("error: ");
+      Serial.println(http_code);
+    }
+    http.end();
   }
-  else {
-    Serial.print("Error: ");
-    Serial.println(http_code);
+
+  // 画像URLをデータベースに送信
+  if (http.begin(client, String(SUPABASE_URL) + "/rest/v1/" + String(table))) {
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("apikey", String(SUPABASE_KEY));
+    http.addHeader("Authorization", "Bearer " + String(SUPABASE_KEY));
+    http.addHeader("Prefer", "resolution=merge-duplicates");
+    String image_url = String(SUPABASE_URL) + "/storage/v1/object/pulic/" + String(bucket) + "/" + String(directory) + "/" + String(UUID) + ".jpg";
+    String payload = "{\"deviceId\":\"" + String(UUID) + "\",\"imageUrl\":\"" + image_url + "\",\"battery\":\"" + String(bat_get_voltage() * 0.001) + "\"}";
+    http_code = http.sendRequest("POST", payload);
+    if (http_code > 0) {
+      String response = http.getString();
+      Serial.print("code: ");
+      Serial.println(http_code);
+      Serial.print("response: ");
+      Serial.println(response);
+    }
+    else {
+      Serial.print("error: ");
+      Serial.println(http_code);
+    }
+    http.end();
   }
-  http.end();
-  client.stop();
 
   esp_camera_fb_return(fb);
 
-  bmm8563_setTimerIRQ(SLEEP_TIME);
+  // bmm8563_setTimerIRQ(SLEEP_TIME);
 
   esp_sleep_enable_timer_wakeup(SLEEP_TIME * 1000000UL);
   esp_deep_sleep_start();
