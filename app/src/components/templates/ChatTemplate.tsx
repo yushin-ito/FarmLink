@@ -4,16 +4,18 @@ import {
   FlatList,
   HStack,
   Heading,
+  Icon,
+  IconButton,
   KeyboardAvoidingView,
   Spinner,
 } from "native-base";
+import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { Platform } from "react-native";
 import ChatItem from "../organisms/ChatItem";
 import ChatBar from "../organisms/ChatBar";
 import { GetCommunityChatsResponse } from "../../hooks/community/query";
 import { GetUserResponse } from "../../hooks/user/query";
-import Avatar from "../molecules/Avatar";
 import { GetTalkChatsResponse } from "../../hooks/talk/query";
 import BackButton from "../molecules/BackButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -29,7 +31,6 @@ type ChatTemplateProps = {
   postChat: (message: string) => Promise<void>;
   readMore: () => void;
   goBackNavigationHandler: () => void;
-  settingNavigationHandler: () => void;
 };
 
 type Locale = "ja" | "en" | null;
@@ -45,7 +46,6 @@ const ChatTemplate = ({
   postChat,
   readMore,
   goBackNavigationHandler,
-  settingNavigationHandler,
 }: ChatTemplateProps) => {
   const [locale, setLocale] = useState<Locale>(null);
 
@@ -72,9 +72,8 @@ const ChatTemplate = ({
     >
       <Box flex={1} pt="5" safeAreaTop>
         <HStack
-          mb="4"
-          pl="3"
-          pr="9"
+          pb="2"
+          px="4"
           alignItems="center"
           justifyContent="space-between"
         >
@@ -82,17 +81,25 @@ const ChatTemplate = ({
             <BackButton onPress={goBackNavigationHandler} />
             <Heading fontSize="2xl">{title}</Heading>
           </HStack>
-          <Avatar
-            text={user?.displayName?.charAt(0)}
-            avatarUrl={user?.avatarUrl}
-            updatedAt={user?.updatedAt}
-            hue={user?.hue}
-            onPress={settingNavigationHandler}
+          <IconButton
+            icon={
+              <Icon
+                as={<Feather />}
+                name="align-justify"
+                size="lg"
+                color="black"
+              />
+            }
+            variant="unstyled"
+            _pressed={{
+              opacity: 0.5,
+            }}
           />
         </HStack>
         <FlatList
           w="100%"
           px="5"
+          bg="muted.100"
           inverted
           data={chats}
           onEndReached={readMore}

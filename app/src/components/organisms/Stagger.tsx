@@ -16,7 +16,7 @@ const Stagger = memo(
         initial={{
           opacity: 0,
           scale: 0,
-          translateY: 34,
+          translateY: 0,
         }}
         animate={{
           translateY: 0,

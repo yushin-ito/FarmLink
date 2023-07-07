@@ -12,11 +12,11 @@ type ChatItemProps = {
   locale: string | null;
 };
 
-const ChatItem = memo(({ item, isAuthor, locale }: ChatItemProps) => {
+const ChatItem = memo(({ item,isAuthor, locale }: ChatItemProps) => {
   return (
     <HStack
       w="100%"
-      mb="5"
+      my="2"
       space="2"
       justifyContent={!isAuthor ? "flex-start" : "flex-end"}
     >

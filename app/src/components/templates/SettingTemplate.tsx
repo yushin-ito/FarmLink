@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import Avatar from "../molecules/Avatar";
 import { GetUserResponse } from "../../hooks/user/query";
 import { Alert } from "react-native";
-import ActionSheet from "../organisms/ActionSheet";
+import ImageActionSheet from "../organisms/ImageActionSheet";
 
 type SettingTemplateProps = {
   user: GetUserResponse | null | undefined;
@@ -51,7 +51,7 @@ const SettingTemplate = ({
 
   return (
     <Box flex={1} pt="6" px="9" safeAreaTop>
-      <ActionSheet
+      <ImageActionSheet
         isOpen={isOpen}
         onClose={onClose}
         pickImageByCamera={pickImageByCamera}

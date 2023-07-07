@@ -80,8 +80,8 @@ const CommunityChatScreen = () => {
     onSuccess: async ({ base64, type }) => {
       if (session?.user && base64 && type) {
         await mutateAsyncPostImage({
-          base64: base64,
-          type: type,
+          base64,
+          type,
           communityId: params.communityId,
           authorId: session?.user.id,
         });

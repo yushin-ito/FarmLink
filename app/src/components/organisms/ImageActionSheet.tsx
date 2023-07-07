@@ -1,27 +1,27 @@
-import { Actionsheet as NativeBaseActionSheet, Icon } from "native-base";
+import { Actionsheet, Icon } from "native-base";
 import React, { memo } from "react";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
-type ActionSheetProps = {
+type ImageActionSheetProps = {
   isOpen: boolean;
   onClose: () => void;
   pickImageByCamera: () => void;
   pickImageByLibrary: () => void;
 };
 
-const ActionSheet = memo(
+const ImageActionSheet = memo(
   ({
     isOpen,
     onClose,
     pickImageByCamera,
     pickImageByLibrary,
-  }: ActionSheetProps) => {
+  }: ImageActionSheetProps) => {
     const { t } = useTranslation("setting");
     return (
-      <NativeBaseActionSheet isOpen={isOpen} onClose={onClose}>
-        <NativeBaseActionSheet.Content>
-          <NativeBaseActionSheet.Item
+      <Actionsheet isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content>
+          <Actionsheet.Item
             startIcon={<Icon as={<Feather />} name="camera" size="6" />}
             rounded="lg"
             _pressed={{ bg: "muted.300" }}
@@ -31,8 +31,8 @@ const ActionSheet = memo(
             }}
           >
             {t("camera")}
-          </NativeBaseActionSheet.Item>
-          <NativeBaseActionSheet.Item
+          </Actionsheet.Item>
+          <Actionsheet.Item
             startIcon={<Icon as={<Feather />} name="image" size="6" />}
             rounded="lg"
             _pressed={{ bg: "muted.300" }}
@@ -42,26 +42,26 @@ const ActionSheet = memo(
             }}
           >
             {t("image")}
-          </NativeBaseActionSheet.Item>
-          <NativeBaseActionSheet.Item
+          </Actionsheet.Item>
+          <Actionsheet.Item
             startIcon={<Icon as={<Feather />} name="trash" size="6" />}
             rounded="lg"
             _pressed={{ bg: "muted.300" }}
             onPress={() => onClose()}
           >
             {t("delete")}
-          </NativeBaseActionSheet.Item>
-          <NativeBaseActionSheet.Item
+          </Actionsheet.Item>
+          <Actionsheet.Item
             rounded="lg"
             _pressed={{ bg: "muted.300" }}
             onPress={onClose}
           >
             {t("cancel")}
-          </NativeBaseActionSheet.Item>
-        </NativeBaseActionSheet.Content>
-      </NativeBaseActionSheet>
+          </Actionsheet.Item>
+        </Actionsheet.Content>
+      </Actionsheet>
     );
   }
 );
 
-export default ActionSheet;
+export default ImageActionSheet;

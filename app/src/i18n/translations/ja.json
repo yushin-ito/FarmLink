@@ -1,5 +1,6 @@
 {
   "auth": {
+    "app": " FarmLinkは安心して農業が始められるアプリです。",
     "displayName": "ユーザー名",
     "displayNameRequired": "ユーザー名を入力してください",
     "email": "メールアドレス",
@@ -57,6 +58,7 @@
     "anyError": "エラーが発生しました",
     "search": "検索",
     "category": "カテゴリー",
+    "all": "すべて",
     "none": "なし",
     "vegetable": "野菜",
     "fruit": "果物",

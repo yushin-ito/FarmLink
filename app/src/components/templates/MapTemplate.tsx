@@ -23,6 +23,10 @@ const MapTemplate = ({
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
+    (async () => await getCurrentPosition())();
+  }, []);
+
+  useEffect(() => {
     if (mapRef.current && position) {
       mapRef.current.animateToRegion({
         latitude: position.coords.latitude,

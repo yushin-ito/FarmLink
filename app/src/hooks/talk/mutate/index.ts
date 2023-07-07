@@ -7,7 +7,7 @@ import { decode } from "base64-arraybuffer";
 export type PostTalkResponse = Awaited<ReturnType<typeof postTalk>>;
 export type DeleteTalkResponse = Awaited<ReturnType<typeof deleteTalk>>;
 export type PostTalkChatResponse = Awaited<ReturnType<typeof postTalkChat>>;
-export type PostTalkImageResponse = Awaited<ReturnType<typeof postTalkImage>>;
+export type PostTalkChatImageResponse = Awaited<ReturnType<typeof postTalkChatImage>>;
 
 const postTalk = async (talk: Talk["Insert"]) => {
   const { data, error } = await supabase.from("talk").upsert(talk).select();
@@ -37,7 +37,7 @@ const postTalkChat = async (chat: Chat["Insert"]) => {
   return data;
 };
 
-const postTalkImage = async ({
+const postTalkChatImage = async ({
   base64,
   type,
   talkId,
@@ -61,12 +61,12 @@ const postTalkImage = async ({
   await postTalkChat({ talkId, authorId, imageUrl: data.publicUrl });
 };
 
-export const usePostTalkImage = ({
+export const usePostTalkChatImage = ({
   onSuccess,
   onError,
-}: UseMutationResult<PostTalkImageResponse, Error>) =>
+}: UseMutationResult<PostTalkChatImageResponse, Error>) =>
   useMutation({
-    mutationFn: postTalkImage,
+    mutationFn: postTalkChatImage,
     onSuccess,
     onError,
   });

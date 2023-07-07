@@ -5,7 +5,7 @@ import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import ChatTemplate from "../components/templates/ChatTemplate";
-import { usePostTalkChat, usePostTalkImage } from "../hooks/talk/mutate";
+import { usePostTalkChat, usePostTalkChatImage } from "../hooks/talk/mutate";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { TalkStackParamList } from "../types";
 import useTalkChat from "../hooks/talk/useTalkChat";
@@ -54,7 +54,7 @@ const TalkChatScreen = () => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostImage } = usePostTalkImage({
+  const { mutateAsync: mutateAsyncPostImage } = usePostTalkChatImage({
     onSuccess: async () => {
       await refetch();
     },
@@ -74,8 +74,8 @@ const TalkChatScreen = () => {
     onSuccess: async ({ base64, type }) => {
       if (session?.user && base64 && type) {
         await mutateAsyncPostImage({
-          base64: base64,
-          type: type,
+          base64,
+          type,
           talkId: params.talkId,
           authorId: session?.user.id,
         });
@@ -124,6 +124,7 @@ const TalkChatScreen = () => {
       title={params.displayName}
       user={user}
       chats={chats}
+      
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
       postChat={postChat}

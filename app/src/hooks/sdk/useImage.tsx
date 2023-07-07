@@ -3,22 +3,20 @@ import { useCallback, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 
+type PickerResult = {
+  base64: string | undefined;
+  type: "image" | "video" | undefined;
+};
+
 type UseImageType = {
-  onSuccess?: ({
-    uri,
-    base64,
-    type,
-  }: {
-    uri: string;
-    base64: string | undefined;
-    type: "image" | "video" | undefined;
-  }) => void;
+  onSuccess?: ({ base64, type }: PickerResult) => void;
   onDisable?: () => void;
   onError?: () => void;
 };
 
 const useImage = ({ onSuccess, onDisable, onError }: UseImageType) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [uri, setUri] = useState<string | null>(null);
 
   const pickImageByLibrary = useCallback(async () => {
     setIsLoading(true);
@@ -48,10 +46,10 @@ const useImage = ({ onSuccess, onDisable, onError }: UseImageType) => {
         );
         onSuccess &&
           onSuccess({
-            uri: manipulatorResult.uri,
             base64: manipulatorResult.base64,
             type: pickerResult.assets[0].type,
           });
+        setUri(manipulatorResult.uri);
       }
     } catch (error) {
       onError && onError();
@@ -86,10 +84,10 @@ const useImage = ({ onSuccess, onDisable, onError }: UseImageType) => {
         );
         onSuccess &&
           onSuccess({
-            uri: manipulatorResult.uri,
             base64: manipulatorResult.base64,
             type: pickerResult.assets[0].type,
           });
+        setUri(manipulatorResult.uri);
       }
     } catch (error) {
       onError && onError();
@@ -98,7 +96,7 @@ const useImage = ({ onSuccess, onDisable, onError }: UseImageType) => {
     }
   }, []);
 
-  return { pickImageByLibrary, pickImageByCamera, isLoading };
+  return { pickImageByLibrary, pickImageByCamera, isLoading, uri };
 };
 
 export default useImage;

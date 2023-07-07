@@ -64,7 +64,6 @@ const PostCommunityTemplate = ({
         w="100%"
         alignItems="center"
         justifyContent="space-between"
-        bg="muted.100"
       >
         <IconButton
           p="6"
@@ -80,7 +79,10 @@ const PostCommunityTemplate = ({
           variant="unstyled"
         />
       </HStack>
-      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
         <Box flex={1} pb="16" justifyContent="space-between">
           <VStack px="10" space="6">
             <FormControl isInvalid={"communityName" in errors}>

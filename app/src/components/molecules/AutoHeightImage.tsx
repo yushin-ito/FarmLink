@@ -1,6 +1,11 @@
 import { Box } from "native-base";
 import React, { memo, useEffect, useState } from "react";
-import { Image, ImageURISource, useWindowDimensions } from "react-native";
+import {
+  Image,
+  ImageProps,
+  ImageURISource,
+  useWindowDimensions,
+} from "react-native";
 
 type AutoHeightImageProps = {
   ratio: number;
@@ -8,7 +13,7 @@ type AutoHeightImageProps = {
 };
 
 const AutoHeightImage = memo(
-  ({ ratio, source, ...props }: AutoHeightImageProps) => {
+  ({ ratio, source, ...props }: AutoHeightImageProps & ImageProps) => {
     const [height, setHeight] = useState(0);
     const { width } = useWindowDimensions();
 
@@ -22,8 +27,12 @@ const AutoHeightImage = memo(
     }, [source, width]);
 
     return (
-      <Box w={width * ratio} h={height} bg="muted.300" rounded="xl" {...props}>
-        <Image source={source} style={{ flex: 1, borderRadius: 9 }} />
+      <Box w={width * ratio} h={height} bg="muted.300" rounded="xl">
+        <Image
+          source={source}
+          style={{ flex: 1, borderRadius: 9 }}
+          {...props}
+        />
       </Box>
     );
   }

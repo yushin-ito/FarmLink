@@ -7,10 +7,13 @@ import {
   Spinner,
   Center,
   VStack,
+  Text,
+  Pressable,
+  useDisclose,
 } from "native-base";
-import React from "react";
+import React, { useState } from "react";
 import CircleButton from "../molecules/CircleButton";
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import CommunityItem from "../organisms/CommunityItem";
 import { RefreshControl } from "react-native";
@@ -18,6 +21,7 @@ import Avatar from "../molecules/Avatar";
 import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
 import { GetCommunitiesResponse } from "../../hooks/community/query";
+import CategoryActionSheet from "../organisms/CategoryActionSheet";
 
 type CommunityListTemplateProps = {
   user: GetUserResponse | null | undefined;
@@ -51,6 +55,17 @@ const CommunityListTemplate = ({
   searchCommunityNavigationHandler,
 }: CommunityListTemplateProps) => {
   const { t } = useTranslation("community");
+  const [categoryIndex, setCategoryIndex] = useState(0);
+  const { isOpen, onOpen, onClose } = useDisclose();
+
+  const categories = [
+    t("all"),
+    t("none"),
+    t("vegetable"),
+    t("fruit"),
+    t("fertilizer"),
+    t("disease"),
+  ];
 
   if (isLoadingCommunities) {
     return (
@@ -62,7 +77,13 @@ const CommunityListTemplate = ({
 
   return (
     <Box flex={1} safeAreaTop>
-      <VStack space="3" px="9" py="6">
+      <CategoryActionSheet
+        isOpen={isOpen}
+        onClose={onClose}
+        categores={categories}
+        setCategoryIndex={setCategoryIndex}
+      />
+      <VStack space="3" px="9" pt="6" pb="2">
         <HStack alignItems="center" justifyContent="space-between">
           <Heading>{t("community")}</Heading>
           <Avatar
@@ -75,9 +96,22 @@ const CommunityListTemplate = ({
         </HStack>
         <SearchBar isReadOnly onPressIn={searchCommunityNavigationHandler} />
       </VStack>
+      <Pressable onPress={onOpen} alignSelf="flex-end" mr="9" mb="2">
+        <HStack
+          alignItems="center"
+          px="2"
+          py="1"
+          space="2"
+          rounded="full"
+          bg="muted.200"
+        >
+          <Text>{categories[categoryIndex]}</Text>
+          <Icon as={<AntDesign name="caretdown" />} size="2" />
+        </HStack>
+      </Pressable>
       <FlatList
         w="100%"
-        px="9"
+        px="8"
         mb="20"
         data={communities}
         onEndReached={readMore}
@@ -104,6 +138,7 @@ const CommunityListTemplate = ({
           />
         }
       />
+
       <CircleButton
         position="absolute"
         bottom="24"

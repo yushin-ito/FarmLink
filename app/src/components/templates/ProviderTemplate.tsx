@@ -41,7 +41,7 @@ const ProviderTemplate = memo(
             Welcome to FarmLink!
           </Heading>
           <Text color="muted.600" bold>
-            FarmLinkは安心して農業が始められるアプリです。
+           {t("app")}
           </Text>
         </VStack>
         <VStack w="70%" mt="6" space="4">

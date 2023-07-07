@@ -8,7 +8,7 @@ const RootComponent = () => {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: "#f5f5f5",
+      background: "white",
     },
   };
 

@@ -1,5 +1,6 @@
 {
   "auth": {
+    "app": "FarmLink is an app that allows you to start farming with peace of mind.",
     "displayName": "User name",
     "displayNameRequired": "User name is required",
     "email": "email",
@@ -57,6 +58,7 @@
     "anyError": "An error occurred",
     "search": "Search",
     "category": "Category",
+    "all": "All",
     "none": "None",
     "vegetable": "Vegetable",
     "fruit": "Fruit",
