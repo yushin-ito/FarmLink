@@ -111,10 +111,6 @@ const TalkChatScreen = () => {
     });
   }, []);
 
-  const settingNavigationHandler = useCallback(() => {
-    navigation.navigate("SettingNavigator", { screen: "Setting" });
-  }, []);
-
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -124,14 +120,12 @@ const TalkChatScreen = () => {
       title={params.displayName}
       user={user}
       chats={chats}
-      
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
       postChat={postChat}
       readMore={fetchNextPage}
       isLoadingChats={isLoadingChats}
       hasMore={hasMore}
-      settingNavigationHandler={settingNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

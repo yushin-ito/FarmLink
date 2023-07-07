@@ -117,10 +117,6 @@ const CommunityChatScreen = () => {
     });
   }, []);
 
-  const settingNavigationHandler = useCallback(() => {
-    navigation.navigate("SettingNavigator", { screen: "Setting" });
-  }, []);
-
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -136,7 +132,6 @@ const CommunityChatScreen = () => {
       readMore={fetchNextPage}
       isLoadingChats={isLoadingChats}
       hasMore={hasMore}
-      settingNavigationHandler={settingNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );
