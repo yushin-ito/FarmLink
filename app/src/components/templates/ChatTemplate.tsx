@@ -8,6 +8,7 @@ import {
   IconButton,
   KeyboardAvoidingView,
   Spinner,
+  useDisclose,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ import { GetUserResponse } from "../../hooks/user/query";
 import { GetTalkChatsResponse } from "../../hooks/talk/query";
 import BackButton from "../molecules/BackButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ChatActionSheet from "../organisms/ChatActionSheet";
 
 type ChatTemplateProps = {
   title: string | null | undefined;
@@ -33,8 +35,6 @@ type ChatTemplateProps = {
   goBackNavigationHandler: () => void;
 };
 
-type Locale = "ja" | "en" | null;
-
 const ChatTemplate = ({
   title,
   user,
@@ -47,12 +47,13 @@ const ChatTemplate = ({
   readMore,
   goBackNavigationHandler,
 }: ChatTemplateProps) => {
-  const [locale, setLocale] = useState<Locale>(null);
+  const [locale, setLocale] = useState<string | null>(null);
+  const { isOpen, onOpen, onClose } = useDisclose();
 
   useEffect(() => {
     (async () => {
       const locale = await AsyncStorage.getItem("@locale");
-      setLocale(locale as Locale);
+      setLocale(locale);
     })();
   }, []);
 
@@ -71,6 +72,7 @@ const ChatTemplate = ({
       keyboardVerticalOffset={-45}
     >
       <Box flex={1} pt="5" safeAreaTop>
+        <ChatActionSheet isOpen={isOpen} onClose={onClose} />
         <HStack
           pb="2"
           px="4"
@@ -110,8 +112,9 @@ const ChatTemplate = ({
           renderItem={({ item }) => (
             <ChatItem
               item={item}
-              isAuthor={item.authorId === user?.userId}
+              authored={item.authorId === user?.userId}
               locale={locale}
+              onOpen={onOpen}
             />
           )}
           keyExtractor={(item) => item.chatId.toString()}

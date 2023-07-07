@@ -26,7 +26,7 @@ type ChatBarProps = {
 
 const ChatBar = memo(
   ({ postChat, pickImageByCamera, pickImageByLibrary }: ChatBarProps) => {
-    const { t } = useTranslation("community");
+    const { t } = useTranslation("chat");
     const { control, handleSubmit, reset } = useForm<FormValues>();
     const { isOpen, onToggle } = useDisclose();
 

@@ -4,13 +4,13 @@ import {
   Heading,
   Text,
   VStack,
-  Image,
   Pressable,
   Icon,
   Box,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
 
 export type ProviderTemplateProps = {
   signInWithGoogle: () => Promise<void>;
@@ -41,7 +41,7 @@ const ProviderTemplate = memo(
             Welcome to FarmLink!
           </Heading>
           <Text color="muted.600" bold>
-           {t("app")}
+            {t("app")}
           </Text>
         </VStack>
         <VStack w="70%" mt="6" space="4">
@@ -70,9 +70,8 @@ const ProviderTemplate = memo(
           >
             <Center h="100%" position="absolute" top="3" left="3">
               <Image
-                size="8"
+                style={{ width: 32, height: 32 }}
                 source={require("../../../assets/google.png")}
-                alt=""
               />
             </Center>
             <Text>{t("signInWithGoogle")}</Text>
@@ -88,9 +87,8 @@ const ProviderTemplate = memo(
           >
             <Center h="100%" position="absolute" top="3" left="3">
               <Image
-                size="8"
+                style={{ width: 32, height: 32 }}
                 source={require("../../../assets/twitter.png")}
-                alt=""
               />
             </Center>
             <Text>{t("signInWithTwitter")}</Text>
@@ -106,9 +104,8 @@ const ProviderTemplate = memo(
           >
             <Center h="100%" position="absolute" top="3" left="3">
               <Image
-                size="8"
+                style={{ width: 32, height: 32 }}
                 source={require("../../../assets/facebook.png")}
-                alt=""
               />
             </Center>
             <Text>{t("signInWithFacebook")}</Text>

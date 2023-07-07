@@ -29,7 +29,7 @@ type CommunityChatRouteProp = RouteProp<
 >;
 
 const CommunityChatScreen = () => {
-  const { t } = useTranslation("community");
+  const { t } = useTranslation("chat");
   const toast = useToast();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);

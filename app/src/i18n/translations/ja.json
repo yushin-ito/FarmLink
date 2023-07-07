@@ -36,13 +36,23 @@
     "permitRequestGPS": "位置情報を許可してください",
     "anyError": "エラーが発生しました"
   },
+  "chat": {
+    "create": "作成",
+    "enterMessage": "メッセージを入力",
+    "camera": "カメラで撮影",
+    "image": "写真を選択",
+    "delete": "削除",
+    "cancel": "キャンセル",
+    "permitRequestCam": "カメラを許可してください",
+    "anyError": "エラーが発生しました"
+  },
   "community": {
     "community": "コミュニティ",
     "createCommunity": "コミュニティを作成",
     "deleteCommunity": "コミュニティ削除",
     "askDeleteCommunity": "コミュニティを削除してもよろしいですか",
-    "cancel": "キャンセル",
     "delete": "削除",
+    "cancel": "キャンセル",
     "icon": "アイコン",
     "communityName": "コミュニティ名",
     "communityNameRequired": "コミュニティ名を入力してください",
@@ -50,12 +60,6 @@
     "description": "詳細",
     "descriptionRequired": "詳細を入力してください",
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
-    "create": "作成",
-    "enterMessage": "メッセージを入力",
-    "camera": "カメラで撮影",
-    "image": "写真を選択",
-    "permitRequestCam": "カメラを許可してください",
-    "anyError": "エラーが発生しました",
     "search": "検索",
     "category": "カテゴリー",
     "all": "すべて",
@@ -65,7 +69,8 @@
     "fertilizer": "肥料",
     "disease": "病気",
     "people": "参加人数",
-    "join": "参加する"
+    "join": "参加する",
+    "anyError": "エラーが発生しました"
   },
   "farm": {
     "myFarm": "自分の農園",

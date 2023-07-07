@@ -36,6 +36,15 @@
     "permitRequestGPS": "Please grant GPS permission",
     "anyError": "An error occurred"
   },
+  "chat": {
+    "enterMessage": "Enter message",
+    "camera": "Pick by camera",
+    "image": "Pick by library",
+    "permitRequestCam": "Please grant camera permission",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "anyError": "An error occurred"
+  },
   "community": {
     "community": "Community",
     "createCommunity": "Create community",
@@ -47,15 +56,10 @@
     "descriptionMaxLength": "Description must be 100 or less",
     "deleteCommunity": "Delete community",
     "askDeleteCommunity": "Are you sure you want to delete community?",
-    "cancel": "Cancel",
     "delete": "Delete",
+    "cancel": "Cancel",
     "icon": "Icon",
     "create": "Create",
-    "enterMessage": "Enter message",
-    "camera": "Pick by camera",
-    "image": "Pick by library",
-    "permitRequestCam": "Please grant camera permission",
-    "anyError": "An error occurred",
     "search": "Search",
     "category": "Category",
     "all": "All",
@@ -65,7 +69,8 @@
     "fertilizer": "Fertilizer",
     "disease": "Disease",
     "people": "People",
-    "join": "Join"
+    "join": "Join",
+    "anyError": "An error occurred"
   },
   "farm": {
     "myFarm": "My farm",

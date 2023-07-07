@@ -40,7 +40,7 @@ i18n
       }
       return "en";
     },
-    ns: ["auth", "map", "community", "farm", "setting"],
+    ns: ["auth", "map", "chat", "community", "farm", "setting"],
     resources,
     interpolation: {
       escapeValue: false,

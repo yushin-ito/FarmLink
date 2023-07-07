@@ -2,7 +2,7 @@ import React from "react";
 
 import { Ionicons, SimpleLineIcons, AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon, Image, Text } from "native-base";
+import { Icon, Text } from "native-base";
 import { TabParamList } from "../types";
 import MapNavigator from "./MapNavigator";
 import FarmNavigator from "./FarmNavigator";
@@ -12,6 +12,7 @@ import { Route, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import CircleButton from "../components/molecules/CircleButton";
 import TalkNavigator from "./TalkNavigator";
 import { useTranslation } from "react-i18next";
+import { Image } from "expo-image";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -104,8 +105,7 @@ const TabNavigator = () => {
             <CircleButton top="-35" onPress={onPress}>
               <Image
                 source={require("../../assets/seedling.png")}
-                size="xs"
-                alt=""
+                style={{ width: 40, height: 40 }}
               />
             </CircleButton>
           ),
