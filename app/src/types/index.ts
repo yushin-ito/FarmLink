@@ -35,7 +35,7 @@ export type MapStackParamList = {
 
 export type FarmStackParamList = {
   FarmList: undefined;
-  FarmCamera: { farmId: number; farmName: string | null };
+  FarmDevice: { deviceId: string | null; farmName: string | null };
   PostFarm: undefined;
   SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
@@ -44,7 +44,7 @@ export type TalkStackParamList = {
   TalkList: undefined;
   TalkChat: { talkId: number; displayName: string | null | undefined };
   PostTalk: undefined;
-  SearchTalk: undefined
+  SearchTalk: undefined;
   SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
 

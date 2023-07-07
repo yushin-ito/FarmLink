@@ -23,7 +23,7 @@ const getTabStyle = (route: Partial<Route<string, object | undefined>>) => {
     routeName === "SearchCommunity" ||
     routeName === "TalkChat" ||
     routeName === "SearchTalk" ||
-    routeName === "FarmCamera"
+    routeName === "FarmDevice"
   )
     return false;
 

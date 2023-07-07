@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import * as Location from "expo-location";
 
 type UseLocationType = {
@@ -36,10 +36,6 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    (async () => await getCurrentPosition())();
   }, []);
 
   return { position, getCurrentPosition, isLoading };

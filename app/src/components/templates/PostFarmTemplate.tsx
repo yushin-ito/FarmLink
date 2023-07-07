@@ -27,14 +27,14 @@ import { Position } from "../../hooks/sdk/useLocation";
 type PostFarmTemplateProps = {
   isLoadingPostFarm: boolean;
   isLoadingPosition: boolean;
-  searchResult: SearchDeviceResponse | undefined;
+  searchResult: SearchDeviceResponse[0] | undefined;
   position: Position | undefined;
   getCurrentPosition: () => Promise<void>;
   postFarm: (
     farmName: string,
     deviceId: string,
     description: string,
-    isPrivate: boolean
+    privated: boolean
   ) => Promise<void>;
   searchDevice: (query: string) => Promise<void>;
   goBackNavigationHandler: () => void;
@@ -64,7 +64,7 @@ const PostFarmTemplate = ({
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const [isPrivate, setIsPrivate] = useState(true);
+  const [privated, setPrivated] = useState(true);
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const PostFarmTemplate = ({
         longitudeDelta: 0.005,
       });
     }
-  }, [position, isPrivate, isLoadingPosition]);
+  }, [privated, isLoadingPosition]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -208,13 +208,17 @@ const PostFarmTemplate = ({
               </Text>
               <Switch
                 colorScheme="brand"
-                onValueChange={(value) => setIsPrivate(!value)}
+                onValueChange={async (value) => {
+                  console.log(value);
+                  setPrivated(!value);
+                  value && (await getCurrentPosition());
+                }}
               />
             </HStack>
-            {!isPrivate && (
+            {!privated && (
               <VStack mt="6" space="6">
                 <FormControl isInvalid={"description" in errors}>
-                  <FormControl.Label>{t("discription")}</FormControl.Label>
+                  <FormControl.Label>{t("description")}</FormControl.Label>
                   <Controller
                     name="description"
                     control={control}
@@ -245,9 +249,12 @@ const PostFarmTemplate = ({
                       );
                     }}
                     rules={{
+                      required: !privated
+                        ? t("descriptionRequired")
+                        : undefined,
                       maxLength: {
                         value: 100,
-                        message: t("discriptionMaxLength"),
+                        message: t("descriptionMaxLength"),
                       },
                     }}
                   />
@@ -309,13 +316,14 @@ const PostFarmTemplate = ({
             size="lg"
             rounded="xl"
             colorScheme="brand"
+            isDisabled={isLoadingPosition}
             isLoading={isLoadingPostFarm}
             onPress={handleSubmit(async (data) => {
               await postFarm(
                 data.farmName,
                 data.deviceId,
                 data.description,
-                isPrivate
+                privated
               );
             })}
           >

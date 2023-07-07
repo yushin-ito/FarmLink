@@ -139,7 +139,7 @@ const PostCommunityTemplate = ({
               />
             </FormControl>
             <FormControl isInvalid={"description" in errors}>
-              <FormControl.Label>{t("discription")}</FormControl.Label>
+              <FormControl.Label>{t("description")}</FormControl.Label>
               <Controller
                 name="description"
                 control={control}
@@ -170,10 +170,10 @@ const PostCommunityTemplate = ({
                   );
                 }}
                 rules={{
-                  required: t("discriptionRequired"),
+                  required: t("descriptionRequired"),
                   maxLength: {
                     value: 100,
-                    message: t("discriptionMaxLength"),
+                    message: t("descriptionMaxLength"),
                   },
                 }}
               />

@@ -10,7 +10,6 @@ const searchDevice = async (text: string) => {
     .from("device")
     .select()
     .textSearch("deviceId", `%${text}%`)
-    .single();
   if (error) {
     throw error;
   }

@@ -17,7 +17,7 @@ const PostFarmModal = () => {
   const navigation = useNavigation();
   const { session } = useAuth();
   const { refetch } = useQueryFarms(session?.user.id);
-  const [searchResult, setSearchResult] = useState<SearchDeviceResponse>();
+  const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
 
   const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
     usePostFarm({
@@ -40,7 +40,7 @@ const PostFarmModal = () => {
 
   const { mutateAsync: mutateAsyncSearchDevice } = useSearchDevice({
     onSuccess: (data) => {
-      setSearchResult(data);
+      setSearchResult(data[0]);
     },
     onError: () => {
       showAlert(
@@ -94,16 +94,16 @@ const PostFarmModal = () => {
       farmName: string,
       deviceId: string,
       description: string,
-      isPrivate: boolean
+      privated: boolean
     ) => {
       await mutateAsyncPostFarm({
         farmName,
         deviceId,
         description,
         ownerId: session?.user.id,
-        isPrivate,
-        longitude: isPrivate ? null : position?.coords.longitude,
-        latitude: isPrivate ? null : position?.coords.latitude,
+        privated,
+        longitude: privated ? null : position?.coords.longitude,
+        latitude: privated ? null : position?.coords.latitude,
       });
     },
     []

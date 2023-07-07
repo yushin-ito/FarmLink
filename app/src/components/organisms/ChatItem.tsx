@@ -48,14 +48,19 @@ const ChatItem = memo(({ item, isAuthor, locale }: ChatItemProps) => {
               {item.message}
             </Text>
           </Box>
-          <Text mx="1" fontSize="xs" color="muted.600">
+          <Text mx="1" fontSize="10" color="muted.600">
             {getTimeDistance(item.createdAt, locale)}
           </Text>
         </VStack>
       )}
       {item?.imageUrl && (
-        <VStack w="100%" alignItems={!isAuthor ? "flex-start" : "flex-end"}>
-          <AutoHeightImage ratio={0.7} source={{ uri: item.imageUrl }} />
+        <VStack space="1" alignItems={!isAuthor ? "flex-end" : "flex-start"}>
+          <Box alignItems={!isAuthor ? "flex-start" : "flex-end"}>
+            <AutoHeightImage ratio={0.7} source={{ uri: item.imageUrl }} />
+          </Box>
+          <Text mx="1" fontSize="10" color="muted.600">
+            {getTimeDistance(item.createdAt, locale)}
+          </Text>
         </VStack>
       )}
     </HStack>

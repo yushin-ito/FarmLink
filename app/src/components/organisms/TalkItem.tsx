@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Center, HStack,  Pressable, Text } from "native-base";
+import { Center, HStack, Pressable, Text } from "native-base";
 import { GetTalksResponse } from "../../hooks/talk/query";
 import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
@@ -19,7 +19,7 @@ const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
     <Pressable
       onPress={onPress}
       _pressed={{ opacity: 0.8 }}
-      mb="2"
+      mb="4"
       rounded="lg"
       bg="white"
       shadow="1"

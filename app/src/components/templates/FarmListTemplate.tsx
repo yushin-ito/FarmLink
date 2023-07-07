@@ -26,8 +26,8 @@ type FarmListTemplateProps = {
   isRefetchingFarms: boolean;
   refetchFarms: () => Promise<void>;
   deleteFarm: (farmId: number) => Promise<void>;
-  farmCameraNavigationHandler: (
-    farmId: number,
+  farmDeviceNavigationHandler: (
+    deviceId: string | null,
     farmName: string | null
   ) => void;
   postFarmNavigationHandler: () => void;
@@ -41,7 +41,7 @@ const FarmListTemplate = ({
   isRefetchingFarms,
   refetchFarms,
   deleteFarm,
-  farmCameraNavigationHandler,
+  farmDeviceNavigationHandler,
   postFarmNavigationHandler,
   settingNavigationHandler,
 }: FarmListTemplateProps) => {
@@ -78,7 +78,7 @@ const FarmListTemplate = ({
             item={item}
             deleteFarm={deleteFarm}
             onPress={() =>
-              farmCameraNavigationHandler(item.farmId, item.farmName)
+              farmDeviceNavigationHandler(item.deviceId, item.farmName)
             }
           />
         )}

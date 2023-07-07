@@ -1,21 +1,25 @@
-import { Box, HStack, Heading } from "native-base";
+import { Box, HStack, Heading, Image } from "native-base";
 import React from "react";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
 import BackButton from "../molecules/BackButton";
-type FarmCameraTemplateProps = {
+import { GetDeviceResponse } from "../../hooks/device";
+
+type FarmDeviceTemplateProps = {
   title: string | null;
   user: GetUserResponse | null | undefined;
+  device: GetDeviceResponse | null | undefined;
   goBackNavigationHandler: () => void;
   settingNavigationHandler: () => void;
 };
 
-const FarmCameraTemplate = ({
+const FarmDeviceTemplate = ({
   title,
   user,
+  device,
   goBackNavigationHandler,
   settingNavigationHandler,
-}: FarmCameraTemplateProps) => {
+}: FarmDeviceTemplateProps) => {
   return (
     <Box flex={1} pt="5" safeAreaTop>
       <HStack
@@ -37,8 +41,12 @@ const FarmCameraTemplate = ({
           onPress={settingNavigationHandler}
         />
       </HStack>
+      <Image
+        source={{ uri: device?.imageUrl + "?=" + device?.updatedAt ?? "" }}
+        alt=""
+      />
     </Box>
   );
 };
 
-export default FarmCameraTemplate;
+export default FarmDeviceTemplate;
