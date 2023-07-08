@@ -81,7 +81,7 @@ const ChatTemplate = ({
         >
           <HStack alignItems="center" space="3">
             <BackButton onPress={goBackNavigationHandler} />
-            <Heading fontSize="2xl">{title}</Heading>
+            <Heading fontSize="xl">{title}</Heading>
           </HStack>
           <IconButton
             icon={

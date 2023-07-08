@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { SettingStackParamList } from "../types";
 import SettingScreen from "../screens/SettingScreen";
-import PostProfileModal from "../modals/PostProfileModal";
+import PostProfileModal from "../screens/PostProfileModal";
 
 const SettingStack = createNativeStackNavigator<SettingStackParamList>();
 

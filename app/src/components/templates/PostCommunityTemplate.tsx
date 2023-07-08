@@ -16,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Category, getCategories } from "../../functions";
 
 type PostCommunityTemplateProps = {
   isLoading: boolean;
@@ -45,26 +46,15 @@ const PostCommunityTemplate = ({
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const categores = [
-    t("none"),
-    t("vegetable"),
-    t("fruit"),
-    t("fertilizer"),
-    t("disease"),
-  ];
   const [categoryIndex, setCategoryIndex] = useState(0);
 
   useEffect(() => {
-    setValue("category", categores[categoryIndex]);
+    setValue("category", getCategories()[categoryIndex]);
   }, [categoryIndex]);
 
   return (
     <Box flex={1} safeAreaTop>
-      <HStack
-        w="100%"
-        alignItems="center"
-        justifyContent="space-between"
-      >
+      <HStack w="100%" alignItems="center" justifyContent="space-between">
         <IconButton
           p="6"
           onPress={goBackNavigationHandler}
@@ -182,8 +172,8 @@ const PostCommunityTemplate = ({
             </FormControl>
             <VStack>
               <FormControl.Label>{t("category")}</FormControl.Label>
-              <HStack pt="1" space="3">
-                {categores.map((category, index) => (
+              <HStack pt="1" space="2">
+                {getCategories().map((category, index) => (
                   <Button
                     key={index}
                     colorScheme={index === categoryIndex ? "brand" : undefined}
@@ -196,7 +186,7 @@ const PostCommunityTemplate = ({
                     }
                     onPress={() => setCategoryIndex(index)}
                   >
-                    {category}
+                    {t(category as Category)}
                   </Button>
                 ))}
               </HStack>

@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { TalkStackParamList } from "../types";
 import TalkListScreen from "../screens/TalkListScreen";
 import TalkChatScreen from "../screens/TalkChatScreen";
-import PostTalkModal from "../modals/PostTalkModal";
+import PostTalkModal from "../screens/PostTalkModal";
 import SearchTalkScreen from "../screens/SearchTalkScreen";
 
 const TalkStack = createNativeStackNavigator<TalkStackParamList>();

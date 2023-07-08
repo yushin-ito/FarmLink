@@ -33,3 +33,16 @@ export const getTimeDistance = (date: string, locale: string | null) => {
 
   return distance;
 };
+
+export type Category =
+  | "all"
+  | "none"
+  | "vegetable"
+  | "fruit"
+  | "fertilizer"
+  | "disease";
+
+export const getCategories = () => {
+  const categories = ["none", "vegetable", "fruit", "fertilizer", "disease"];
+  return categories;
+};

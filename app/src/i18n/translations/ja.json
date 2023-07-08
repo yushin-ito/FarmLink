@@ -60,6 +60,7 @@
     "description": "詳細",
     "descriptionRequired": "詳細を入力してください",
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
+    "create": "作成",
     "search": "検索",
     "category": "カテゴリー",
     "all": "すべて",

@@ -5,7 +5,6 @@ import {
   Heading,
   HStack,
   Spinner,
-  Center,
   VStack,
 } from "native-base";
 import React from "react";
@@ -49,17 +48,9 @@ const TalkListTemplate = ({
 }: TalkListTemplateProps) => {
   const { t } = useTranslation("talk");
 
-  if (isLoadingTalks) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
-
   return (
     <Box flex={1} safeAreaTop>
-      <VStack space="3" px="9" py="6">
+      <VStack space="3" px="8" py="6">
         <HStack alignItems="center" justifyContent="space-between">
           <Heading>{t("talk")}</Heading>
           <Avatar
@@ -72,28 +63,33 @@ const TalkListTemplate = ({
         </HStack>
         <SearchBar isReadOnly onPressIn={searchTalkNavigationHandler} />
       </VStack>
-      <FlatList
-        w="100%"
-        px="9"
-        mb="20"
-        data={talks}
-        renderItem={({ item }) => (
-          <TalkItem
-            item={item}
-            deleteTalk={deleteTalk}
-            onPress={() =>
-              talkChatNavigationHandler(item.talkId, item.to.displayName)
-            }
-          />
-        )}
-        keyExtractor={(item) => item.talkId.toString()}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefetchingTalks}
-            onRefresh={refetchTalks}
-          />
-        }
-      />
+      {isLoadingTalks ? (
+        <Spinner color="muted.400" />
+      ) : (
+        <FlatList
+          w="100%"
+          px="8"
+          mb="20"
+          data={talks}
+          
+          renderItem={({ item }) => (
+            <TalkItem
+              item={item}
+              deleteTalk={deleteTalk}
+              onPress={() =>
+                talkChatNavigationHandler(item.talkId, item.to.displayName)
+              }
+            />
+          )}
+          keyExtractor={(item) => item.talkId.toString()}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetchingTalks}
+              onRefresh={refetchTalks}
+            />
+          }
+        />
+      )}
       <CircleButton
         position="absolute"
         bottom="24"

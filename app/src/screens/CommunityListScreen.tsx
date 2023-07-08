@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
+import { getCategories, showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import { useInfiniteQueryCommunities } from "../hooks/community/query";
@@ -20,16 +20,20 @@ type CommunityListNavigationProp = NativeStackNavigationProp<
 const CommunityListScreen = () => {
   const toast = useToast();
   const { t } = useTranslation("community");
+
   const navigation = useNavigation<CommunityListNavigationProp>();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
+  const categories = getCategories();
+  categories.splice(0, 1, "all");
+  const [categoryIndex, setCategoryIndex] = useState(0);
   const {
     data: communities,
     isLoading: isLoadingCommunities,
     refetch,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQueryCommunities();
+  } = useInfiniteQueryCommunities(categories[categoryIndex]);
   const [isRefetchingCommunities, setIsRefetchingCommunitys] = useState(false);
 
   const { mutateAsync: mutateAsyncDeleteCommunity } = useDeleteCommunity({
@@ -79,6 +83,8 @@ const CommunityListScreen = () => {
 
   return (
     <CommunityListTemplate
+      categoryIndex={categoryIndex}
+      setCategoryIndex={setCategoryIndex}
       communities={communities}
       user={user}
       isLoadingCommunities={isLoadingCommunities}

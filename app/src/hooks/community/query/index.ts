@@ -8,12 +8,20 @@ export type GetCommunityChatsResponse = Awaited<
   ReturnType<typeof getCommunityChats>
 >;
 
-const getCommunities = async (from: number, to: number) => {
-  const { data, error } = await supabase
-    .from("community")
-    .select("*")
-    .order("createdAt", { ascending: false })
-    .range(from, to);
+const getCommunities = async (category: string, from: number, to: number) => {
+  const { data, error } =
+    category === "all"
+      ? await supabase
+          .from("community")
+          .select("*")
+          .order("createdAt", { ascending: false })
+          .range(from, to)
+      : await supabase
+          .from("community")
+          .select("*")
+          .eq("category", category)
+          .order("createdAt", { ascending: false })
+          .range(from, to);
   if (error) {
     throw error;
   }
@@ -43,12 +51,16 @@ const getCommunityChats = async (
   );
 };
 
-export const useInfiniteQueryCommunities = () => {
+export const useInfiniteQueryCommunities = (category: string) => {
   const PAGE_COUNT = 15;
   const query = useInfiniteQuery<GetCommunitiesResponse, PostgrestError>({
-    queryKey: "communities",
+    queryKey: ["communities", category],
     queryFn: async ({ pageParam = 0 }) => {
-      return await getCommunities(pageParam, pageParam + PAGE_COUNT - 1);
+      return await getCommunities(
+        category,
+        pageParam,
+        pageParam + PAGE_COUNT - 1
+      );
     },
     getNextPageParam: (lastPage, pages) => {
       if (lastPage && lastPage.length === PAGE_COUNT) {

@@ -3,7 +3,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FarmStackParamList } from "../types";
 import FarmListScreen from "../screens/FarmListScreen";
-import PostFarmModal from "../modals/PostFarmModal";
+import PostFarmModal from "../screens/PostFarmModal";
 import FarmDeviceScreen from "../screens/FarmDeviceScreen";
 
 const FarmStack = createNativeStackNavigator<FarmStackParamList>();

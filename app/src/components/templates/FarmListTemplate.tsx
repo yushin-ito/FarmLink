@@ -56,7 +56,7 @@ const FarmListTemplate = ({
 
   return (
     <Box flex={1} safeAreaTop>
-      <VStack space="3" px="9" pt="6" pb="12">
+      <VStack space="3" px="8" pt="6" pb="12">
         <HStack alignItems="center" justifyContent="space-between">
           <Heading>{t("myFarm")}</Heading>
           <Avatar
@@ -70,7 +70,7 @@ const FarmListTemplate = ({
       </VStack>
       <FlatList
         w="100%"
-        px="9"
+        px="8"
         mb="20"
         data={farms}
         renderItem={({ item }) => (

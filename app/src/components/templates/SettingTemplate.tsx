@@ -50,7 +50,7 @@ const SettingTemplate = ({
   }
 
   return (
-    <Box flex={1} pt="6" px="9" safeAreaTop>
+    <Box flex={1} pt="6" px="8" safeAreaTop>
       <ImageActionSheet
         isOpen={isOpen}
         onClose={onClose}

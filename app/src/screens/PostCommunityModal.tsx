@@ -12,7 +12,7 @@ const PostCommunityModal = () => {
   const toast = useToast();
   const { t } = useTranslation("community");
   const navigation = useNavigation();
-  const { refetch } = useInfiniteQueryCommunities();
+  const { refetch } = useInfiniteQueryCommunities("all");
 
   const { mutateAsync, isLoading } = usePostCommunity({
     onSuccess: async () => {

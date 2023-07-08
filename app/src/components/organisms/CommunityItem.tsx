@@ -3,6 +3,7 @@ import { Box, Divider, HStack, Pressable, Text, VStack } from "native-base";
 import { GetCommunitiesResponse } from "../../hooks/community/query";
 import Avatar from "../molecules/Avatar";
 import { useTranslation } from "react-i18next";
+import { Category } from "../../functions";
 
 type CommunityItemProps = {
   item: GetCommunitiesResponse[number];
@@ -41,7 +42,7 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
           </VStack>
           <Box pt="2">
             <Text fontSize="xs">
-              {t("category")}:{" " + item.category}
+              {t("category")}:{" " + t(item.category as Category)}
             </Text>
           </Box>
         </VStack>
