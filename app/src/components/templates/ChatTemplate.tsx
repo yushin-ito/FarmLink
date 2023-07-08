@@ -114,7 +114,7 @@ const ChatTemplate = ({
               item={item}
               authored={item.authorId === user?.userId}
               locale={locale}
-              onOpen={onOpen}
+              onLongPress={onOpen}
             />
           )}
           keyExtractor={(item) => item.chatId.toString()}

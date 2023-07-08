@@ -86,11 +86,13 @@ const postCommunityImage = async ({
 const postCommunityChatImage = async ({
   base64,
   type,
+  size,
   communityId,
   authorId,
 }: {
   base64: string;
   type: string;
+  size: { width: number; height: number };
   communityId: number;
   authorId: string;
 }) => {
@@ -104,7 +106,13 @@ const postCommunityChatImage = async ({
     throw error;
   }
   const { data } = supabase.storage.from("image").getPublicUrl(filePath);
-  await postCommunityChat({ communityId, authorId, imageUrl: data.publicUrl });
+  await postCommunityChat({
+    communityId,
+    authorId,
+    imageUrl: data.publicUrl,
+    width: size.width,
+    height: size.height
+  });
 };
 
 export const usePostCommunityChat = ({
@@ -145,7 +153,7 @@ export const usePostCommunityImage = ({
     mutationFn: postCommunityImage,
     onSuccess,
     onError,
-  })
+  });
 
 export const useDeleteCommunity = ({
   onSuccess,

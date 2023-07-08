@@ -6,6 +6,7 @@ import * as ImageManipulator from "expo-image-manipulator";
 type PickerResult = {
   base64: string | undefined;
   type: "image" | "video" | undefined;
+  size: { width: number; height: number };
 };
 
 type UseImageType = {
@@ -48,6 +49,10 @@ const useImage = ({ onSuccess, onDisable, onError }: UseImageType) => {
           onSuccess({
             base64: manipulatorResult.base64,
             type: pickerResult.assets[0].type,
+            size: {
+              width: pickerResult.assets[0].width,
+              height: pickerResult.assets[0].height,
+            },
           });
         setUri(manipulatorResult.uri);
       }
@@ -86,6 +91,10 @@ const useImage = ({ onSuccess, onDisable, onError }: UseImageType) => {
           onSuccess({
             base64: manipulatorResult.base64,
             type: pickerResult.assets[0].type,
+            size: {
+              width: pickerResult.assets[0].width,
+              height: pickerResult.assets[0].height,
+            },
           });
         setUri(manipulatorResult.uri);
       }

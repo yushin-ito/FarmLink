@@ -77,11 +77,12 @@ const CommunityChatScreen = () => {
   });
 
   const { pickImageByCamera, pickImageByLibrary } = useImage({
-    onSuccess: async ({ base64, type }) => {
+    onSuccess: async ({ base64, type, size }) => {
       if (session?.user && base64 && type) {
         await mutateAsyncPostImage({
           base64,
           type,
+          size,
           communityId: params.communityId,
           authorId: session?.user.id,
         });

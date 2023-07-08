@@ -91,6 +91,7 @@ export const useInfiniteQueryCommunityChats = (communityId: number) => {
       query.data?.pages
         .flatMap((page) => page)
         .filter((page): page is NonNullable<typeof page> => page !== null),
+
     [query.data]
   );
 
