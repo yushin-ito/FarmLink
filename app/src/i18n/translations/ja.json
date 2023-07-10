@@ -81,7 +81,7 @@
     "askDeleteFarm": "農園を削除してもよろしいですか",
     "cancel": "キャンセル",
     "delete": "削除",
-    "notExistFarm": "右下のボタンからデバイスを接続して\n農園を管理してみましょう!",
+    "notExistFarm": "右下のボタンからデバイスを接続して\n農園を管理しましょう",
     "farmName": "農園名",
     "farmNameRequired": "農園名を入力してください",
     "farmNameMaxLength": "農園名は20文字以内で入力してください",
@@ -102,6 +102,7 @@
     "anyError": "エラーが発生しました",
     "createTalk": "トークを作成",
     "searchUser": "ユーザーを検索",
+    "notExistTalk": "右下のボタンからユーザーを追加して\nトークを開始しましょう",
     "deleteTalk": "トーク削除",
     "permitRequestCam": "カメラを許可してください",
     "askDeleteTalk": "トークを削除してもよろしいですか",
@@ -113,6 +114,7 @@
   "setting": {
     "setting": "設定",
     "profile": "プロフィール",
+    "editProfile": "プロフィールを編集",
     "noProfile": "プロフィールがありません",
     "signout": "サインアウト",
     "askSignout": "サインアウトしてもよろしいですか",
@@ -128,6 +130,19 @@
     "profileMaxLength": "プロフィールは30文字以内で入力してください",
     "permitRequestCam": "カメラを許可してください",
     "signoutError": "サインアウトに失敗しました",
-    "save": "保存"
+    "save": "保存",
+    "rental": "レンタルする",
+    "rentalFarm": "農園をレンタルする",
+    "rentalName": "レンタル名",
+    "rentalNameRequired": "レンタル名を入力してください",
+    "rentalNameMaxLength": "レンタル名は20文字以内で入力してください",
+    "setPosition": "現在地から農園の場所を設定",
+    "refetch": "再取得",
+    "address": "住所",
+    "permitRequestGPS": "位置情報を許可してください",
+    "description": "詳細",
+    "descriptionRequired": "詳細を入力してください",
+    "descriptionMaxLength": "詳細は100文字以内で入力してください",
+    "create": "作成"
   }
 }

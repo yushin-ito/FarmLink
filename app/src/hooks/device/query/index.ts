@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { supabase } from "../../supabase";
+import { supabase } from "../../../supabase";
 
 export type GetDeviceResponse = Awaited<ReturnType<typeof getDevice>>;
 

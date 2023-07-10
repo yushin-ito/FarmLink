@@ -23,7 +23,7 @@ const MapTemplate = ({
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
-    (async () => await getCurrentPosition())();
+    getCurrentPosition();
   }, []);
 
   useEffect(() => {

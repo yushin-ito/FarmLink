@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { SearchUsersResponse, useSearchUsers } from "../hooks/user/mutate";
 import useAuth from "../hooks/auth/useAuth";
 
-const PostTalkModal = () => {
+const PostTalkScreen = () => {
   const toast = useToast();
   const { t } = useTranslation("talk");
   const navigation = useNavigation();
@@ -62,7 +62,7 @@ const PostTalkModal = () => {
       return;
     }
     await mutateAsyncSearchUsers({ userId: session?.user.id, text });
-  }, []);
+  }, [session?.user]);
 
   const postTalk = useCallback(
     async (recieverId: string) => {
@@ -90,4 +90,4 @@ const PostTalkModal = () => {
   );
 };
 
-export default PostTalkModal;
+export default PostTalkScreen;

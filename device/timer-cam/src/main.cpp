@@ -113,9 +113,9 @@ void setup() {
   // 画像URLをデータベースに送信
   if (http.begin(client, String(SUPABASE_URL) + "/rest/v1/" + String(table))) {
     http.addHeader("Content-Type", "application/json");
-    http.addHeader("apikey", String(SUPABASE_KEY));
+    http.addHeader("apikey", Stringa(SUPABASE_KEY));
     http.addHeader("Authorization", "Bearer " + String(SUPABASE_KEY));
-    http.addHeader("Prefer", "resolution=merge-duplicates");
+1
     String image_url = String(SUPABASE_URL) + "/storage/v1/object/pulic/" + String(bucket) + "/" + String(directory) + "/" + String(UUID) + ".jpg";
     String payload = "{\"deviceId\":\"" + String(UUID) + "\",\"imageUrl\":\"" + image_url + "\",\"battery\":\"" + String(bat_get_voltage() * 0.001) + "\"}";
     http_code = http.sendRequest("POST", payload);

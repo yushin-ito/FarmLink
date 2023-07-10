@@ -6,6 +6,7 @@ import {
   HStack,
   Spinner,
   VStack,
+  Text,
 } from "native-base";
 import React from "react";
 import CircleButton from "../molecules/CircleButton";
@@ -71,7 +72,17 @@ const TalkListTemplate = ({
           px="8"
           mb="20"
           data={talks}
-          
+          ListEmptyComponent={
+            <Text
+              bold
+              lineHeight="2xl"
+              fontSize="md"
+              textAlign="center"
+              color="muted.600"
+            >
+              {t("notExistTalk")}
+            </Text>
+          }
           renderItem={({ item }) => (
             <TalkItem
               item={item}

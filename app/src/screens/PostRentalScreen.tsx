@@ -1,28 +1,27 @@
 import React, { useCallback, useState } from "react";
-import PostFarmTemplate from "../components/templates/PostFarmTemplate";
+import PostRentalTemplate from "../components/templates/PostRentalTemplate";
 import { useNavigation } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
-import { usePostFarm } from "../hooks/farm/mutate";
+import { usePostRental } from "../hooks/rental/mutate";
 import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
-import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
-import { useQueryFarms } from "../hooks/farm/query";
 import useLocation from "../hooks/sdk/useLocation";
+import useImage from "../hooks/sdk/useImage";
 
-const PostFarmModal = () => {
+const PostRentalScreen = () => {
   const toast = useToast();
-  const { t } = useTranslation("farm");
+  const { t } = useTranslation("setting");
   const navigation = useNavigation();
   const { session } = useAuth();
-  const { refetch } = useQueryFarms(session?.user.id);
-  const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
+  const [uri, setUri] = useState<string[]>([]);
+  const [base64, setBase64] = useState<string[]>([]);
 
-  const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
-    usePostFarm({
+  const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
+    usePostRental({
       onSuccess: async () => {
-        await refetch();
+        // await refetch();
         navigation.goBack();
       },
       onError: () => {
@@ -38,9 +37,22 @@ const PostFarmModal = () => {
       },
     });
 
-  const { mutateAsync: mutateAsyncSearchDevice } = useSearchDevice({
-    onSuccess: (data) => {
-      setSearchResult(data[0]);
+  const { pickImageByCamera, pickImageByLibrary } = useImage({
+    onSuccess: async ({ uri, base64 }) => {
+      if (uri && base64) {
+        setUri((prev) => [...prev, uri]);
+        setBase64((prev) => [...prev, base64]);
+      }
+    },
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestCam")}
+        />
+      );
     },
     onError: () => {
       showAlert(
@@ -60,6 +72,7 @@ const PostFarmModal = () => {
     isLoading: isLoadingLocation,
   } = useLocation({
     onDisable: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -70,6 +83,7 @@ const PostFarmModal = () => {
       );
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -81,32 +95,20 @@ const PostFarmModal = () => {
     },
   });
 
-  const searchDevice = useCallback(async (text: string) => {
-    if (text === "") {
-      setSearchResult(undefined);
-      return;
-    }
-    await mutateAsyncSearchDevice(text);
-  }, []);
-
-  const postFarm = useCallback(
-    async (
-      farmName: string,
-      deviceId: string,
-      description: string,
-      privated: boolean
-    ) => {
-      await mutateAsyncPostFarm({
-        farmName,
-        deviceId,
-        description,
-        ownerId: session?.user.id,
-        privated,
-        longitude: privated ? null : position?.coords.longitude,
-        latitude: privated ? null : position?.coords.latitude,
+  const postRental = useCallback(
+    async (rentalName: string, description: string) => {
+      await mutateAsyncPostRental({
+        base64,
+        rental: {
+          rentalName,
+          description,
+          ownerId: session?.user.id,
+          longitude: position?.coords.longitude,
+          latitude: position?.coords.latitude,
+        },
       });
     },
-    []
+    [session?.user, position?.coords, base64]
   );
 
   const goBackNavigationHandler = useCallback(() => {
@@ -114,17 +116,18 @@ const PostFarmModal = () => {
   }, []);
 
   return (
-    <PostFarmTemplate
-      isLoadingPostFarm={isLoadingPostFarm}
+    <PostRentalTemplate
+      uri={uri}
+      isLoadingPostRental={isLoadingPostRental}
       isLoadingPosition={isLoadingLocation}
       position={position}
+      pickImageByCamera={pickImageByCamera}
+      pickImageByLibrary={pickImageByLibrary}
       getCurrentPosition={getCurrentPosition}
-      searchResult={searchResult}
-      postFarm={postFarm}
-      searchDevice={searchDevice}
+      postRental={postRental}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );
 };
 
-export default PostFarmModal;
+export default PostRentalScreen;

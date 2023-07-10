@@ -1,10 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Keyboard,
-  Platform,
-  TouchableWithoutFeedback,
-  useWindowDimensions,
-} from "react-native";
+import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import {
@@ -49,7 +44,6 @@ const PostProfileTemplate = ({
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const { height } = useWindowDimensions();
 
   useEffect(() => {
     if (user?.displayName) {
@@ -64,31 +58,26 @@ const PostProfileTemplate = ({
     <KeyboardAvoidingView
       flex={1}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={height / 15}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Box flex={1} pt="6" pb="12" px="2" justifyContent="space-between">
-          <VStack space="7">
-            <HStack alignItems="center" justifyContent="space-between">
+        <Box flex={1} pb="16" justifyContent="space-between" safeAreaTop>
+          <VStack>
+            <HStack w="100%" alignItems="center" justifyContent="space-between">
               <IconButton
+                p="6"
                 onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="chevron-left" />} size="6" />}
+                icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
                 variant="unstyled"
-                _pressed={{
-                  opacity: 0.5,
-                }}
               />
-              <Heading textAlign="center">{t("profile")}</Heading>
+              <Heading textAlign="center">{t("editProfile")}</Heading>
               <IconButton
+                p="6"
                 onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="x" />} size="6" />}
+                icon={<Icon as={<Feather name="x" />} size="xl" />}
                 variant="unstyled"
-                _pressed={{
-                  opacity: 0.5,
-                }}
               />
             </HStack>
-            <VStack mx="10">
+            <VStack px="10">
               <FormControl isInvalid={"displayName" in errors}>
                 <FormControl.Label>{t("displayName")}</FormControl.Label>
                 <Controller

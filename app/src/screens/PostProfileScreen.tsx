@@ -9,7 +9,7 @@ import { usePostUser } from "../hooks/user/mutate";
 import Alert from "../components/molecules/Alert";
 import { useTranslation } from "react-i18next";
 
-const PostProfileModal = () => {
+const PostProfileScreen = () => {
   const toast = useToast();
   const { t } = useTranslation("setting");
   const navigation = useNavigation();
@@ -61,4 +61,4 @@ const PostProfileModal = () => {
   );
 };
 
-export default PostProfileModal;
+export default PostProfileScreen;

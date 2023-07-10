@@ -21,10 +21,15 @@ const getTabStyle = (route: Partial<Route<string, object | undefined>>) => {
   if (
     routeName === "SearchMap" ||
     routeName === "CommunityChat" ||
+    routeName === "PostCommunity" ||
     routeName === "SearchCommunity" ||
     routeName === "TalkChat" ||
+    routeName === "PostTalk" ||
     routeName === "SearchTalk" ||
-    routeName === "FarmDevice"
+    routeName === "FarmDevice" ||
+    routeName === "PostFarm" ||
+    routeName === "PostProfile" ||
+    routeName === "PostRental"
   )
     return false;
 
@@ -48,9 +53,10 @@ const TabNavigator = () => {
             width: 0,
             height: -0.5,
           },
+          minHeight: 64,
           shadowOpacity: 0.25,
           shadowRadius: 4,
-          elevation: 0,
+          elevation: 24,
           paddingTop: 12,
           paddingHorizontal: 10,
           borderTopRightRadius: 20,

@@ -57,9 +57,9 @@ const RoomListScreen = () => {
     });
 
   const { pickImageByCamera, pickImageByLibrary } = useImage({
-    onSuccess: async ({ base64, type }) => {
-      if (session?.user && base64 && type) {
-        await mutateAsyncPostAvatar({ base64, type, userId: session.user.id });
+    onSuccess: async ({ base64 }) => {
+      if (session?.user && base64) {
+        await mutateAsyncPostAvatar({ base64, userId: session.user.id });
       }
     },
     onDisable: () => {
@@ -92,6 +92,10 @@ const RoomListScreen = () => {
     navigation.navigate("PostProfile");
   }, []);
 
+  const postRentalNavigationHandler = useCallback(() => {
+    navigation.navigate("PostRental");
+  }, []);
+
   return (
     <SettingTemplate
       user={user}
@@ -100,6 +104,7 @@ const RoomListScreen = () => {
       signOut={signOut}
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
+      postRentalNavigationHandler={postRentalNavigationHandler}
       postProfileNavigationHandler={postProfileNavigationHandler}
     />
   );

@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useCallback } from "react";
 import useAuth from "../hooks/auth/useAuth";
 import { useQueryUser } from "../hooks/user/query";
-import { useQueryDevice } from "../hooks/device";
+import { useQueryDevice } from "../hooks/device/query";
 
 type FarmDeviceNavigationProp = NativeStackNavigationProp<
   FarmStackParamList,
@@ -21,6 +21,7 @@ const FarmDeviceScreen = () => {
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
   const { data: device } = useQueryDevice(route.params.deviceId);
+
   const settingNavigationHandler = useCallback(() => {
     navigation.navigate("SettingNavigator", { screen: "Setting" });
   }, []);

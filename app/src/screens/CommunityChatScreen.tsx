@@ -11,7 +11,7 @@ import {
 } from "../hooks/community/mutate";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { CommunityStackParamList } from "../types";
-import useCommunityChat from "../hooks/community/useCommunityChat";
+import useChat from "../hooks/community/useChat";
 import useAuth from "../hooks/auth/useAuth";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useInfiniteQueryCommunityChats } from "../hooks/community/query";
@@ -43,7 +43,7 @@ const CommunityChatScreen = () => {
     refetch,
   } = useInfiniteQueryCommunityChats(params.communityId);
 
-  useCommunityChat(params.communityId, async () => {
+  useChat(params.communityId, async () => {
     await refetch();
   });
 
@@ -60,7 +60,7 @@ const CommunityChatScreen = () => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostImage } = usePostCommunityChatImage({
+  const { mutateAsync: mutateAsyncPostChatImage } = usePostCommunityChatImage({
     onSuccess: async () => {
       await refetch();
     },
@@ -77,11 +77,10 @@ const CommunityChatScreen = () => {
   });
 
   const { pickImageByCamera, pickImageByLibrary } = useImage({
-    onSuccess: async ({ base64, type, size }) => {
-      if (session?.user && base64 && type) {
-        await mutateAsyncPostImage({
+    onSuccess: async ({ base64, size }) => {
+      if (session?.user && base64) {
+        await mutateAsyncPostChatImage({
           base64,
-          type,
           size,
           communityId: params.communityId,
           authorId: session?.user.id,
@@ -116,7 +115,7 @@ const CommunityChatScreen = () => {
       communityId: params.communityId,
       authorId: session?.user.id,
     });
-  }, []);
+  }, [session?.user]);
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

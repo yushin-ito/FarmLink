@@ -20,7 +20,6 @@ type CommunityListNavigationProp = NativeStackNavigationProp<
 const CommunityListScreen = () => {
   const toast = useToast();
   const { t } = useTranslation("community");
-
   const navigation = useNavigation<CommunityListNavigationProp>();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);

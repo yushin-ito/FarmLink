@@ -8,7 +8,7 @@ import ChatTemplate from "../components/templates/ChatTemplate";
 import { usePostTalkChat, usePostTalkChatImage } from "../hooks/talk/mutate";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { TalkStackParamList } from "../types";
-import useTalkChat from "../hooks/talk/useTalkChat";
+import useChat from "../hooks/talk/useChat";
 import useAuth from "../hooks/auth/useAuth";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useInfiniteQueryTalkChats } from "../hooks/talk/query";
@@ -37,7 +37,7 @@ const TalkChatScreen = () => {
     refetch,
   } = useInfiniteQueryTalkChats(params.talkId);
 
-  useTalkChat(params.talkId, async () => {
+  useChat(params.talkId, async () => {
     await refetch();
   });
 
@@ -54,7 +54,7 @@ const TalkChatScreen = () => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostImage } = usePostTalkChatImage({
+  const { mutateAsync: mutateAsyncPostChatImage } = usePostTalkChatImage({
     onSuccess: async () => {
       await refetch();
     },
@@ -71,11 +71,10 @@ const TalkChatScreen = () => {
   });
 
   const { pickImageByCamera, pickImageByLibrary } = useImage({
-    onSuccess: async ({ base64, type, size }) => {
-      if (session?.user && base64 && type) {
-        await mutateAsyncPostImage({
+    onSuccess: async ({ base64, size }) => {
+      if (session?.user && base64) {
+        await mutateAsyncPostChatImage({
           base64,
-          type,
           talkId: params.talkId,
           authorId: session?.user.id,
           size,
@@ -104,13 +103,16 @@ const TalkChatScreen = () => {
     },
   });
 
-  const postChat = useCallback(async (message: string) => {
-    await mutateAsyncPostChat({
-      message,
-      talkId: params.talkId,
-      authorId: session?.user.id,
-    });
-  }, []);
+  const postChat = useCallback(
+    async (message: string) => {
+      await mutateAsyncPostChat({
+        message,
+        talkId: params.talkId,
+        authorId: session?.user.id,
+      });
+    },
+    [session?.user]
+  );
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

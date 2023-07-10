@@ -41,13 +41,11 @@ const postTalkChat = async (chat: Chat["Insert"]) => {
 
 const postTalkChatImage = async ({
   base64,
-  type,
   size,
   talkId,
   authorId,
 }: {
   base64: string;
-  type: string;
   size: { width: number; height: number };
   talkId: number;
   authorId: string;
@@ -56,7 +54,7 @@ const postTalkChatImage = async ({
   const { error } = await supabase.storage
     .from("image")
     .upload(filePath, decode(base64), {
-      contentType: type,
+      contentType: "image",
     });
   if (error) {
     throw error;

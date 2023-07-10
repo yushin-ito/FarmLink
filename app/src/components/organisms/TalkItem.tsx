@@ -22,9 +22,8 @@ type TalkItemProps = {
 
 const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
   const { t } = useTranslation("talk");
-
   return (
-    <Pressable onPress={onPress} _pressed={{ bg: "muted.100" }} rounded="md">
+    <VStack>
       <Swipeable
         renderRightActions={() => (
           <Pressable
@@ -53,27 +52,33 @@ const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
           </Pressable>
         )}
       >
-        <HStack p="5">
-          <Box w="25%">
-            <Avatar
-              size="md"
-              fontSize="2xl"
-              disabled
-              text={item?.to.displayName?.charAt(0)}
-              avatarUrl={item?.to.avatarUrl}
-              updatedAt={item?.to.updatedAt}
-              hue={item?.to.hue}
-            />
-          </Box>
-          <VStack h="75%">
-            <Text bold fontSize="md">
-              {item.to?.displayName}
-            </Text>
-          </VStack>
-        </HStack>
+        <Pressable
+          onPress={onPress}
+          _pressed={{ bg: "muted.100" }}
+          rounded="md"
+        >
+          <HStack p="5">
+            <Box w="25%">
+              <Avatar
+                size="md"
+                fontSize="2xl"
+                disabled
+                text={item?.to.displayName?.charAt(0)}
+                avatarUrl={item?.to.avatarUrl}
+                updatedAt={item?.to.updatedAt}
+                hue={item?.to.hue}
+              />
+            </Box>
+            <VStack h="75%">
+              <Text bold fontSize="md">
+                {item.to?.displayName}
+              </Text>
+            </VStack>
+          </HStack>
+        </Pressable>
       </Swipeable>
       <Divider />
-    </Pressable>
+    </VStack>
   );
 });
 

@@ -4,13 +4,13 @@ import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 
 type PickerResult = {
+  uri: string;
   base64: string | undefined;
-  type: "image" | "video" | undefined;
   size: { width: number; height: number };
 };
 
 type UseImageType = {
-  onSuccess?: ({ base64, type }: PickerResult) => void;
+  onSuccess?: ({ uri, base64 }: PickerResult) => void;
   onDisable?: () => void;
   onError?: () => void;
 };
@@ -39,19 +39,19 @@ const useImage = ({ onSuccess, onDisable, onError }: UseImageType) => {
       if (!pickerResult.canceled) {
         const manipulatorResult = await ImageManipulator.manipulateAsync(
           pickerResult.assets[0].uri,
-          [{ resize: { width: 500 } }],
+          [{ resize: { width: 700 } }],
           {
-            compress: 1,
+            compress: 0.5,
             base64: true,
           }
         );
         onSuccess &&
           onSuccess({
+            uri: manipulatorResult.uri,
             base64: manipulatorResult.base64,
-            type: pickerResult.assets[0].type,
             size: {
-              width: pickerResult.assets[0].width,
-              height: pickerResult.assets[0].height,
+              width: manipulatorResult.width,
+              height: manipulatorResult.height,
             },
           });
         setUri(manipulatorResult.uri);
@@ -89,11 +89,11 @@ const useImage = ({ onSuccess, onDisable, onError }: UseImageType) => {
         );
         onSuccess &&
           onSuccess({
+            uri: manipulatorResult.uri,
             base64: manipulatorResult.base64,
-            type: pickerResult.assets[0].type,
             size: {
-              width: pickerResult.assets[0].width,
-              height: pickerResult.assets[0].height,
+              width: manipulatorResult.width,
+              height: manipulatorResult.height,
             },
           });
         setUri(manipulatorResult.uri);

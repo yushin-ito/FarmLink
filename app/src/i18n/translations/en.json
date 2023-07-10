@@ -80,7 +80,7 @@
     "askDeleteFarm": "Are you sure you want to delete farm?",
     "cancel": "Cancel",
     "delete": "Delete",
-    "notExistFarm": "Connect your device using the button to manage your farm!",
+    "notExistFarm": "Click the button\nto connect and manage your farm!",
     "farmName": "Farm name",
     "farmNameRequired": "Farm name is required",
     "farmNameMaxLength": "Farm name must be 20 or less",
@@ -101,6 +101,7 @@
     "anyError": "An error occurred",
     "createTalk": "Create Talk",
     "searchUser": "Search User",
+    "notExistTalk": "Click the button\nto add  user and start talking",
     "deleteTalk": "Delete Talk",
     "permitRequestCam": "Please grant camera permission",
     "askDeleteTalk": "Are you sure want to delete Talk?",
@@ -112,6 +113,7 @@
   "setting": {
     "setting": "Settings",
     "profile": "Profile",
+    "editProfile": "Edit profile",
     "noProfile": "No profile",
     "signout": "Sign out",
     "askSignout": "Are you sure you want to sign out?",
@@ -127,6 +129,19 @@
     "profileMaxLength": "Profile must be 30 or less",
     "permitRequestCam": "Please grant camera permission",
     "signoutError": "Sign out failed",
-    "save": "Save"
+    "save": "Save",
+    "rental": "Rental",
+    "rentalFarm": "Retanl farm",
+    "rentalName": "Rental name",
+    "rentalNameRequired": "Rental name is required",
+    "rentalNameMaxLength": "Rental name must be 20 or less",
+    "setPosition": "Set location of farm from your location",
+    "refetch": "Refetch",
+    "address": "Address",
+    "permitRequestGPS": "Please grant GPS permission",
+    "description": "Description",
+    "descriptionRequired": "Description is required",
+    "descriptionMaxLength": "Description must be 100 or less",
+    "create": "Create"
   }
 }

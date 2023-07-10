@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { CommunityStackParamList } from "../types";
 import CommunityListScreen from "../screens/CommunityListScreen";
 import CommunityChatScreen from "../screens/CommunityChatScreen";
-import PostCommunityModal from "../screens/PostCommunityModal";
+import PostCommunityScreen from "../screens/PostCommunityScreen";
 import SearchCommunityScreen from "../screens/SearchCommunityScreen";
 
 const CommunityStack = createNativeStackNavigator<CommunityStackParamList>();
@@ -24,7 +24,7 @@ const CommunityNavigator = () => {
       <CommunityStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
         <CommunityStack.Screen
           name="PostCommunity"
-          component={PostCommunityModal}
+          component={PostCommunityScreen}
         />
       </CommunityStack.Group>
       <CommunityStack.Group

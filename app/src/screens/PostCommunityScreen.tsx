@@ -8,7 +8,7 @@ import Alert from "../components/molecules/Alert";
 import { usePostCommunity } from "../hooks/community/mutate";
 import { useTranslation } from "react-i18next";
 
-const PostCommunityModal = () => {
+const PostCommunityScreen = () => {
   const toast = useToast();
   const { t } = useTranslation("community");
   const navigation = useNavigation();
@@ -61,4 +61,4 @@ const PostCommunityModal = () => {
   );
 };
 
-export default PostCommunityModal;
+export default PostCommunityScreen;

@@ -18,18 +18,16 @@ const postUser = async (user: User["Insert"]) => {
 
 const postAvatar = async ({
   base64,
-  type,
   userId,
 }: {
   base64: string;
-  type: string;
   userId: string;
 }) => {
   const filePath = `avatar/${userId}.png`;
   const { error } = await supabase.storage
     .from("image")
     .upload(filePath, decode(base64), {
-      contentType: type,
+      contentType: "image",
       upsert: true,
     });
   if (error) {
@@ -50,7 +48,7 @@ const searchUsers = async ({
     .from("user")
     .select("*")
     .neq("userId", userId)
-    .ilike("displayName", `%${text}%`)
+    .ilike("displayName", `%${text}%`);
   if (error) {
     throw error;
   }

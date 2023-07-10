@@ -26,6 +26,7 @@ type SettingTemplateProps = {
   signOut: () => Promise<void>;
   pickImageByCamera: () => Promise<void>;
   pickImageByLibrary: () => Promise<void>;
+  postRentalNavigationHandler: () => void;
   postProfileNavigationHandler: () => void;
 };
 
@@ -36,6 +37,7 @@ const SettingTemplate = ({
   signOut,
   pickImageByCamera,
   pickImageByLibrary,
+  postRentalNavigationHandler,
   postProfileNavigationHandler,
 }: SettingTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -59,7 +61,7 @@ const SettingTemplate = ({
       />
       <VStack space="3">
         <Heading>{t("setting")}</Heading>
-        <HStack my="4" alignItems="center">
+        <HStack mt="4" mb="6" alignItems="center">
           <Box w="30%">
             <Avatar
               text={user?.displayName?.charAt(0)}
@@ -96,11 +98,28 @@ const SettingTemplate = ({
           _pressed={{
             opacity: 0.5,
           }}
+          onPress={postRentalNavigationHandler}
+        >
+          <HStack alignItems="center" justifyContent="space-between">
+            <HStack p="2" space="3" alignItems="center" rounded="md">
+              <Icon as={<Feather name="camera" />} size="5" />
+              <Text fontSize="md">{t("rentalFarm")}</Text>
+            </HStack>
+            <Icon as={<Feather name="chevron-right" />} size="5" />
+          </HStack>
+        </Pressable>
+        <Pressable
+          _pressed={{
+            opacity: 0.5,
+          }}
           onPress={postProfileNavigationHandler}
         >
-          <HStack p="2" space="2" alignItems="center" rounded="md">
-            <Icon as={<Feather name="edit" />} size="5" />
-            <Text fontSize="md">{t("profile")}</Text>
+          <HStack alignItems="center" justifyContent="space-between">
+            <HStack p="2" space="2" alignItems="center" rounded="md">
+              <Icon as={<Feather name="edit" />} size="5" />
+              <Text fontSize="md">{t("editProfile")}</Text>
+            </HStack>
+            <Icon as={<Feather name="chevron-right" />} size="5" />
           </HStack>
         </Pressable>
         <Pressable
@@ -121,7 +140,7 @@ const SettingTemplate = ({
             opacity: 0.5,
           }}
         >
-          <HStack p="2" space="2" alignItems="center" rounded="md">
+          <HStack p="2" space="3" alignItems="center" rounded="md">
             <Icon as={<Feather name="log-out" />} size="5" />
             <Text fontSize="md">{t("signout")}</Text>
           </HStack>

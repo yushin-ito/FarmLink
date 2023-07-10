@@ -51,4 +51,5 @@ export type TalkStackParamList = {
 export type SettingStackParamList = {
   Setting: undefined;
   PostProfile: undefined;
+  PostRental: undefined;
 };

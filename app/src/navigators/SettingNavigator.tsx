@@ -4,7 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { SettingStackParamList } from "../types";
 import SettingScreen from "../screens/SettingScreen";
-import PostProfileModal from "../screens/PostProfileModal";
+import PostProfileScreen from "../screens/PostProfileScreen";
+import PostRentalScreen from "../screens/PostRentalScreen";
 
 const SettingStack = createNativeStackNavigator<SettingStackParamList>();
 
@@ -12,8 +13,9 @@ const SettingNavigator = () => {
   return (
     <SettingStack.Navigator screenOptions={{ headerShown: false }}>
       <SettingStack.Screen name="Setting" component={SettingScreen} />
-      <SettingStack.Group screenOptions={{ presentation: "modal" }}>
-        <SettingStack.Screen name="PostProfile" component={PostProfileModal} />
+      <SettingStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
+        <SettingStack.Screen name="PostProfile" component={PostProfileScreen} />
+        <SettingStack.Screen name="PostRental" component={PostRentalScreen} />
       </SettingStack.Group>
     </SettingStack.Navigator>
   );

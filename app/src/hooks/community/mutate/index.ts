@@ -85,13 +85,11 @@ const postCommunityImage = async ({
 
 const postCommunityChatImage = async ({
   base64,
-  type,
   size,
   communityId,
   authorId,
 }: {
   base64: string;
-  type: string;
   size: { width: number; height: number };
   communityId: number;
   authorId: string;
@@ -100,7 +98,7 @@ const postCommunityChatImage = async ({
   const { error } = await supabase.storage
     .from("image")
     .upload(filePath, decode(base64), {
-      contentType: type,
+      contentType: "image",
     });
   if (error) {
     throw error;
