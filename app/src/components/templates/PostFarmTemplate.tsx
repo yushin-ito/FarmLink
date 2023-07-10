@@ -72,19 +72,15 @@ const PostFarmTemplate = ({
       mapRef.current.animateToRegion({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
       });
     }
   }, [privated, isLoadingPosition]);
 
   return (
     <Box flex={1} safeAreaTop>
-      <HStack
-        w="100%"
-        alignItems="center"
-        justifyContent="space-between"
-      >
+      <HStack w="100%" alignItems="center" justifyContent="space-between">
         <IconButton
           p="6"
           onPress={goBackNavigationHandler}
@@ -211,7 +207,6 @@ const PostFarmTemplate = ({
               <Switch
                 colorScheme="brand"
                 onValueChange={async (value) => {
-                  console.log(value);
                   setPrivated(!value);
                   value && (await getCurrentPosition());
                 }}
@@ -280,16 +275,15 @@ const PostFarmTemplate = ({
                   ) : (
                     <MapView
                       ref={mapRef}
-                      mapType="hybrid"
+                      loadingBackgroundColor="#e5e5e5"
+                      loadingEnabled
+                      showsCompass={false}
                       style={{
                         width: "100%",
                         height: 160,
                         borderRadius: 12,
                         opacity: isLoadingPosition ? 0.5 : 1,
                       }}
-                      loadingBackgroundColor="#e5e5e5"
-                      loadingEnabled
-                      showsCompass={false}
                     >
                       {position && (
                         <Marker coordinate={position.coords}>

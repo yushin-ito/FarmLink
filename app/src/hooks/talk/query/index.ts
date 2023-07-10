@@ -7,7 +7,7 @@ import { Talk, User } from "../../../types/db";
 export type GetTalksResponse = Awaited<ReturnType<typeof getTalks>>;
 export type GetTalkChatsResponse = Awaited<ReturnType<typeof getTalkChats>>;
 
-const getTalks = async (userId: string | undefined) => {
+const getTalks = async (userId?: string) => {
   const { data, error } = await supabase
     .from("talk")
     .select(`*, to:recieverId(*), from:senderId(*)`)
@@ -44,7 +44,7 @@ const getTalkChats = async (talkId: number, from: number, to: number) => {
   );
 };
 
-export const useQueryTalks = (userId: string | undefined) =>
+export const useQueryTalks = (userId?: string) =>
   useQuery({
     queryKey: "talks",
     queryFn: async () => await getTalks(userId),

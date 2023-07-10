@@ -1,23 +1,35 @@
 import { Box, Icon, Spinner } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, {
+  Details,
+  Marker,
+  PROVIDER_GOOGLE,
+  Region,
+} from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import CircleButton from "../molecules/CircleButton";
 import { LocationObject } from "expo-location";
-import { MaterialIcons } from "@expo/vector-icons";
+import { GetFarmsResponse } from "../../hooks/farm/query";
+import { GetRentalsResponse } from "../../hooks/rental/query";
 
 type MapTemplateProps = {
   position: LocationObject | undefined;
+  farms: GetFarmsResponse | undefined;
+  rentals: GetRentalsResponse | undefined;
   getCurrentPosition: () => Promise<void>;
+  onRegionChange: (region: Region, details: Details) => void;
   isLoadingPosition: boolean;
   searchFarmNavigationHandler: () => void;
 };
 
 const MapTemplate = ({
   position,
+  farms,
+  rentals,
   getCurrentPosition,
   isLoadingPosition,
+  onRegionChange,
   searchFarmNavigationHandler,
 }: MapTemplateProps) => {
   const mapRef = useRef<MapView>(null);
@@ -40,24 +52,51 @@ const MapTemplate = ({
   return (
     <Box flex={1}>
       <MapView
+        provider={PROVIDER_GOOGLE}
         ref={mapRef}
-        mapType="hybrid"
+        mapType="satellite"
+        loadingEnabled
+        showsCompass={false}
+        initialRegion={{
+          latitude: 35,
+          longitude: 135,
+          latitudeDelta: 1,
+          longitudeDelta: 1,
+        }}
         style={{
           flex: 1,
           opacity: isLoadingPosition ? 0.5 : 1,
         }}
-        loadingEnabled
-        showsCompass={false}
+        onRegionChangeComplete={onRegionChange}
       >
-        {position && (
-          <Marker coordinate={position.coords}>
-            <Icon
-              as={<MaterialIcons />}
-              name="location-pin"
-              size="3xl"
-              color="red.500"
-            />
-          </Marker>
+        {position && <Marker coordinate={position.coords} />}
+        {farms?.map(
+          (item, index) =>
+            item.latitude &&
+            item.longitude && (
+              <Marker
+                key={index}
+                pinColor="green"
+                coordinate={{
+                  latitude: item.latitude,
+                  longitude: item.longitude,
+                }}
+              />
+            )
+        )}
+        {rentals?.map(
+          (item, index) =>
+            item.latitude &&
+            item.longitude && (
+              <Marker
+                key={index}
+                pinColor="blue"
+                coordinate={{
+                  latitude: item.latitude,
+                  longitude: item.longitude,
+                }}
+              />
+            )
         )}
       </MapView>
       <SearchBar

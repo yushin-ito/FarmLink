@@ -3,7 +3,7 @@ import React from "react";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
 import BackButton from "../molecules/BackButton";
-import { GetDeviceResponse } from "../../hooks/device";
+import { GetDeviceResponse } from "../../hooks/device/query"
 
 type FarmDeviceTemplateProps = {
   title: string | null;

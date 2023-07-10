@@ -73,8 +73,8 @@ const PostRentalTemplate = ({
       mapRef.current.animateToRegion({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
       });
     }
   }, [position, isLoadingPosition]);
@@ -244,7 +244,6 @@ const PostRentalTemplate = ({
               ) : (
                 <MapView
                   ref={mapRef}
-                  mapType="hybrid"
                   style={{
                     width: "100%",
                     height: 160,
