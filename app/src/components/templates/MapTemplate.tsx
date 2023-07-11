@@ -33,10 +33,6 @@ const MapTemplate = ({
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
-    !latitude && !longitude && getCurrentPosition();
-  }, []);
-
-  useEffect(() => {
     if (mapRef.current && latitude && longitude) {
       mapRef.current.animateToRegion({
         latitude,
@@ -45,7 +41,7 @@ const MapTemplate = ({
         longitudeDelta: 0.005,
       });
     }
-  }, [latitude, longitude]);
+  }, [mapRef.current, latitude, longitude]);
 
   return (
     <Box flex={1}>

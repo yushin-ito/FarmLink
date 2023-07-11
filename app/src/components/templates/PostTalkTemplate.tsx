@@ -106,6 +106,7 @@ const PostTalkTemplate = ({
                 <Spinner color="muted.400" />
               ) : (
                 <FlatList
+                  keyboardShouldPersistTaps="handled"
                   data={searchResult}
                   renderItem={({ item }) => (
                     <SearchUserItem

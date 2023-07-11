@@ -1,6 +1,6 @@
 import { IToastService } from "native-base/lib/typescript/components/composites/Toast";
 import * as Linking from "expo-linking";
-import { formatDistance } from "date-fns";
+import { format, formatDistance } from "date-fns";
 import { ja, enUS } from "date-fns/locale";
 
 export const wait = (sec: number) => {
@@ -29,13 +29,36 @@ export const getSessionFromLink = (link: string) => {
   return null;
 };
 
-export const getTimeDistance = (date: string, locale: string | null) => {
-  const localeJP = locale === "ja" || locale?.startsWith("ja-");
+const getTimeDistanceForJa = (date: string) => {
   const distance = formatDistance(new Date(), new Date(date), {
-    locale: localeJP ? ja : enUS,
+    locale: ja,
   });
+  if (distance.indexOf("未満") !== -1) {
+    return "たった今";
+  } else if (distance.indexOf("か月") !== -1 || distance.indexOf("年") !== -1) {
+    return format(new Date(date), "yyyy/M/d/", {
+      locale: ja,
+    });
+  } else {
+    return distance + "前";
+  }
+};
 
+const getTimeDistanceForEn = (date: string) => {
+  const distance = formatDistance(new Date(), new Date(date), {
+    locale: enUS,
+  });
   return distance;
+};
+
+export const getTimeDistance = (date: string, locale: "en" | "ja" | null) => {
+  if (locale === "en") {
+    return getTimeDistanceForEn(date);
+  } else if (locale === "ja") {
+    return getTimeDistanceForJa(date);
+  } else {
+    return getTimeDistanceForEn(date);
+  }
 };
 
 export type Category =

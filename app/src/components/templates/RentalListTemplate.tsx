@@ -8,6 +8,7 @@ import RentalItem from "../organisms/RentalItem";
 
 type RentalListTemplateProps = {
   rentals: GetRentalsResponse | undefined;
+  deleteRental: (rentalId: number) => Promise<void>;
   mapNavigationHandler: (
     latitude: number | null,
     longitude: number | null
@@ -17,6 +18,7 @@ type RentalListTemplateProps = {
 
 const RentalListTemplate = ({
   rentals,
+  deleteRental,
   mapNavigationHandler,
   goBackNavigationHandler,
 }: RentalListTemplateProps) => {
@@ -45,6 +47,7 @@ const RentalListTemplate = ({
           renderItem={({ item }) => (
             <RentalItem
               item={item}
+              deleteRental={deleteRental}
               onPress={() =>
                 mapNavigationHandler(item.latitude, item.longitude)
               }

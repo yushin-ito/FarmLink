@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import MapTemplate from "../components/templates/MapTemplate";
 import useLocation from "../hooks/sdk/useLocation";
 import { showAlert } from "../functions";
@@ -19,6 +19,10 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const [farms, setFarms] = useState<GetFarmsResponse>();
   const [rentals, setRentals] = useState<GetRentalsResponse>();
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
+
+  useEffect(() => {
+    !params?.latitude && !params?.longitude && getCurrentPosition();
+  }, [params]);
 
   const {
     position,

@@ -20,6 +20,7 @@ import { GetUserResponse } from "../../hooks/user/query";
 import { GetTalksResponse } from "../../hooks/talk/query";
 
 type TalkListTemplateProps = {
+  locale: "en" | "ja" | null;
   user: GetUserResponse | null | undefined;
   talks: GetTalksResponse | null | undefined;
   isLoadingTalks: boolean;
@@ -36,6 +37,7 @@ type TalkListTemplateProps = {
 };
 
 const TalkListTemplate = ({
+  locale,
   user,
   talks,
   isLoadingTalks,
@@ -85,6 +87,7 @@ const TalkListTemplate = ({
           renderItem={({ item }) => (
             <TalkItem
               item={item}
+              locale={locale}
               deleteTalk={deleteTalk}
               onPress={() =>
                 talkChatNavigationHandler(item.talkId, item.to.displayName)

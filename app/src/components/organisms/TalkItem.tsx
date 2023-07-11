@@ -13,17 +13,19 @@ import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 import Avatar from "../molecules/Avatar";
 import { Swipeable } from "react-native-gesture-handler";
+import { getTimeDistance } from "../../functions";
 
 type TalkItemProps = {
   item: GetTalksResponse[number];
+  locale: "en" | "ja" | null;
   deleteTalk: (talkId: number) => Promise<void>;
   onPress: () => void;
 };
 
-const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
-  const { t } = useTranslation("talk");
-  return (
-    <VStack>
+const TalkItem = memo(
+  ({ item, locale, deleteTalk, onPress }: TalkItemProps) => {
+    const { t } = useTranslation("talk");
+    return (
       <Swipeable
         renderRightActions={() => (
           <Pressable
@@ -65,17 +67,30 @@ const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
                 hue={item?.to.hue}
               />
             </Box>
-            <VStack h="75%">
-              <Text bold fontSize="md">
-                {item.to?.displayName}
+            <VStack w="75%" space="1">
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text bold fontSize="md">
+                  {item.to?.displayName}
+                </Text>
+                <Text fontSize="sm">
+                  {getTimeDistance(item.updatedAt, locale)}
+                </Text>
+              </HStack>
+              <Text
+                color="muted.600"
+                fontSize="xs"
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {item.lastMessage}
               </Text>
             </VStack>
           </HStack>
           <Divider w="80%" alignSelf="center" bg="muted.200" />
         </Pressable>
       </Swipeable>
-    </VStack>
-  );
-});
+    );
+  }
+);
 
 export default TalkItem;

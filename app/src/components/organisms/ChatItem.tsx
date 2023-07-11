@@ -10,7 +10,7 @@ import { useWindowDimensions } from "react-native";
 type ChatItemProps = {
   item: GetCommunityChatsResponse[number] | GetTalkChatsResponse[number];
   authored: boolean;
-  locale: string | null;
+  locale: "en" | "ja" | null;
   onLongPress: () => void;
 };
 
@@ -36,7 +36,7 @@ const ChatItem = memo(
           />
         )}
         {item?.message && (
-          <Pressable onLongPress={() => onLongPress()} maxW="70%">
+          <Pressable onLongPress={onLongPress} maxW="70%">
             <VStack
               space="1"
               alignItems={!authored ? "flex-end" : "flex-start"}

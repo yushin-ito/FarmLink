@@ -19,13 +19,13 @@ type FormValues = {
 };
 
 type ChatBarProps = {
-  postChat: (message: string) => void;
+  onSend: (message: string) => Promise<void>;
   pickImageByCamera: () => Promise<void>;
   pickImageByLibrary: () => Promise<void>;
 };
 
 const ChatBar = memo(
-  ({ postChat, pickImageByCamera, pickImageByLibrary }: ChatBarProps) => {
+  ({ onSend, pickImageByCamera, pickImageByLibrary }: ChatBarProps) => {
     const { t } = useTranslation("chat");
     const { control, handleSubmit, reset } = useForm<FormValues>();
     const { isOpen, onToggle } = useDisclose();
@@ -87,9 +87,9 @@ const ChatBar = memo(
           />
         </Box>
         <IconButton
-          onPress={handleSubmit((data) => {
+          onPress={handleSubmit(async (data) => {
             if (data.message) {
-              postChat(data.message);
+              await onSend(data.message);
             }
             reset();
           })}

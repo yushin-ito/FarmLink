@@ -5,9 +5,11 @@ import { supabase } from "../supabase";
 import { Session } from "@supabase/supabase-js";
 import * as Linking from "expo-linking";
 import { getSessionFromLink } from "../functions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type AuthContextProps = {
   session: Session | null;
+  locale: "en" | "ja" | null;
   error: Error | undefined;
   isLoading: boolean;
 };
@@ -25,6 +27,7 @@ export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(null);
+  const [locale, setLocale] = useState<"en" | "ja" | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>();
 
@@ -55,7 +58,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
+  const getLocale = useCallback(async () => {
+    const locale = await AsyncStorage.getItem("@locale");
+    if (locale === "en" || locale?.startsWith("en-")) {
+      setLocale("en");
+      return;
+    } else if (locale === "ja" || locale?.startsWith("ja-")) {
+      setLocale("ja");
+      return;
+    }
+    setLocale("en");
+  }, []);
+
   useEffect(() => {
+    getLocale();
     getSessionFromDB();
 
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -105,7 +121,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [setSessionToDB]);
 
   return (
-    <AuthContext.Provider value={{ session, error, isLoading }}>
+    <AuthContext.Provider value={{ session, locale, error, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

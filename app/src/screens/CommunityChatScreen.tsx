@@ -26,7 +26,7 @@ const CommunityChatScreen = ({
 }: CommunityStackScreenProps<"CommunityChat">) => {
   const { t } = useTranslation("chat");
   const toast = useToast();
-  const { session } = useAuth();
+  const { session, locale } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
   const { params } =
     useRoute<RouteProp<CommunityStackParamList, "CommunityChat">>();
@@ -124,7 +124,7 @@ const CommunityChatScreen = ({
     },
   });
 
-  const postChat = useCallback(
+  const onSend = useCallback(
     async (message: string) => {
       await mutateAsyncPostChat({
         message,
@@ -146,13 +146,14 @@ const CommunityChatScreen = ({
   return (
     <ChatTemplate
       type="community"
+      locale={locale}
       title={params.communityName}
       user={user}
       chats={chats}
       deleteRoom={deleteCommunity}
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
-      postChat={postChat}
+      onSend={onSend}
       readMore={fetchNextPage}
       isLoadingChats={isLoadingChats}
       hasMore={hasMore}

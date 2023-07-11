@@ -7,6 +7,7 @@ import Alert from "../components/molecules/Alert";
 import ChatTemplate from "../components/templates/ChatTemplate";
 import {
   useDeleteTalk,
+  usePostTalk,
   usePostTalkChat,
   usePostTalkChatImage,
 } from "../hooks/talk/mutate";
@@ -21,7 +22,7 @@ import { useQueryUser } from "../hooks/user/query";
 const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { t } = useTranslation("talk");
   const toast = useToast();
-  const { session } = useAuth();
+  const { session, locale } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
   const { params } = useRoute<RouteProp<TalkStackParamList, "TalkChat">>();
   const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
@@ -35,6 +36,22 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   useChat(params.talkId, async () => {
     await refetchChats();
+  });
+
+  const { mutateAsync: mutateAsyncPostTalk } = usePostTalk({
+    onSuccess: async () => {
+      await refetchTalks();
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("anyError")}
+        />
+      );
+    },
   });
 
   const { mutateAsync: mutateAsyncDeleteTalk } = useDeleteTalk({
@@ -116,12 +133,16 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
-  const postChat = useCallback(
+  const onSend = useCallback(
     async (message: string) => {
       await mutateAsyncPostChat({
         message,
         talkId: params.talkId,
         authorId: session?.user.id,
+      });
+      await mutateAsyncPostTalk({
+        talkId: params.talkId,
+        lastMessage: message,
       });
     },
     [session?.user]
@@ -138,13 +159,14 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   return (
     <ChatTemplate
       type="talk"
+      locale={locale}
       title={params.displayName}
       user={user}
       chats={chats}
+      onSend={onSend}
       deleteRoom={deleteTalk}
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
-      postChat={postChat}
       readMore={fetchNextPage}
       isLoadingChats={isLoadingChats}
       hasMore={hasMore}
