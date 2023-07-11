@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import SearchCommunityTemplate from "../components/templates/SearchCommunityTemplate";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import {
   SearchCommunitiesResponse,
   useSearchCommunities,
@@ -17,10 +17,16 @@ type SearchCommunityNavigationProp = NativeStackNavigationProp<
   "SearchCommunity"
 >;
 
+type SearchCommunityRouteProp = RouteProp<
+  CommunityStackParamList,
+  "SearchCommunity"
+>;
+
 const SearchCommunitieScreen = () => {
   const { t } = useTranslation("community");
   const toast = useToast();
   const navigation = useNavigation<SearchCommunityNavigationProp>();
+  const { params } = useRoute<SearchCommunityRouteProp>();
   const [searchResult, setSearchResult] = useState<SearchCommunitiesResponse>();
 
   const {
@@ -31,6 +37,7 @@ const SearchCommunitieScreen = () => {
       setSearchResult(data);
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -53,7 +60,11 @@ const SearchCommunitieScreen = () => {
   const communityChatNavigationHandler = useCallback(
     (communityId: number, communityName: string | null) => {
       navigation.goBack();
-      navigation.navigate("CommunityChat", { communityId, communityName });
+      navigation.navigate("CommunityChat", {
+        communityId,
+        communityName,
+        category: params.category,
+      });
     },
     []
   );

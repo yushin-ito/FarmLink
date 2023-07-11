@@ -13,8 +13,8 @@ type CommunityItemProps = {
 const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
   const { t } = useTranslation("community");
   return (
-    <Pressable onPress={onPress} _pressed={{ bg: "muted.100" }} rounded="md">
-      <HStack p="3" minH="32">
+    <Pressable onPress={onPress} _pressed={{ bg: "muted.200" }} rounded="md">
+      <HStack px="9" py="3" minH="32">
         <Box w="25%">
           <Avatar
             size="md"
@@ -47,7 +47,7 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
           </Box>
         </VStack>
       </HStack>
-      <Divider />
+      <Divider w="80%" alignSelf="center" bg="muted.200" />
     </Pressable>
   );
 });

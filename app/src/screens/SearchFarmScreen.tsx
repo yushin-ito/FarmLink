@@ -28,6 +28,7 @@ const SearchFarmScreen = () => {
       setSearchResult(data);
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert

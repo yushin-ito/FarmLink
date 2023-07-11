@@ -120,6 +120,7 @@ const TalkChatScreen = () => {
 
   return (
     <ChatTemplate
+      type="talk"
       title={params.displayName}
       user={user}
       chats={chats}

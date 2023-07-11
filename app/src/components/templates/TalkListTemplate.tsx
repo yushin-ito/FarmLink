@@ -69,7 +69,6 @@ const TalkListTemplate = ({
       ) : (
         <FlatList
           w="100%"
-          px="8"
           mb="20"
           data={talks}
           ListEmptyComponent={

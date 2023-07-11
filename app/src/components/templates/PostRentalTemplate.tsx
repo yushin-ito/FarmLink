@@ -27,11 +27,10 @@ import { useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 
 type PostRentalTemplateProps = {
-  uri: string[];
+  base64: string[];
   isLoadingPostRental: boolean;
   isLoadingPosition: boolean;
   position: Position | undefined;
-  pickImageByCamera: () => Promise<void>;
   pickImageByLibrary: () => Promise<void>;
   getCurrentPosition: () => Promise<void>;
   postRental: (RentalName: string, description: string) => Promise<void>;
@@ -44,11 +43,10 @@ type FormValues = {
 };
 
 const PostRentalTemplate = ({
-  uri,
+  base64,
   isLoadingPostRental,
   isLoadingPosition,
   position,
-  pickImageByCamera,
   pickImageByLibrary,
   getCurrentPosition,
   postRental,
@@ -109,7 +107,7 @@ const PostRentalTemplate = ({
               showsHorizontalScrollIndicator={false}
               horizontal
               pagingEnabled
-              data={uri}
+              data={base64}
               ListFooterComponent={
                 <Pressable onPress={pickImageByLibrary}>
                   <Center w={width - 80} h="100%" bg="muted.200">
@@ -120,7 +118,7 @@ const PostRentalTemplate = ({
               renderItem={({ item, index }) => (
                 <Box w={width - 80} h="100%" bg="muted.200">
                   <Image
-                    source={{ uri: item }}
+                    source={{ uri: "data:image/png;base64," + item }}
                     style={{ flex: 1 }}
                     contentFit="contain"
                   />

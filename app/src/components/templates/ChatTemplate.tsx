@@ -7,12 +7,14 @@ import {
   Icon,
   IconButton,
   KeyboardAvoidingView,
+  Menu,
   Spinner,
+  Text,
   useDisclose,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { Platform } from "react-native";
+import { Alert, Platform } from "react-native";
 import ChatItem from "../organisms/ChatItem";
 import ChatBar from "../organisms/ChatBar";
 import { GetCommunityChatsResponse } from "../../hooks/community/query";
@@ -21,13 +23,16 @@ import { GetTalkChatsResponse } from "../../hooks/talk/query";
 import BackButton from "../molecules/BackButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ChatActionSheet from "../organisms/ChatActionSheet";
+import { useTranslation } from "react-i18next";
 
 type ChatTemplateProps = {
+  type: "community" | "talk";
   title: string | null | undefined;
   user: GetUserResponse | null | undefined;
   chats: GetCommunityChatsResponse | GetTalkChatsResponse | undefined;
   isLoadingChats: boolean;
   hasMore: boolean | undefined;
+  deleteRoom: () => Promise<void>;
   pickImageByCamera: () => Promise<void>;
   pickImageByLibrary: () => Promise<void>;
   postChat: (message: string) => Promise<void>;
@@ -36,17 +41,20 @@ type ChatTemplateProps = {
 };
 
 const ChatTemplate = ({
+  type,
   title,
   user,
   chats,
   isLoadingChats,
   hasMore,
+  deleteRoom,
   pickImageByCamera,
   pickImageByLibrary,
   postChat,
   readMore,
   goBackNavigationHandler,
 }: ChatTemplateProps) => {
+  const { t } = useTranslation(["chat", "community", "talk"]);
   const [locale, setLocale] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclose();
 
@@ -83,20 +91,54 @@ const ChatTemplate = ({
             <BackButton onPress={goBackNavigationHandler} />
             <Heading fontSize="xl">{title}</Heading>
           </HStack>
-          <IconButton
-            icon={
-              <Icon
-                as={<Feather />}
-                name="align-justify"
-                size="lg"
-                color="black"
+          <Menu
+            mr="4"
+            shadow="3"
+            rounded="lg"
+            bg="white"
+            trigger={(props) => (
+              <IconButton
+                icon={<Icon as={<Feather />} name="align-justify" size="md" />}
+                variant="unstyled"
+                _pressed={{
+                  opacity: 0.5,
+                }}
+                {...props}
               />
-            }
-            variant="unstyled"
-            _pressed={{
-              opacity: 0.5,
-            }}
-          />
+            )}
+          >
+            <Menu.Item
+              onPress={() =>
+                Alert.alert(
+                  type === "community"
+                    ? t("community:deleteCommunity")
+                    : t("talk:deleteTalk"),
+                  type === "community"
+                    ? t("community:askDeleteCommunity")
+                    : t("talk:askDeleteTalk"),
+                  [
+                    {
+                      text: t("chat:cancel"),
+                      style: "cancel",
+                    },
+                    {
+                      text: t("chat:delete"),
+                      onPress: async () => await deleteRoom(),
+                      style: "destructive",
+                    },
+                  ]
+                )
+              }
+              _pressed={{ bg: "muted.200" }}
+            >
+              <Icon as={<Feather />} name="trash" size="md" />
+              <Text>
+                {(type === "community"
+                  ? t("community:community")
+                  : t("talk:talk")) + t("chat:delete")}
+              </Text>
+            </Menu.Item>
+          </Menu>
         </HStack>
         <FlatList
           w="100%"

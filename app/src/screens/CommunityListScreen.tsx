@@ -63,9 +63,13 @@ const CommunityListScreen = () => {
 
   const communityChatNavigationHandler = useCallback(
     (communityId: number, communityName: string | null) => {
-      navigation.navigate("CommunityChat", { communityId, communityName });
+      navigation.navigate("CommunityChat", {
+        communityId,
+        communityName,
+        category: categories[categoryIndex],
+      });
     },
-    []
+    [categoryIndex]
   );
 
   const postCommunityNavigationHandler = useCallback(() => {
@@ -77,8 +81,10 @@ const CommunityListScreen = () => {
   }, []);
 
   const searchCommunityNavigationHandler = useCallback(() => {
-    navigation.navigate("SearchCommunity");
-  }, []);
+    navigation.navigate("SearchCommunity", {
+      category: categories[categoryIndex],
+    });
+  }, [categoryIndex]);
 
   return (
     <CommunityListTemplate

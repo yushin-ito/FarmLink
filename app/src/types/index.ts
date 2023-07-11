@@ -21,16 +21,22 @@ export type TabParamList = {
 
 export type CommunityStackParamList = {
   CommunityList: undefined;
-  CommunityChat: { communityId: number; communityName: string | null };
+  CommunityChat: {
+    communityId: number;
+    communityName: string | null;
+    category: string;
+  };
   PostCommunity: undefined;
-  SearchCommunity: undefined;
+  SearchCommunity: { category: string };
   SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
 
 export type MapStackParamList = {
   Map: undefined;
   SearchFarm: undefined;
+  RentalDetail: { rentalId: number };
   FarmDetail: { farmId: number };
+  SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
 
 export type FarmStackParamList = {

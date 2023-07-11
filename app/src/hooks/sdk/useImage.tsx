@@ -81,9 +81,9 @@ const useImage = ({ onSuccess, onDisable, onError }: UseImageType) => {
       if (!pickerResult.canceled) {
         const manipulatorResult = await ImageManipulator.manipulateAsync(
           pickerResult.assets[0].uri,
-          [{ resize: { width: 500 } }],
+          [{ resize: { width: 700 } }],
           {
-            compress: 1,
+            compress: 0.5,
             base64: true,
           }
         );

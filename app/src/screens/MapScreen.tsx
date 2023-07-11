@@ -75,6 +75,10 @@ const MapScreen = () => {
     setRentals(rentals);
   };
 
+  const rentalDetailNavigationHandler = useCallback((rentalId: number) => {
+    navigation.navigate("RentalDetail", { rentalId });
+  }, []);
+
   const searchFarmNavigationHandler = useCallback(() => {
     navigation.navigate("SearchFarm");
   }, []);
@@ -87,6 +91,7 @@ const MapScreen = () => {
       onRegionChange={onRegionChange}
       getCurrentPosition={getCurrentPosition}
       isLoadingPosition={isLoadingLocation}
+      rentalDetailNavigationHandler={rentalDetailNavigationHandler}
       searchFarmNavigationHandler={searchFarmNavigationHandler}
     />
   );

@@ -9,19 +9,20 @@ import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
+import { useQueryRentals } from "../hooks/rental/query";
 
 const PostRentalScreen = () => {
   const toast = useToast();
   const { t } = useTranslation("setting");
   const navigation = useNavigation();
   const { session } = useAuth();
-  const [uri, setUri] = useState<string[]>([]);
+  const { refetch } = useQueryRentals(session?.user.id);
   const [base64, setBase64] = useState<string[]>([]);
 
   const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
     usePostRental({
       onSuccess: async () => {
-        // await refetch();
+        await refetch();
         navigation.goBack();
       },
       onError: () => {
@@ -37,14 +38,24 @@ const PostRentalScreen = () => {
       },
     });
 
-  const { pickImageByCamera, pickImageByLibrary } = useImage({
-    onSuccess: async ({ uri, base64 }) => {
-      if (uri && base64) {
-        setUri((prev) => [...prev, uri]);
+  const { pickImageByLibrary } = useImage({
+    onSuccess: async ({ base64 }) => {
+      if (base64) {
         setBase64((prev) => [...prev, base64]);
+      } else {
+        navigation.goBack();
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("anyError")}
+          />
+        );
       }
     },
     onDisable: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -55,6 +66,7 @@ const PostRentalScreen = () => {
       );
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -117,11 +129,10 @@ const PostRentalScreen = () => {
 
   return (
     <PostRentalTemplate
-      uri={uri}
+      base64={base64}
       isLoadingPostRental={isLoadingPostRental}
       isLoadingPosition={isLoadingLocation}
       position={position}
-      pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
       getCurrentPosition={getCurrentPosition}
       postRental={postRental}

@@ -2,6 +2,7 @@ import { Box, Icon, Spinner } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
 import MapView, {
+  Callout,
   Details,
   Marker,
   PROVIDER_GOOGLE,
@@ -20,6 +21,7 @@ type MapTemplateProps = {
   getCurrentPosition: () => Promise<void>;
   onRegionChange: (region: Region, details: Details) => void;
   isLoadingPosition: boolean;
+  rentalDetailNavigationHandler: (rentalId: number) => void;
   searchFarmNavigationHandler: () => void;
 };
 
@@ -30,6 +32,7 @@ const MapTemplate = ({
   getCurrentPosition,
   isLoadingPosition,
   onRegionChange,
+  rentalDetailNavigationHandler,
   searchFarmNavigationHandler,
 }: MapTemplateProps) => {
   const mapRef = useRef<MapView>(null);
@@ -95,7 +98,11 @@ const MapTemplate = ({
                   latitude: item.latitude,
                   longitude: item.longitude,
                 }}
-              />
+              >
+                <Callout
+                  onPress={() => rentalDetailNavigationHandler(item.rentalId)}
+                />
+              </Marker>
             )
         )}
       </MapView>

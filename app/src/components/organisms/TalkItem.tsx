@@ -54,10 +54,10 @@ const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
       >
         <Pressable
           onPress={onPress}
-          _pressed={{ bg: "muted.100" }}
+          _pressed={{ bg: "muted.200" }}
           rounded="md"
         >
-          <HStack p="5">
+          <HStack px="9" py="4">
             <Box w="25%">
               <Avatar
                 size="md"
@@ -75,9 +75,9 @@ const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
               </Text>
             </VStack>
           </HStack>
+          <Divider w="80%" alignSelf="center" bg="muted.200" />
         </Pressable>
       </Swipeable>
-      <Divider />
     </VStack>
   );
 });
