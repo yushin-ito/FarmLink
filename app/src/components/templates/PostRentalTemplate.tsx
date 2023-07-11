@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 
 import {
@@ -61,6 +61,7 @@ const PostRentalTemplate = ({
   } = useForm<FormValues>();
   const mapRef = useRef<MapView>(null);
   const { width } = useWindowDimensions();
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     getCurrentPosition();
@@ -100,34 +101,65 @@ const PostRentalTemplate = ({
       >
         <Box flex={1} pb="16" justifyContent="space-between">
           <VStack px="10" space="6">
-            <FlatList
-              w={width - 80}
-              h="180"
-              rounded="lg"
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              pagingEnabled
-              data={base64}
-              ListFooterComponent={
-                <Pressable onPress={pickImageByLibrary}>
-                  <Center w={width - 80} h="100%" bg="muted.200">
-                    <Icon as={<Feather />} name="camera" size="4xl" />
-                  </Center>
-                </Pressable>
-              }
-              renderItem={({ item, index }) => (
-                <Box w={width - 80} h="100%" bg="muted.200">
-                  <Image
-                    source={{ uri: "data:image/png;base64," + item }}
-                    style={{ flex: 1 }}
-                    contentFit="contain"
+            <VStack space="2">
+              <FlatList
+                w={width - 80}
+                h="180"
+                rounded="lg"
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                pagingEnabled
+                data={base64}
+                ListFooterComponent={
+                  <Pressable onPress={pickImageByLibrary}>
+                    <Center w={width - 80} h="100%" bg="muted.200">
+                      <Icon as={<Feather />} name="camera" size="2xl" />
+                    </Center>
+                  </Pressable>
+                }
+                renderItem={({ item, index }) => (
+                  <Box w={width - 80} h="100%" bg="muted.200">
+                    <Image
+                      source={{ uri: "data:image/png;base64," + item }}
+                      style={{ flex: 1 }}
+                      contentFit="contain"
+                    />
+                    <Text position="absolute" top="1" left="3">
+                      {index + 1}
+                    </Text>
+                  </Box>
+                )}
+                onMomentumScrollEnd={(event) => {
+                  const currentIndex = Math.floor(
+                    Math.floor(event.nativeEvent.contentOffset.x) /
+                      Math.floor(event.nativeEvent.layoutMeasurement.width)
+                  );
+                  setCurrentIndex(currentIndex);
+                }}
+              />
+              <HStack w="100%" alignItems="center" justifyContent="center">
+                {base64.map((_item, index) => (
+                  <Box
+                    key={index}
+                    mr="1"
+                    rounded="full"
+                    size={Number(index) === currentIndex ? "1.5" : "1"}
+                    bg={
+                      Number(index) === currentIndex ? "info.500" : "muted.400"
+                    }
                   />
-                  <Text position="absolute" top="1" left="3">
-                    {index + 1}
-                  </Text>
-                </Box>
-              )}
-            />
+                ))}
+                <Box
+                  rounded="full"
+                  size={(base64.length ?? 0) === currentIndex ? "1.5" : "1"}
+                  bg={
+                    (base64.length ?? 0) === currentIndex
+                      ? "info.500"
+                      : "muted.400"
+                  }
+                />
+              </HStack>
+            </VStack>
             <FormControl isInvalid={"rentalName" in errors}>
               <FormControl.Label>{t("rentalName")}</FormControl.Label>
               <Controller

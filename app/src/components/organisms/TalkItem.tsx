@@ -44,7 +44,7 @@ const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
               opacity: 0.5,
             }}
           >
-            <Center h="100%" px="5" roundedRight="md" bg="red.500">
+            <Center h="100%" px="8" bg="red.500">
               <Text color="white" bold fontSize="md">
                 {t("delete")}
               </Text>
@@ -52,11 +52,7 @@ const TalkItem = memo(({ item, deleteTalk, onPress }: TalkItemProps) => {
           </Pressable>
         )}
       >
-        <Pressable
-          onPress={onPress}
-          _pressed={{ bg: "muted.200" }}
-          rounded="md"
-        >
+        <Pressable onPress={onPress} _pressed={{ bg: "muted.200" }}>
           <HStack px="9" py="4">
             <Box w="25%">
               <Avatar
