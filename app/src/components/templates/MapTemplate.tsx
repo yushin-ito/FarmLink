@@ -1,18 +1,27 @@
 import { Box, Icon, Spinner } from "native-base";
 import { Feather } from "@expo/vector-icons";
-import React, { useEffect, useRef } from "react";
-import MapView, { Marker, PROVIDER_GOOGLE, Region } from "react-native-maps";
+import React, { useCallback, useEffect, useRef } from "react";
+import MapView, {
+  LatLng,
+  Marker,
+  PROVIDER_GOOGLE,
+  Region,
+} from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import CircleButton from "../molecules/CircleButton";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { GetRentalsResponse } from "../../hooks/rental/query";
+import { Position } from "../../hooks/sdk/useLocation";
 
 type MapTemplateProps = {
-  latitude: number | null | undefined;
-  longitude: number | null | undefined;
+  params: {
+    latitude: number | null;
+    longitude: number | null;
+  };
+  position: Position | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
-  getCurrentPosition: () => Promise<void>;
+  getCurrentPosition: () => Promise<LatLng | undefined>;
   onRegionChange: (region: Region) => void;
   isLoadingPosition: boolean;
   rentalDetailNavigationHandler: (rentalId: number) => void;
@@ -20,8 +29,8 @@ type MapTemplateProps = {
 };
 
 const MapTemplate = ({
-  latitude,
-  longitude,
+  params,
+  position,
   farms,
   rentals,
   getCurrentPosition,
@@ -32,16 +41,28 @@ const MapTemplate = ({
 }: MapTemplateProps) => {
   const mapRef = useRef<MapView>(null);
 
+  const animateToRegion = useCallback(
+    (latitude: number | null, longitude: number | null) => {
+      if (mapRef.current && latitude && longitude) {
+        mapRef.current.animateToRegion({
+          latitude,
+          longitude,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        });
+      }
+    },
+    [mapRef.current]
+  );
+
   useEffect(() => {
-    if (mapRef.current && latitude && longitude) {
-      mapRef.current.animateToRegion({
-        latitude,
-        longitude,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      });
-    }
-  }, [mapRef.current, latitude, longitude]);
+    params && animateToRegion(params.latitude, params.longitude);
+  }, [mapRef.current, params]);
+
+  useEffect(() => {
+    position?.coords &&
+      animateToRegion(position?.coords.latitude, position?.coords.longitude);
+  }, [mapRef.current, position?.coords]);
 
   return (
     <Box flex={1}>
@@ -63,9 +84,7 @@ const MapTemplate = ({
         }}
         onRegionChangeComplete={onRegionChange}
       >
-        {latitude && longitude && (
-          <Marker coordinate={{ latitude, longitude }} />
-        )}
+        {position && <Marker coordinate={position.coords} />}
         {farms?.map(
           (item, index) =>
             item.latitude &&
@@ -109,7 +128,8 @@ const MapTemplate = ({
         bottom="24"
         right="8"
         onPress={async () => {
-          await getCurrentPosition();
+          const position = await getCurrentPosition();
+          position && animateToRegion(position.latitude, position.longitude);
         }}
       >
         <Icon as={<Feather />} name="navigation" size="xl" color="white" />

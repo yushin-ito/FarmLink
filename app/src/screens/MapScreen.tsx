@@ -86,8 +86,8 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
 
   return (
     <MapTemplate
-      latitude={params?.latitude ?? position?.coords.latitude}
-      longitude={params?.longitude ?? position?.coords.longitude}
+      params={params}
+      position={position}
       farms={farms}
       rentals={rentals}
       onRegionChange={onRegionChange}
