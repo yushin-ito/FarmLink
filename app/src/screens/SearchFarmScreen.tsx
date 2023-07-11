@@ -1,23 +1,17 @@
 import React, { useCallback, useState } from "react";
 import SearchFarmTemplate from "../components/templates/SearchFarmTemplate";
-import { useNavigation } from "@react-navigation/native";
 import { SearchFarmsResponse, useSearchFarms } from "../hooks/farm/mutate";
 import { showAlert } from "../functions";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { MapStackParamList } from "../types";
+import { MapStackScreenProps } from "../types";
 
-type SearchFarmNavigationProp = NativeStackNavigationProp<
-  MapStackParamList,
-  "SearchFarm"
->;
-
-const SearchFarmScreen = () => {
+const SearchFarmScreen = ({
+  navigation,
+}: MapStackScreenProps<"SearchFarm">) => {
   const { t } = useTranslation("farm");
   const toast = useToast();
-  const navigation = useNavigation<SearchFarmNavigationProp>();
   const [searchResult, setSearchResult] = useState<SearchFarmsResponse>();
 
   const {

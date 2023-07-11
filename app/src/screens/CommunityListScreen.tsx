@@ -5,22 +5,16 @@ import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import { useInfiniteQueryCommunities } from "../hooks/community/query";
 import { useDeleteCommunity } from "../hooks/community/mutate";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
-import { CommunityStackParamList } from "../types";
+import { CommunityStackScreenProps } from "../types";
 import CommunityListTemplate from "../components/templates/CommunityListTemplate";
 
-type CommunityListNavigationProp = NativeStackNavigationProp<
-  CommunityStackParamList,
-  "CommunityList"
->;
-
-const CommunityListScreen = () => {
+const CommunityListScreen = ({
+  navigation,
+}: CommunityStackScreenProps<"CommunityList">) => {
   const toast = useToast();
   const { t } = useTranslation("community");
-  const navigation = useNavigation<CommunityListNavigationProp>();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
   const categories = getCategories();
@@ -77,7 +71,12 @@ const CommunityListScreen = () => {
   }, []);
 
   const settingNavigationHandler = useCallback(() => {
-    navigation.navigate("SettingNavigator", { screen: "Setting" });
+    navigation.navigate("TabNavigator", {
+      screen: "SettingNavigator",
+      params: {
+        screen: "Setting",
+      },
+    });
   }, []);
 
   const searchCommunityNavigationHandler = useCallback(() => {

@@ -5,22 +5,14 @@ import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import { useQueryTalks } from "../hooks/talk/query";
 import { useDeleteTalk } from "../hooks/talk/mutate";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
-import { TalkStackParamList } from "../types";
+import { TalkStackScreenProps } from "../types";
 import TalkListTemplate from "../components/templates/TalkListTemplate";
 
-type TalkListNavigationProp = NativeStackNavigationProp<
-  TalkStackParamList,
-  "TalkList"
->;
-
-const TalkListScreen = () => {
+const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
   const toast = useToast();
   const { t } = useTranslation("talk");
-  const navigation = useNavigation<TalkListNavigationProp>();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
   const {

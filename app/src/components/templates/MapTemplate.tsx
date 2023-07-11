@@ -1,32 +1,27 @@
 import { Box, Icon, Spinner } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
-import MapView, {
-  Callout,
-  Details,
-  Marker,
-  PROVIDER_GOOGLE,
-  Region,
-} from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE, Region } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import CircleButton from "../molecules/CircleButton";
-import { LocationObject } from "expo-location";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 
 type MapTemplateProps = {
-  position: LocationObject | undefined;
+  latitude: number | null | undefined;
+  longitude: number | null | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
   getCurrentPosition: () => Promise<void>;
-  onRegionChange: (region: Region, details: Details) => void;
+  onRegionChange: (region: Region) => void;
   isLoadingPosition: boolean;
   rentalDetailNavigationHandler: (rentalId: number) => void;
   searchFarmNavigationHandler: () => void;
 };
 
 const MapTemplate = ({
-  position,
+  latitude,
+  longitude,
   farms,
   rentals,
   getCurrentPosition,
@@ -38,19 +33,19 @@ const MapTemplate = ({
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
-    getCurrentPosition();
+    !latitude && !longitude && getCurrentPosition();
   }, []);
 
   useEffect(() => {
-    if (mapRef.current && position) {
+    if (mapRef.current && latitude && longitude) {
       mapRef.current.animateToRegion({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
+        latitude,
+        longitude,
         latitudeDelta: 0.005,
         longitudeDelta: 0.005,
       });
     }
-  }, [position]);
+  }, [latitude, longitude]);
 
   return (
     <Box flex={1}>
@@ -72,7 +67,9 @@ const MapTemplate = ({
         }}
         onRegionChangeComplete={onRegionChange}
       >
-        {position && <Marker coordinate={position.coords} />}
+        {latitude && longitude && (
+          <Marker coordinate={{ latitude, longitude }} />
+        )}
         {farms?.map(
           (item, index) =>
             item.latitude &&
@@ -98,11 +95,8 @@ const MapTemplate = ({
                   latitude: item.latitude,
                   longitude: item.longitude,
                 }}
-              >
-                <Callout
-                  onPress={() => rentalDetailNavigationHandler(item.rentalId)}
-                />
-              </Marker>
+                onPress={() => rentalDetailNavigationHandler(item.rentalId)}
+              />
             )
         )}
       </MapView>

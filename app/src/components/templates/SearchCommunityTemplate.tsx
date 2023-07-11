@@ -42,7 +42,7 @@ const SearchCommunityTemplate = ({
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} pt="4" px="2" safeAreaTop>
+      <Box flex={1} pt="4" safeAreaTop>
         <VStack space="7">
           <HStack px="5" alignItems="center" justifyContent="space-between">
             <Controller
@@ -90,8 +90,7 @@ const SearchCommunityTemplate = ({
             <Spinner color="muted.400" />
           ) : (
             <FlatList
-              w="100%"
-              px="6"
+              keyboardShouldPersistTaps="handled"
               data={searchResult}
               renderItem={({ item }) => (
                 <SearchCommunityItem

@@ -1,8 +1,13 @@
-import { NavigatorScreenParams } from "@react-navigation/native";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import {
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
-  AuthNavigator: undefined;
-  TabNavigator: undefined;
+  AuthNavigator: NavigatorScreenParams<AuthStackParamList> | undefined;
+  TabNavigator: NavigatorScreenParams<TabParamList> | undefined;
 };
 
 export type AuthStackParamList = {
@@ -12,11 +17,18 @@ export type AuthStackParamList = {
 };
 
 export type TabParamList = {
-  MapNavigator: undefined;
-  CommunityNavigator: undefined;
-  FarmNavigator: undefined;
-  TalkNavigator: undefined;
-  SettingNavigator: undefined;
+  MapNavigator: NavigatorScreenParams<MapStackParamList>;
+  CommunityNavigator: NavigatorScreenParams<CommunityStackParamList>;
+  FarmNavigator: NavigatorScreenParams<FarmStackParamList>;
+  TalkNavigator: NavigatorScreenParams<TalkStackParamList>;
+  SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
+};
+
+export type MapStackParamList = {
+  Map: { latitude: number | null; longitude: number | null };
+  SearchFarm: undefined;
+  RentalDetail: { rentalId: number };
+  FarmDetail: { farmId: number };
 };
 
 export type CommunityStackParamList = {
@@ -28,22 +40,12 @@ export type CommunityStackParamList = {
   };
   PostCommunity: undefined;
   SearchCommunity: { category: string };
-  SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
-};
-
-export type MapStackParamList = {
-  Map: undefined;
-  SearchFarm: undefined;
-  RentalDetail: { rentalId: number };
-  FarmDetail: { farmId: number };
-  SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
 
 export type FarmStackParamList = {
   FarmList: undefined;
   FarmDevice: { deviceId: string | null; farmName: string | null };
   PostFarm: undefined;
-  SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
 
 export type TalkStackParamList = {
@@ -51,11 +53,58 @@ export type TalkStackParamList = {
   TalkChat: { talkId: number; displayName: string | null | undefined };
   PostTalk: undefined;
   SearchTalk: undefined;
-  SettingNavigator: NavigatorScreenParams<SettingStackParamList>;
 };
 
 export type SettingStackParamList = {
   Setting: undefined;
-  PostProfile: undefined;
+  RentalList: undefined;
   PostRental: undefined;
+  PostProfile: undefined;
 };
+
+export type MapStackScreenProps<Screen extends keyof MapStackParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<MapStackParamList, Screen>,
+    CompositeScreenProps<
+      BottomTabScreenProps<TabParamList>,
+      NativeStackScreenProps<RootStackParamList>
+    >
+  >;
+
+export type CommunityStackScreenProps<
+  Screen extends keyof CommunityStackParamList
+> = CompositeScreenProps<
+  BottomTabScreenProps<CommunityStackParamList, Screen>,
+  CompositeScreenProps<
+    BottomTabScreenProps<TabParamList>,
+    NativeStackScreenProps<RootStackParamList>
+  >
+>;
+
+export type FarmStackScreenProps<Screen extends keyof FarmStackParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<FarmStackParamList, Screen>,
+    CompositeScreenProps<
+      BottomTabScreenProps<TabParamList>,
+      NativeStackScreenProps<RootStackParamList>
+    >
+  >;
+
+export type TalkStackScreenProps<Screen extends keyof TalkStackParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<TalkStackParamList, Screen>,
+    CompositeScreenProps<
+      BottomTabScreenProps<TabParamList>,
+      NativeStackScreenProps<RootStackParamList>
+    >
+  >;
+
+export type SettingStackScreenProps<
+  Screen extends keyof SettingStackParamList
+> = CompositeScreenProps<
+  BottomTabScreenProps<SettingStackParamList, Screen>,
+  CompositeScreenProps<
+    BottomTabScreenProps<TabParamList>,
+    NativeStackScreenProps<RootStackParamList>
+  >
+>;

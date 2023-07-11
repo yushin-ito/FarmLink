@@ -1,18 +1,12 @@
 import React, { useCallback, useState } from "react";
 import SearchTalkTemplate from "../components/templates/SearchTalkTemplate";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { TalkStackParamList } from "../types";
+import { TalkStackScreenProps } from "../types";
 import { GetTalksResponse, useQueryTalks } from "../hooks/talk/query";
 import useAuth from "../hooks/auth/useAuth";
 
-type SearchTalkNavigationProp = NativeStackNavigationProp<
-  TalkStackParamList,
-  "SearchTalk"
->;
-
-const SearchTalkscreen = () => {
-  const navigation = useNavigation<SearchTalkNavigationProp>();
+const SearchTalkScreen = ({
+  navigation,
+}: TalkStackScreenProps<"SearchTalk">) => {
   const [searchResult, setSearchResult] = useState<GetTalksResponse>();
   const { session } = useAuth();
   const { data } = useQueryTalks(session?.user.id);
@@ -54,4 +48,4 @@ const SearchTalkscreen = () => {
   );
 };
 
-export default SearchTalkscreen;
+export default SearchTalkScreen;

@@ -100,7 +100,7 @@ const PostRentalTemplate = ({
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} pb="16" justifyContent="space-between">
-          <VStack px="10" space="6">
+          <VStack px="10" space="4">
             <VStack space="2">
               <FlatList
                 w={width - 80}

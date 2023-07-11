@@ -6,6 +6,7 @@ import { SettingStackParamList } from "../types";
 import SettingScreen from "../screens/SettingScreen";
 import PostProfileScreen from "../screens/PostProfileScreen";
 import PostRentalScreen from "../screens/PostRentalScreen";
+import RentalListScreen from "../screens/RentalListScreen";
 
 const SettingStack = createNativeStackNavigator<SettingStackParamList>();
 
@@ -16,6 +17,7 @@ const SettingNavigator = () => {
       <SettingStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
         <SettingStack.Screen name="PostProfile" component={PostProfileScreen} />
         <SettingStack.Screen name="PostRental" component={PostRentalScreen} />
+        <SettingStack.Screen name="RentalList" component={RentalListScreen} />
       </SettingStack.Group>
     </SettingStack.Navigator>
   );

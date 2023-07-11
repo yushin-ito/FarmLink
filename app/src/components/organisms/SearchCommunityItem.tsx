@@ -14,18 +14,17 @@ const SearchCommunityItem = memo(
     return (
       <Pressable
         onPress={onPress}
-        my="1"
         alignItems="center"
-        rounded="md"
-        _pressed={{ bg: "muted.300" }}
+        _pressed={{ bg: "muted.200" }}
       >
         <HStack
           w="100%"
-          p="2"
+          px="6"
+          py="5"
           alignItems="center"
           justifyContent="space-between"
         >
-          <HStack alignItems="center" space="2">
+          <HStack alignItems="center" space="3">
             <Avatar
               text={item?.communityName?.charAt(0)}
               avatarUrl={item?.imageUrl}
@@ -39,7 +38,7 @@ const SearchCommunityItem = memo(
           </HStack>
           <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
         </HStack>
-        <Divider />
+        <Divider w="90%" bg="muted.200" />
       </Pressable>
     );
   }

@@ -9,20 +9,21 @@ type SearchTalkItemProps = {
   onPress: () => void;
 };
 
-const SearchTalkItem = memo(({
-  item,
-  onPress
-}: SearchTalkItemProps) => {
+const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
   return (
     <Pressable
       onPress={onPress}
-      my="1"
       alignItems="center"
-      rounded="md"
-      _pressed={{ bg: "muted.300" }}
+      _pressed={{ bg: "muted.200" }}
     >
-      <HStack w="100%" p="2" alignItems="center" justifyContent="space-between">
-        <HStack alignItems="center" space="2">
+      <HStack
+        w="100%"
+        px="6"
+        py="5"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <HStack alignItems="center" space="3">
           <Avatar
             text={item?.to.displayName?.charAt(0)}
             avatarUrl={item?.to.avatarUrl}
@@ -36,9 +37,9 @@ const SearchTalkItem = memo(({
         </HStack>
         <Icon as={<Feather />} name="chevron-right" size="md" ml="2" />
       </HStack>
-      <Divider w="95%" />
+      <Divider w="90%" bg="muted.200" />
     </Pressable>
   );
-})
+});
 
 export default SearchTalkItem;

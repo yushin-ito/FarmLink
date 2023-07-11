@@ -18,12 +18,6 @@ import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
 
-type FormValues = {
-  email: string;
-  password: string;
-  displayName: string;
-};
-
 export type SignUpTemplateProps = {
   isLoading: boolean;
   signUpWithEmail: (
@@ -32,6 +26,12 @@ export type SignUpTemplateProps = {
     displayName: string
   ) => Promise<void>;
   signInNavigationHandler: () => void;
+};
+
+type FormValues = {
+  email: string;
+  password: string;
+  displayName: string;
 };
 
 const SignUpTemplate = memo(

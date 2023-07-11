@@ -49,9 +49,9 @@ const ProviderTemplate = memo(
             py="3"
             rounded="full"
             borderWidth="1"
-            borderColor="muted.300"
+            borderColor="muted.200"
             alignItems="center"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: "muted.100" }}
             onPress={signInNavigationHandler}
           >
             <Center h="100%" position="absolute" top="3" left="5">
@@ -63,9 +63,9 @@ const ProviderTemplate = memo(
             py="3"
             rounded="full"
             borderWidth="1"
-            borderColor="muted.300"
+            borderColor="muted.200"
             alignItems="center"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: "muted.100" }}
             onPress={signInWithGoogle}
           >
             <Center h="100%" position="absolute" top="3" left="3">
@@ -80,9 +80,9 @@ const ProviderTemplate = memo(
             py="3"
             rounded="full"
             borderWidth="1"
-            borderColor="muted.300"
+            borderColor="muted.200"
             alignItems="center"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: "muted.100" }}
             onPress={signInWithTwitter}
           >
             <Center h="100%" position="absolute" top="3" left="3">
@@ -97,9 +97,9 @@ const ProviderTemplate = memo(
             py="3"
             rounded="full"
             borderWidth="1"
-            borderColor="muted.300"
+            borderColor="muted.200"
             alignItems="center"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: "muted.100" }}
             onPress={signInWithFacebook}
           >
             <Center h="100%" position="absolute" top="3" left="3">

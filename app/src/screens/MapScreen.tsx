@@ -5,23 +5,20 @@ import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { MapStackParamList } from "../types";
+import { MapStackParamList, MapStackScreenProps } from "../types";
 import { GetFarmsResponse, useQueryFarms } from "../hooks/farm/query";
 import { Region } from "react-native-maps";
 import { GetRentalsResponse, useQueryRentals } from "../hooks/rental/query";
+import { useRoute, RouteProp } from "@react-navigation/native";
 
-type MapNavigationProp = NativeStackNavigationProp<MapStackParamList, "Map">;
-
-const MapScreen = () => {
+const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { t } = useTranslation("map");
   const toast = useToast();
-  const navigation = useNavigation<MapNavigationProp>();
   const { data: queryFarms } = useQueryFarms();
   const { data: queryRentals } = useQueryRentals();
   const [farms, setFarms] = useState<GetFarmsResponse>();
   const [rentals, setRentals] = useState<GetRentalsResponse>();
+  const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
 
   const {
     position,
@@ -85,7 +82,8 @@ const MapScreen = () => {
 
   return (
     <MapTemplate
-      position={position}
+      latitude={params?.latitude ?? position?.coords.latitude}
+      longitude={params?.longitude ?? position?.coords.longitude}
       farms={farms}
       rentals={rentals}
       onRegionChange={onRegionChange}

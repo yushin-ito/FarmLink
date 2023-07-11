@@ -13,19 +13,17 @@ const SearchFarmItem = memo(({ item, onPress }: SearchFarmItemProps) => {
     <Box>
       <Pressable
         onPress={onPress}
-        my="1"
         alignItems="center"
-        rounded="md"
-        _pressed={{ bg: "muted.300" }}
+        _pressed={{ bg: "muted.200" }}
       >
-        <HStack w="100%" px="1" py="3" justifyContent="space-between">
+        <HStack w="100%" px="6" py="5" justifyContent="space-between">
           <Text>{item?.farmName}</Text>
           <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
         </HStack>
       </Pressable>
-      <Divider />
+      <Divider w="90%" bg="muted.200" />
     </Box>
   );
-})
+});
 
 export default SearchFarmItem;

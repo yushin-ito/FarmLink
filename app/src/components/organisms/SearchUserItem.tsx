@@ -10,41 +10,47 @@ type SearchUserItemProps = {
   selected: boolean;
 };
 
-const SearchUserItem = memo(({ item, onPress, selected }: SearchUserItemProps) => {
-  return (
-    <Pressable
-      onPress={onPress}
-      my="1"
-      alignItems="center"
-      rounded="md"
-      _pressed={{ bg: "muted.300" }}
-    >
-      <HStack w="100%" p="2" alignItems="center" justifyContent="space-between">
-        <HStack alignItems="center" space="2">
-          <Avatar
-            text={item?.displayName?.charAt(0)}
-            avatarUrl={item?.avatarUrl}
-            updatedAt={item?.updatedAt}
-            hue={item?.hue}
-            size="9"
-          />
-          <Text bold fontSize="md">
-            {item?.displayName}
-          </Text>
-        </HStack>
-        <Center
-          size="5"
-          rounded="full"
-          bg={selected ? "success.500" : "muted.300"}
+const SearchUserItem = memo(
+  ({ item, onPress, selected }: SearchUserItemProps) => {
+    return (
+      <Pressable
+        onPress={onPress}
+        alignItems="center"
+        _pressed={{ bg: "muted.200" }}
+      >
+        <HStack
+          w="100%"
+          px="6"
+          py="5"
+          alignItems="center"
+          justifyContent="space-between"
         >
-          {selected && (
-            <Icon as={<Feather />} name="check" size="xs" color="white" />
-          )}
-        </Center>
-      </HStack>
-      <Divider />
-    </Pressable>
-  );
-})
+          <HStack alignItems="center" space="3">
+            <Avatar
+              text={item?.displayName?.charAt(0)}
+              avatarUrl={item?.avatarUrl}
+              updatedAt={item?.updatedAt}
+              hue={item?.hue}
+              size="9"
+            />
+            <Text bold fontSize="md">
+              {item?.displayName}
+            </Text>
+          </HStack>
+          <Center
+            size="5"
+            rounded="full"
+            bg={selected ? "success.500" : "muted.300"}
+          >
+            {selected && (
+              <Icon as={<Feather />} name="check" size="xs" color="white" />
+            )}
+          </Center>
+        </HStack>
+        <Divider w="90%" bg="muted.200" />
+      </Pressable>
+    );
+  }
+);
 
 export default SearchUserItem;

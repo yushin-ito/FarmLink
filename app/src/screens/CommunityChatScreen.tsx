@@ -10,11 +10,10 @@ import {
   usePostCommunityChat,
   usePostCommunityChatImage,
 } from "../hooks/community/mutate";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { CommunityStackParamList } from "../types";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
 import useChat from "../hooks/community/useChat";
 import useAuth from "../hooks/auth/useAuth";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {
   useInfiniteQueryCommunities,
   useInfiniteQueryCommunityChats,
@@ -22,23 +21,15 @@ import {
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
 
-type CommunityChatNavigationProp = NativeStackNavigationProp<
-  CommunityStackParamList,
-  "CommunityChat"
->;
-
-type CommunityChatRouteProp = RouteProp<
-  CommunityStackParamList,
-  "CommunityChat"
->;
-
-const CommunityChatScreen = () => {
+const CommunityChatScreen = ({
+  navigation,
+}: CommunityStackScreenProps<"CommunityChat">) => {
   const { t } = useTranslation("chat");
   const toast = useToast();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
-  const { params } = useRoute<CommunityChatRouteProp>();
-  const navigation = useNavigation<CommunityChatNavigationProp>();
+  const { params } =
+    useRoute<RouteProp<CommunityStackParamList, "CommunityChat">>();
   const { refetch: refetchCommunities } = useInfiniteQueryCommunities(
     params.category
   );

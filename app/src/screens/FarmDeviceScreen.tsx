@@ -1,29 +1,26 @@
 import React from "react";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import FarmDeviceTemplate from "../components/templates/FarmDeviceTemplate";
-import { FarmStackParamList } from "../types";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { FarmStackParamList, FarmStackScreenProps } from "../types";
 import { useCallback } from "react";
 import useAuth from "../hooks/auth/useAuth";
 import { useQueryUser } from "../hooks/user/query";
 import { useQueryDevice } from "../hooks/device/query";
 
-type FarmDeviceNavigationProp = NativeStackNavigationProp<
-  FarmStackParamList,
-  "FarmDevice"
->;
-
-type FarmDeviceRouteProp = RouteProp<FarmStackParamList, "FarmDevice">;
-
 const FarmDeviceScreen = () => {
-  const navigation = useNavigation<FarmDeviceNavigationProp>();
-  const route = useRoute<FarmDeviceRouteProp>();
+  const { navigation } = useNavigation<FarmStackScreenProps<"FarmDevice">>();
+  const route = useRoute<RouteProp<FarmStackParamList, "FarmDevice">>();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
   const { data: device } = useQueryDevice(route.params.deviceId);
 
   const settingNavigationHandler = useCallback(() => {
-    navigation.navigate("SettingNavigator", { screen: "Setting" });
+    navigation.navigate("TabNavigator", {
+      screen: "SettingNavigator",
+      params: {
+        screen: "Setting",
+      },
+    });
   }, []);
 
   const goBackNavigationHandler = useCallback(() => {

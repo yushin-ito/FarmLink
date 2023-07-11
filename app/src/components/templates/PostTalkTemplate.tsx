@@ -106,7 +106,6 @@ const PostTalkTemplate = ({
                 <Spinner color="muted.400" />
               ) : (
                 <FlatList
-                  px="10"
                   data={searchResult}
                   renderItem={({ item }) => (
                     <SearchUserItem

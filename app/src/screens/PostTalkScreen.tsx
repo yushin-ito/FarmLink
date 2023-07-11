@@ -15,7 +15,7 @@ const PostTalkScreen = () => {
   const { t } = useTranslation("talk");
   const navigation = useNavigation();
   const { session } = useAuth();
-  const { refetch } = useQueryTalks(session?.user.id);
+  const { data: talks, refetch } = useQueryTalks(session?.user.id);
   const [searchResult, setSearchResult] = useState<SearchUsersResponse>();
 
   const {
@@ -23,7 +23,11 @@ const PostTalkScreen = () => {
     isLoading: isLoadingSearchUsers,
   } = useSearchUsers({
     onSuccess: (data) => {
-      setSearchResult(data);
+      setSearchResult(
+        data.filter(
+          (item) => !talks?.some((talk) => talk.to.userId === item.userId)
+        )
+      );
     },
     onError: () => {
       showAlert(
@@ -56,13 +60,16 @@ const PostTalkScreen = () => {
       },
     });
 
-  const searchUsers = useCallback(async (text: string) => {
-    if (text === "") {
-      setSearchResult([]);
-      return;
-    }
-    await mutateAsyncSearchUsers({ userId: session?.user.id, text });
-  }, [session?.user]);
+  const searchUsers = useCallback(
+    async (text: string) => {
+      if (text === "") {
+        setSearchResult([]);
+        return;
+      }
+      await mutateAsyncSearchUsers({ userId: session?.user.id, text });
+    },
+    [session?.user]
+  );
 
   const postTalk = useCallback(
     async (recieverId: string) => {

@@ -20,6 +20,7 @@ const getTabStyle = (route: Partial<Route<string, object | undefined>>) => {
   const routeName = getFocusedRouteNameFromRoute(route);
   if (
     routeName === "SearchMap" ||
+    routeName === "RentalDetail" ||
     routeName === "CommunityChat" ||
     routeName === "PostCommunity" ||
     routeName === "SearchCommunity" ||
@@ -29,7 +30,8 @@ const getTabStyle = (route: Partial<Route<string, object | undefined>>) => {
     routeName === "FarmDevice" ||
     routeName === "PostFarm" ||
     routeName === "PostProfile" ||
-    routeName === "PostRental"
+    routeName === "PostRental" ||
+    routeName === "RentalList"
   )
     return false;
 

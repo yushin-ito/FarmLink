@@ -28,6 +28,7 @@ type SettingTemplateProps = {
   pickImageByLibrary: () => Promise<void>;
   postRentalNavigationHandler: () => void;
   postProfileNavigationHandler: () => void;
+  rentalListNavigationHandler: () => void;
 };
 
 const SettingTemplate = ({
@@ -39,6 +40,7 @@ const SettingTemplate = ({
   pickImageByLibrary,
   postRentalNavigationHandler,
   postProfileNavigationHandler,
+  rentalListNavigationHandler,
 }: SettingTemplateProps) => {
   const { t } = useTranslation("setting");
   const { isOpen, onOpen, onClose } = useDisclose();
@@ -98,14 +100,28 @@ const SettingTemplate = ({
           _pressed={{
             opacity: 0.5,
           }}
+          onPress={rentalListNavigationHandler}
+        >
+          <HStack alignItems="center" justifyContent="space-between">
+            <HStack p="2" space="3" alignItems="center" rounded="md">
+              <Icon as={<Feather />} name="clipboard" size="5" />
+              <Text fontSize="md">{t("rentalList")}</Text>
+            </HStack>
+            <Icon as={<Feather />} name="chevron-right" size="5" />
+          </HStack>
+        </Pressable>
+        <Pressable
+          _pressed={{
+            opacity: 0.5,
+          }}
           onPress={postRentalNavigationHandler}
         >
           <HStack alignItems="center" justifyContent="space-between">
             <HStack p="2" space="3" alignItems="center" rounded="md">
-              <Icon as={<Feather name="camera" />} size="5" />
-              <Text fontSize="md">{t("rentalFarm")}</Text>
+              <Icon as={<Feather />} name="camera" size="5" />
+              <Text fontSize="md">{t("rental")}</Text>
             </HStack>
-            <Icon as={<Feather name="chevron-right" />} size="5" />
+            <Icon as={<Feather />} name="chevron-right" size="5" />
           </HStack>
         </Pressable>
         <Pressable
@@ -116,10 +132,10 @@ const SettingTemplate = ({
         >
           <HStack alignItems="center" justifyContent="space-between">
             <HStack p="2" space="2" alignItems="center" rounded="md">
-              <Icon as={<Feather name="edit" />} size="5" />
+              <Icon as={<Feather />} name="edit" size="5" />
               <Text fontSize="md">{t("editProfile")}</Text>
             </HStack>
-            <Icon as={<Feather name="chevron-right" />} size="5" />
+            <Icon as={<Feather />} name="chevron-right" size="5" />
           </HStack>
         </Pressable>
         <Pressable
@@ -141,7 +157,7 @@ const SettingTemplate = ({
           }}
         >
           <HStack p="2" space="3" alignItems="center" rounded="md">
-            <Icon as={<Feather name="log-out" />} size="5" />
+            <Icon as={<Feather />} name="log-out" size="5" />
             <Text fontSize="md">{t("signout")}</Text>
           </HStack>
         </Pressable>

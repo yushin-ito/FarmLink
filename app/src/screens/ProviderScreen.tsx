@@ -12,15 +12,15 @@ import { usePostUser } from "../hooks/user/mutate";
 import ProviderTemplate from "../components/templates/ProviderTemplate";
 import { useSignInWithProvider } from "../hooks/auth/mutate";
 
-type SignUpNavigationProp = NativeStackNavigationProp<
+type ProviderNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
-  "SignUp"
+  "Provider"
 >;
 
-const SignUpScreen = () => {
+const ProviderScreen = () => {
   const toast = useToast();
   const { t } = useTranslation("auth");
-  const navigation = useNavigation<SignUpNavigationProp>();
+  const navigation = useNavigation<ProviderNavigationProp>();
 
   const { mutateAsync: mutateAsyncPostUser } = usePostUser({
     onError: () => {
@@ -90,4 +90,4 @@ const SignUpScreen = () => {
   );
 };
 
-export default SignUpScreen;
+export default ProviderScreen;

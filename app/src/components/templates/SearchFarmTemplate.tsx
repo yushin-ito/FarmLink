@@ -87,8 +87,7 @@ const SearchFarmTemplate = ({
             <Spinner color="muted.400" />
           ) : (
             <FlatList
-              w="100%"
-              px="6"
+              keyboardShouldPersistTaps="handled"
               data={searchResult}
               renderItem={({ item }) => (
                 <SearchFarmItem

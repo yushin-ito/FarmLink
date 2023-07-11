@@ -3,25 +3,17 @@ import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSignOut } from "../hooks/auth/mutate";
 import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
 import SettingTemplate from "../components/templates/SettingTemplate";
 import useImage from "../hooks/sdk/useImage";
 import { usePostAvatar } from "../hooks/user/mutate";
-import { SettingStackParamList } from "../types";
+import { SettingStackScreenProps } from "../types";
 
-type SettingNavigationProp = NativeStackNavigationProp<
-  SettingStackParamList,
-  "Setting"
->;
-
-const RoomListScreen = () => {
+const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
   const toast = useToast();
   const { t } = useTranslation("setting");
-  const navigation = useNavigation<SettingNavigationProp>();
   const { session } = useAuth();
   const { data: user, refetch } = useQueryUser(session?.user.id);
 
@@ -96,6 +88,10 @@ const RoomListScreen = () => {
     navigation.navigate("PostRental");
   }, []);
 
+  const rentalListNavigationHandler = useCallback(() => {
+    navigation.navigate("RentalList");
+  }, []);
+
   return (
     <SettingTemplate
       user={user}
@@ -106,8 +102,9 @@ const RoomListScreen = () => {
       pickImageByLibrary={pickImageByLibrary}
       postRentalNavigationHandler={postRentalNavigationHandler}
       postProfileNavigationHandler={postProfileNavigationHandler}
+      rentalListNavigationHandler={rentalListNavigationHandler}
     />
   );
 };
 
-export default RoomListScreen;
+export default SettingScreen;

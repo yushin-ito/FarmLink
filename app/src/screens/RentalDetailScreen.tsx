@@ -1,23 +1,26 @@
 import React, { useCallback } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { MapStackParamList } from "../types";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { MapStackParamList, MapStackScreenProps } from "../types";
 import RentalDetailTemplate from "../components/templates/RentalDetailTemplate";
 import useAuth from "../hooks/auth/useAuth";
 import { useQueryUser } from "../hooks/user/query";
+import { useQueryRental } from "../hooks/rental/query";
 
-type RentalDetailNavigationProp = NativeStackNavigationProp<
-  MapStackParamList,
-  "RentalDetail"
->;
-
-const RentalDetailScreen = () => {
+const RentalDetailScreen = ({
+  navigation,
+}: MapStackScreenProps<"RentalDetail">) => {
+  const { params } = useRoute<RouteProp<MapStackParamList, "RentalDetail">>();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
-  const navigation = useNavigation<RentalDetailNavigationProp>();
+  const { data: rental } = useQueryRental(params.rentalId);
 
   const settingNavigationHandler = useCallback(() => {
-    navigation.navigate("SettingNavigator", { screen: "Setting" });
+    navigation.navigate("TabNavigator", {
+      screen: "SettingNavigator",
+      params: {
+        screen: "Setting",
+      },
+    });
   }, []);
 
   const goBackNavigationHandler = useCallback(() => {
@@ -27,6 +30,7 @@ const RentalDetailScreen = () => {
   return (
     <RentalDetailTemplate
       user={user}
+      rental={rental}
       settingNavigationHandler={settingNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

@@ -10,29 +10,20 @@ import {
   usePostTalkChat,
   usePostTalkChatImage,
 } from "../hooks/talk/mutate";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { TalkStackParamList } from "../types";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { TalkStackParamList, TalkStackScreenProps } from "../types";
 import useChat from "../hooks/talk/useChat";
 import useAuth from "../hooks/auth/useAuth";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useInfiniteQueryTalkChats, useQueryTalks } from "../hooks/talk/query";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
 
-type TalkChatNavigationProp = NativeStackNavigationProp<
-  TalkStackParamList,
-  "TalkChat"
->;
-
-type TalkChatRouteProp = RouteProp<TalkStackParamList, "TalkChat">;
-
-const TalkChatScreen = () => {
+const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { t } = useTranslation("talk");
   const toast = useToast();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
-  const { params } = useRoute<TalkChatRouteProp>();
-  const navigation = useNavigation<TalkChatNavigationProp>();
+  const { params } = useRoute<RouteProp<TalkStackParamList, "TalkChat">>();
   const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
   const {
     data: chats,

@@ -3,6 +3,10 @@ import * as Linking from "expo-linking";
 import { formatDistance } from "date-fns";
 import { ja, enUS } from "date-fns/locale";
 
+export const wait = (sec: number) => {
+  return new Promise((resolve) => setTimeout(resolve, sec * 1000));
+};
+
 export const showAlert = (toast: IToastService, Alert: React.ReactNode) => {
   if (!toast.isActive(1)) {
     toast.show({

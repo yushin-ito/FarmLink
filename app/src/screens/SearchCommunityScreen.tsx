@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import SearchCommunityTemplate from "../components/templates/SearchCommunityTemplate";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import {
   SearchCommunitiesResponse,
   useSearchCommunities,
@@ -9,24 +9,15 @@ import { showAlert } from "../functions";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CommunityStackParamList } from "../types";
+import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
 
-type SearchCommunityNavigationProp = NativeStackNavigationProp<
-  CommunityStackParamList,
-  "SearchCommunity"
->;
-
-type SearchCommunityRouteProp = RouteProp<
-  CommunityStackParamList,
-  "SearchCommunity"
->;
-
-const SearchCommunitieScreen = () => {
+const SearchCommunitieScreen = ({
+  navigation,
+}: CommunityStackScreenProps<"SearchCommunity">) => {
   const { t } = useTranslation("community");
   const toast = useToast();
-  const navigation = useNavigation<SearchCommunityNavigationProp>();
-  const { params } = useRoute<SearchCommunityRouteProp>();
+  const { params } =
+    useRoute<RouteProp<CommunityStackParamList, "SearchCommunity">>();
   const [searchResult, setSearchResult] = useState<SearchCommunitiesResponse>();
 
   const {

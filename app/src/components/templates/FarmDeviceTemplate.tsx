@@ -1,9 +1,10 @@
-import { Box, HStack, Heading, Image } from "native-base";
+import { Box, HStack, Heading } from "native-base";
 import React from "react";
+import { Image } from "expo-image";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
 import BackButton from "../molecules/BackButton";
-import { GetDeviceResponse } from "../../hooks/device/query"
+import { GetDeviceResponse } from "../../hooks/device/query";
 
 type FarmDeviceTemplateProps = {
   title: string | null;
@@ -43,7 +44,6 @@ const FarmDeviceTemplate = ({
       </HStack>
       <Image
         source={{ uri: device?.imageUrl + "?=" + device?.updatedAt ?? "" }}
-        alt=""
       />
     </Box>
   );

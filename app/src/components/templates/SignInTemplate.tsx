@@ -19,16 +19,16 @@ import Input from "../molecules/Input";
 import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
 import BackButton from "../molecules/BackButton";
 
-type FormValues = {
-  email: string;
-  password: string;
-};
-
 type SignInTemplateProps = {
   isLoading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpNavigationHandler: () => void;
   goBackNavigationHandler: () => void;
+};
+
+type FormValues = {
+  email: string;
+  password: string;
 };
 
 const SignInTemplate = memo(
