@@ -47,11 +47,11 @@ const CommunityChatScreen = () => {
     isLoading: isLoadingChats,
     hasNextPage: hasMore,
     fetchNextPage,
-    refetch: refetchCommunityChats,
+    refetch: refetchChats,
   } = useInfiniteQueryCommunityChats(params.communityId);
 
   useChat(params.communityId, async () => {
-    await refetchCommunityChats();
+    await refetchChats();
   });
 
   const { mutateAsync: mutateAsyncPostChat } = usePostCommunityChat({
@@ -86,7 +86,7 @@ const CommunityChatScreen = () => {
 
   const { mutateAsync: mutateAsyncPostChatImage } = usePostCommunityChatImage({
     onSuccess: async () => {
-      await refetchCommunityChats();
+      await refetchChats();
     },
     onError: () => {
       showAlert(

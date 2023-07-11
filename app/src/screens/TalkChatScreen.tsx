@@ -5,13 +5,17 @@ import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import ChatTemplate from "../components/templates/ChatTemplate";
-import { usePostTalkChat, usePostTalkChatImage } from "../hooks/talk/mutate";
+import {
+  useDeleteTalk,
+  usePostTalkChat,
+  usePostTalkChatImage,
+} from "../hooks/talk/mutate";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { TalkStackParamList } from "../types";
 import useChat from "../hooks/talk/useChat";
 import useAuth from "../hooks/auth/useAuth";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useInfiniteQueryTalkChats } from "../hooks/talk/query";
+import { useInfiniteQueryTalkChats, useQueryTalks } from "../hooks/talk/query";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
 
@@ -29,16 +33,34 @@ const TalkChatScreen = () => {
   const { data: user } = useQueryUser(session?.user.id);
   const { params } = useRoute<TalkChatRouteProp>();
   const navigation = useNavigation<TalkChatNavigationProp>();
+  const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
   const {
     data: chats,
     isLoading: isLoadingChats,
     hasNextPage: hasMore,
     fetchNextPage,
-    refetch,
+    refetch: refetchChats,
   } = useInfiniteQueryTalkChats(params.talkId);
 
   useChat(params.talkId, async () => {
-    await refetch();
+    await refetchChats();
+  });
+
+  const { mutateAsync: mutateAsyncDeleteTalk } = useDeleteTalk({
+    onSuccess: async () => {
+      await refetchTalks();
+      navigation.goBack();
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("anyError")}
+        />
+      );
+    },
   });
 
   const { mutateAsync: mutateAsyncPostChat } = usePostTalkChat({
@@ -56,7 +78,7 @@ const TalkChatScreen = () => {
 
   const { mutateAsync: mutateAsyncPostChatImage } = usePostTalkChatImage({
     onSuccess: async () => {
-      await refetch();
+      await refetchChats();
     },
     onError: () => {
       showAlert(
@@ -114,6 +136,10 @@ const TalkChatScreen = () => {
     [session?.user]
   );
 
+  const deleteTalk = useCallback(async () => {
+    await mutateAsyncDeleteTalk(params.talkId);
+  }, []);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -124,6 +150,7 @@ const TalkChatScreen = () => {
       title={params.displayName}
       user={user}
       chats={chats}
+      deleteRoom={deleteTalk}
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
       postChat={postChat}
