@@ -12,7 +12,7 @@ import { GetTalksResponse } from "../../hooks/talk/query";
 import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 import Avatar from "../molecules/Avatar";
-import { Swipeable } from "react-native-gesture-handler";
+import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { getTimeDistance } from "../../functions";
 
 type TalkItemProps = {
@@ -54,40 +54,42 @@ const TalkItem = memo(
           </Pressable>
         )}
       >
-        <Pressable onPress={onPress} _pressed={{ bg: "muted.200" }}>
-          <HStack px="9" py="4">
-            <Box w="25%">
-              <Avatar
-                size="md"
-                fontSize="2xl"
-                disabled
-                text={item?.to.displayName?.charAt(0)}
-                avatarUrl={item?.to.avatarUrl}
-                updatedAt={item?.to.updatedAt}
-                hue={item?.to.hue}
-              />
-            </Box>
-            <VStack w="75%" space="1">
-              <HStack alignItems="center" justifyContent="space-between">
-                <Text bold fontSize="md">
-                  {item.to?.displayName}
+        <TouchableHighlight onPress={onPress} underlayColor="#e5e5e5">
+          <VStack>
+            <HStack px="9" py="4">
+              <Box w="25%">
+                <Avatar
+                  size="md"
+                  fontSize="2xl"
+                  disabled
+                  text={item?.to.displayName?.charAt(0)}
+                  avatarUrl={item?.to.avatarUrl}
+                  updatedAt={item?.to.updatedAt}
+                  hue={item?.to.hue}
+                />
+              </Box>
+              <VStack w="75%" space="1">
+                <HStack alignItems="center" justifyContent="space-between">
+                  <Text bold fontSize="md">
+                    {item.to?.displayName}
+                  </Text>
+                  <Text fontSize="sm">
+                    {getTimeDistance(item.updatedAt, locale)}
+                  </Text>
+                </HStack>
+                <Text
+                  color="muted.600"
+                  fontSize="xs"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {item.lastMessage}
                 </Text>
-                <Text fontSize="sm">
-                  {getTimeDistance(item.updatedAt, locale)}
-                </Text>
-              </HStack>
-              <Text
-                color="muted.600"
-                fontSize="xs"
-                numberOfLines={1}
-                ellipsizeMode="tail"
-              >
-                {item.lastMessage}
-              </Text>
-            </VStack>
-          </HStack>
-          <Divider w="80%" alignSelf="center" bg="muted.200" />
-        </Pressable>
+              </VStack>
+            </HStack>
+            <Divider w="80%" alignSelf="center" bg="muted.200" />
+          </VStack>
+        </TouchableHighlight>
       </Swipeable>
     );
   }

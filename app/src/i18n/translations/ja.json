@@ -133,6 +133,7 @@
     "save": "保存",
     "rentalList": "レンタル一覧",
     "delete": "削除",
+    "deleteRental": "レンタル削除",
     "askDeleteRental": "レンタルを削除してもよろしいですか",
     "rental": "農園をレンタル",
     "rentalName": "レンタル名",

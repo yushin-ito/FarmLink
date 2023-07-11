@@ -133,6 +133,7 @@
     "rentalList": "Rental list",
     "askDeleteRental": "Are you sure want to delete Rental?",
     "delete": "Delete",
+    "deleteRental": "Delete rental",
     "rental": "Retanl farm",
     "rentalName": "Rental name",
     "rentalNameRequired": "Rental name is required",
