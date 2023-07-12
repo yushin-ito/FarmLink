@@ -104,7 +104,7 @@ const PostFarmTemplate = ({
       >
         <Box flex={1} pb="16" justifyContent="space-between">
           <VStack px="10" space="6">
-            <FormControl isInvalid={"farmName" in errors}>
+            <FormControl isRequired isInvalid={"farmName" in errors}>
               <FormControl.Label>{t("farmName")}</FormControl.Label>
               <Controller
                 name="farmName"
@@ -159,7 +159,7 @@ const PostFarmTemplate = ({
                 }}
               />
             </FormControl>
-            <FormControl isInvalid={"deviceId" in errors}>
+            <FormControl isRequired isInvalid={"deviceId" in errors}>
               <FormControl.Label>{t("deviceId")}</FormControl.Label>
               <Controller
                 name="deviceId"
@@ -217,7 +217,7 @@ const PostFarmTemplate = ({
             </HStack>
             {!privated && (
               <VStack mt="6" space="6">
-                <FormControl isInvalid={"description" in errors}>
+                <FormControl isRequired isInvalid={"description" in errors}>
                   <FormControl.Label>{t("description")}</FormControl.Label>
                   <Controller
                     name="description"

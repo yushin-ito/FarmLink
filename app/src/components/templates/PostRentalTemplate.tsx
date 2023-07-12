@@ -35,12 +35,21 @@ type PostRentalTemplateProps = {
   pickImageByLibrary: () => Promise<void>;
   getCurrentPosition: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
-  postRental: (RentalName: string, description: string) => Promise<void>;
+  postRental: (
+    rentalName: string,
+    description: string,
+    fee: string,
+    area: string,
+    equipment: string
+  ) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
 
 type FormValues = {
   rentalName: string;
+  fee: string;
+  area: string;
+  equipment: string;
   description: string;
 };
 
@@ -163,7 +172,7 @@ const PostRentalTemplate = ({
                 />
               </HStack>
             </VStack>
-            <FormControl isInvalid={"rentalName" in errors}>
+            <FormControl isRequired isInvalid={"rentalName" in errors}>
               <FormControl.Label>{t("rentalName")}</FormControl.Label>
               <Controller
                 name="rentalName"
@@ -218,7 +227,7 @@ const PostRentalTemplate = ({
                 }}
               />
             </FormControl>
-            <FormControl isInvalid={"description" in errors}>
+            <FormControl isRequired isInvalid={"description" in errors}>
               <FormControl.Label>{t("description")}</FormControl.Label>
               <Controller
                 name="description"
@@ -258,6 +267,165 @@ const PostRentalTemplate = ({
                 }}
               />
             </FormControl>
+            <FormControl isInvalid={"fee" in errors}>
+              <FormControl.Label>{t("fee")}</FormControl.Label>
+              <Controller
+                name="fee"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <VStack>
+                      <Input
+                        returnKeyType="done"
+                        InputRightElement={
+                          <IconButton
+                            onPress={() => setValue("fee", "")}
+                            icon={
+                              <Icon
+                                as={<Feather name="x" />}
+                                size="4"
+                                color="muted.400"
+                              />
+                            }
+                            variant="unstyled"
+                            _pressed={{
+                              opacity: 0.5,
+                            }}
+                          />
+                        }
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                      <HStack mt="1" justifyContent="space-between">
+                        <FormControl.ErrorMessage
+                          leftIcon={
+                            <Icon as={<Feather name="alert-circle" />} />
+                          }
+                        >
+                          {errors.fee && <Text>{errors.fee.message}</Text>}
+                        </FormControl.ErrorMessage>
+                        <Text color="muted.600">
+                          {value?.length ? value.length : 0} / 20
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  );
+                }}
+                rules={{
+                  maxLength: {
+                    value: 20,
+                    message: t("feeMaxLength"),
+                  },
+                }}
+              />
+            </FormControl>
+            <FormControl isInvalid={"area" in errors}>
+              <FormControl.Label>{t("area")}</FormControl.Label>
+              <Controller
+                name="area"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <VStack>
+                      <Input
+                        returnKeyType="done"
+                        InputRightElement={
+                          <IconButton
+                            onPress={() => setValue("area", "")}
+                            icon={
+                              <Icon
+                                as={<Feather name="x" />}
+                                size="4"
+                                color="muted.400"
+                              />
+                            }
+                            variant="unstyled"
+                            _pressed={{
+                              opacity: 0.5,
+                            }}
+                          />
+                        }
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                      <HStack mt="1" justifyContent="space-between">
+                        <FormControl.ErrorMessage
+                          leftIcon={
+                            <Icon as={<Feather name="alert-circle" />} />
+                          }
+                        >
+                          {errors.area && <Text>{errors.area.message}</Text>}
+                        </FormControl.ErrorMessage>
+                        <Text color="muted.600">
+                          {value?.length ? value.length : 0} / 20
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  );
+                }}
+                rules={{
+                  maxLength: {
+                    value: 20,
+                    message: t("areaMaxLength"),
+                  },
+                }}
+              />
+            </FormControl>
+            <FormControl isInvalid={"equipment" in errors}>
+              <FormControl.Label>{t("equipment")}</FormControl.Label>
+              <Controller
+                name="equipment"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <VStack>
+                      <Input
+                        returnKeyType="done"
+                        InputRightElement={
+                          <IconButton
+                            onPress={() => setValue("equipment", "")}
+                            icon={
+                              <Icon
+                                as={<Feather name="x" />}
+                                size="4"
+                                color="muted.400"
+                              />
+                            }
+                            variant="unstyled"
+                            _pressed={{
+                              opacity: 0.5,
+                            }}
+                          />
+                        }
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                      <HStack mt="1" justifyContent="space-between">
+                        <FormControl.ErrorMessage
+                          leftIcon={
+                            <Icon as={<Feather name="alert-circle" />} />
+                          }
+                        >
+                          {errors.equipment && (
+                            <Text>{errors.equipment.message}</Text>
+                          )}
+                        </FormControl.ErrorMessage>
+                        <Text color="muted.600">
+                          {value?.length ? value.length : 0} / 20
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  );
+                }}
+                rules={{
+                  maxLength: {
+                    value: 20,
+                    message: t("equipmentMaxLength"),
+                  },
+                }}
+              />
+            </FormControl>
+
             <VStack space="1">
               <HStack justifyContent="space-between">
                 <Text bold color="muted.600">
@@ -322,7 +490,13 @@ const PostRentalTemplate = ({
             isDisabled={isLoadingPosition}
             isLoading={isLoadingPostRental}
             onPress={handleSubmit(async (data) => {
-              await postRental(data.rentalName, data.description);
+              await postRental(
+                data.rentalName,
+                data.description,
+                data.fee,
+                data.area,
+                data.equipment
+              );
             })}
           >
             {t("create")}

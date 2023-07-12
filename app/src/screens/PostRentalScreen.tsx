@@ -110,7 +110,13 @@ const PostRentalScreen = () => {
   });
 
   const postRental = useCallback(
-    async (rentalName: string, description: string) => {
+    async (
+      rentalName: string,
+      description: string,
+      fee: string,
+      area: string,
+      equipment: string
+    ) => {
       await mutateAsyncPostRental({
         base64,
         rental: {
@@ -119,6 +125,9 @@ const PostRentalScreen = () => {
           ownerId: session?.user.id,
           longitude: position?.coords.longitude,
           latitude: position?.coords.latitude,
+          fee,
+          area,
+          equipment,
         },
       });
     },

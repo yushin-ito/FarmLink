@@ -73,7 +73,7 @@ const PostCommunityTemplate = ({
       >
         <Box flex={1} pb="16" justifyContent="space-between">
           <VStack px="10" space="6">
-            <FormControl isInvalid={"communityName" in errors}>
+            <FormControl isRequired isInvalid={"communityName" in errors}>
               <FormControl.Label>{t("communityName")}</FormControl.Label>
               <Controller
                 name="communityName"
@@ -128,7 +128,7 @@ const PostCommunityTemplate = ({
                 }}
               />
             </FormControl>
-            <FormControl isInvalid={"description" in errors}>
+            <FormControl isRequired isInvalid={"description" in errors}>
               <FormControl.Label>{t("description")}</FormControl.Label>
               <Controller
                 name="description"
