@@ -16,3 +16,4 @@ export type Community = Database["public"]["Tables"]["community"];
 export type Farm = Database["public"]["Tables"]["farm"];
 export type Talk = Database["public"]["Tables"]["talk"];
 export type Rental = Database["public"]["Tables"]["rental"];
+export type Like = Database["public"]["Tables"]["like"];

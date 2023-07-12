@@ -212,7 +212,7 @@ const PostRentalTemplate = ({
                           )}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
-                          {value?.length ? value.length : 0} / 20
+                          {value?.length ?? 0} / 20
                         </Text>
                       </HStack>
                     </VStack>
@@ -252,7 +252,7 @@ const PostRentalTemplate = ({
                           )}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
-                          {value?.length ? value.length : 0} / 100
+                          {value?.length ?? 0} / 100
                         </Text>
                       </HStack>
                     </VStack>
@@ -305,7 +305,7 @@ const PostRentalTemplate = ({
                           {errors.fee && <Text>{errors.fee.message}</Text>}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
-                          {value?.length ? value.length : 0} / 20
+                          {value?.length ?? 0} / 20
                         </Text>
                       </HStack>
                     </VStack>
@@ -357,7 +357,7 @@ const PostRentalTemplate = ({
                           {errors.area && <Text>{errors.area.message}</Text>}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
-                          {value?.length ? value.length : 0} / 20
+                          {value?.length ?? 0} / 20
                         </Text>
                       </HStack>
                     </VStack>
@@ -411,7 +411,7 @@ const PostRentalTemplate = ({
                           )}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
-                          {value?.length ? value.length : 0} / 20
+                          {value?.length ?? 0} / 20
                         </Text>
                       </HStack>
                     </VStack>

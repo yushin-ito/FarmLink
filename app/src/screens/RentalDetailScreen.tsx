@@ -11,6 +11,9 @@ import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import useLocation from "../hooks/sdk/useLocation";
+import { useQueryRentalLike } from "../hooks/like/query";
+import { useRentalLike } from "../hooks/like/useLike";
+import { useDeleteRentalLike, usePostLike } from "../hooks/like/mutate";
 
 const RentalDetailScreen = ({
   navigation,
@@ -20,11 +23,46 @@ const RentalDetailScreen = ({
   const { params } = useRoute<RouteProp<MapStackParamList, "RentalDetail">>();
   const { data: rental } = useQueryRental(params.rentalId);
   const { session } = useAuth();
-  const { data: talks, refetch } = useQueryTalks(session?.user.id);
+  const { data: talks, refetch: refetchTalks } = useQueryTalks(
+    session?.user.id
+  );
+  const { data: likes, refetch: refetchLike } = useQueryRentalLike(
+    params.rentalId
+  );
+
+  useRentalLike(params.rentalId, async () => {
+    await refetchLike();
+  });
 
   useEffect(() => {
     rental && getAddress(rental.latitude, rental.longitude);
   }, [rental]);
+
+  const { mutateAsync: mutateAsyncPostLike } = usePostLike({
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
+  const { mutateAsync: mutateAsyncDeleteLike } = useDeleteRentalLike({
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   const { address, getAddress } = useLocation({
     onDisable: () => {
@@ -52,7 +90,7 @@ const RentalDetailScreen = ({
   const { mutateAsync: mutateAsyncPostTalk, isLoading: isLoadingPostTalk } =
     usePostTalk({
       onSuccess: async () => {
-        const { data } = await refetch();
+        const { data } = await refetchTalks();
         const talk = data?.find((item) => item.to.userId === rental?.ownerId);
         if (talk) {
           navigation.navigate("TabNavigator", {
@@ -117,12 +155,28 @@ const RentalDetailScreen = ({
     }
   }, [talks]);
 
+  const postLike = useCallback(async () => {
+    session &&
+      (await mutateAsyncPostLike({
+        userId: session.user.id,
+        rentalId: params.rentalId,
+      }));
+  }, [session?.user]);
+
+  const deleteLike = useCallback(async () => {
+    await mutateAsyncDeleteLike(params.rentalId);
+  }, []);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
 
   return (
     <RentalDetailTemplate
+      like={likes?.some((item) => item.userId === session?.user.id) ?? false}
+      likes={likes}
+      postLike={postLike}
+      deleteLike={deleteLike}
       owned={session?.user.id === rental?.ownerId}
       address={address}
       rental={rental}

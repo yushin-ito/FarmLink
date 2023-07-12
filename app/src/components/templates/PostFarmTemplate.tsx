@@ -139,13 +139,9 @@ const PostFarmTemplate = ({
                             <Icon as={<Feather name="alert-circle" />} />
                           }
                         >
-                          {errors.name && (
-                            <Text>{errors.name.message}</Text>
-                          )}
+                          {errors.name && <Text>{errors.name.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">
-                          {value?.length ? value.length : 0} / 20
-                        </Text>
+                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -242,7 +238,7 @@ const PostFarmTemplate = ({
                               )}
                             </FormControl.ErrorMessage>
                             <Text color="muted.600">
-                              {value?.length ? value.length : 0} / 100
+                              {value?.length ?? 0} / 100
                             </Text>
                           </HStack>
                         </VStack>

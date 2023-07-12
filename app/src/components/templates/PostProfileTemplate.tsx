@@ -22,7 +22,7 @@ import { GetUserResponse } from "../../hooks/user/query";
 type PostProfileTemplateProps = {
   user: GetUserResponse | null | undefined;
   isLoading: boolean;
-  postUser: (name: string, introduction: string) => Promise<void>;
+  postProfile: (name: string, introduction: string) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
 
@@ -34,7 +34,7 @@ type FormValues = {
 const PostProfileTemplate = ({
   user,
   isLoading,
-  postUser,
+  postProfile,
   goBackNavigationHandler,
 }: PostProfileTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -117,11 +117,9 @@ const PostProfileTemplate = ({
                               <Icon as={<Feather name="alert-circle" />} />
                             }
                           >
-                            {errors.name && (
-                              <Text>{errors.name.message}</Text>
-                            )}
+                            {errors.name && <Text>{errors.name.message}</Text>}
                           </FormControl.ErrorMessage>
-                          <Text color="muted.600">{value?.length}/20</Text>
+                          <Text color="muted.600">{value?.length} / 20</Text>
                         </HStack>
                       </VStack>
                     );
@@ -174,7 +172,9 @@ const PostProfileTemplate = ({
                               <Text>{errors.introduction.message}</Text>
                             )}
                           </FormControl.ErrorMessage>
-                          <Text color="muted.600">{value?.length}/30</Text>
+                          <Text color="muted.600">
+                            {value?.length ?? 0} / 30
+                          </Text>
                         </HStack>
                       </VStack>
                     );
@@ -197,7 +197,7 @@ const PostProfileTemplate = ({
             colorScheme="brand"
             isLoading={isLoading}
             onPress={handleSubmit(async (data) => {
-              await postUser(data.name, data.introduction);
+              await postProfile(data.name, data.introduction);
             })}
           >
             {t("save")}

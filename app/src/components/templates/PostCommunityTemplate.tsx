@@ -111,7 +111,7 @@ const PostCommunityTemplate = ({
                           {errors.name && <Text>{errors.name.message}</Text>}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
-                          {value?.length ? value.length : 0} / 20
+                          {value?.length ?? 0} / 20
                         </Text>
                       </HStack>
                     </VStack>
@@ -151,7 +151,7 @@ const PostCommunityTemplate = ({
                           )}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
-                          {value?.length ? value.length : 0} / 100
+                          {value?.length ?? 0} / 100
                         </Text>
                       </HStack>
                     </VStack>

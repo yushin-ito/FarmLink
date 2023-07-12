@@ -34,7 +34,7 @@ const PostProfileScreen = () => {
     },
   });
 
-  const postUser = useCallback(
+  const postProfile = useCallback(
     async (name: string, introduction: string) => {
       if (session?.user) {
         await mutateAsync({
@@ -55,7 +55,7 @@ const PostProfileScreen = () => {
     <PostProfileTemplate
       user={user}
       isLoading={isLoading}
-      postUser={postUser}
+      postProfile={postProfile}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

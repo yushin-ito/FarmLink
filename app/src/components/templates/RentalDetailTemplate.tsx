@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Feather, FontAwesome } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { Feather, AntDesign } from "@expo/vector-icons";
 
 import {
   Box,
@@ -18,33 +18,49 @@ import { GetRentalResponse } from "../../hooks/rental/query";
 import { Alert, useWindowDimensions } from "react-native";
 import { useTranslation } from "react-i18next";
 import { LocationGeocodedAddress } from "expo-location";
+import { GetRentalLikeResponse } from "../../hooks/like/query";
 
 type RentalDetailTemplateProps = {
   owned: boolean;
+  isLike: boolean;
+  likes: GetRentalLikeResponse | undefined;
   rental: GetRentalResponse | undefined;
   address: LocationGeocodedAddress | undefined;
   isLoadingPostTalk: boolean;
+  isLoadingLike: boolean;
+  postLike: () => Promise<void>;
+  deleteLike: () => Promise<void>;
   talkChatNavigationHandler: () => void;
   goBackNavigationHandler: () => void;
 };
 
 const RentalDetailTemplate = ({
+  isLike,
+  likes,
   owned,
   rental,
   address,
   isLoadingPostTalk,
+  isLoadingLike,
+  postLike,
+  deleteLike,
   talkChatNavigationHandler,
   goBackNavigationHandler,
 }: RentalDetailTemplateProps) => {
   const { t } = useTranslation("map");
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [liked, setLiked] = useState(isLike);
+
+  useEffect(() => {
+    liked ? postLike() : deleteLike();
+  }, [liked]);
 
   return (
     <Box flex={1} safeAreaTop>
       <HStack
         mb="2"
-        pl="2"
+        pl="1"
         pr="3"
         alignItems="center"
         justifyContent="space-between"
@@ -97,15 +113,24 @@ const RentalDetailTemplate = ({
             ))}
           </HStack>
         </VStack>
-        <VStack mt="3" px="6">
-          <Heading numberOfLines={2} ellipsizeMode="tail">
-            {rental?.name}
-          </Heading>
-          <Text>
-            {address && (
-              <Text color="muted.600">{`${address.city} ${address.name}`}</Text>
-            )}
-          </Text>
+        <VStack mt="2" px="6">
+          <HStack alignItems="center" justifyContent="space-between">
+            <VStack>
+              <Heading numberOfLines={2} ellipsizeMode="tail">
+                {rental?.name}
+              </Heading>
+              <Text>
+                {address && (
+                  <Text color="muted.600">{`${address.city} ${address.name}`}</Text>
+                )}
+              </Text>
+            </VStack>
+            <VStack alignItems="center" mr="3">
+              <Icon as={<AntDesign />} name="hearto" size="md" color="black" />
+              <Text>{likes?.length ?? 0}</Text>
+            </VStack>
+          </HStack>
+
           <HStack mt="6" alignItems="center" justifyContent="space-between">
             <VStack w="24">
               <Text color="muted.600">{t("area")}</Text>
@@ -149,10 +174,10 @@ const RentalDetailTemplate = ({
         <IconButton
           icon={
             <Icon
-              as={<FontAwesome />}
+              as={<AntDesign />}
               name="heart"
               size="md"
-              color="muted.300"
+              color={liked ? "red.300" : "muted.300"}
             />
           }
           variant="unstyled"
@@ -160,6 +185,8 @@ const RentalDetailTemplate = ({
           rounded="lg"
           p="2"
           borderColor="muted.300"
+          onPress={() => setLiked(!liked)}
+          isDisabled={isLoadingLike}
         />
         <Button
           px="9"
