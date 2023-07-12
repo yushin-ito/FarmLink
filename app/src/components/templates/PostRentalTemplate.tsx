@@ -22,17 +22,19 @@ import MapView, { Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Position } from "../../hooks/sdk/useLocation";
 import { useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
+import { LocationObject, LocationGeocodedAddress } from "expo-location";
 
 type PostRentalTemplateProps = {
   base64: string[];
   isLoadingPostRental: boolean;
   isLoadingPosition: boolean;
-  position: Position | undefined;
+  position: LocationObject | undefined;
+  address: LocationGeocodedAddress | undefined;
   pickImageByLibrary: () => Promise<void>;
   getCurrentPosition: () => Promise<void>;
+  getAddress: (latitude: number, longitude: number) => Promise<void>;
   postRental: (RentalName: string, description: string) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
@@ -47,8 +49,10 @@ const PostRentalTemplate = ({
   isLoadingPostRental,
   isLoadingPosition,
   position,
+  address,
   pickImageByLibrary,
   getCurrentPosition,
+  getAddress,
   postRental,
   goBackNavigationHandler,
 }: PostRentalTemplateProps) => {
@@ -75,21 +79,20 @@ const PostRentalTemplate = ({
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       });
+      getAddress(position.coords.latitude, position.coords.longitude);
     }
   }, [position, isLoadingPosition]);
 
   return (
     <Box flex={1} safeAreaTop>
-      <HStack w="100%" alignItems="center" justifyContent="space-between">
+      <HStack mb="4" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
-          p="6"
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
           variant="unstyled"
         />
         <Heading textAlign="center">{t("rental")}</Heading>
         <IconButton
-          p="6"
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" />}
           variant="unstyled"
@@ -262,7 +265,14 @@ const PostRentalTemplate = ({
                 </Text>
                 <Link
                   _text={{ color: "brand.600" }}
-                  onPress={async () => await getCurrentPosition()}
+                  onPress={async () => {
+                    await getCurrentPosition();
+                    position &&
+                      (await getAddress(
+                        position?.coords.latitude,
+                        position?.coords.longitude
+                      ));
+                  }}
                 >
                   {t("refetch")}
                 </Link>
@@ -296,10 +306,10 @@ const PostRentalTemplate = ({
                   )}
                 </MapView>
               )}
-              {!isLoadingPosition && (
-                <Text color="muted.600">{`${t("address")}: ${
-                  position?.address.city
-                }${position?.address.name}`}</Text>
+              {!isLoadingPosition && address && (
+                <Text color="muted.600">{`${t("address")}: ${address.city}${
+                  address.name
+                }`}</Text>
               )}
             </VStack>
           </VStack>

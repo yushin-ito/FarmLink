@@ -22,14 +22,16 @@ import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SearchDeviceResponse } from "../../hooks/device/mutate";
-import { Position } from "../../hooks/sdk/useLocation";
+import { LocationGeocodedAddress, LocationObject } from "expo-location";
 
 type PostFarmTemplateProps = {
   isLoadingPostFarm: boolean;
   isLoadingPosition: boolean;
   searchResult: SearchDeviceResponse[0] | undefined;
-  position: Position | undefined;
+  position: LocationObject | undefined;
+  address: LocationGeocodedAddress | undefined;
   getCurrentPosition: () => Promise<void>;
+  getAddress: (latitude: number, longitude: number) => Promise<void>;
   postFarm: (
     farmName: string,
     deviceId: string,
@@ -51,7 +53,9 @@ const PostFarmTemplate = ({
   isLoadingPostFarm,
   isLoadingPosition,
   position,
+  address,
   getCurrentPosition,
+  getAddress,
   searchResult,
   postFarm,
   searchDevice,
@@ -75,21 +79,20 @@ const PostFarmTemplate = ({
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       });
+      getAddress(position.coords.latitude, position.coords.longitude);
     }
   }, [privated, isLoadingPosition]);
 
   return (
     <Box flex={1} safeAreaTop>
-      <HStack w="100%" alignItems="center" justifyContent="space-between">
+      <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
-          p="6"
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
           variant="unstyled"
         />
         <Heading textAlign="center">{t("createFarm")}</Heading>
         <IconButton
-          p="6"
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" />}
           variant="unstyled"
@@ -263,7 +266,7 @@ const PostFarmTemplate = ({
                     </Text>
                     <Link
                       _text={{ color: "brand.600" }}
-                      onPress={async () => await getCurrentPosition()}
+                      onPress={getCurrentPosition}
                     >
                       {t("refetch")}
                     </Link>
@@ -297,10 +300,10 @@ const PostFarmTemplate = ({
                       )}
                     </MapView>
                   )}
-                  {!isLoadingPosition && (
-                    <Text color="muted.600">{`${t("address")}: ${
-                      position?.address.city
-                    }${position?.address.name}`}</Text>
+                  {!isLoadingPosition && address && (
+                    <Text color="muted.600">{`${t("address")}: ${address.city}${
+                      address.name
+                    }`}</Text>
                   )}
                 </VStack>
               </VStack>

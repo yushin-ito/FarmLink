@@ -11,46 +11,31 @@ import {
   Heading,
   ScrollView,
 } from "native-base";
-import { GetUserResponse } from "../../hooks/user/query";
-import Avatar from "../molecules/Avatar";
 import { Image } from "expo-image";
 import { GetRentalResponse } from "../../hooks/rental/query";
 import { useWindowDimensions } from "react-native";
 import { useTranslation } from "react-i18next";
 
 type RentalDetailTemplateProps = {
-  user: GetUserResponse | null | undefined;
   rental: GetRentalResponse | undefined;
   goBackNavigationHandler: () => void;
-  settingNavigationHandler: () => void;
 };
 
 const RentalDetailTemplate = ({
-  user,
   rental,
   goBackNavigationHandler,
-  settingNavigationHandler,
 }: RentalDetailTemplateProps) => {
   const { t } = useTranslation("map");
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   return (
-    <Box flex={1} pt="1" safeAreaTop>
-      <HStack alignItems="center" justifyContent="space-between">
+    <Box flex={1} safeAreaTop>
+      <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
-          p="6"
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather />} name="chevron-left" size="2xl" />}
           variant="unstyled"
-        />
-        <Avatar
-          pr="8"
-          text={user?.displayName?.charAt(0)}
-          avatarUrl={user?.avatarUrl}
-          updatedAt={user?.updatedAt}
-          hue={user?.hue}
-          onPress={settingNavigationHandler}
         />
       </HStack>
       <VStack space="2">
@@ -88,8 +73,10 @@ const RentalDetailTemplate = ({
           ))}
         </HStack>
       </VStack>
-      <ScrollView>
-        <Heading>{rental?.rentalName}</Heading>
+      <ScrollView mt="4" px="5">
+        <Heading fontSize="xl" numberOfLines={2} ellipsizeMode="tail">
+          {rental?.rentalName}
+        </Heading>
       </ScrollView>
     </Box>
   );

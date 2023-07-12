@@ -7,13 +7,21 @@ type UseLocationType = {
   onDisable?: () => void;
 };
 
-export type Position = Location.LocationObject & {
-  address: Location.LocationGeocodedAddress;
-};
-
 const useLocation = ({ onError, onDisable }: UseLocationType) => {
-  const [position, setPosition] = useState<Position>();
+  const [position, setPosition] = useState<Location.LocationObject>();
+  const [address, setAddress] = useState<Location.LocationGeocodedAddress>();
   const [isLoading, setIsLoading] = useState(false);
+
+  const getAddress = useCallback(
+    async (latitude: number, longitude: number) => {
+      const address = await Location.reverseGeocodeAsync({
+        longitude,
+        latitude,
+      });
+      setAddress(address[0]);
+    },
+    []
+  );
 
   const getCurrentPosition = useCallback(async () => {
     setIsLoading(true);
@@ -23,18 +31,14 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
         onDisable && onDisable();
         return;
       }
-      const location = await Location.getCurrentPositionAsync({
+      const position = await Location.getCurrentPositionAsync({
         accuracy:
           Platform.OS === "android"
             ? Location.Accuracy.Low
             : Location.Accuracy.Lowest,
       });
-      const address = await Location.reverseGeocodeAsync({
-        longitude: location.coords.longitude,
-        latitude: location.coords.latitude,
-      });
 
-      setPosition({ ...location, address: address[0] });
+      setPosition(position);
     } catch (error) {
       if (error instanceof Error) {
         onError && onError(error);
@@ -44,7 +48,7 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
     }
   }, []);
 
-  return { position, getCurrentPosition, isLoading };
+  return { position, address, getAddress, getCurrentPosition, isLoading };
 };
 
 export default useLocation;

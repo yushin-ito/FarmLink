@@ -80,7 +80,9 @@ const PostRentalScreen = () => {
 
   const {
     position,
+    address,
     getCurrentPosition,
+    getAddress,
     isLoading: isLoadingLocation,
   } = useLocation({
     onDisable: () => {
@@ -133,8 +135,10 @@ const PostRentalScreen = () => {
       isLoadingPostRental={isLoadingPostRental}
       isLoadingPosition={isLoadingLocation}
       position={position}
+      address={address}
       pickImageByLibrary={pickImageByLibrary}
       getCurrentPosition={getCurrentPosition}
+      getAddress={getAddress}
       postRental={postRental}
       goBackNavigationHandler={goBackNavigationHandler}
     />

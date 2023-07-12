@@ -62,16 +62,19 @@ const PostProfileTemplate = ({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Box flex={1} pb="16" justifyContent="space-between" safeAreaTop>
           <VStack>
-            <HStack w="100%" alignItems="center" justifyContent="space-between">
+            <HStack
+              mb="2"
+              px="2"
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <IconButton
-                p="6"
                 onPress={goBackNavigationHandler}
                 icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
                 variant="unstyled"
               />
               <Heading textAlign="center">{t("editProfile")}</Heading>
               <IconButton
-                p="6"
                 onPress={goBackNavigationHandler}
                 icon={<Icon as={<Feather name="x" />} size="xl" />}
                 variant="unstyled"

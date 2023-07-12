@@ -6,14 +6,14 @@ import SearchBar from "../organisms/SearchBar";
 import CircleButton from "../molecules/CircleButton";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { GetRentalsResponse } from "../../hooks/rental/query";
-import { Position } from "../../hooks/sdk/useLocation";
+import { LocationObject } from "expo-location";
 
 type MapTemplateProps = {
   params: {
     latitude: number | null;
     longitude: number | null;
   };
-  position: Position | undefined;
+  position: LocationObject | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
   getCurrentPosition: () => Promise<void>;

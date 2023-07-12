@@ -52,17 +52,20 @@ const PostTalkTemplate = ({
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Box flex={1} pb="10" justifyContent="space-between" safeAreaTop>
-          <VStack space="3">
-            <HStack alignItems="center" justifyContent="space-between">
+          <VStack>
+            <HStack
+              mb="6"
+              px="2"
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <IconButton
-                p="6"
                 onPress={goBackNavigationHandler}
                 icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
                 variant="unstyled"
               />
               <Heading textAlign="center">{t("createTalk")}</Heading>
               <IconButton
-                p="6"
                 onPress={goBackNavigationHandler}
                 icon={<Icon as={<Feather name="x" />} size="xl" />}
                 variant="unstyled"
