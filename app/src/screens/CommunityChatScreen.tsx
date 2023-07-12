@@ -45,18 +45,19 @@ const CommunityChatScreen = ({
     await refetchChats();
   });
 
-  const { mutateAsync: mutateAsyncPostChat } = usePostCommunityChat({
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncPostChat, isLoading: isLoadingPostChat } =
+    usePostCommunityChat({
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("anyError")}
+          />
+        );
+      },
+    });
 
   const { mutateAsync: mutateAsyncDeleteCommunity } = useDeleteCommunity({
     onSuccess: async () => {
@@ -156,6 +157,7 @@ const CommunityChatScreen = ({
       onSend={onSend}
       readMore={fetchNextPage}
       isLoadingChats={isLoadingChats}
+      isLoadingPostChat={isLoadingPostChat}
       hasMore={hasMore}
       goBackNavigationHandler={goBackNavigationHandler}
     />

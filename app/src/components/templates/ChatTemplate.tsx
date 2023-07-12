@@ -31,6 +31,7 @@ type ChatTemplateProps = {
   user: GetUserResponse | null | undefined;
   chats: GetCommunityChatsResponse | GetTalkChatsResponse | undefined;
   isLoadingChats: boolean;
+  isLoadingPostChat: boolean,
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;
   deleteRoom: () => Promise<void>;
@@ -47,6 +48,7 @@ const ChatTemplate = ({
   user,
   chats,
   isLoadingChats,
+  isLoadingPostChat,
   hasMore,
   onSend,
   deleteRoom,
@@ -156,6 +158,7 @@ const ChatTemplate = ({
         />
         <ChatBar
           onSend={onSend}
+          isLoading={isLoadingPostChat}
           pickImageByCamera={pickImageByCamera}
           pickImageByLibrary={pickImageByLibrary}
         />

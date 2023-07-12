@@ -35,10 +35,6 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
       });
 
       setPosition({ ...location, address: address[0] });
-      return {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
     } catch (error) {
       if (error instanceof Error) {
         onError && onError(error);

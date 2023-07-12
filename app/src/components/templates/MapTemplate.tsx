@@ -1,12 +1,7 @@
 import { Box, Icon, Spinner } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useRef } from "react";
-import MapView, {
-  LatLng,
-  Marker,
-  PROVIDER_GOOGLE,
-  Region,
-} from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE, Region } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import CircleButton from "../molecules/CircleButton";
 import { GetFarmsResponse } from "../../hooks/farm/query";
@@ -21,7 +16,7 @@ type MapTemplateProps = {
   position: Position | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
-  getCurrentPosition: () => Promise<LatLng | undefined>;
+  getCurrentPosition: () => Promise<void>;
   onRegionChange: (region: Region) => void;
   isLoadingPosition: boolean;
   rentalDetailNavigationHandler: (rentalId: number) => void;
@@ -127,10 +122,7 @@ const MapTemplate = ({
         position="absolute"
         bottom="24"
         right="8"
-        onPress={async () => {
-          const position = await getCurrentPosition();
-          position && animateToRegion(position.latitude, position.longitude);
-        }}
+        onPress={getCurrentPosition}
       >
         <Icon as={<Feather />} name="navigation" size="xl" color="white" />
       </CircleButton>

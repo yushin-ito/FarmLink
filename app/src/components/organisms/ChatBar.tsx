@@ -7,6 +7,7 @@ import {
   useDisclose,
   Box,
   Center,
+  Spinner,
 } from "native-base";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -20,12 +21,18 @@ type FormValues = {
 
 type ChatBarProps = {
   onSend: (message: string) => Promise<void>;
+  isLoading: boolean;
   pickImageByCamera: () => Promise<void>;
   pickImageByLibrary: () => Promise<void>;
 };
 
 const ChatBar = memo(
-  ({ onSend, pickImageByCamera, pickImageByLibrary }: ChatBarProps) => {
+  ({
+    onSend,
+    isLoading,
+    pickImageByCamera,
+    pickImageByLibrary,
+  }: ChatBarProps) => {
     const { t } = useTranslation("chat");
     const { control, handleSubmit, reset } = useForm<FormValues>();
     const { isOpen, onToggle } = useDisclose();
@@ -95,7 +102,7 @@ const ChatBar = memo(
           })}
           icon={
             <Icon
-              as={<Ionicons />}
+              as={isLoading ? <Spinner color="muted.200" /> : <Ionicons />}
               mb="1"
               name="ios-send"
               size="6"

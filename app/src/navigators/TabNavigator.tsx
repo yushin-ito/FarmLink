@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Ionicons, SimpleLineIcons, AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon, Text } from "native-base";
 import { TabParamList } from "../types";
@@ -73,10 +73,11 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              as={<SimpleLineIcons />}
-              name="location-pin"
+              as={<Feather />}
+              name="map-pin"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
+              mb="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
@@ -92,10 +93,11 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              as={<AntDesign />}
-              name="team"
+              as={<Feather />}
+              name="users"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
+              mb="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
@@ -125,10 +127,11 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              as={<Ionicons />}
-              name="ios-chatbubble-ellipses-outline"
+              as={<Feather />}
+              name="message-circle"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
+              mb="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
@@ -144,10 +147,11 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              as={<Ionicons />}
-              name="ios-settings-outline"
+              as={<Feather />}
+              name="settings"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
+              mb="1"
             />
           ),
           tabBarLabel: ({ focused }) => (

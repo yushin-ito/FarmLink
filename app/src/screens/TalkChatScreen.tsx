@@ -71,18 +71,19 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostChat } = usePostTalkChat({
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncPostChat, isLoading: isLoadingPostChat } =
+    usePostTalkChat({
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("anyError")}
+          />
+        );
+      },
+    });
 
   const { mutateAsync: mutateAsyncPostChatImage } = usePostTalkChatImage({
     onSuccess: async () => {
@@ -135,14 +136,14 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   const onSend = useCallback(
     async (message: string) => {
+      await mutateAsyncPostTalk({
+        talkId: params.talkId,
+        lastMessage: message,
+      });
       await mutateAsyncPostChat({
         message,
         talkId: params.talkId,
         authorId: session?.user.id,
-      });
-      await mutateAsyncPostTalk({
-        talkId: params.talkId,
-        lastMessage: message,
       });
     },
     [session?.user]
@@ -169,6 +170,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
       pickImageByLibrary={pickImageByLibrary}
       readMore={fetchNextPage}
       isLoadingChats={isLoadingChats}
+      isLoadingPostChat={isLoadingPostChat}
       hasMore={hasMore}
       goBackNavigationHandler={goBackNavigationHandler}
     />
