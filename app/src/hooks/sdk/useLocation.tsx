@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import * as Location from "expo-location";
+import { Platform } from "react-native";
 
 type UseLocationType = {
   onError?: (error: Error) => void;
@@ -22,7 +23,12 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
         onDisable && onDisable();
         return;
       }
-      const location = await Location.getCurrentPositionAsync();
+      const location = await Location.getCurrentPositionAsync({
+        accuracy:
+          Platform.OS === "android"
+            ? Location.Accuracy.Low
+            : Location.Accuracy.Lowest,
+      });
       const address = await Location.reverseGeocodeAsync({
         longitude: location.coords.longitude,
         latitude: location.coords.latitude,
