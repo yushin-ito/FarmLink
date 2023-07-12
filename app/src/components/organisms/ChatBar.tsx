@@ -41,13 +41,13 @@ const ChatBar = memo(
       <HStack
         w="100%"
         pt="1"
-        pb="12"
         px="3"
         space="2"
         shadow="1"
         bg="white"
         alignItems="flex-end"
         justifyContent="space-between"
+        safeAreaBottom
       >
         <Center>
           <Box position="absolute" bottom="12">

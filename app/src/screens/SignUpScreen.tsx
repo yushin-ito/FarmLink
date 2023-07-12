@@ -28,9 +28,10 @@ const SignUpScreen = () => {
         if (user && user.identities && user.identities?.length > 0) {
           mutateAsyncPostUser({
             userId: user.id,
-            displayName: user.user_metadata.displayName,
-            introduction: t("notExistProfile"),
-            hue: Math.floor(Math.random() * 360).toString(),
+            name: user.user_metadata.displayName,
+            color: `hsl(${Math.floor(
+              Math.random() * 360
+            ).toString()}, 60%, 60%)`,
           });
           showAlert(
             toast,
@@ -82,7 +83,7 @@ const SignUpScreen = () => {
           <Alert
             status="error"
             onPressCloseButton={() => toast.closeAll()}
-            text={t("anyError")}
+            text={t("error")}
           />
         );
       },
@@ -107,11 +108,16 @@ const SignUpScreen = () => {
     navigation.navigate("SignIn");
   }, []);
 
+  const goBackNavigationHandler = useCallback(() => {
+    navigation.goBack();
+  }, []);
+
   return (
     <SignUpTemplate
       isLoading={isLoadingSignUp || isLoadingPostUser}
       signUpWithEmail={signUpWithEmail}
       signInNavigationHandler={signInNavigationHandler}
+      goBackNavigationHandler={goBackNavigationHandler}
     />
   );
 };

@@ -48,7 +48,7 @@ const searchUsers = async ({
     .from("user")
     .select("*")
     .neq("userId", userId)
-    .ilike("displayName", `%${text}%`);
+    .ilike("name", `%${text}%`);
   if (error) {
     throw error;
   }

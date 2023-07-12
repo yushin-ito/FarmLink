@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { MapStackParamList } from "../types";
 import MapScreen from "../screens/MapScreen";
-import SearchFarmScreen from "../screens/SearchFarmScreen";
+import SearchMapScreen from "../screens/SearchMapScreen";
 import RentalDetailScreen from "../screens/RentalDetailScreen";
 
 const MapStack = createNativeStackNavigator<MapStackParamList>();
@@ -17,7 +17,7 @@ const MapNavigator = () => {
       <MapStack.Group
         screenOptions={{ animation: "none", gestureEnabled: false }}
       >
-        <MapStack.Screen name="SearchFarm" component={SearchFarmScreen} />
+        <MapStack.Screen name="SearchMap" component={SearchMapScreen} />
       </MapStack.Group>
     </MapStack.Navigator>
   );

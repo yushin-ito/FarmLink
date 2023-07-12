@@ -25,14 +25,13 @@ const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
       >
         <HStack alignItems="center" space="3">
           <Avatar
-            text={item?.to.displayName?.charAt(0)}
-            avatarUrl={item?.to.avatarUrl}
-            updatedAt={item?.to.updatedAt}
-            hue={item?.to.hue}
+            text={item.to.name.charAt(0)}
+            uri={item.to.avatarUrl}
+            color={item.to.color}
             size="9"
           />
           <Text bold fontSize="md">
-            {item?.to.displayName}
+            {item.to.name}
           </Text>
         </HStack>
         <Icon as={<Feather />} name="chevron-right" size="md" ml="2" />

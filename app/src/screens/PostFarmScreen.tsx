@@ -32,7 +32,7 @@ const PostFarmScreen = () => {
           <Alert
             status="error"
             onPressCloseButton={() => toast.closeAll()}
-            text={t("anyError")}
+            text={t("error")}
           />
         );
       },
@@ -48,7 +48,7 @@ const PostFarmScreen = () => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -77,7 +77,7 @@ const PostFarmScreen = () => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -93,13 +93,13 @@ const PostFarmScreen = () => {
 
   const postFarm = useCallback(
     async (
-      farmName: string,
+      name: string,
       deviceId: string,
       description: string,
       privated: boolean
     ) => {
       await mutateAsyncPostFarm({
-        farmName,
+        name,
         deviceId,
         description,
         ownerId: session?.user.id,

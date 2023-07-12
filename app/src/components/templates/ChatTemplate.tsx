@@ -20,7 +20,6 @@ import ChatBar from "../organisms/ChatBar";
 import { GetCommunityChatsResponse } from "../../hooks/community/query";
 import { GetUserResponse } from "../../hooks/user/query";
 import { GetTalkChatsResponse } from "../../hooks/talk/query";
-import BackButton from "../molecules/BackButton";
 import ChatActionSheet from "../organisms/ChatActionSheet";
 import { useTranslation } from "react-i18next";
 
@@ -31,7 +30,7 @@ type ChatTemplateProps = {
   user: GetUserResponse | null | undefined;
   chats: GetCommunityChatsResponse | GetTalkChatsResponse | undefined;
   isLoadingChats: boolean;
-  isLoadingPostChat: boolean,
+  isLoadingPostChat: boolean;
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;
   deleteRoom: () => Promise<void>;
@@ -72,7 +71,7 @@ const ChatTemplate = ({
     <KeyboardAvoidingView
       flex={1}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={-45}
+      keyboardVerticalOffset={-30}
     >
       <Box flex={1} pt="5" safeAreaTop>
         <ChatActionSheet isOpen={isOpen} onClose={onClose} />
@@ -83,7 +82,11 @@ const ChatTemplate = ({
           justifyContent="space-between"
         >
           <HStack alignItems="center" space="3">
-            <BackButton onPress={goBackNavigationHandler} />
+            <IconButton
+              onPress={goBackNavigationHandler}
+              icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+              variant="unstyled"
+            />
             <Heading fontSize="xl">{title}</Heading>
           </HStack>
           <Menu

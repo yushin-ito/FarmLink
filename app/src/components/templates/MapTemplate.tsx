@@ -10,8 +10,8 @@ import { LocationObject } from "expo-location";
 
 type MapTemplateProps = {
   params: {
-    latitude: number | null;
-    longitude: number | null;
+    latitude: number | null | undefined;
+    longitude: number | null | undefined;
   };
   position: LocationObject | undefined;
   farms: GetFarmsResponse | undefined;
@@ -20,7 +20,7 @@ type MapTemplateProps = {
   onRegionChange: (region: Region) => void;
   isLoadingPosition: boolean;
   rentalDetailNavigationHandler: (rentalId: number) => void;
-  searchFarmNavigationHandler: () => void;
+  searchMapNavigationHandler: () => void;
 };
 
 const MapTemplate = ({
@@ -32,18 +32,18 @@ const MapTemplate = ({
   isLoadingPosition,
   onRegionChange,
   rentalDetailNavigationHandler,
-  searchFarmNavigationHandler,
+  searchMapNavigationHandler,
 }: MapTemplateProps) => {
   const mapRef = useRef<MapView>(null);
 
   const animateToRegion = useCallback(
-    (latitude: number | null, longitude: number | null) => {
+    (latitude: number, longitude: number) => {
       if (mapRef.current && latitude && longitude) {
         mapRef.current.animateToRegion({
           latitude,
           longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
+          latitudeDelta: 0.0005,
+          longitudeDelta: 0.0005,
         });
       }
     },
@@ -51,7 +51,9 @@ const MapTemplate = ({
   );
 
   useEffect(() => {
-    params && animateToRegion(params.latitude, params.longitude);
+    params?.latitude &&
+      params?.longitude &&
+      animateToRegion(params.latitude, params.longitude);
   }, [mapRef.current, params]);
 
   useEffect(() => {
@@ -116,7 +118,7 @@ const MapTemplate = ({
         top="16"
         isReadOnly
         alignSelf="center"
-        onPressIn={searchFarmNavigationHandler}
+        onPressIn={searchMapNavigationHandler}
       />
       <CircleButton
         position="absolute"

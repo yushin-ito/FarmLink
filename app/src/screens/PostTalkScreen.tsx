@@ -35,7 +35,7 @@ const PostTalkScreen = () => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -54,7 +54,7 @@ const PostTalkScreen = () => {
           <Alert
             status="error"
             onPressCloseButton={() => toast.closeAll()}
-            text={t("anyError")}
+            text={t("error")}
           />
         );
       },
@@ -73,7 +73,7 @@ const PostTalkScreen = () => {
 
   const postTalk = useCallback(
     async (recieverId: string) => {
-      await mutateAsyncPostTalk({
+      session && await mutateAsyncPostTalk({
         senderId: session?.user.id,
         recieverId,
       });

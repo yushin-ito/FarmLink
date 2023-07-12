@@ -32,7 +32,7 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -49,8 +49,8 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
   }, []);
 
   const talkChatNavigationHandler = useCallback(
-    (talkId: number, displayName: string | null | undefined) => {
-      navigation.navigate("TalkChat", { talkId, displayName });
+    (talkId: number, name: string | null | undefined) => {
+      navigation.navigate("TalkChat", { talkId, name });
     },
     []
   );

@@ -1,7 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
 import { Farm, UseMutationResult } from "../../../types/db";
-import { PostgrestError } from "@supabase/supabase-js";
 
 export type PostFarmResponse = Awaited<ReturnType<typeof postFarm>>;
 export type DeleteFarmResponse = Awaited<
@@ -37,7 +36,7 @@ const searchFarms = async (text: string) => {
   const { data, error } = await supabase
     .from("farm")
     .select()
-    .ilike("farmName", `%${text}%`);
+    .ilike("name", `%${text}%`);
   if (error) {
     throw error;
   }
@@ -47,7 +46,7 @@ const searchFarms = async (text: string) => {
 export const usePostFarm = ({
   onSuccess,
   onError,
-}: UseMutationResult<PostFarmResponse, PostgrestError>) =>
+}: UseMutationResult<PostFarmResponse, Error>) =>
   useMutation({
     mutationFn: postFarm,
     onSuccess,
@@ -57,7 +56,7 @@ export const usePostFarm = ({
 export const useDeleteFarm = ({
   onSuccess,
   onError,
-}: UseMutationResult<DeleteFarmResponse, PostgrestError>) =>
+}: UseMutationResult<DeleteFarmResponse, Error>) =>
   useMutation({
     mutationFn: deleteFarm,
     onSuccess,
@@ -67,7 +66,7 @@ export const useDeleteFarm = ({
 export const useSearchFarms = ({
   onSuccess,
   onError,
-}: UseMutationResult<SearchFarmsResponse, PostgrestError>) =>
+}: UseMutationResult<SearchFarmsResponse, Error>) =>
   useMutation({
     mutationFn: searchFarms,
     onSuccess,

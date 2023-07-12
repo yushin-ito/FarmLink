@@ -48,7 +48,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -65,7 +65,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -79,7 +79,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
           <Alert
             status="error"
             onPressCloseButton={() => toast.closeAll()}
-            text={t("anyError")}
+            text={t("error")}
           />
         );
       },
@@ -95,7 +95,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -103,14 +103,14 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   const { pickImageByCamera, pickImageByLibrary } = useImage({
     onSuccess: async ({ base64, size }) => {
-      if (session?.user && base64) {
-        await mutateAsyncPostChatImage({
+      session &&
+        base64 &&
+        (await mutateAsyncPostChatImage({
           base64,
           talkId: params.talkId,
-          authorId: session?.user.id,
+          authorId: session.user.id,
           size,
-        });
-      }
+        }));
     },
     onDisable: () => {
       showAlert(
@@ -128,7 +128,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -140,11 +140,12 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
         talkId: params.talkId,
         lastMessage: message,
       });
-      await mutateAsyncPostChat({
-        message,
-        talkId: params.talkId,
-        authorId: session?.user.id,
-      });
+      session &&
+        (await mutateAsyncPostChat({
+          message,
+          talkId: params.talkId,
+          authorId: session.user.id,
+        }));
     },
     [session?.user]
   );
@@ -161,7 +162,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     <ChatTemplate
       type="talk"
       locale={locale}
-      title={params.displayName}
+      title={params.name}
       user={user}
       chats={chats}
       onSend={onSend}

@@ -63,13 +63,17 @@ const RentalItem = memo(({ item, deleteRental, onPress }: RentalItemProps) => {
             justifyContent="space-between"
           >
             <HStack alignItems="center" space="3">
-              <Box bg="muted.200">
-                {item?.imageUrls && (
-                  <Image source={{ uri: item?.imageUrls[0] }} />
+              <Box size="12" rounded="sm" bg="muted.200">
+                {item.imageUrls && (
+                  <Image
+                    style={{ flex: 1 }}
+                    source={{ uri: item.imageUrls[0] }}
+                    contentFit="contain"
+                  />
                 )}
               </Box>
               <Text bold fontSize="md">
-                {item?.rentalName}
+                {item?.name}
               </Text>
             </HStack>
             <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />

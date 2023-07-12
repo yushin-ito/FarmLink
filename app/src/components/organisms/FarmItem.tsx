@@ -26,7 +26,7 @@ const FarmItem = memo(({ item, deleteFarm, onPress }: FarmItemProps) => {
         justifyContent="space-between"
       >
         <Text bold fontSize="md">
-          {item.farmName}
+          {item.name}
         </Text>
         <IconButton
           onPress={() =>

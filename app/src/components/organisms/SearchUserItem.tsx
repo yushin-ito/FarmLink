@@ -27,14 +27,13 @@ const SearchUserItem = memo(
         >
           <HStack alignItems="center" space="3">
             <Avatar
-              text={item?.displayName?.charAt(0)}
-              avatarUrl={item?.avatarUrl}
-              updatedAt={item?.updatedAt}
-              hue={item?.hue}
+              text={item.name.charAt(0)}
+              uri={item.avatarUrl}
+              color={item.color}
               size="9"
             />
             <Text bold fontSize="md">
-              {item?.displayName}
+              {item?.name}
             </Text>
           </HStack>
           <Center

@@ -26,23 +26,19 @@ const PostCommunityScreen = () => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
   });
 
   const postCommunity = useCallback(
-    async (
-      communityName: string,
-      description: string,
-      category: string
-    ) => {
+    async (name: string, description: string, category: string) => {
       await mutateAsync({
-        communityName,
+        name,
         description,
         category,
-        hue: Math.floor(Math.random() * 360).toString(),
+        color: `hsl(${Math.floor(Math.random() * 360).toString()}, 60%, 60%)`,
       });
     },
     []

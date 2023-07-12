@@ -22,12 +22,12 @@ import { GetUserResponse } from "../../hooks/user/query";
 type PostProfileTemplateProps = {
   user: GetUserResponse | null | undefined;
   isLoading: boolean;
-  postUser: (displayName: string, introduction: string) => Promise<void>;
+  postUser: (name: string, introduction: string) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
 
 type FormValues = {
-  displayName: string;
+  name: string;
   introduction: string;
 };
 
@@ -46,8 +46,8 @@ const PostProfileTemplate = ({
   } = useForm<FormValues>();
 
   useEffect(() => {
-    if (user?.displayName) {
-      setValue("displayName", user.displayName);
+    if (user?.name) {
+      setValue("name", user.name);
     }
     if (user?.introduction) {
       setValue("introduction", user.introduction);
@@ -81,10 +81,10 @@ const PostProfileTemplate = ({
               />
             </HStack>
             <VStack px="10">
-              <FormControl isInvalid={"displayName" in errors}>
+              <FormControl isInvalid={"name" in errors}>
                 <FormControl.Label>{t("displayName")}</FormControl.Label>
                 <Controller
-                  name="displayName"
+                  name="name"
                   control={control}
                   render={({ field: { value, onChange } }) => {
                     return (
@@ -94,7 +94,7 @@ const PostProfileTemplate = ({
                           returnKeyType="done"
                           InputRightElement={
                             <IconButton
-                              onPress={() => setValue("displayName", "")}
+                              onPress={() => setValue("name", "")}
                               icon={
                                 <Icon
                                   as={<Feather name="x" />}
@@ -117,8 +117,8 @@ const PostProfileTemplate = ({
                               <Icon as={<Feather name="alert-circle" />} />
                             }
                           >
-                            {errors.displayName && (
-                              <Text>{errors.displayName.message}</Text>
+                            {errors.name && (
+                              <Text>{errors.name.message}</Text>
                             )}
                           </FormControl.ErrorMessage>
                           <Text color="muted.600">{value?.length}/20</Text>
@@ -197,7 +197,7 @@ const PostProfileTemplate = ({
             colorScheme="brand"
             isLoading={isLoading}
             onPress={handleSubmit(async (data) => {
-              await postUser(data.displayName, data.introduction);
+              await postUser(data.name, data.introduction);
             })}
           >
             {t("save")}

@@ -1,46 +1,34 @@
-import React, { ReactNode, memo } from "react";
+import React, { memo } from "react";
 import {
   Pressable,
   IPressableProps,
   Text,
   Avatar as NativeBaseAvatar,
-  Center,
-  Spinner,
+  Box,
 } from "native-base";
-import { supabaseUrl } from "../../supabase";
 
 type AvatarProps = {
-  text?: string | null;
-  avatarUrl?: string | null;
-  updatedAt?: string | null;
-  hue?: string | null;
+  text: string | undefined;
+  uri: string | null | undefined;
   isLoading?: boolean;
   size?: string;
   fontSize?: string;
-  badge?: ReactNode;
+  color: string | undefined;
 };
 
 const Avatar = memo(
   ({
     text,
-    avatarUrl,
-    updatedAt,
-    hue,
+    uri,
+    color,
     isLoading,
     size = "10",
     fontSize = "md",
-    badge,
     ...props
   }: AvatarProps & IPressableProps) => {
-    if (isLoading) {
-      return (
-        <Center size={size}>
-          <Spinner color="muted.400" />
-        </Center>
-      );
-    }
-
-    return (
+    return isLoading ? (
+      <Box size={size} bg="muted.300" />
+    ) : (
       <Pressable
         _pressed={{
           opacity: 0.5,
@@ -50,17 +38,12 @@ const Avatar = memo(
         {
           <NativeBaseAvatar
             size={size}
-            source={{
-              uri: avatarUrl?.match(supabaseUrl)
-                ? avatarUrl + `?${updatedAt}`
-                : avatarUrl ?? undefined,
-            }}
-            bg={avatarUrl ? "muted.300" : `hsl(${hue}, 60%, 60%)`}
+            source={{ uri: uri ?? undefined, cache: "reload" }}
+            bg={uri ? "muted.300" : color}
           >
             <Text color="white" fontSize={fontSize}>
               {text}
             </Text>
-            {badge}
           </NativeBaseAvatar>
         }
       </Pressable>

@@ -29,7 +29,7 @@ const FarmDeviceScreen = () => {
 
   return (
     <FarmDeviceTemplate
-      title={route.params.farmName}
+      title={route.params.name}
       user={user}
       device={device}
       settingNavigationHandler={settingNavigationHandler}

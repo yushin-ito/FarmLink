@@ -1,4 +1,3 @@
-import { PostgrestError } from "@supabase/supabase-js";
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
 import { UseMutationResult } from "../../../types/db";
@@ -19,7 +18,7 @@ const searchDevice = async (text: string) => {
 export const useSearchDevice = ({
   onSuccess,
   onError,
-}: UseMutationResult<SearchDeviceResponse, PostgrestError>) =>
+}: UseMutationResult<SearchDeviceResponse, Error>) =>
   useMutation({
     mutationFn: searchDevice,
     onSuccess,

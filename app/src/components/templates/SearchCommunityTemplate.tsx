@@ -22,7 +22,7 @@ type SearchCommunityTemplateProps = {
   isLoadingSearchCommunities: boolean;
   communityChatNavigationHandler: (
     communityId: number,
-    communityName: string | null
+    name: string | null
   ) => void;
   goBackNavigationHandler: () => void;
 };
@@ -98,7 +98,7 @@ const SearchCommunityTemplate = ({
                   onPress={() =>
                     communityChatNavigationHandler(
                       item.communityId,
-                      item.communityName
+                      item.name
                     )
                   }
                 />

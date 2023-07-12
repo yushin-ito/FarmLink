@@ -1,7 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
 import { Chat, Talk, UseMutationResult } from "../../../types/db";
-import { PostgrestError } from "@supabase/supabase-js";
 import { decode } from "base64-arraybuffer";
 
 export type PostTalkResponse = Awaited<ReturnType<typeof postTalk>>;
@@ -82,7 +81,7 @@ export const usePostTalkChatImage = ({
 export const usePostTalk = ({
   onSuccess,
   onError,
-}: UseMutationResult<PostTalkResponse, PostgrestError>) =>
+}: UseMutationResult<PostTalkResponse, Error>) =>
   useMutation({
     mutationFn: postTalk,
     onSuccess,
@@ -92,7 +91,7 @@ export const usePostTalk = ({
 export const useDeleteTalk = ({
   onSuccess,
   onError,
-}: UseMutationResult<DeleteTalkResponse, PostgrestError>) =>
+}: UseMutationResult<DeleteTalkResponse, Error>) =>
   useMutation({
     mutationFn: deleteTalk,
     onSuccess,
@@ -102,7 +101,7 @@ export const useDeleteTalk = ({
 export const usePostTalkChat = ({
   onSuccess,
   onError,
-}: UseMutationResult<PostTalkChatResponse, PostgrestError>) =>
+}: UseMutationResult<PostTalkChatResponse, Error>) =>
   useMutation({
     mutationFn: postTalkChat,
     onSuccess,

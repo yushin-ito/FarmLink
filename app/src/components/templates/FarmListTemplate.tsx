@@ -28,7 +28,7 @@ type FarmListTemplateProps = {
   deleteFarm: (farmId: number) => Promise<void>;
   farmDeviceNavigationHandler: (
     deviceId: string | null,
-    farmName: string | null
+    name: string | null
   ) => void;
   postFarmNavigationHandler: () => void;
   settingNavigationHandler: () => void;
@@ -60,10 +60,9 @@ const FarmListTemplate = ({
         <HStack alignItems="center" justifyContent="space-between">
           <Heading>{t("myFarm")}</Heading>
           <Avatar
-            text={user?.displayName?.charAt(0)}
-            avatarUrl={user?.avatarUrl}
-            updatedAt={user?.updatedAt}
-            hue={user?.hue}
+            text={user?.name?.charAt(0)}
+            uri={user?.avatarUrl}
+            color={user?.color}
             onPress={settingNavigationHandler}
           />
         </HStack>
@@ -78,7 +77,7 @@ const FarmListTemplate = ({
             item={item}
             deleteFarm={deleteFarm}
             onPress={() =>
-              farmDeviceNavigationHandler(item.deviceId, item.farmName)
+              farmDeviceNavigationHandler(item.deviceId, item.name)
             }
           />
         )}
@@ -93,7 +92,6 @@ const FarmListTemplate = ({
             {t("notExistFarm")}
           </Text>
         }
-        keyExtractor={(item) => item.farmId.toString()}
         refreshControl={
           <RefreshControl
             refreshing={isRefetchingFarms}

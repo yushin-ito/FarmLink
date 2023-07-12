@@ -21,7 +21,7 @@ import { Category, getCategories } from "../../functions";
 type PostCommunityTemplateProps = {
   isLoading: boolean;
   postCommunity: (
-    communityName: string,
+    name: string,
     description: string,
     category: string
   ) => Promise<void>;
@@ -29,7 +29,7 @@ type PostCommunityTemplateProps = {
 };
 
 type FormValues = {
-  communityName: string;
+  name: string;
   description: string;
   category: string;
 };
@@ -73,10 +73,10 @@ const PostCommunityTemplate = ({
       >
         <Box flex={1} pb="16" justifyContent="space-between">
           <VStack px="10" space="6">
-            <FormControl isRequired isInvalid={"communityName" in errors}>
+            <FormControl isRequired isInvalid={"name" in errors}>
               <FormControl.Label>{t("communityName")}</FormControl.Label>
               <Controller
-                name="communityName"
+                name="name"
                 control={control}
                 render={({ field: { value, onChange } }) => {
                   return (
@@ -85,7 +85,7 @@ const PostCommunityTemplate = ({
                         returnKeyType="done"
                         InputRightElement={
                           <IconButton
-                            onPress={() => setValue("communityName", "")}
+                            onPress={() => setValue("name", "")}
                             icon={
                               <Icon
                                 as={<Feather name="x" />}
@@ -108,9 +108,7 @@ const PostCommunityTemplate = ({
                             <Icon as={<Feather name="alert-circle" />} />
                           }
                         >
-                          {errors.communityName && (
-                            <Text>{errors.communityName.message}</Text>
-                          )}
+                          {errors.name && <Text>{errors.name.message}</Text>}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
                           {value?.length ? value.length : 0} / 20
@@ -197,11 +195,7 @@ const PostCommunityTemplate = ({
             colorScheme="brand"
             isLoading={isLoading}
             onPress={handleSubmit((data) => {
-              postCommunity(
-                data.communityName,
-                data.description,
-                data.category
-              );
+              postCommunity(data.name, data.description, data.category);
             })}
           >
             {t("create")}

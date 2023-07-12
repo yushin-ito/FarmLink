@@ -28,18 +28,18 @@ const PostProfileScreen = () => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
   });
 
   const postUser = useCallback(
-    async (displayName: string, introduction: string) => {
+    async (name: string, introduction: string) => {
       if (session?.user) {
         await mutateAsync({
           userId: session?.user.id,
-          displayName,
+          name,
           introduction,
         });
       }

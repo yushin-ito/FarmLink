@@ -34,7 +34,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -51,8 +51,8 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   }, []);
 
   const farmDeviceNavigationHandler = useCallback(
-    (deviceId: string | null, farmName: string | null) => {
-      navigation.navigate("FarmDevice", { deviceId, farmName });
+    (deviceId: string | null, name: string | null) => {
+      navigation.navigate("FarmDevice", { deviceId, name });
     },
     []
   );

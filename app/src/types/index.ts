@@ -25,8 +25,11 @@ export type TabParamList = {
 };
 
 export type MapStackParamList = {
-  Map: { latitude: number | null; longitude: number | null };
-  SearchFarm: undefined;
+  Map: {
+    latitude: number | null | undefined;
+    longitude: number | null | undefined;
+  };
+  SearchMap: undefined;
   RentalDetail: { rentalId: number };
   FarmDetail: { farmId: number };
 };
@@ -35,7 +38,7 @@ export type CommunityStackParamList = {
   CommunityList: undefined;
   CommunityChat: {
     communityId: number;
-    communityName: string | null;
+    name: string | null;
     category: string;
   };
   PostCommunity: undefined;
@@ -44,13 +47,13 @@ export type CommunityStackParamList = {
 
 export type FarmStackParamList = {
   FarmList: undefined;
-  FarmDevice: { deviceId: string | null; farmName: string | null };
+  FarmDevice: { deviceId: string | null; name: string | null };
   PostFarm: undefined;
 };
 
 export type TalkStackParamList = {
   TalkList: undefined;
-  TalkChat: { talkId: number; displayName: string | null | undefined };
+  TalkChat: { talkId: number; name: string | null | undefined };
   PostTalk: undefined;
   SearchTalk: undefined;
 };

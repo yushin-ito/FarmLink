@@ -1,7 +1,7 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 
-import { Box, Heading, HStack, IconButton, Icon, FlatList } from "native-base";
+import { Box, Heading, HStack, IconButton, Icon, FlatList, Text } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import RentalItem from "../organisms/RentalItem";
@@ -51,6 +51,17 @@ const RentalListTemplate = ({
               }
             />
           )}
+          ListEmptyComponent={
+            <Text
+              bold
+              lineHeight="2xl"
+              fontSize="md"
+              textAlign="center"
+              color="muted.600"
+            >
+              {t("notExistRental")}
+            </Text>
+          }
         />
       </Box>
     </Box>

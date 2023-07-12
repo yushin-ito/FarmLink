@@ -42,7 +42,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
           <Alert
             status="error"
             onPressCloseButton={() => toast.closeAll()}
-            text={t("anyError")}
+            text={t("error")}
           />
         );
       },
@@ -70,7 +70,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },

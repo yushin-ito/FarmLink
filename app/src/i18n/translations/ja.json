@@ -1,6 +1,7 @@
 {
   "auth": {
     "app": " FarmLinkは安心して農業が始められるアプリです。",
+    "enter": "入力してください",
     "displayName": "ユーザー名",
     "displayNameRequired": "ユーザー名を入力してください",
     "email": "メールアドレス",
@@ -32,9 +33,19 @@
     "fetchError": "データの取得に失敗しました"
   },
   "map": {
+    "farm": "農園",
+    "rental": "レンタル",
     "search": "探す",
+    "fee": "料金",
+    "equipment": "設備",
+    "area": "面積",
+    "unknown": "不明",
+    "description": "詳細",
     "permitRequestGPS": "位置情報を許可してください",
-    "anyError": "エラーが発生しました"
+    "edit": "編集する",
+    "chat": "チャットする",
+    "error": "エラーが発生しました",
+    "dev": "この機能は現在開発中です"
   },
   "chat": {
     "create": "作成",
@@ -44,7 +55,7 @@
     "delete": "削除",
     "cancel": "キャンセル",
     "permitRequestCam": "カメラを許可してください",
-    "anyError": "エラーが発生しました"
+    "error": "エラーが発生しました"
   },
   "community": {
     "community": "コミュニティ",
@@ -71,11 +82,11 @@
     "disease": "病気",
     "people": "参加人数",
     "join": "参加する",
-    "anyError": "エラーが発生しました"
+    "error": "エラーが発生しました"
   },
   "farm": {
     "myFarm": "自分の農園",
-    "anyError": "エラーが発生しました",
+    "error": "エラーが発生しました",
     "createFarm": "農園を作成",
     "deleteFarm": "農園削除",
     "askDeleteFarm": "農園を削除してもよろしいですか",
@@ -99,7 +110,7 @@
   },
   "talk": {
     "talk": "トーク",
-    "anyError": "エラーが発生しました",
+    "error": "エラーが発生しました",
     "createTalk": "トークを作成",
     "searchUser": "ユーザーを検索",
     "notExistTalk": "右下のボタンからユーザーを追加して\nトークを開始しましょう",
@@ -122,7 +133,7 @@
     "image": "写真を選択",
     "deleteImage": "画像を削除",
     "cancel": "キャンセル",
-    "anyError": "エラーが発生しました",
+    "error": "エラーが発生しました",
     "displayName": "ユーザー名",
     "displayNameRequired": "ユーザー名を入力してください",
     "displayNameMaxLength": "ユーザー名は20文字以内で入力してください",
@@ -132,6 +143,7 @@
     "signoutError": "サインアウトに失敗しました",
     "save": "保存",
     "rentalList": "レンタル一覧",
+    "notExistRental": "レンタル中の農園はありません",
     "delete": "削除",
     "deleteRental": "レンタル削除",
     "askDeleteRental": "レンタルを削除してもよろしいですか",

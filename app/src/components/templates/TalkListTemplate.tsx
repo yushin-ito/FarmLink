@@ -29,7 +29,7 @@ type TalkListTemplateProps = {
   deleteTalk: (talkId: number) => Promise<void>;
   talkChatNavigationHandler: (
     talkId: number,
-    displayName: string | null | undefined
+    name: string | null | undefined
   ) => void;
   postTalkNavigationHandler: () => void;
   settingNavigationHandler: () => void;
@@ -57,10 +57,9 @@ const TalkListTemplate = ({
         <HStack alignItems="center" justifyContent="space-between">
           <Heading>{t("talk")}</Heading>
           <Avatar
-            text={user?.displayName?.charAt(0)}
-            avatarUrl={user?.avatarUrl}
-            updatedAt={user?.updatedAt}
-            hue={user?.hue}
+            text={user?.name?.charAt(0)}
+            uri={user?.avatarUrl}
+            color={user?.name}
             onPress={settingNavigationHandler}
           />
         </HStack>
@@ -90,7 +89,7 @@ const TalkListTemplate = ({
               locale={locale}
               deleteTalk={deleteTalk}
               onPress={() =>
-                talkChatNavigationHandler(item.talkId, item.to.displayName)
+                talkChatNavigationHandler(item.talkId, item.to.name)
               }
             />
           )}

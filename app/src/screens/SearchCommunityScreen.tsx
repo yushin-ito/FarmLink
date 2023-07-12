@@ -34,7 +34,7 @@ const SearchCommunitieScreen = ({
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -49,11 +49,11 @@ const SearchCommunitieScreen = ({
   }, []);
 
   const communityChatNavigationHandler = useCallback(
-    (communityId: number, communityName: string | null) => {
+    (communityId: number, name: string | null) => {
       navigation.goBack();
       navigation.navigate("CommunityChat", {
         communityId,
-        communityName,
+        name,
         category: params.category,
       });
     },

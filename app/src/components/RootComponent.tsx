@@ -15,7 +15,6 @@ const RootComponent = () => {
   return (
     <NavigationContainer theme={theme}>
       <StatusBar style="auto" />
-
       <RootNavigator />
     </NavigationContainer>
   );

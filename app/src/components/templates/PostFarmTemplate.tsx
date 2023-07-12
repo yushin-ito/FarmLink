@@ -33,7 +33,7 @@ type PostFarmTemplateProps = {
   getCurrentPosition: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
   postFarm: (
-    farmName: string,
+    name: string,
     deviceId: string,
     description: string,
     privated: boolean
@@ -43,7 +43,7 @@ type PostFarmTemplateProps = {
 };
 
 type FormValues = {
-  farmName: string;
+  name: string;
   deviceId: string;
   private: boolean;
   description: string;
@@ -104,10 +104,10 @@ const PostFarmTemplate = ({
       >
         <Box flex={1} pb="16" justifyContent="space-between">
           <VStack px="10" space="6">
-            <FormControl isRequired isInvalid={"farmName" in errors}>
+            <FormControl isRequired isInvalid={"name" in errors}>
               <FormControl.Label>{t("farmName")}</FormControl.Label>
               <Controller
-                name="farmName"
+                name="name"
                 control={control}
                 render={({ field: { value, onChange } }) => {
                   return (
@@ -116,7 +116,7 @@ const PostFarmTemplate = ({
                         returnKeyType="done"
                         InputRightElement={
                           <IconButton
-                            onPress={() => setValue("farmName", "")}
+                            onPress={() => setValue("name", "")}
                             icon={
                               <Icon
                                 as={<Feather name="x" />}
@@ -139,8 +139,8 @@ const PostFarmTemplate = ({
                             <Icon as={<Feather name="alert-circle" />} />
                           }
                         >
-                          {errors.farmName && (
-                            <Text>{errors.farmName.message}</Text>
+                          {errors.name && (
+                            <Text>{errors.name.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
@@ -319,7 +319,7 @@ const PostFarmTemplate = ({
             isLoading={isLoadingPostFarm}
             onPress={handleSubmit(async (data) => {
               await postFarm(
-                data.farmName,
+                data.name,
                 data.deviceId,
                 data.description,
                 privated

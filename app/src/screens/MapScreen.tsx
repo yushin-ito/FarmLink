@@ -14,8 +14,8 @@ import { useRoute, RouteProp } from "@react-navigation/native";
 const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { t } = useTranslation("map");
   const toast = useToast();
-  const { data: queryFarms } = useQueryFarms();
-  const { data: queryRentals } = useQueryRentals();
+  const { data: queryFarms } = useQueryFarms(null);
+  const { data: queryRentals } = useQueryRentals(null);
   const [farms, setFarms] = useState<GetFarmsResponse>();
   const [rentals, setRentals] = useState<GetRentalsResponse>();
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
@@ -45,7 +45,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -80,8 +80,8 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     navigation.navigate("RentalDetail", { rentalId });
   }, []);
 
-  const searchFarmNavigationHandler = useCallback(() => {
-    navigation.navigate("SearchFarm");
+  const searchMapNavigationHandler = useCallback(() => {
+    navigation.navigate("SearchMap");
   }, []);
 
   return (
@@ -94,7 +94,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       getCurrentPosition={getCurrentPosition}
       isLoadingPosition={isLoadingLocation}
       rentalDetailNavigationHandler={rentalDetailNavigationHandler}
-      searchFarmNavigationHandler={searchFarmNavigationHandler}
+      searchMapNavigationHandler={searchMapNavigationHandler}
     />
   );
 };

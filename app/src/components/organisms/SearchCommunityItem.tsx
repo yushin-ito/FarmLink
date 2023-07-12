@@ -26,14 +26,13 @@ const SearchCommunityItem = memo(
         >
           <HStack alignItems="center" space="3">
             <Avatar
-              text={item?.communityName?.charAt(0)}
-              avatarUrl={item?.imageUrl}
-              updatedAt={item?.updatedAt}
-              hue={item?.hue}
               size="9"
+              text={item.name.charAt(0)}
+              uri={item.imageUrl}
+              color={item.color}
             />
             <Text bold fontSize="md">
-              {item?.communityName}
+              {item.name}
             </Text>
           </HStack>
           <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />

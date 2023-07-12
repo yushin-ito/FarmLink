@@ -19,7 +19,7 @@ const SearchTalkScreen = ({
     setSearchResult(
       data?.filter(
         (item) =>
-          item.to?.displayName
+          item.to?.name
             ?.toUpperCase()
             .indexOf(text.trim().toUpperCase()) !== -1
       )
@@ -27,9 +27,9 @@ const SearchTalkScreen = ({
   }, []);
 
   const talkChatNavigationHandler = useCallback(
-    (talkId: number, displayName: string | null | undefined) => {
+    (talkId: number, name: string | null | undefined) => {
       navigation.goBack();
-      navigation.navigate("TalkChat", { talkId, displayName });
+      navigation.navigate("TalkChat", { talkId, name });
     },
     []
   );

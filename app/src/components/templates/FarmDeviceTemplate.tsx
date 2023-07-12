@@ -1,9 +1,9 @@
-import { Box, HStack, Heading } from "native-base";
+import { Feather } from "@expo/vector-icons";
+import { Box, HStack, Heading, Icon, IconButton } from "native-base";
 import React from "react";
 import { Image } from "expo-image";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
-import BackButton from "../molecules/BackButton";
 import { GetDeviceResponse } from "../../hooks/device/query";
 
 type FarmDeviceTemplateProps = {
@@ -31,14 +31,17 @@ const FarmDeviceTemplate = ({
         justifyContent="space-between"
       >
         <HStack alignItems="center" space="3">
-          <BackButton onPress={goBackNavigationHandler} />
+          <IconButton
+            onPress={goBackNavigationHandler}
+            icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+            variant="unstyled"
+          />
           <Heading fontSize="2xl">{title}</Heading>
         </HStack>
         <Avatar
-          text={user?.displayName?.charAt(0)}
-          avatarUrl={user?.avatarUrl}
-          updatedAt={user?.updatedAt}
-          hue={user?.hue}
+          text={user?.name?.charAt(0)}
+          uri={user?.avatarUrl}
+          color={user?.color}
           onPress={settingNavigationHandler}
         />
       </HStack>

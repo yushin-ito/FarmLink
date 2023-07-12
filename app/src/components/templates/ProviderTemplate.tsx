@@ -72,6 +72,7 @@ const ProviderTemplate = memo(
               <Image
                 style={{ width: 32, height: 32 }}
                 source={require("../../../assets/google.png")}
+                cachePolicy="memory-disk"
               />
             </Center>
             <Text>{t("signInWithGoogle")}</Text>
@@ -89,6 +90,7 @@ const ProviderTemplate = memo(
               <Image
                 style={{ width: 32, height: 32 }}
                 source={require("../../../assets/twitter.png")}
+                cachePolicy="memory-disk"
               />
             </Center>
             <Text>{t("signInWithTwitter")}</Text>
@@ -106,6 +108,7 @@ const ProviderTemplate = memo(
               <Image
                 style={{ width: 32, height: 32 }}
                 source={require("../../../assets/facebook.png")}
+                cachePolicy="memory-disk"
               />
             </Center>
             <Text>{t("signInWithFacebook")}</Text>

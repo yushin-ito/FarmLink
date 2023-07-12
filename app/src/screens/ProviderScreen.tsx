@@ -29,7 +29,7 @@ const ProviderScreen = () => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -45,10 +45,9 @@ const ProviderScreen = () => {
       if (data?.user && !(await searchUser(data.user.id))?.length) {
         mutateAsyncPostUser({
           userId: data.user.id,
-          displayName: data.user.user_metadata.name,
+          name: data.user.user_metadata.name,
           avatarUrl: data.user.user_metadata.avatar_url.replace("_normal", ""), // for Twitter
-          introduction: t("notExistProfile"),
-          hue: Math.floor(Math.random() * 360).toString(),
+          color: `hsl(${Math.floor(Math.random() * 360).toString()}, 60%, 60%)`,
         });
       }
     },
@@ -58,7 +57,7 @@ const ProviderScreen = () => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },

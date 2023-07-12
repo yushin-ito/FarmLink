@@ -66,32 +66,18 @@ const SettingTemplate = ({
         <HStack mt="4" mb="6" alignItems="center">
           <Box w="30%">
             <Avatar
-              text={user?.displayName?.charAt(0)}
-              avatarUrl={user?.avatarUrl}
-              updatedAt={user?.updatedAt}
-              hue={user?.hue}
+              text={user?.name?.charAt(0)}
+              uri={user?.avatarUrl}
+              color={user?.name}
               isLoading={isLoadingPostAvatar}
               size="16"
               fontSize="2xl"
-              badge={
-                <Center
-                  position="absolute"
-                  right="-1"
-                  bottom="-1"
-                  bg="black"
-                  opacity="0.7"
-                  rounded="full"
-                  p="1"
-                >
-                  <Icon as={<Feather />} name="camera" size="3" color="white" />
-                </Center>
-              }
               onPress={onOpen}
             />
           </Box>
           <VStack w="70%">
             <Text fontSize="xl" bold>
-              {user?.displayName}
+              {user?.name}
             </Text>
             <Text color="muted.600">{user?.introduction}</Text>
           </VStack>

@@ -36,7 +36,7 @@ type PostRentalTemplateProps = {
   getCurrentPosition: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
   postRental: (
-    rentalName: string,
+    name: string,
     description: string,
     fee: string,
     area: string,
@@ -46,7 +46,7 @@ type PostRentalTemplateProps = {
 };
 
 type FormValues = {
-  rentalName: string;
+  name: string;
   fee: string;
   area: string;
   equipment: string;
@@ -172,10 +172,10 @@ const PostRentalTemplate = ({
                 />
               </HStack>
             </VStack>
-            <FormControl isRequired isInvalid={"rentalName" in errors}>
+            <FormControl isRequired isInvalid={"name" in errors}>
               <FormControl.Label>{t("rentalName")}</FormControl.Label>
               <Controller
-                name="rentalName"
+                name="name"
                 control={control}
                 render={({ field: { value, onChange } }) => {
                   return (
@@ -184,7 +184,7 @@ const PostRentalTemplate = ({
                         returnKeyType="done"
                         InputRightElement={
                           <IconButton
-                            onPress={() => setValue("rentalName", "")}
+                            onPress={() => setValue("name", "")}
                             icon={
                               <Icon
                                 as={<Feather name="x" />}
@@ -207,8 +207,8 @@ const PostRentalTemplate = ({
                             <Icon as={<Feather name="alert-circle" />} />
                           }
                         >
-                          {errors.rentalName && (
-                            <Text>{errors.rentalName.message}</Text>
+                          {errors.name && (
+                            <Text>{errors.name.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
                         <Text color="muted.600">
@@ -491,7 +491,7 @@ const PostRentalTemplate = ({
             isLoading={isLoadingPostRental}
             onPress={handleSubmit(async (data) => {
               await postRental(
-                data.rentalName,
+                data.name,
                 data.description,
                 data.fee,
                 data.area,

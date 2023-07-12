@@ -37,7 +37,7 @@ type CommunityListTemplateProps = {
   readMore: () => void;
   communityChatNavigationHandler: (
     communityId: number,
-    communityName: string | null
+    name: string | null
   ) => void;
   postCommunityNavigationHandler: () => void;
   settingNavigationHandler: () => void;
@@ -76,10 +76,9 @@ const CommunityListTemplate = ({
         <HStack alignItems="center" justifyContent="space-between">
           <Heading>{t("community")}</Heading>
           <Avatar
-            text={user?.displayName?.charAt(0)}
-            avatarUrl={user?.avatarUrl}
-            updatedAt={user?.updatedAt}
-            hue={user?.hue}
+            text={user?.name.charAt(0)}
+            uri={user?.avatarUrl}
+            color={user?.color}
             onPress={settingNavigationHandler}
           />
         </HStack>
@@ -114,10 +113,7 @@ const CommunityListTemplate = ({
             <CommunityItem
               item={item}
               onPress={() =>
-                communityChatNavigationHandler(
-                  item.communityId,
-                  item.communityName
-                )
+                communityChatNavigationHandler(item.communityId, item.name)
               }
             />
           )}

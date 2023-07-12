@@ -18,14 +18,15 @@ const getRental = async (rentalId: number) => {
   return data;
 };
 
-const getRentals = async (ownerId?: string) => {
-  const { data, error } = ownerId
-    ? await supabase
-        .from("rental")
-        .select("*")
-        .eq("ownerId", ownerId)
-        .order("createdAt", { ascending: false })
-    : await supabase.from("rental").select("*");
+const getRentals = async (ownerId?: string | null) => {
+  const { data, error } =
+    ownerId !== null
+      ? await supabase
+          .from("rental")
+          .select("*")
+          .eq("ownerId", ownerId)
+          .order("createdAt", { ascending: false })
+      : await supabase.from("rental").select("*");
 
   if (error) {
     throw error;
@@ -40,7 +41,7 @@ export const useQueryRental = (rentalId: number) =>
     queryFn: async () => await getRental(rentalId),
   });
 
-export const useQueryRentals = (ownerId?: string) =>
+export const useQueryRentals = (ownerId?: string | null) =>
   useQuery({
     queryKey: "rentals",
     queryFn: async () => await getRentals(ownerId),

@@ -20,16 +20,15 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
             size="md"
             fontSize="2xl"
             disabled
-            text={item?.communityName?.charAt(0)}
-            avatarUrl={item?.imageUrl}
-            updatedAt={item?.updatedAt}
-            hue={item?.hue}
+            text={item.name.charAt(0)}
+            uri={item.imageUrl}
+            color={item.color}
           />
         </Box>
         <VStack w="75%" justifyContent="space-between">
           <VStack>
             <Text bold fontSize="md">
-              {item.communityName}
+              {item.name}
             </Text>
             <Text
               color="muted.600"

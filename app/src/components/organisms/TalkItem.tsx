@@ -62,16 +62,15 @@ const TalkItem = memo(
                   size="md"
                   fontSize="2xl"
                   disabled
-                  text={item?.to.displayName?.charAt(0)}
-                  avatarUrl={item?.to.avatarUrl}
-                  updatedAt={item?.to.updatedAt}
-                  hue={item?.to.hue}
+                  text={item.to.name?.charAt(0)}
+                  uri={item.to.avatarUrl}
+                  color={item.to.color}
                 />
               </Box>
               <VStack w="75%" space="1">
                 <HStack alignItems="center" justifyContent="space-between">
                   <Text bold fontSize="md">
-                    {item.to?.displayName}
+                    {item.to.name}
                   </Text>
                   <Text fontSize="sm">
                     {getTimeDistance(item.updatedAt, locale)}

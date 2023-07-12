@@ -39,7 +39,7 @@ const CommunityListScreen = ({
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -56,10 +56,10 @@ const CommunityListScreen = ({
   }, []);
 
   const communityChatNavigationHandler = useCallback(
-    (communityId: number, communityName: string | null) => {
+    (communityId: number, name: string | null) => {
       navigation.navigate("CommunityChat", {
         communityId,
-        communityName,
+        name,
         category: categories[categoryIndex],
       });
     },

@@ -1,7 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
 import { Rental, UseMutationResult } from "../../../types/db";
-import { PostgrestError } from "@supabase/supabase-js";
 import { decode } from "base64-arraybuffer";
 
 export type PostRentalResponse = Awaited<ReturnType<typeof postRental>>;
@@ -15,15 +14,14 @@ const postRental = async ({
   base64: string[];
   rental: Rental["Insert"];
 }) => {
-  const filePath = `rental/${Math.random()}.png`;
   const imageUrls: string[] = [];
   await Promise.all(
     base64.map(async (item) => {
+      const filePath = `rental/${Math.random()}.png`;
       const { error } = await supabase.storage
         .from("image")
         .upload(filePath, decode(item), {
           contentType: "image",
-          upsert: true,
         });
       if (error) {
         throw error;
@@ -57,7 +55,7 @@ const searchRentals = async (text: string) => {
   const { data, error } = await supabase
     .from("rental")
     .select()
-    .ilike("rentalName", `%${text}%`);
+    .ilike("name", `%${text}%`);
   if (error) {
     throw error;
   }
@@ -67,7 +65,7 @@ const searchRentals = async (text: string) => {
 export const usePostRental = ({
   onSuccess,
   onError,
-}: UseMutationResult<PostRentalResponse, PostgrestError>) =>
+}: UseMutationResult<PostRentalResponse, Error>) =>
   useMutation({
     mutationFn: postRental,
     onSuccess,
@@ -77,7 +75,7 @@ export const usePostRental = ({
 export const useDeleteRental = ({
   onSuccess,
   onError,
-}: UseMutationResult<DeleteRentalResponse, PostgrestError>) =>
+}: UseMutationResult<DeleteRentalResponse, Error>) =>
   useMutation({
     mutationFn: deleteRental,
     onSuccess,
@@ -87,7 +85,7 @@ export const useDeleteRental = ({
 export const useSearchRentals = ({
   onSuccess,
   onError,
-}: UseMutationResult<SearchRentalsResponse, PostgrestError>) =>
+}: UseMutationResult<SearchRentalsResponse, Error>) =>
   useMutation({
     mutationFn: searchRentals,
     onSuccess,

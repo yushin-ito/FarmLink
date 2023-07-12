@@ -29,10 +29,9 @@ const ChatItem = memo(
         {!authored && (
           <Avatar
             size="sm"
-            text={item.user?.displayName?.charAt(0)}
-            avatarUrl={item.user?.avatarUrl}
-            updatedAt={item.user?.updatedAt}
-            hue={item.user?.hue}
+            text={item.user?.name?.charAt(0)}
+            uri={item.user?.avatarUrl}
+            color={item.user?.color}
           />
         )}
         {item?.message && (

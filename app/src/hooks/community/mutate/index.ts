@@ -1,7 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
 import { Chat, Community, UseMutationResult } from "../../../types/db";
-import { PostgrestError } from "@supabase/supabase-js";
 import { decode } from "base64-arraybuffer";
 
 export type PostCommunityResponse = Awaited<ReturnType<typeof postCommunity>>;
@@ -13,9 +12,6 @@ export type SearchCommunitiesResponse = Awaited<
 >;
 export type PostCommunityChatResponse = Awaited<
   ReturnType<typeof postCommunityChat>
->;
-export type PostCommunityImageResponse = Awaited<
-  ReturnType<typeof postCommunityImage>
 >;
 export type PostCommunityChatImageResponse = Awaited<
   ReturnType<typeof postCommunityChatImage>
@@ -48,7 +44,7 @@ const searchCommunities = async (text: string) => {
   const { data, error } = await supabase
     .from("community")
     .select()
-    .ilike("communityName", `%${text}%`);
+    .ilike("name", `%${text}%`);
   if (error) {
     throw error;
   }
@@ -61,26 +57,6 @@ const postCommunityChat = async (chat: Chat["Insert"]) => {
     throw error;
   }
   return data;
-};
-
-const postCommunityImage = async ({
-  base64,
-  type,
-}: {
-  base64: string;
-  type: string;
-}) => {
-  const filePath = `community/${Math.random()}.png`;
-  const { error } = await supabase.storage
-    .from("image")
-    .upload(filePath, decode(base64), {
-      contentType: type,
-    });
-  if (error) {
-    throw error;
-  }
-  const { data } = supabase.storage.from("image").getPublicUrl(filePath);
-  await postCommunity({ imageUrl: data.publicUrl });
 };
 
 const postCommunityChatImage = async ({
@@ -109,14 +85,14 @@ const postCommunityChatImage = async ({
     authorId,
     imageUrl: data.publicUrl,
     width: size.width,
-    height: size.height
+    height: size.height,
   });
 };
 
 export const usePostCommunityChat = ({
   onSuccess,
   onError,
-}: UseMutationResult<PostCommunityChatResponse, PostgrestError>) =>
+}: UseMutationResult<PostCommunityChatResponse, Error>) =>
   useMutation({
     mutationFn: postCommunityChat,
     onSuccess,
@@ -136,19 +112,9 @@ export const usePostCommunityChatImage = ({
 export const usePostCommunity = ({
   onSuccess,
   onError,
-}: UseMutationResult<PostCommunityResponse, PostgrestError>) =>
+}: UseMutationResult<PostCommunityResponse, Error>) =>
   useMutation({
     mutationFn: postCommunity,
-    onSuccess,
-    onError,
-  });
-
-export const usePostCommunityImage = ({
-  onSuccess,
-  onError,
-}: UseMutationResult<PostCommunityImageResponse, Error>) =>
-  useMutation({
-    mutationFn: postCommunityImage,
     onSuccess,
     onError,
   });
@@ -156,7 +122,7 @@ export const usePostCommunityImage = ({
 export const useDeleteCommunity = ({
   onSuccess,
   onError,
-}: UseMutationResult<DeleteCommunityResponse, PostgrestError>) =>
+}: UseMutationResult<DeleteCommunityResponse, Error>) =>
   useMutation({
     mutationFn: deleteCommunity,
     onSuccess,
@@ -166,7 +132,7 @@ export const useDeleteCommunity = ({
 export const useSearchCommunities = ({
   onSuccess,
   onError,
-}: UseMutationResult<SearchCommunitiesResponse, PostgrestError>) =>
+}: UseMutationResult<SearchCommunitiesResponse, Error>) =>
   useMutation({
     mutationFn: searchCommunities,
     onSuccess,

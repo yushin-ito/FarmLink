@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon, Text } from "native-base";
 import { TabParamList } from "../types";
@@ -147,8 +147,8 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              as={<Feather />}
-              name="settings"
+              as={<AntDesign />}
+              name="setting"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
               mb="1"

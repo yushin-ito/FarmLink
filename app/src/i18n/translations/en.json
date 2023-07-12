@@ -1,6 +1,7 @@
 {
   "auth": {
     "app": "FarmLink is an app that allows you to start farming with peace of mind.",
+    "enter": "Enter",
     "displayName": "User name",
     "displayNameRequired": "User name is required",
     "email": "email",
@@ -29,12 +30,22 @@
     "notExistProfile": "No profile",
     "enterMessage": "Enter message",
     "back": "Back",
-    "anyError": "An error occurred"
+    "error": "An error occurred"
   },
   "map": {
+    "farm": "farm",
+    "rental": "rental",
     "search": "Search",
     "permitRequestGPS": "Please grant GPS permission",
-    "anyError": "An error occurred"
+    "fee": "Fee",
+    "equipment": "Equipment",
+    "area": "Area",
+    "unknown": "unknown",
+    "description": "Description",
+    "edit": "Edit",
+    "chat": "Chat",
+    "error": "An error occurred",
+    "dev": "This function is currently under development"
   },
   "chat": {
     "enterMessage": "Enter message",
@@ -43,7 +54,7 @@
     "permitRequestCam": "Please grant camera permission",
     "delete": "Delete",
     "cancel": "Cancel",
-    "anyError": "An error occurred"
+    "error": "An error occurred"
   },
   "community": {
     "community": "Community",
@@ -70,11 +81,11 @@
     "disease": "Disease",
     "people": "People",
     "join": "Join",
-    "anyError": "An error occurred"
+    "error": "An error occurred"
   },
   "farm": {
     "myFarm": "My farm",
-    "anyError": "An error occurred",
+    "error": "An error occurred",
     "createFarm": "Create farm",
     "deleteFarm": "Delete farm",
     "askDeleteFarm": "Are you sure you want to delete farm?",
@@ -98,7 +109,7 @@
   },
   "talk": {
     "talk": "Talk",
-    "anyError": "An error occurred",
+    "error": "An error occurred",
     "createTalk": "Create Talk",
     "searchUser": "Search User",
     "notExistTalk": "Click the button\nto add  user and start talking",
@@ -121,7 +132,7 @@
     "image": "Pick by library",
     "deleteImage": "Delete image",
     "cancel": "Cancel",
-    "anyError": "An error occurred",
+    "error": "An error occurred",
     "displayName": "User name",
     "displayNameRequired": "User name is required",
     "displayNameMaxLength": "User name must be 20 or less",
@@ -131,6 +142,7 @@
     "signoutError": "Sign out failed",
     "save": "Save",
     "rentalList": "Rental list",
+    "notExistRental": "No farms under rental",
     "askDeleteRental": "Are you sure want to delete Rental?",
     "delete": "Delete",
     "deleteRental": "Delete rental",

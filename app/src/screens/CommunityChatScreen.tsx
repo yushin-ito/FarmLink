@@ -53,7 +53,7 @@ const CommunityChatScreen = ({
           <Alert
             status="error"
             onPressCloseButton={() => toast.closeAll()}
-            text={t("anyError")}
+            text={t("error")}
           />
         );
       },
@@ -70,7 +70,7 @@ const CommunityChatScreen = ({
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -86,7 +86,7 @@ const CommunityChatScreen = ({
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -119,7 +119,7 @@ const CommunityChatScreen = ({
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("anyError")}
+          text={t("error")}
         />
       );
     },
@@ -127,11 +127,12 @@ const CommunityChatScreen = ({
 
   const onSend = useCallback(
     async (message: string) => {
-      await mutateAsyncPostChat({
-        message,
-        communityId: params.communityId,
-        authorId: session?.user.id,
-      });
+      session &&
+        (await mutateAsyncPostChat({
+          message,
+          communityId: params.communityId,
+          authorId: session.user.id,
+        }));
     },
     [session?.user]
   );
@@ -148,7 +149,7 @@ const CommunityChatScreen = ({
     <ChatTemplate
       type="community"
       locale={locale}
-      title={params.communityName}
+      title={params.name}
       user={user}
       chats={chats}
       deleteRoom={deleteCommunity}
