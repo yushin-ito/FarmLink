@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import useLocation from "../hooks/sdk/useLocation";
 import { useQueryRentalLike } from "../hooks/like/query";
-import { useRentalLike } from "../hooks/like/useLike";
 import { useDeleteRentalLike, usePostLike } from "../hooks/like/mutate";
 
 const RentalDetailScreen = ({
@@ -29,40 +28,46 @@ const RentalDetailScreen = ({
   const { data: likes, refetch: refetchLike } = useQueryRentalLike(
     params.rentalId
   );
-
-  useRentalLike(params.rentalId, async () => {
-    await refetchLike();
-  });
+  const liked =
+    likes?.some((item) => item.likeId === session?.user.id) ?? false;
 
   useEffect(() => {
     rental && getAddress(rental.latitude, rental.longitude);
   }, [rental]);
 
-  const { mutateAsync: mutateAsyncPostLike } = usePostLike({
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncPostLike, isLoading: isLoadingPostLike } =
+    usePostLike({
+      onSuccess: async () => {
+        await refetchLike();
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
-  const { mutateAsync: mutateAsyncDeleteLike } = useDeleteRentalLike({
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncDeleteLike, isLoading: isLoadingDeleteLike } =
+    useDeleteRentalLike({
+      onSuccess: async () => {
+        await refetchLike();
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const { address, getAddress } = useLocation({
     onDisable: () => {
@@ -158,7 +163,7 @@ const RentalDetailScreen = ({
   const postLike = useCallback(async () => {
     session &&
       (await mutateAsyncPostLike({
-        userId: session.user.id,
+        likeId: session.user.id,
         rentalId: params.rentalId,
       }));
   }, [session?.user]);
@@ -173,7 +178,7 @@ const RentalDetailScreen = ({
 
   return (
     <RentalDetailTemplate
-      like={likes?.some((item) => item.userId === session?.user.id) ?? false}
+      liked={liked}
       likes={likes}
       postLike={postLike}
       deleteLike={deleteLike}
@@ -181,6 +186,7 @@ const RentalDetailScreen = ({
       address={address}
       rental={rental}
       isLoadingPostTalk={isLoadingPostTalk}
+      isLoadingLike={isLoadingPostLike || isLoadingDeleteLike}
       talkChatNavigationHandler={talkChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

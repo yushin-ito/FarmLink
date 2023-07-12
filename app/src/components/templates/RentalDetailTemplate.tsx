@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Feather, AntDesign } from "@expo/vector-icons";
 
 import {
@@ -22,7 +22,7 @@ import { GetRentalLikeResponse } from "../../hooks/like/query";
 
 type RentalDetailTemplateProps = {
   owned: boolean;
-  isLike: boolean;
+  liked: boolean;
   likes: GetRentalLikeResponse | undefined;
   rental: GetRentalResponse | undefined;
   address: LocationGeocodedAddress | undefined;
@@ -35,7 +35,7 @@ type RentalDetailTemplateProps = {
 };
 
 const RentalDetailTemplate = ({
-  isLike,
+  liked,
   likes,
   owned,
   rental,
@@ -50,11 +50,6 @@ const RentalDetailTemplate = ({
   const { t } = useTranslation("map");
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [liked, setLiked] = useState(isLike);
-
-  useEffect(() => {
-    liked ? postLike() : deleteLike();
-  }, [liked]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -177,7 +172,7 @@ const RentalDetailTemplate = ({
               as={<AntDesign />}
               name="heart"
               size="md"
-              color={liked ? "red.300" : "muted.300"}
+              color={liked ? "red.400" : "muted.300"}
             />
           }
           variant="unstyled"
@@ -185,7 +180,9 @@ const RentalDetailTemplate = ({
           rounded="lg"
           p="2"
           borderColor="muted.300"
-          onPress={() => setLiked(!liked)}
+          onPress={() => {
+            !liked ? postLike() : deleteLike();
+          }}
           isDisabled={isLoadingLike}
         />
         <Button
