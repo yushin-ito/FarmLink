@@ -63,6 +63,7 @@ const FarmListTemplate = ({
             text={user?.name?.charAt(0)}
             uri={user?.avatarUrl}
             color={user?.color}
+            updatedAt={user?.updatedAt}
             onPress={settingNavigationHandler}
           />
         </HStack>

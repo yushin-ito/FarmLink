@@ -11,8 +11,8 @@ import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import useLocation from "../hooks/sdk/useLocation";
-import { useQueryRentalLike } from "../hooks/like/query";
-import { useDeleteRentalLike, usePostLike } from "../hooks/like/mutate";
+import { useQueryRentalLikes } from "../hooks/like/query";
+import { useDeleteRentalLike, usePostRentalLike } from "../hooks/like/mutate";
 
 const RentalDetailScreen = ({
   navigation,
@@ -20,25 +20,30 @@ const RentalDetailScreen = ({
   const toast = useToast();
   const { t } = useTranslation("map");
   const { params } = useRoute<RouteProp<MapStackParamList, "RentalDetail">>();
-  const { data: rental } = useQueryRental(params.rentalId);
+  const { data: rental, isRefetching: isRefetchingRental } = useQueryRental(
+    params.rentalId
+  );
   const { session } = useAuth();
   const { data: talks, refetch: refetchTalks } = useQueryTalks(
     session?.user.id
   );
-  const { data: likes, refetch: refetchLike } = useQueryRentalLike(
+  const { data: likes, refetch: refetchLikes } = useQueryRentalLikes(
     params.rentalId
   );
   const liked =
-    likes?.some((item) => item.likeId === session?.user.id) ?? false;
+    likes?.some(
+      (item) =>
+        item.userId === session?.user.id && item.rentalId === params.rentalId
+    ) ?? false;
 
   useEffect(() => {
     rental && getAddress(rental.latitude, rental.longitude);
   }, [rental]);
 
   const { mutateAsync: mutateAsyncPostLike, isLoading: isLoadingPostLike } =
-    usePostLike({
+    usePostRentalLike({
       onSuccess: async () => {
-        await refetchLike();
+        await refetchLikes();
       },
       onError: () => {
         showAlert(
@@ -55,7 +60,7 @@ const RentalDetailScreen = ({
   const { mutateAsync: mutateAsyncDeleteLike, isLoading: isLoadingDeleteLike } =
     useDeleteRentalLike({
       onSuccess: async () => {
-        await refetchLike();
+        await refetchLikes();
       },
       onError: () => {
         showAlert(
@@ -163,7 +168,7 @@ const RentalDetailScreen = ({
   const postLike = useCallback(async () => {
     session &&
       (await mutateAsyncPostLike({
-        likeId: session.user.id,
+        userId: session.user.id,
         rentalId: params.rentalId,
       }));
   }, [session?.user]);
@@ -185,6 +190,7 @@ const RentalDetailScreen = ({
       owned={session?.user.id === rental?.ownerId}
       address={address}
       rental={rental}
+      isRefetchingRental={isRefetchingRental}
       isLoadingPostTalk={isLoadingPostTalk}
       isLoadingLike={isLoadingPostLike || isLoadingDeleteLike}
       talkChatNavigationHandler={talkChatNavigationHandler}

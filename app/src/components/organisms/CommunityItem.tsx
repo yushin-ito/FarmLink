@@ -23,6 +23,7 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
             text={item.name.charAt(0)}
             uri={item.imageUrl}
             color={item.color}
+            updatedAt={item.updatedAt}
           />
         </Box>
         <VStack w="75%" justifyContent="space-between">

@@ -1,10 +1,33 @@
 import { useQuery } from "react-query";
 import { supabase } from "../../../supabase";
 
-export type GetFarmLikeResponse = Awaited<ReturnType<typeof getFarmLike>>;
-export type GetRentalLikeResponse = Awaited<ReturnType<typeof getRentalLike>>;
+export type GetUserLikesResponse = Awaited<ReturnType<typeof getUserLikes>>;
+export type GetFarmLikesResponse = Awaited<ReturnType<typeof getFarmLikes>>;
+export type GetRentalLikesResponse = Awaited<ReturnType<typeof getRentalLikes>>;
 
-const getFarmLike = async (farmId: number) => {
+const getUserLikes = async (userId: string | undefined) => {
+  const { data, error } = await supabase
+    .from("like")
+    .select("*, farm(*), rental(*)")
+    .eq("userId", userId);
+  if (error) {
+    throw error;
+  }
+
+  return data
+    .map((item) =>
+      Array.isArray(item.farm)
+        ? { ...item, farm: item.farm[0] }
+        : { ...item, farm: item.farm, }
+    )
+    .map((item) =>
+      Array.isArray(item.rental)
+        ? { ...item, rental: item.rental[0] }
+        : { ...item, rental: item.rental }
+    );
+};
+
+const getFarmLikes = async (farmId: number) => {
   const { data, error } = await supabase
     .from("like")
     .select("*")
@@ -16,13 +39,7 @@ const getFarmLike = async (farmId: number) => {
   return data;
 };
 
-export const useQueryFarmLike = (farmId: number) =>
-  useQuery({
-    queryKey: "like",
-    queryFn: async () => await getFarmLike(farmId),
-  });
-
-const getRentalLike = async (rentalId: number) => {
+const getRentalLikes = async (rentalId: number) => {
   const { data, error } = await supabase
     .from("like")
     .select("*")
@@ -34,8 +51,20 @@ const getRentalLike = async (rentalId: number) => {
   return data;
 };
 
-export const useQueryRentalLike = (rentalId: number) =>
+export const useQueryUserLikes = (userId: string | undefined) =>
   useQuery({
-    queryKey: "like",
-    queryFn: async () => await getRentalLike(rentalId),
+    queryKey: "likes",
+    queryFn: async () => await getUserLikes(userId),
+  });
+
+export const useQueryFarmLikes = (farmId: number) =>
+  useQuery({
+    queryKey: "likes",
+    queryFn: async () => await getFarmLikes(farmId),
+  });
+
+export const useQueryRentalLikes = (rentalId: number) =>
+  useQuery({
+    queryKey: "likes",
+    queryFn: async () => await getRentalLikes(rentalId),
   });

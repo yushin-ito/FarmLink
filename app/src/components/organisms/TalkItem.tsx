@@ -9,7 +9,6 @@ import {
   VStack,
 } from "native-base";
 import { GetTalksResponse } from "../../hooks/talk/query";
-import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 import Avatar from "../molecules/Avatar";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
@@ -18,30 +17,18 @@ import { getTimeDistance } from "../../functions";
 type TalkItemProps = {
   item: GetTalksResponse[number];
   locale: "en" | "ja" | null;
-  deleteTalk: (talkId: number) => Promise<void>;
   onPress: () => void;
+  onPressRight: () => void;
 };
 
 const TalkItem = memo(
-  ({ item, locale, deleteTalk, onPress }: TalkItemProps) => {
+  ({ item, locale, onPressRight, onPress }: TalkItemProps) => {
     const { t } = useTranslation("talk");
     return (
       <Swipeable
         renderRightActions={() => (
           <Pressable
-            onPress={() =>
-              Alert.alert(t("deleteTalk"), t("askDeleteTalk"), [
-                {
-                  text: t("cancel"),
-                  style: "cancel",
-                },
-                {
-                  text: t("delete"),
-                  onPress: async () => await deleteTalk(item.talkId),
-                  style: "destructive",
-                },
-              ])
-            }
+            onPress={onPressRight}
             _pressed={{
               opacity: 0.5,
             }}
@@ -65,6 +52,7 @@ const TalkItem = memo(
                   text={item.to.name?.charAt(0)}
                   uri={item.to.avatarUrl}
                   color={item.to.color}
+                  updatedAt={item.to.updatedAt}
                 />
               </Box>
               <VStack w="75%" space="1">

@@ -3,18 +3,11 @@ import { supabase } from "../../../supabase";
 import { Farm, UseMutationResult } from "../../../types/db";
 
 export type PostFarmResponse = Awaited<ReturnType<typeof postFarm>>;
-export type DeleteFarmResponse = Awaited<
-  ReturnType<typeof deleteFarm>
->;
-export type SearchFarmsResponse = Awaited<
-  ReturnType<typeof searchFarms>
->;
+export type DeleteFarmResponse = Awaited<ReturnType<typeof deleteFarm>>;
+export type SearchFarmsResponse = Awaited<ReturnType<typeof searchFarms>>;
 
 const postFarm = async (farm: Farm["Insert"]) => {
-  const { data, error } = await supabase
-    .from("farm")
-    .upsert(farm)
-    .select();
+  const { data, error } = await supabase.from("farm").upsert(farm).select();
   if (error) {
     throw error;
   }
@@ -22,6 +15,7 @@ const postFarm = async (farm: Farm["Insert"]) => {
 };
 
 const deleteFarm = async (farmId: number) => {
+  await supabase.from("like").delete().eq("farmId", farmId);
   const { data, error } = await supabase
     .from("farm")
     .delete()

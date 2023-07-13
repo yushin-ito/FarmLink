@@ -1,10 +1,19 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 
-import { Box, Heading, HStack, IconButton, Icon, FlatList, Text } from "native-base";
+import {
+  Box,
+  Heading,
+  HStack,
+  IconButton,
+  Icon,
+  FlatList,
+  Text,
+} from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import RentalItem from "../organisms/RentalItem";
+import { Alert } from "react-native";
 
 type RentalListTemplateProps = {
   rentals: GetRentalsResponse | undefined;
@@ -45,9 +54,21 @@ const RentalListTemplate = ({
           renderItem={({ item }) => (
             <RentalItem
               item={item}
-              deleteRental={deleteRental}
               onPress={() =>
                 mapNavigationHandler(item.latitude, item.longitude)
+              }
+              onPressRight={() =>
+                Alert.alert(t("deleteRental"), t("askDeleteRental"), [
+                  {
+                    text: t("cancel"),
+                    style: "cancel",
+                  },
+                  {
+                    text: t("delete"),
+                    onPress: async () => await deleteRental(item.rentalId),
+                    style: "destructive",
+                  },
+                ])
               }
             />
           )}
@@ -62,6 +83,7 @@ const RentalListTemplate = ({
               {t("notExistRental")}
             </Text>
           }
+          keyExtractor={(item) => item.rentalId.toString()}
         />
       </Box>
     </Box>

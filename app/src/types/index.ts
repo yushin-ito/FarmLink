@@ -63,6 +63,7 @@ export type SettingStackParamList = {
   RentalList: undefined;
   PostRental: undefined;
   PostProfile: undefined;
+  LikeList: undefined;
 };
 
 export type MapStackScreenProps<Screen extends keyof MapStackParamList> =

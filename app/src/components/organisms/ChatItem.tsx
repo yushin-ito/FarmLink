@@ -24,14 +24,17 @@ const ChatItem = memo(
         w="100%"
         my="2"
         space="2"
+        alignItems="flex-end"
         justifyContent={!authored ? "flex-start" : "flex-end"}
       >
         {!authored && (
           <Avatar
             size="sm"
+            mb="3"
             text={item.user?.name?.charAt(0)}
             uri={item.user?.avatarUrl}
             color={item.user?.color}
+            updatedAt={item.user?.updatedAt}
           />
         )}
         {item?.message && (
@@ -45,9 +48,9 @@ const ChatItem = memo(
                 py="1"
                 bg="white"
                 shadow="1"
-                roundedTop="lg"
-                roundedBottomRight={!authored ? "lg" : "0"}
-                roundedBottomLeft={!authored ? "0" : "lg"}
+                roundedTop="xl"
+                roundedBottomRight={!authored ? "xl" : "0"}
+                roundedBottomLeft={!authored ? "0" : "xl"}
               >
                 <Text bold fontSize="md">
                   {item.message}

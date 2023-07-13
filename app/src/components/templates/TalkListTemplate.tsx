@@ -13,7 +13,7 @@ import CircleButton from "../molecules/CircleButton";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import TalkItem from "../organisms/TalkItem";
-import { RefreshControl } from "react-native";
+import { Alert, RefreshControl } from "react-native";
 import Avatar from "../molecules/Avatar";
 import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
@@ -60,6 +60,7 @@ const TalkListTemplate = ({
             text={user?.name?.charAt(0)}
             uri={user?.avatarUrl}
             color={user?.name}
+            updatedAt={user?.updatedAt}
             onPress={settingNavigationHandler}
           />
         </HStack>
@@ -87,9 +88,21 @@ const TalkListTemplate = ({
             <TalkItem
               item={item}
               locale={locale}
-              deleteTalk={deleteTalk}
               onPress={() =>
                 talkChatNavigationHandler(item.talkId, item.to.name)
+              }
+              onPressRight={() =>
+                Alert.alert(t("deleteTalk"), t("askDeleteTalk"), [
+                  {
+                    text: t("cancel"),
+                    style: "cancel",
+                  },
+                  {
+                    text: t("delete"),
+                    onPress: async () => await deleteTalk(item.talkId),
+                    style: "destructive",
+                  },
+                ])
               }
             />
           )}

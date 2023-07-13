@@ -5,7 +5,6 @@ import {
   Pressable,
   Text,
   Icon,
-  Box,
   Center,
   VStack,
 } from "native-base";
@@ -13,34 +12,21 @@ import { Feather } from "@expo/vector-icons";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import { Image } from "expo-image";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
-import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 
 type RentalItemProps = {
   item: GetRentalsResponse[number];
-  deleteRental: (rentalId: number) => Promise<void>;
   onPress: () => void;
+  onPressRight: () => void;
 };
 
-const RentalItem = memo(({ item, deleteRental, onPress }: RentalItemProps) => {
+const RentalItem = memo(({ item, onPressRight, onPress }: RentalItemProps) => {
   const { t } = useTranslation("setting");
   return (
     <Swipeable
       renderRightActions={() => (
         <Pressable
-          onPress={() =>
-            Alert.alert(t("deleteRental"), t("askDeleteRental"), [
-              {
-                text: t("cancel"),
-                style: "cancel",
-              },
-              {
-                text: t("delete"),
-                onPress: async () => await deleteRental(item.rentalId),
-                style: "destructive",
-              },
-            ])
-          }
+          onPress={onPressRight}
           _pressed={{
             opacity: 0.5,
           }}
@@ -63,15 +49,23 @@ const RentalItem = memo(({ item, deleteRental, onPress }: RentalItemProps) => {
             justifyContent="space-between"
           >
             <HStack alignItems="center" space="3">
-              <Box size="12" rounded="sm" bg="muted.200">
-                {item.imageUrls && (
+              <Center size="12" rounded="md" bg="muted.200">
+                {item.imageUrls?.length ? (
                   <Image
                     style={{ flex: 1 }}
                     source={{ uri: item.imageUrls[0] }}
                     contentFit="contain"
+                    recyclingKey={item.rentalId.toString()}
+                  />
+                ) : (
+                  <Icon
+                    as={<Feather />}
+                    name="image"
+                    size="lg"
+                    color="muted.600"
                   />
                 )}
-              </Box>
+              </Center>
               <Text bold fontSize="md">
                 {item?.name}
               </Text>

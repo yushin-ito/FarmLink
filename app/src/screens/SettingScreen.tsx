@@ -92,6 +92,10 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     navigation.navigate("RentalList");
   }, []);
 
+    const likeListNavigationHandler = useCallback(() => {
+      navigation.navigate("LikeList");
+    }, []);
+
   return (
     <SettingTemplate
       user={user}
@@ -103,6 +107,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       postRentalNavigationHandler={postRentalNavigationHandler}
       postProfileNavigationHandler={postProfileNavigationHandler}
       rentalListNavigationHandler={rentalListNavigationHandler}
+      likeListNavigationHandler={likeListNavigationHandler}
     />
   );
 };

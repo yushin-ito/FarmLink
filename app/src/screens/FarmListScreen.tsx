@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-
 import FarmListTemplate from "../components/templates/FarmListTemplate";
 import { useQueryFarms } from "../hooks/farm/query";
 import { useToast } from "native-base";

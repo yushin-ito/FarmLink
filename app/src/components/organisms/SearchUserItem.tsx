@@ -31,6 +31,7 @@ const SearchUserItem = memo(
               uri={item.avatarUrl}
               color={item.color}
               size="9"
+              updatedAt={item.updatedAt}
             />
             <Text bold fontSize="md">
               {item?.name}

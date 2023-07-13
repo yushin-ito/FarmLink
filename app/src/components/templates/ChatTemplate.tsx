@@ -73,15 +73,16 @@ const ChatTemplate = ({
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={-30}
     >
-      <Box flex={1} pt="5" safeAreaTop>
+      <Box flex={1} safeAreaTop>
         <ChatActionSheet isOpen={isOpen} onClose={onClose} />
         <HStack
+          pt="1"
           pb="2"
-          px="4"
+          px="2"
           alignItems="center"
           justifyContent="space-between"
         >
-          <HStack alignItems="center" space="3">
+          <HStack alignItems="center">
             <IconButton
               onPress={goBackNavigationHandler}
               icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
@@ -90,13 +91,20 @@ const ChatTemplate = ({
             <Heading fontSize="xl">{title}</Heading>
           </HStack>
           <Menu
-            mr="4"
+            mr="6"
             shadow="3"
             rounded="lg"
             bg="white"
             trigger={(props) => (
               <IconButton
-                icon={<Icon as={<Feather />} name="align-justify" size="md" />}
+                icon={
+                  <Icon
+                    as={<Feather />}
+                    name="align-justify"
+                    size="md"
+                    mr="3"
+                  />
+                }
                 variant="unstyled"
                 _pressed={{
                   opacity: 0.5,

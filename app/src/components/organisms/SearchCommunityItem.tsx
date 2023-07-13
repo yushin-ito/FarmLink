@@ -30,6 +30,7 @@ const SearchCommunityItem = memo(
               text={item.name.charAt(0)}
               uri={item.imageUrl}
               color={item.color}
+              updatedAt={item.updatedAt}
             />
             <Text bold fontSize="md">
               {item.name}

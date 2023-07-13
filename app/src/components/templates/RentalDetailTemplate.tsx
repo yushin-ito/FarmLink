@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Feather, AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign, Ionicons } from "@expo/vector-icons";
 
 import {
   Box,
@@ -12,20 +12,23 @@ import {
   ScrollView,
   Button,
   Text,
+  Center,
+  Spinner,
 } from "native-base";
 import { Image } from "expo-image";
 import { GetRentalResponse } from "../../hooks/rental/query";
 import { Alert, useWindowDimensions } from "react-native";
 import { useTranslation } from "react-i18next";
 import { LocationGeocodedAddress } from "expo-location";
-import { GetRentalLikeResponse } from "../../hooks/like/query";
+import { GetRentalLikesResponse } from "../../hooks/like/query";
 
 type RentalDetailTemplateProps = {
   owned: boolean;
   liked: boolean;
-  likes: GetRentalLikeResponse | undefined;
+  likes: GetRentalLikesResponse | undefined;
   rental: GetRentalResponse | undefined;
   address: LocationGeocodedAddress | undefined;
+  isRefetchingRental: boolean;
   isLoadingPostTalk: boolean;
   isLoadingLike: boolean;
   postLike: () => Promise<void>;
@@ -40,6 +43,7 @@ const RentalDetailTemplate = ({
   owned,
   rental,
   address,
+  isRefetchingRental,
   isLoadingPostTalk,
   isLoadingLike,
   postLike,
@@ -50,6 +54,14 @@ const RentalDetailTemplate = ({
   const { t } = useTranslation("map");
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  if (isRefetchingRental) {
+    return (
+      <Center flex={1}>
+        <Spinner color="muted.400" />
+      </Center>
+    );
+  }
 
   return (
     <Box flex={1} safeAreaTop>
@@ -73,29 +85,40 @@ const RentalDetailTemplate = ({
       </HStack>
       <ScrollView>
         <VStack space="2">
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            pagingEnabled
-            data={rental?.imageUrls}
-            renderItem={({ item }) => (
-              <Box w={width} h="240" bg="muted.100">
-                <Image
-                  source={{ uri: item }}
-                  style={{ flex: 1 }}
-                  contentFit="contain"
-                  cachePolicy="memory-disk"
-                />
-              </Box>
-            )}
-            onMomentumScrollEnd={(event) => {
-              const currentIndex = Math.floor(
-                event.nativeEvent.contentOffset.x /
-                  event.nativeEvent.layoutMeasurement.width
-              );
-              setCurrentIndex(currentIndex);
-            }}
-          />
+          {rental?.imageUrls?.length ? (
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              pagingEnabled
+              data={rental.imageUrls}
+              renderItem={({ item }) => (
+                <Box w={width} h="240" bg="muted.100">
+                  <Image
+                    source={{ uri: item }}
+                    style={{ flex: 1 }}
+                    contentFit="contain"
+                    cachePolicy="memory-disk"
+                  />
+                </Box>
+              )}
+              onMomentumScrollEnd={(event) => {
+                const currentIndex = Math.floor(
+                  event.nativeEvent.contentOffset.x /
+                    event.nativeEvent.layoutMeasurement.width
+                );
+                setCurrentIndex(currentIndex);
+              }}
+            />
+          ) : (
+            <Center w={width} h="240" bg="muted.100">
+              <Icon
+                as={<Ionicons />}
+                name="image-outline"
+                size="6xl"
+                color="muted.600"
+              />
+            </Center>
+          )}
           <HStack w="100%" alignItems="center" justifyContent="center">
             {rental?.imageUrls?.map((_item, index) => (
               <Box

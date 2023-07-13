@@ -2,14 +2,29 @@ import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
 import { Like, UseMutationResult } from "../../../types/db";
 
-export type PostLikeResponse = Awaited<ReturnType<typeof postLike>>;
+export type PostFarmLikeResponse = Awaited<ReturnType<typeof postFarmLike>>;
+export type PostRentalLikeResponse = Awaited<ReturnType<typeof postRentalLike>>;
 export type DeleteFarmLikeResponse = Awaited<ReturnType<typeof deleteFarmLike>>;
 export type DeleteRentalLikeResponse = Awaited<
   ReturnType<typeof deleteRentalLike>
 >;
 
-const postLike = async (like: Like["Insert"]) => {
-  const { data, error } = await supabase.from("like").upsert(like).select();
+const postFarmLike = async (like: Like["Insert"]) => {
+  const { data, error } = await supabase
+    .from("like")
+    .upsert(like)
+    .eq("farmId", like.farmId);
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const postRentalLike = async (like: Like["Insert"]) => {
+  const { data, error } = await supabase
+    .from("like")
+    .upsert(like)
+    .eq("rentalId", like.rentalId);
   if (error) {
     throw error;
   }
@@ -38,12 +53,22 @@ const deleteRentalLike = async (rentalId: number) => {
   return data;
 };
 
-export const usePostLike = ({
+export const usePostFarmLike = ({
   onSuccess,
   onError,
-}: UseMutationResult<PostLikeResponse, Error>) =>
+}: UseMutationResult<PostFarmLikeResponse, Error>) =>
   useMutation({
-    mutationFn: postLike,
+    mutationFn: postFarmLike,
+    onSuccess,
+    onError,
+  });
+
+export const usePostRentalLike = ({
+  onSuccess,
+  onError,
+}: UseMutationResult<PostRentalLikeResponse, Error>) =>
+  useMutation({
+    mutationFn: postRentalLike,
     onSuccess,
     onError,
   });

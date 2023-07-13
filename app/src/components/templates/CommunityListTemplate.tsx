@@ -80,6 +80,7 @@ const CommunityListTemplate = ({
             uri={user?.avatarUrl}
             color={user?.color}
             onPress={settingNavigationHandler}
+            updatedAt={user?.updatedAt}
           />
         </HStack>
         <SearchBar isReadOnly onPressIn={searchCommunityNavigationHandler} />

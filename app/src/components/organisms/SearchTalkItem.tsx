@@ -29,6 +29,7 @@ const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
             uri={item.to.avatarUrl}
             color={item.to.color}
             size="9"
+            updatedAt={item.to.updatedAt}
           />
           <Text bold fontSize="md">
             {item.to.name}

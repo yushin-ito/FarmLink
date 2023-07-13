@@ -51,30 +51,33 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     },
   });
 
-  const onRegionChange = (region: Region) => {
-    const farms = queryFarms?.filter(
-      (item) =>
-        !item.privated &&
-        item.latitude &&
-        item.longitude &&
-        item.longitude >= region.longitude - 0.3 &&
-        item.longitude <= region.longitude + 0.3 &&
-        item.latitude >= region.latitude - 0.1 &&
-        item.latitude <= region.latitude + 0.1
-    );
-    setFarms(farms);
+  const onRegionChange = useCallback(
+    (region: Region) => {
+      const farms = queryFarms?.filter(
+        (item) =>
+          !item.privated &&
+          item.latitude &&
+          item.longitude &&
+          item.longitude >= region.longitude - 0.3 &&
+          item.longitude <= region.longitude + 0.3 &&
+          item.latitude >= region.latitude - 0.1 &&
+          item.latitude <= region.latitude + 0.1
+      );
+      setFarms(farms);
 
-    const rentals = queryRentals?.filter(
-      (item) =>
-        item.latitude &&
-        item.longitude &&
-        item.longitude >= region.longitude - 0.3 &&
-        item.longitude <= region.longitude + 0.3 &&
-        item.latitude >= region.latitude - 0.1 &&
-        item.latitude <= region.latitude + 0.1
-    );
-    setRentals(rentals);
-  };
+      const rentals = queryRentals?.filter(
+        (item) =>
+          item.latitude &&
+          item.longitude &&
+          item.longitude >= region.longitude - 0.3 &&
+          item.longitude <= region.longitude + 0.3 &&
+          item.latitude >= region.latitude - 0.1 &&
+          item.latitude <= region.latitude + 0.1
+      );
+      setRentals(rentals);
+    },
+    [queryFarms, queryRentals]
+  );
 
   const rentalDetailNavigationHandler = useCallback((rentalId: number) => {
     navigation.navigate("RentalDetail", { rentalId });

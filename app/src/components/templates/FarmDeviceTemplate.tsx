@@ -43,6 +43,7 @@ const FarmDeviceTemplate = ({
           uri={user?.avatarUrl}
           color={user?.color}
           onPress={settingNavigationHandler}
+          updatedAt={user?.updatedAt}
         />
       </HStack>
       <Image

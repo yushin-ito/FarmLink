@@ -41,6 +41,7 @@ const postRental = async ({
 };
 
 const deleteRental = async (rentalId: number) => {
+  await supabase.from("like").delete().eq("rentalId", rentalId);
   const { data, error } = await supabase
     .from("rental")
     .delete()

@@ -29,6 +29,7 @@ type SettingTemplateProps = {
   postRentalNavigationHandler: () => void;
   postProfileNavigationHandler: () => void;
   rentalListNavigationHandler: () => void;
+  likeListNavigationHandler: () => void;
 };
 
 const SettingTemplate = ({
@@ -41,6 +42,7 @@ const SettingTemplate = ({
   postRentalNavigationHandler,
   postProfileNavigationHandler,
   rentalListNavigationHandler,
+  likeListNavigationHandler,
 }: SettingTemplateProps) => {
   const { t } = useTranslation("setting");
   const { isOpen, onOpen, onClose } = useDisclose();
@@ -72,6 +74,7 @@ const SettingTemplate = ({
               isLoading={isLoadingPostAvatar}
               size="16"
               fontSize="2xl"
+              updatedAt={user?.updatedAt}
               onPress={onOpen}
             />
           </Box>
@@ -82,6 +85,20 @@ const SettingTemplate = ({
             <Text color="muted.600">{user?.introduction}</Text>
           </VStack>
         </HStack>
+        <Pressable
+          _pressed={{
+            opacity: 0.5,
+          }}
+          onPress={likeListNavigationHandler}
+        >
+          <HStack alignItems="center" justifyContent="space-between">
+            <HStack p="2" space="3" alignItems="center" rounded="md">
+              <Icon as={<Feather />} name="heart" size="5" />
+              <Text fontSize="md">{t("likeList")}</Text>
+            </HStack>
+            <Icon as={<Feather />} name="chevron-right" size="5" />
+          </HStack>
+        </Pressable>
         <Pressable
           _pressed={{
             opacity: 0.5,
@@ -105,7 +122,7 @@ const SettingTemplate = ({
           <HStack alignItems="center" justifyContent="space-between">
             <HStack p="2" space="3" alignItems="center" rounded="md">
               <Icon as={<Feather />} name="camera" size="5" />
-              <Text fontSize="md">{t("rental")}</Text>
+              <Text fontSize="md">{t("rentalFarm")}</Text>
             </HStack>
             <Icon as={<Feather />} name="chevron-right" size="5" />
           </HStack>

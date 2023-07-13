@@ -83,12 +83,17 @@ const MapTemplate = ({
       >
         {position && <Marker coordinate={position.coords} />}
         {farms?.map(
-          (item, index) =>
+          (item) =>
             item.latitude &&
             item.longitude && (
               <Marker
-                key={index}
-                pinColor="green"
+                key={item.farmId}
+                pinColor={
+                  item.latitude === params?.latitude &&
+                  item.longitude === params?.longitude
+                    ? "tomato"
+                    : "green"
+                }
                 coordinate={{
                   latitude: item.latitude,
                   longitude: item.longitude,
@@ -97,12 +102,17 @@ const MapTemplate = ({
             )
         )}
         {rentals?.map(
-          (item, index) =>
+          (item) =>
             item.latitude &&
             item.longitude && (
               <Marker
-                key={index}
-                pinColor="blue"
+                key={item.rentalId}
+                pinColor={
+                  item.latitude === params?.latitude &&
+                  item.longitude === params?.longitude
+                    ? "aqua"
+                    : "blue"
+                }
                 coordinate={{
                   latitude: item.latitude,
                   longitude: item.longitude,

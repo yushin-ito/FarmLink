@@ -7,6 +7,7 @@ import SettingScreen from "../screens/SettingScreen";
 import PostProfileScreen from "../screens/PostProfileScreen";
 import PostRentalScreen from "../screens/PostRentalScreen";
 import RentalListScreen from "../screens/RentalListScreen";
+import LikeListScreen from "../screens/LikeListScreen";
 
 const SettingStack = createNativeStackNavigator<SettingStackParamList>();
 
@@ -18,6 +19,7 @@ const SettingNavigator = () => {
         <SettingStack.Screen name="PostProfile" component={PostProfileScreen} />
         <SettingStack.Screen name="PostRental" component={PostRentalScreen} />
         <SettingStack.Screen name="RentalList" component={RentalListScreen} />
+        <SettingStack.Screen name="LikeList" component={LikeListScreen} />
       </SettingStack.Group>
     </SettingStack.Navigator>
   );
