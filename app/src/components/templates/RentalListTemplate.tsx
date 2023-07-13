@@ -9,25 +9,32 @@ import {
   Icon,
   FlatList,
   Text,
+  Spinner,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import RentalItem from "../organisms/RentalItem";
-import { Alert } from "react-native";
+import { Alert, RefreshControl } from "react-native";
 
 type RentalListTemplateProps = {
   rentals: GetRentalsResponse | undefined;
   deleteRental: (rentalId: number) => Promise<void>;
+  refetchRentals: () => Promise<void>;
   mapNavigationHandler: (
     latitude: number | null,
     longitude: number | null
   ) => Promise<void>;
+  isLoadingRentals: boolean;
+  isRefetchingRentals: boolean;
   goBackNavigationHandler: () => void;
 };
 
 const RentalListTemplate = ({
   rentals,
   deleteRental,
+  isLoadingRentals,
+  isRefetchingRentals,
+  refetchRentals,
   mapNavigationHandler,
   goBackNavigationHandler,
 }: RentalListTemplateProps) => {
@@ -49,42 +56,52 @@ const RentalListTemplate = ({
         />
       </HStack>
       <Box flex={1}>
-        <FlatList
-          data={rentals}
-          renderItem={({ item }) => (
-            <RentalItem
-              item={item}
-              onPress={() =>
-                mapNavigationHandler(item.latitude, item.longitude)
-              }
-              onPressRight={() =>
-                Alert.alert(t("deleteRental"), t("askDeleteRental"), [
-                  {
-                    text: t("cancel"),
-                    style: "cancel",
-                  },
-                  {
-                    text: t("delete"),
-                    onPress: async () => await deleteRental(item.rentalId),
-                    style: "destructive",
-                  },
-                ])
-              }
-            />
-          )}
-          ListEmptyComponent={
-            <Text
-              bold
-              lineHeight="2xl"
-              fontSize="md"
-              textAlign="center"
-              color="muted.600"
-            >
-              {t("notExistRental")}
-            </Text>
-          }
-          keyExtractor={(item) => item.rentalId.toString()}
-        />
+        {isLoadingRentals ? (
+          <Spinner color="muted.400" />
+        ) : (
+          <FlatList
+            data={rentals}
+            renderItem={({ item }) => (
+              <RentalItem
+                item={item}
+                onPress={() =>
+                  mapNavigationHandler(item.latitude, item.longitude)
+                }
+                onPressRight={() =>
+                  Alert.alert(t("deleteRental"), t("askDeleteRental"), [
+                    {
+                      text: t("cancel"),
+                      style: "cancel",
+                    },
+                    {
+                      text: t("delete"),
+                      onPress: async () => await deleteRental(item.rentalId),
+                      style: "destructive",
+                    },
+                  ])
+                }
+              />
+            )}
+            ListEmptyComponent={
+              <Text
+                bold
+                lineHeight="2xl"
+                fontSize="md"
+                textAlign="center"
+                color="muted.600"
+              >
+                {t("notExistRental")}
+              </Text>
+            }
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetchingRentals}
+                onRefresh={refetchRentals}
+              />
+            }
+            keyExtractor={(item) => item.rentalId.toString()}
+          />
+        )}
       </Box>
     </Box>
   );

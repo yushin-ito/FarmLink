@@ -16,7 +16,7 @@ const getUser = async (userId: string | undefined) => {
 };
 
 export const useQueryUser = (userId: string | undefined) =>
- useQuery({
-    queryKey: "user",
+  useQuery({
+    queryKey: ["user", userId],
     queryFn: async () => await getUser(userId),
   });

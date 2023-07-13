@@ -42,9 +42,9 @@ const TalkItem = memo(
         )}
       >
         <TouchableHighlight onPress={onPress} underlayColor="#e5e5e5">
-          <VStack>
+          <VStack bg="white">
             <HStack px="9" py="4">
-              <Box w="25%">
+              <Box w="20%">
                 <Avatar
                   size="md"
                   fontSize="2xl"
@@ -55,7 +55,7 @@ const TalkItem = memo(
                   updatedAt={item.to.updatedAt}
                 />
               </Box>
-              <VStack w="75%" space="1">
+              <VStack w="80%" space="1">
                 <HStack alignItems="center" justifyContent="space-between">
                   <Text bold fontSize="md">
                     {item.to.name}

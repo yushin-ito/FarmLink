@@ -40,7 +40,7 @@ const RentalItem = memo(({ item, onPressRight, onPress }: RentalItemProps) => {
       )}
     >
       <TouchableHighlight onPress={onPress} underlayColor="#e5e5e5">
-        <VStack alignItems="center">
+        <VStack alignItems="center" bg="white">
           <HStack
             w="100%"
             px="6"
@@ -52,7 +52,7 @@ const RentalItem = memo(({ item, onPressRight, onPress }: RentalItemProps) => {
               <Center size="12" rounded="md" bg="muted.200">
                 {item.imageUrls?.length ? (
                   <Image
-                    style={{ flex: 1 }}
+                    style={{ width: 48, height: 48 }}
                     source={{ uri: item.imageUrls[0] }}
                     contentFit="contain"
                     recyclingKey={item.rentalId.toString()}

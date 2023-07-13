@@ -60,7 +60,7 @@ const SignUpTemplate = memo(
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
         >
-          <VStack flex={1} pt="24" px="10" space="6">
+          <VStack flex={1} pt="20" px="10" space="5">
             <Heading fontSize="3xl" mb="5" textAlign="center">
               {t("signup")}
             </Heading>

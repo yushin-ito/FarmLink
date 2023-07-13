@@ -81,7 +81,7 @@ const PostProfileTemplate = ({
               />
             </HStack>
             <VStack px="10">
-              <FormControl isInvalid={"name" in errors}>
+              <FormControl isRequired isInvalid={"name" in errors}>
                 <FormControl.Label>{t("displayName")}</FormControl.Label>
                 <Controller
                   name="name"
@@ -133,7 +133,7 @@ const PostProfileTemplate = ({
                   }}
                 />
               </FormControl>
-              <FormControl isInvalid={"profile" in errors}>
+              <FormControl isInvalid={"introduction" in errors}>
                 <FormControl.Label>{t("profile")}</FormControl.Label>
                 <Controller
                   name="introduction"
@@ -180,7 +180,6 @@ const PostProfileTemplate = ({
                     );
                   }}
                   rules={{
-                    required: t("profileRequired"),
                     maxLength: {
                       value: 30,
                       message: t("profileMaxLength"),

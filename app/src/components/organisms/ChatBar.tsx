@@ -95,10 +95,10 @@ const ChatBar = memo(
         </Box>
         <IconButton
           onPress={handleSubmit(async (data) => {
+            reset();
             if (data.message) {
               await onSend(data.message);
             }
-            reset();
           })}
           icon={
             <Icon

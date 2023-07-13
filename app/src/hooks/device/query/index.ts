@@ -18,6 +18,6 @@ const getDevice = async (deviceId: string | null | undefined) => {
 
 export const useQueryDevice = (deviceId: string | null | undefined) =>
   useQuery({
-    queryKey: "device",
+    queryKey: ["device", deviceId?.toString()],
     queryFn: async () => await getDevice(deviceId),
   });

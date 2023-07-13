@@ -42,7 +42,7 @@ const RentalItem = memo(
         )}
       >
         <TouchableHighlight onPress={onPress} underlayColor="#e5e5e5">
-          <VStack alignItems="center">
+          <VStack alignItems="center" bg="white">
             <HStack
               w="100%"
               px="6"

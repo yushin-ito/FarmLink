@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import LikeListTemplate from "../components/templates/LikeListTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
@@ -15,13 +15,16 @@ const LikeListScreen = ({
   const { t } = useTranslation("farm");
   const toast = useToast();
   const { session } = useAuth();
-  const { data: likes, refetch: refetchLikes } = useQueryUserLikes(
-    session?.user.id
-  );
+  const {
+    data: likes,
+    refetch,
+    isLoading: isLoadingLikes,
+  } = useQueryUserLikes(session?.user.id);
+  const [isRefetchingLikes, setIsRefetchingRentals] = useState(false);
 
   const { mutateAsync: mutateAsyncDeleteFarmLike } = useDeleteFarmLike({
     onSuccess: async () => {
-      await refetchLikes();
+      await refetch();
     },
     onError: () => {
       navigation.goBack();
@@ -38,7 +41,7 @@ const LikeListScreen = ({
 
   const { mutateAsync: mutateAsyncDeleteRentalLike } = useDeleteRentalLike({
     onSuccess: async () => {
-      await refetchLikes();
+      await refetch();
     },
     onError: () => {
       navigation.goBack();
@@ -59,6 +62,12 @@ const LikeListScreen = ({
 
   const deleteRentalLike = useCallback(async (rentalId: number) => {
     await mutateAsyncDeleteRentalLike(rentalId);
+  }, []);
+
+  const refetchLikes = useCallback(async () => {
+    setIsRefetchingRentals(true);
+    await refetch();
+    setIsRefetchingRentals(false);
   }, []);
 
   const mapNavigationHandler = useCallback(
@@ -84,6 +93,9 @@ const LikeListScreen = ({
       likes={likes}
       deleteFarmLike={deleteFarmLike}
       deleteRentalLike={deleteRentalLike}
+      refetchLikes={refetchLikes}
+      isLoadingLikes={isLoadingLikes}
+      isRefetchingLikes={isRefetchingLikes}
       mapNavigationHandler={mapNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

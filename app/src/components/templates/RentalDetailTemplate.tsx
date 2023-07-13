@@ -21,6 +21,7 @@ import { Alert, useWindowDimensions } from "react-native";
 import { useTranslation } from "react-i18next";
 import { LocationGeocodedAddress } from "expo-location";
 import { GetRentalLikesResponse } from "../../hooks/like/query";
+import Avatar from "../molecules/Avatar";
 
 type RentalDetailTemplateProps = {
   owned: boolean;
@@ -143,29 +144,42 @@ const RentalDetailTemplate = ({
                 )}
               </Text>
             </VStack>
-            <VStack alignItems="center" mr="3">
-              <Icon as={<AntDesign />} name="hearto" size="md" color="black" />
-              <Text>{likes?.length ?? 0}</Text>
-            </VStack>
+            <HStack alignItems="center">
+              <Avatar
+                isDisabled
+                mr="1"
+                size="xs"
+                text={rental?.user?.name?.charAt(0)}
+                uri={rental?.user?.avatarUrl}
+                color={rental?.user?.color}
+                updatedAt={rental?.user?.updatedAt}
+              />
+              <Text>{rental?.user?.name}</Text>
+            </HStack>
           </HStack>
-
           <HStack mt="6" alignItems="center" justifyContent="space-between">
-            <VStack w="24">
+            <VStack>
               <Text color="muted.600">{t("area")}</Text>
               <Text bold fontSize="md">
                 {rental?.area ? rental.area : t("unknown")}
               </Text>
             </VStack>
-            <VStack w="24">
+            <VStack>
               <Text color="muted.600">{t("equipment")}</Text>
               <Text bold fontSize="md">
                 {rental?.equipment ? rental.equipment : t("unknown")}
               </Text>
             </VStack>
-            <VStack w="24">
+            <VStack>
               <Text color="muted.600">{t("fee")}</Text>
               <Text bold fontSize="md">
                 {rental?.fee ? rental.fee : t("unknown")}
+              </Text>
+            </VStack>
+            <VStack>
+              <Text color="muted.600">{t("like")}</Text>
+              <Text bold textAlign="center">
+                {likes?.length ?? 0}
               </Text>
             </VStack>
           </HStack>
@@ -209,7 +223,7 @@ const RentalDetailTemplate = ({
           isDisabled={isLoadingLike}
         />
         <Button
-          px="9"
+          w="40"
           colorScheme="brand"
           rounded="lg"
           isLoading={isLoadingPostTalk}

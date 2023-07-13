@@ -131,7 +131,7 @@ const CommunityListTemplate = ({
       <CircleButton
         position="absolute"
         bottom="24"
-        right="8"
+        right="6"
         onPress={postCommunityNavigationHandler}
       >
         <Icon as={<Feather name="plus" />} size="4xl" color="white" />

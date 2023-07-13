@@ -1,14 +1,9 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
-import { Chat, Talk, UseMutationResult } from "../../../types/db";
-import { decode } from "base64-arraybuffer";
+import {  Talk, UseMutationResult } from "../../../types/db";
 
 export type PostTalkResponse = Awaited<ReturnType<typeof postTalk>>;
 export type DeleteTalkResponse = Awaited<ReturnType<typeof deleteTalk>>;
-export type PostTalkChatResponse = Awaited<ReturnType<typeof postTalkChat>>;
-export type PostTalkChatImageResponse = Awaited<
-  ReturnType<typeof postTalkChatImage>
->;
 
 const postTalk = async (talk: Talk["Insert"]) => {
   const { data, error } = await supabase.from("talk").upsert(talk).select();
@@ -30,53 +25,6 @@ const deleteTalk = async (talkId: number) => {
   return data;
 };
 
-const postTalkChat = async (chat: Chat["Insert"]) => {
-  const { data, error } = await supabase.from("chat").upsert(chat).select();
-  if (error) {
-    throw error;
-  }
-  return data;
-};
-
-const postTalkChatImage = async ({
-  base64,
-  size,
-  talkId,
-  authorId,
-}: {
-  base64: string;
-  size: { width: number; height: number };
-  talkId: number;
-  authorId: string;
-}) => {
-  const filePath = `chat/${Math.random()}.png`;
-  const { error } = await supabase.storage
-    .from("image")
-    .upload(filePath, decode(base64), {
-      contentType: "image",
-    });
-  if (error) {
-    throw error;
-  }
-  const { data } = supabase.storage.from("image").getPublicUrl(filePath);
-  await postTalkChat({
-    talkId,
-    authorId,
-    imageUrl: data.publicUrl,
-    width: size.width,
-    height: size.height,
-  });
-};
-
-export const usePostTalkChatImage = ({
-  onSuccess,
-  onError,
-}: UseMutationResult<PostTalkChatImageResponse, Error>) =>
-  useMutation({
-    mutationFn: postTalkChatImage,
-    onSuccess,
-    onError,
-  });
 
 export const usePostTalk = ({
   onSuccess,
@@ -98,12 +46,3 @@ export const useDeleteTalk = ({
     onError,
   });
 
-export const usePostTalkChat = ({
-  onSuccess,
-  onError,
-}: UseMutationResult<PostTalkChatResponse, Error>) =>
-  useMutation({
-    mutationFn: postTalkChat,
-    onSuccess,
-    onError,
-  });

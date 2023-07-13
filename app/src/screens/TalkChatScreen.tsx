@@ -5,19 +5,20 @@ import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import ChatTemplate from "../components/templates/ChatTemplate";
-import {
-  useDeleteTalk,
-  usePostTalk,
-  usePostTalkChat,
-  usePostTalkChatImage,
-} from "../hooks/talk/mutate";
+import { useDeleteTalk, usePostTalk } from "../hooks/talk/mutate";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { TalkStackParamList, TalkStackScreenProps } from "../types";
-import useChat from "../hooks/talk/useChat";
 import useAuth from "../hooks/auth/useAuth";
-import { useInfiniteQueryTalkChats, useQueryTalks } from "../hooks/talk/query";
+import { useQueryTalks } from "../hooks/talk/query";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
+import { useTalkChat } from "../hooks/chat";
+import {
+  useDeleteChat,
+  usePostChat,
+  usePostTalkChatImage,
+} from "../hooks/chat/mutate";
+import { useInfiniteQueryTalkChats } from "../hooks/chat/query";
 
 const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { t } = useTranslation("talk");
@@ -34,7 +35,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     refetch: refetchChats,
   } = useInfiniteQueryTalkChats(params.talkId);
 
-  useChat(params.talkId, async () => {
+  useTalkChat(params.talkId, async () => {
     await refetchChats();
   });
 
@@ -72,7 +73,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   });
 
   const { mutateAsync: mutateAsyncPostChat, isLoading: isLoadingPostChat } =
-    usePostTalkChat({
+    usePostChat({
       onError: () => {
         showAlert(
           toast,
@@ -84,6 +85,19 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
         );
       },
     });
+
+  const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   const { mutateAsync: mutateAsyncPostChatImage } = usePostTalkChatImage({
     onSuccess: async () => {
@@ -150,6 +164,10 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     [session?.user]
   );
 
+  const deleteChat = useCallback(async (chatId: number | null) => {
+    await mutateAsyncDeleteChat(chatId);
+  }, []);
+
   const deleteTalk = useCallback(async () => {
     await mutateAsyncDeleteTalk(params.talkId);
   }, []);
@@ -166,6 +184,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
       user={user}
       chats={chats}
       onSend={onSend}
+      deleteChat={deleteChat}
       deleteRoom={deleteTalk}
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}

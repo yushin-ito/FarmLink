@@ -133,7 +133,7 @@ const MapTemplate = ({
       <CircleButton
         position="absolute"
         bottom="24"
-        right="8"
+        right="6"
         onPress={getCurrentPosition}
       >
         <Icon as={<Feather />} name="navigation" size="xl" color="white" />

@@ -10,19 +10,24 @@ import {
   FlatList,
   Text,
   Pressable,
+  Spinner,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
 import LikeItem from "../organisms/LikeItem";
+import { RefreshControl } from "react-native";
 
 type LikeListTemplateProps = {
   likes: GetUserLikesResponse | undefined;
   deleteFarmLike: (farmId: number) => Promise<void>;
   deleteRentalLike: (likeId: number) => Promise<void>;
+  refetchLikes: () => Promise<void>;
   mapNavigationHandler: (
     latitude: number | null,
     longitude: number | null
   ) => Promise<void>;
+  isLoadingLikes: boolean;
+  isRefetchingLikes: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -30,6 +35,9 @@ const LikeListTemplate = ({
   likes,
   deleteRentalLike,
   deleteFarmLike,
+  refetchLikes,
+  isLoadingLikes,
+  isRefetchingLikes,
   mapNavigationHandler,
   goBackNavigationHandler,
 }: LikeListTemplateProps) => {
@@ -80,7 +88,9 @@ const LikeListTemplate = ({
             </Box>
           </Pressable>
         </HStack>
-        {type === "farm" ? (
+        {isLoadingLikes ? (
+          <Spinner color="muted.400" />
+        ) : type === "farm" ? (
           <FlatList
             data={likes?.filter((item) => item.farmId)}
             renderItem={({ item }) => (
@@ -94,7 +104,24 @@ const LikeListTemplate = ({
                 onPressRight={() => item.farmId && deleteFarmLike(item.farmId)}
               />
             )}
+            ListEmptyComponent={
+              <Text
+                bold
+                lineHeight="2xl"
+                fontSize="md"
+                textAlign="center"
+                color="muted.600"
+              >
+                {t("notExistFarmLike")}
+              </Text>
+            }
             keyExtractor={(item) => item.likeId.toString()}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetchingLikes}
+                onRefresh={refetchLikes}
+              />
+            }
           />
         ) : (
           <FlatList
@@ -115,7 +142,24 @@ const LikeListTemplate = ({
                 }
               />
             )}
+            ListEmptyComponent={
+              <Text
+                bold
+                lineHeight="2xl"
+                fontSize="md"
+                textAlign="center"
+                color="muted.600"
+              >
+                {t("notExistRentalLike")}
+              </Text>
+            }
             keyExtractor={(item) => item.likeId.toString()}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetchingLikes}
+                onRefresh={refetchLikes}
+              />
+            }
           />
         )}
       </Box>

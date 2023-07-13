@@ -66,7 +66,7 @@ const SettingTemplate = ({
       <VStack space="3">
         <Heading>{t("setting")}</Heading>
         <HStack mt="4" mb="6" alignItems="center">
-          <Box w="30%">
+          <Box w="25%">
             <Avatar
               text={user?.name?.charAt(0)}
               uri={user?.avatarUrl}
@@ -78,7 +78,7 @@ const SettingTemplate = ({
               onPress={onOpen}
             />
           </Box>
-          <VStack w="70%">
+          <VStack w="75%">
             <Text fontSize="xl" bold>
               {user?.name}
             </Text>

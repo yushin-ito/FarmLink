@@ -18,7 +18,7 @@ const getUserLikes = async (userId: string | undefined) => {
     .map((item) =>
       Array.isArray(item.farm)
         ? { ...item, farm: item.farm[0] }
-        : { ...item, farm: item.farm, }
+        : { ...item, farm: item.farm }
     )
     .map((item) =>
       Array.isArray(item.rental)
@@ -53,18 +53,18 @@ const getRentalLikes = async (rentalId: number) => {
 
 export const useQueryUserLikes = (userId: string | undefined) =>
   useQuery({
-    queryKey: "likes",
+    queryKey: ["like", userId],
     queryFn: async () => await getUserLikes(userId),
   });
 
 export const useQueryFarmLikes = (farmId: number) =>
   useQuery({
-    queryKey: "likes",
+    queryKey: ["like", farmId],
     queryFn: async () => await getFarmLikes(farmId),
   });
 
 export const useQueryRentalLikes = (rentalId: number) =>
   useQuery({
-    queryKey: "likes",
+    queryKey: ["like", rentalId],
     queryFn: async () => await getRentalLikes(rentalId),
   });

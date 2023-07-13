@@ -14,7 +14,7 @@ const CircleButton = memo(
     ...props
   }: CirCleButtonProps & IPressableProps) => {
     return (
-      <Pressable {...props}>
+      <Pressable {...props} mb="3">
         {({ isPressed }) => {
           return (
             <Center

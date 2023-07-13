@@ -1,8 +1,8 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import RentalListTemplate from "../components/templates/RentalListTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
-import { useQueryRentals } from "../hooks/rental/query";
+import { useQueryUserRentals } from "../hooks/rental/query";
 import { showAlert, wait } from "../functions";
 import { useDeleteRental } from "../hooks/rental/mutate";
 import { useToast } from "native-base";
@@ -15,7 +15,12 @@ const RentalListScreen = ({
   const { t } = useTranslation("farm");
   const toast = useToast();
   const { session } = useAuth();
-  const { data: rentals, refetch } = useQueryRentals(session?.user.id);
+  const {
+    data: rentals,
+    refetch,
+    isLoading: isLoadingRentals,
+  } = useQueryUserRentals(session?.user.id);
+  const [isRefreshingRentals, setIsRefetchingRentals] = useState(false);
 
   const { mutateAsync: mutateAsyncDeleteRental } = useDeleteRental({
     onSuccess: async () => {
@@ -36,6 +41,12 @@ const RentalListScreen = ({
 
   const deleteRental = useCallback(async (rentalId: number) => {
     await mutateAsyncDeleteRental(rentalId);
+  }, []);
+
+  const refetchRentals = useCallback(async () => {
+    setIsRefetchingRentals(true);
+    await refetch();
+    setIsRefetchingRentals(false);
   }, []);
 
   const mapNavigationHandler = useCallback(
@@ -61,6 +72,9 @@ const RentalListScreen = ({
     <RentalListTemplate
       rentals={rentals}
       deleteRental={deleteRental}
+      isLoadingRentals={isLoadingRentals}
+      isRefetchingRentals={isRefreshingRentals}
+      refetchRentals={refetchRentals}
       mapNavigationHandler={mapNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

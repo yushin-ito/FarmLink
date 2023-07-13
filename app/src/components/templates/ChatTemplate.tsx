@@ -13,15 +13,14 @@ import {
   useDisclose,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
-import React from "react";
+import React, { useState } from "react";
 import { Alert, Platform } from "react-native";
 import ChatItem from "../organisms/ChatItem";
 import ChatBar from "../organisms/ChatBar";
-import { GetCommunityChatsResponse } from "../../hooks/community/query";
 import { GetUserResponse } from "../../hooks/user/query";
-import { GetTalkChatsResponse } from "../../hooks/talk/query";
 import ChatActionSheet from "../organisms/ChatActionSheet";
 import { useTranslation } from "react-i18next";
+import { GetCommunityChatsResponse, GetTalkChatsResponse } from "../../hooks/chat/query";
 
 type ChatTemplateProps = {
   type: "community" | "talk";
@@ -34,6 +33,7 @@ type ChatTemplateProps = {
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;
   deleteRoom: () => Promise<void>;
+  deleteChat: (chatId: number | null) => Promise<void>
   pickImageByCamera: () => Promise<void>;
   pickImageByLibrary: () => Promise<void>;
   readMore: () => void;
@@ -51,6 +51,7 @@ const ChatTemplate = ({
   hasMore,
   onSend,
   deleteRoom,
+  deleteChat,
   pickImageByCamera,
   pickImageByLibrary,
   readMore,
@@ -58,6 +59,7 @@ const ChatTemplate = ({
 }: ChatTemplateProps) => {
   const { t } = useTranslation(["chat", "community", "talk"]);
   const { isOpen, onOpen, onClose } = useDisclose();
+  const [chatId, setChatId] = useState<number | null>(null);
 
   if (isLoadingChats) {
     return (
@@ -74,7 +76,11 @@ const ChatTemplate = ({
       keyboardVerticalOffset={-30}
     >
       <Box flex={1} safeAreaTop>
-        <ChatActionSheet isOpen={isOpen} onClose={onClose} />
+        <ChatActionSheet
+          isOpen={isOpen}
+          onClose={onClose}
+          deleteChat={() => deleteChat(chatId)}
+        />
         <HStack
           pt="1"
           pb="2"
@@ -162,7 +168,10 @@ const ChatTemplate = ({
               item={item}
               authored={item.authorId === user?.userId}
               locale={locale}
-              onLongPress={onOpen}
+              onLongPress={() => {
+                onOpen();
+                setChatId(item.chatId);
+              }}
             />
           )}
           keyExtractor={(item) => item.chatId.toString()}

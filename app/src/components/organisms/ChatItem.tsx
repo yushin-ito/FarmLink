@@ -1,11 +1,13 @@
 import React, { memo } from "react";
 import { Box, HStack, Pressable, Text, VStack } from "native-base";
-import { GetCommunityChatsResponse } from "../../hooks/community/query";
 import Avatar from "../molecules/Avatar";
-import { GetTalkChatsResponse } from "../../hooks/talk/query";
 import { getTimeDistance } from "../../functions";
 import { Image } from "expo-image";
 import { useWindowDimensions } from "react-native";
+import {
+  GetCommunityChatsResponse,
+  GetTalkChatsResponse,
+} from "../../hooks/chat/query";
 
 type ChatItemProps = {
   item: GetCommunityChatsResponse[number] | GetTalkChatsResponse[number];
@@ -38,7 +40,7 @@ const ChatItem = memo(
           />
         )}
         {item?.message && (
-          <Pressable onLongPress={onLongPress} maxW="70%">
+          <Pressable onLongPress={() => authored && onLongPress()} maxW="70%">
             <VStack
               space="1"
               alignItems={!authored ? "flex-end" : "flex-start"}
@@ -63,7 +65,7 @@ const ChatItem = memo(
           </Pressable>
         )}
         {item?.imageUrl && item.width && item.height && (
-          <Pressable onLongPress={onLongPress}>
+          <Pressable onLongPress={() => authored && onLongPress()}>
             <VStack
               space="1"
               alignItems={!authored ? "flex-end" : "flex-start"}

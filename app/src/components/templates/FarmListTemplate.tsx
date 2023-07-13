@@ -104,7 +104,7 @@ const FarmListTemplate = ({
       <CircleButton
         position="absolute"
         bottom="24"
-        right="8"
+        right="6"
         onPress={postFarmNavigationHandler}
       >
         <Icon as={<Feather name="plus" />} size="4xl" color="white" />
