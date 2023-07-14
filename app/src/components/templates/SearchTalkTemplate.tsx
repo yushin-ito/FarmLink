@@ -7,6 +7,7 @@ import SearchBar from "../organisms/SearchBar";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import SearchTalkItem from "../organisms/SearchTalkItem";
 import { GetTalksResponse } from "../../hooks/talk/query";
+import { useTranslation } from "react-i18next";
 
 type SearchTalkTemplateProps = {
   searchResult: GetTalksResponse | undefined;
@@ -28,6 +29,7 @@ const SearchTalkTemplate = ({
   talkChatNavigationHandler,
   goBackNavigationHandler,
 }: SearchTalkTemplateProps) => {
+    const { t } = useTranslation("talk");
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -43,6 +45,7 @@ const SearchTalkTemplate = ({
                   w="90%"
                   autoFocus
                   returnKeyType="search"
+                  placeholder={t("searchTalk")}
                   InputRightElement={
                     <IconButton
                       onPress={() => reset()}

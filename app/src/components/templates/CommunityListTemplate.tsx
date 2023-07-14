@@ -83,7 +83,11 @@ const CommunityListTemplate = ({
             updatedAt={user?.updatedAt}
           />
         </HStack>
-        <SearchBar isReadOnly onPressIn={searchCommunityNavigationHandler} />
+        <SearchBar
+          isReadOnly
+          placeholder={t("searchCommunity")}
+          onPressIn={searchCommunityNavigationHandler}
+        />
       </VStack>
       <Pressable onPress={onOpen} alignSelf="flex-end" mr="8" mb="2">
         <HStack

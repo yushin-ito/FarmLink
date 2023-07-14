@@ -22,7 +22,9 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const [type, setType] = useState<"farm" | "rental">("farm");
 
   useEffect(() => {
-    !params?.latitude && !params?.longitude && getCurrentPosition();
+    if (!params?.latitude && !params?.longitude) {
+      getCurrentPosition();
+    }
     params?.type && setType(params.type);
   }, [params]);
 

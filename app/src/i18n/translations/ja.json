@@ -35,7 +35,8 @@
   "map": {
     "farm": "農園",
     "rental": "レンタル",
-    "search": "探す",
+    "searchFarm": "農園を探す",
+    "searchRental": "レンタルを探す",
     "fee": "料金",
     "equipment": "設備",
     "area": "面積",
@@ -73,7 +74,7 @@
     "descriptionRequired": "詳細を入力してください",
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
     "create": "作成",
-    "search": "検索",
+    "searchCommunity": "コミュニティを検索",
     "category": "カテゴリー",
     "all": "すべて",
     "none": "なし",
@@ -111,7 +112,7 @@
   },
   "talk": {
     "talk": "トーク",
-    "error": "エラーが発生しました",
+    "searchTalk": "トークを検索",
     "createTalk": "トークを作成",
     "searchUser": "ユーザーを検索",
     "notExistTalk": "右下のボタンからユーザーを追加して\nトークを開始しましょう",
@@ -121,7 +122,8 @@
     "cancel": "キャンセル",
     "delete": "削除",
     "search": "検索",
-    "create": "作成"
+    "create": "作成",
+    "error": "エラーが発生しました"
   },
   "setting": {
     "setting": "設定",

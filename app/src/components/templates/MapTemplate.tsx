@@ -74,12 +74,12 @@ const MapTemplate = ({
     params?.latitude &&
       params?.longitude &&
       animateToRegion(params.latitude, params.longitude);
-  }, [mapRef.current, params]);
+  }, [params.latitude, params.longitude]);
 
   useEffect(() => {
     position?.coords &&
       animateToRegion(position?.coords.latitude, position?.coords.longitude);
-  }, [mapRef.current, position?.coords]);
+  }, [position?.coords]);
 
   return (
     <Box flex={1}>
@@ -141,7 +141,11 @@ const MapTemplate = ({
             )}
       </MapView>
       <VStack w="80%" position="absolute" top="16" alignSelf="center" space="4">
-        <SearchBar isReadOnly onPressIn={searchMapNavigationHandler} />
+        <SearchBar
+          isReadOnly
+          placeholder={t(type === "farm" ? "searchFarm" : "searchRental")}
+          onPressIn={searchMapNavigationHandler}
+        />
         <HStack space="2">
           <Pressable onPress={() => setType("farm")}>
             <Box

@@ -35,7 +35,8 @@
   "map": {
     "farm": "farm",
     "rental": "rental",
-    "search": "Search",
+    "searchFarm": "Search Farm",
+    "searchRental": "Search rental",
     "permitRequestGPS": "Please grant GPS permission",
     "fee": "Fee",
     "equipment": "Equipment",
@@ -72,7 +73,7 @@
     "cancel": "Cancel",
     "icon": "Icon",
     "create": "Create",
-    "search": "Search",
+    "searchCommunity": "Search community",
     "category": "Category",
     "all": "All",
     "none": "None",
@@ -110,17 +111,18 @@
   },
   "talk": {
     "talk": "Talk",
-    "error": "An error occurred",
-    "createTalk": "Create Talk",
+    "searchTalk": "Search talk",
+    "createTalk": "Create talk",
     "searchUser": "Search User",
     "notExistTalk": "Click the button\nto add  user and start talking",
-    "deleteTalk": "Delete Talk",
+    "deleteTalk": "Delete talk",
     "permitRequestCam": "Please grant camera permission",
-    "askDeleteTalk": "Are you sure want to delete Talk?",
+    "askDeleteTalk": "Are you sure want to delete talk?",
     "cancel": "Cancel",
     "delete": "Delete",
     "search": "Search",
-    "create": "Create"
+    "create": "Create",
+    "error": "An error occurred"
   },
   "setting": {
     "setting": "Settings",

@@ -100,7 +100,6 @@ const FarmListTemplate = ({
           />
         }
       />
-
       <CircleButton
         position="absolute"
         bottom="24"

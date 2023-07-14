@@ -15,6 +15,7 @@ import SearchBar from "../organisms/SearchBar";
 import { GetCommunitiesResponse } from "../../hooks/community/query";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import SearchCommunityItem from "../organisms/SearchCommunityItem";
+import { useTranslation } from "react-i18next";
 
 type SearchCommunityTemplateProps = {
   searchResult: GetCommunitiesResponse | undefined;
@@ -38,6 +39,7 @@ const SearchCommunityTemplate = ({
   communityChatNavigationHandler,
   goBackNavigationHandler,
 }: SearchCommunityTemplateProps) => {
+  const { t } = useTranslation("community");
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -53,6 +55,7 @@ const SearchCommunityTemplate = ({
                   w="90%"
                   autoFocus
                   returnKeyType="search"
+                  placeholder={t("searchCommunity")}
                   InputRightElement={
                     <IconButton
                       onPress={() => reset()}
@@ -96,10 +99,7 @@ const SearchCommunityTemplate = ({
                 <SearchCommunityItem
                   item={item}
                   onPress={() =>
-                    communityChatNavigationHandler(
-                      item.communityId,
-                      item.name
-                    )
+                    communityChatNavigationHandler(item.communityId, item.name)
                   }
                 />
               )}

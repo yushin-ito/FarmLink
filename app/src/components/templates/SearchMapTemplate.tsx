@@ -16,6 +16,7 @@ import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import SearchMapItem from "../organisms/SearchMapItem";
 import { SearchFarmsResponse } from "../../hooks/farm/mutate";
 import { SearchRentalsResponse } from "../../hooks/rental/mutate";
+import { useTranslation } from "react-i18next";
 
 type SearchMapTemplateProps = {
   type: "farm" | "rental";
@@ -47,6 +48,7 @@ const SearchMapTemplate = ({
   mapNavigationHandler,
   goBackNavigationHandler,
 }: SearchMapTemplateProps) => {
+  const { t } = useTranslation("map");
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -62,6 +64,9 @@ const SearchMapTemplate = ({
                   w="90%"
                   autoFocus
                   returnKeyType="search"
+                  placeholder={t(
+                    type === "farm" ? "searchFarm" : "searchRental"
+                  )}
                   InputRightElement={
                     <IconButton
                       onPress={() => reset()}

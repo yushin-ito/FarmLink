@@ -64,7 +64,11 @@ const TalkListTemplate = ({
             onPress={settingNavigationHandler}
           />
         </HStack>
-        <SearchBar isReadOnly onPressIn={searchTalkNavigationHandler} />
+        <SearchBar
+          isReadOnly
+          placeholder={t("searchTalk")}
+          onPressIn={searchTalkNavigationHandler}
+        />
       </VStack>
       {isLoadingTalks ? (
         <Spinner color="muted.400" />
