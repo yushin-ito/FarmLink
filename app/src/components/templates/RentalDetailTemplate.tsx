@@ -29,9 +29,10 @@ type RentalDetailTemplateProps = {
   likes: GetRentalLikesResponse | undefined;
   rental: GetRentalResponse | undefined;
   address: LocationGeocodedAddress | undefined;
-  isRefetchingRental: boolean;
+  isLoading: boolean;
   isLoadingPostTalk: boolean;
-  isLoadingLike: boolean;
+  isLoadingPostLike: boolean;
+  isLoadingDeleteLike: boolean;
   postLike: () => Promise<void>;
   deleteLike: () => Promise<void>;
   talkChatNavigationHandler: () => void;
@@ -44,9 +45,10 @@ const RentalDetailTemplate = ({
   owned,
   rental,
   address,
-  isRefetchingRental,
+  isLoading,
   isLoadingPostTalk,
-  isLoadingLike,
+  isLoadingPostLike,
+  isLoadingDeleteLike,
   postLike,
   deleteLike,
   talkChatNavigationHandler,
@@ -56,7 +58,7 @@ const RentalDetailTemplate = ({
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (isRefetchingRental) {
+  if (isLoading) {
     return (
       <Center flex={1}>
         <Spinner color="muted.400" />
@@ -220,7 +222,7 @@ const RentalDetailTemplate = ({
           onPress={() => {
             !liked ? postLike() : deleteLike();
           }}
-          isDisabled={isLoadingLike}
+          isDisabled={isLoadingPostLike || isLoadingDeleteLike}
         />
         <Button
           w="40"

@@ -96,7 +96,7 @@ const PostRentalScreen = ({
     address,
     getCurrentPosition,
     getAddress,
-    isLoading: isLoadingLocation,
+    isLoadingPosition,
   } = useLocation({
     onDisable: () => {
       navigation.goBack();
@@ -157,7 +157,7 @@ const PostRentalScreen = ({
     <PostRentalTemplate
       base64={base64}
       isLoadingPostRental={isLoadingPostRental}
-      isLoadingPosition={isLoadingLocation}
+      isLoadingPosition={isLoadingPosition}
       position={position}
       address={address}
       pickImageByLibrary={pickImageByLibrary}

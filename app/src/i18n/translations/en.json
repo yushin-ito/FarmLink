@@ -34,6 +34,7 @@
   },
   "map": {
     "farm": "farm",
+    "search": "Search",
     "rental": "rental",
     "searchFarm": "Search Farm",
     "searchRental": "Search rental",

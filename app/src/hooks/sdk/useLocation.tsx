@@ -10,21 +10,24 @@ type UseLocationType = {
 const useLocation = ({ onError, onDisable }: UseLocationType) => {
   const [position, setPosition] = useState<Location.LocationObject>();
   const [address, setAddress] = useState<Location.LocationGeocodedAddress>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingAddress, setIsLoadingAddress] = useState(false);
+  const [isLoadingPosition, setIsLoadingPosition] = useState(false);
 
   const getAddress = useCallback(
     async (latitude: number, longitude: number) => {
+      setIsLoadingAddress(true);
       const address = await Location.reverseGeocodeAsync({
         longitude,
         latitude,
       });
       setAddress(address[0]);
+      setIsLoadingAddress(false);
     },
     []
   );
 
   const getCurrentPosition = useCallback(async () => {
-    setIsLoading(true);
+    setIsLoadingPosition(true);
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -44,11 +47,18 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
         onError && onError(error);
       }
     } finally {
-      setIsLoading(false);
+      setIsLoadingPosition(false);
     }
   }, []);
 
-  return { position, address, getAddress, getCurrentPosition, isLoading };
+  return {
+    position,
+    address,
+    getAddress,
+    getCurrentPosition,
+    isLoadingPosition,
+    isLoadingAddress,
+  };
 };
 
 export default useLocation;

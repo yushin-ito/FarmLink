@@ -31,7 +31,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const {
     position,
     getCurrentPosition,
-    isLoading: isLoadingLocation,
+    isLoadingPosition,
   } = useLocation({
     onDisable: () => {
       showAlert(
@@ -101,7 +101,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       rentals={rentals}
       onRegionChange={onRegionChange}
       getCurrentPosition={getCurrentPosition}
-      isLoadingPosition={isLoadingLocation}
+      isLoadingPosition={isLoadingPosition}
       rentalDetailNavigationHandler={rentalDetailNavigationHandler}
       searchMapNavigationHandler={searchMapNavigationHandler}
     />

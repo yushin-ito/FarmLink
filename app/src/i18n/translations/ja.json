@@ -34,6 +34,7 @@
   },
   "map": {
     "farm": "農園",
+    "search": "探す",
     "rental": "レンタル",
     "searchFarm": "農園を探す",
     "searchRental": "レンタルを探す",

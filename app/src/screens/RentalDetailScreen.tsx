@@ -20,16 +20,18 @@ const RentalDetailScreen = ({
   const toast = useToast();
   const { t } = useTranslation("map");
   const { params } = useRoute<RouteProp<MapStackParamList, "RentalDetail">>();
-  const { data: rental, isRefetching: isRefetchingRental } = useQueryRental(
+  const { data: rental, isLoading: isLoadingRental } = useQueryRental(
     params.rentalId
   );
   const { session } = useAuth();
   const { data: talks, refetch: refetchTalks } = useQueryTalks(
     session?.user.id
   );
-  const { data: likes, refetch: refetchLikes } = useQueryRentalLikes(
-    params.rentalId
-  );
+  const {
+    data: likes,
+    refetch: refetchLikes,
+    isLoading: isLoadingLikes,
+  } = useQueryRentalLikes(params.rentalId);
   const liked =
     likes?.some(
       (item) =>
@@ -74,7 +76,7 @@ const RentalDetailScreen = ({
       },
     });
 
-  const { address, getAddress } = useLocation({
+  const { address, getAddress, isLoadingAddress } = useLocation({
     onDisable: () => {
       showAlert(
         toast,
@@ -190,9 +192,10 @@ const RentalDetailScreen = ({
       owned={session?.user.id === rental?.ownerId}
       address={address}
       rental={rental}
-      isRefetchingRental={isRefetchingRental}
+      isLoading={isLoadingRental || isLoadingLikes || isLoadingAddress}
       isLoadingPostTalk={isLoadingPostTalk}
-      isLoadingLike={isLoadingPostLike || isLoadingDeleteLike}
+      isLoadingPostLike={isLoadingPostLike}
+      isLoadingDeleteLike={isLoadingDeleteLike}
       talkChatNavigationHandler={talkChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

@@ -59,7 +59,7 @@ const PostFarmScreen = () => {
     address,
     getCurrentPosition,
     getAddress,
-    isLoading: isLoadingLocation,
+    isLoadingPosition,
   } = useLocation({
     onDisable: () => {
       showAlert(
@@ -118,7 +118,7 @@ const PostFarmScreen = () => {
   return (
     <PostFarmTemplate
       isLoadingPostFarm={isLoadingPostFarm}
-      isLoadingPosition={isLoadingLocation}
+      isLoadingPosition={isLoadingPosition}
       position={position}
       address={address}
       getAddress={getAddress}
