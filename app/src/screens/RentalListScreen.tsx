@@ -57,7 +57,7 @@ const RentalListScreen = ({
         screen: "MapNavigator",
         params: {
           screen: "Map",
-          params: { latitude, longitude },
+          params: { latitude, longitude, type: "rental" },
         },
       });
     },

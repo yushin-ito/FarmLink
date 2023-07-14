@@ -1,14 +1,31 @@
-import { Box, Icon, Spinner } from "native-base";
+import {
+  Box,
+  HStack,
+  Icon,
+  Pressable,
+  Spinner,
+  VStack,
+  Text,
+} from "native-base";
 import { Feather } from "@expo/vector-icons";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import MapView, { Marker, PROVIDER_GOOGLE, Region } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import CircleButton from "../molecules/CircleButton";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import { LocationObject } from "expo-location";
+import { useTranslation } from "react-i18next";
 
 type MapTemplateProps = {
+  type: "farm" | "rental";
+  setType: Dispatch<SetStateAction<"farm" | "rental">>;
   params: {
     latitude: number | null | undefined;
     longitude: number | null | undefined;
@@ -24,6 +41,8 @@ type MapTemplateProps = {
 };
 
 const MapTemplate = ({
+  type,
+  setType,
   params,
   position,
   farms,
@@ -34,6 +53,7 @@ const MapTemplate = ({
   rentalDetailNavigationHandler,
   searchMapNavigationHandler,
 }: MapTemplateProps) => {
+  const { t } = useTranslation("map");
   const mapRef = useRef<MapView>(null);
 
   const animateToRegion = useCallback(
@@ -75,61 +95,82 @@ const MapTemplate = ({
           latitudeDelta: 1,
           longitudeDelta: 1,
         }}
-        style={{
-          flex: 1,
-          opacity: isLoadingPosition ? 0.5 : 1,
-        }}
+        style={{ flex: 1 }}
         onRegionChangeComplete={onRegionChange}
       >
         {position && <Marker coordinate={position.coords} />}
-        {farms?.map(
-          (item) =>
-            item.latitude &&
-            item.longitude && (
-              <Marker
-                key={item.farmId}
-                pinColor={
-                  item.latitude === params?.latitude &&
-                  item.longitude === params?.longitude
-                    ? "tomato"
-                    : "green"
-                }
-                coordinate={{
-                  latitude: item.latitude,
-                  longitude: item.longitude,
-                }}
-              />
+        {type === "farm"
+          ? farms?.map(
+              (item) =>
+                item.latitude &&
+                item.longitude && (
+                  <Marker
+                    key={item.farmId}
+                    pinColor={
+                      item.latitude === params?.latitude &&
+                      item.longitude === params?.longitude
+                        ? "tomato"
+                        : "green"
+                    }
+                    coordinate={{
+                      latitude: item.latitude,
+                      longitude: item.longitude,
+                    }}
+                  />
+                )
             )
-        )}
-        {rentals?.map(
-          (item) =>
-            item.latitude &&
-            item.longitude && (
-              <Marker
-                key={item.rentalId}
-                pinColor={
-                  item.latitude === params?.latitude &&
-                  item.longitude === params?.longitude
-                    ? "aqua"
-                    : "blue"
-                }
-                coordinate={{
-                  latitude: item.latitude,
-                  longitude: item.longitude,
-                }}
-                onPress={() => rentalDetailNavigationHandler(item.rentalId)}
-              />
-            )
-        )}
+          : rentals?.map(
+              (item) =>
+                item.latitude &&
+                item.longitude && (
+                  <Marker
+                    key={item.rentalId}
+                    pinColor={
+                      item.latitude === params?.latitude &&
+                      item.longitude === params?.longitude
+                        ? "aqua"
+                        : "blue"
+                    }
+                    coordinate={{
+                      latitude: item.latitude,
+                      longitude: item.longitude,
+                    }}
+                    onPress={() => rentalDetailNavigationHandler(item.rentalId)}
+                  />
+                )
+            )}
       </MapView>
-      <SearchBar
-        w="80%"
-        position="absolute"
-        top="16"
-        isReadOnly
-        alignSelf="center"
-        onPressIn={searchMapNavigationHandler}
-      />
+      <VStack w="80%" position="absolute" top="16" alignSelf="center" space="4">
+        <SearchBar isReadOnly onPressIn={searchMapNavigationHandler} />
+        <HStack space="2">
+          <Pressable onPress={() => setType("farm")}>
+            <Box
+              px="3"
+              py="1"
+              rounded="full"
+              bg={type === "farm" ? "brand.600" : "muted.200"}
+              alignItems="center"
+            >
+              <Text color={type === "farm" ? "white" : "black"}>
+                {t("farm")}
+              </Text>
+            </Box>
+          </Pressable>
+          <Pressable onPress={() => setType("rental")}>
+            <Box
+              px="3"
+              py="1"
+              rounded="full"
+              bg={type === "rental" ? "brand.600" : "muted.200"}
+              alignItems="center"
+            >
+              <Text color={type === "rental" ? "white" : "black"}>
+                {t("rental")}
+              </Text>
+            </Box>
+          </Pressable>
+        </HStack>
+      </VStack>
       <CircleButton
         position="absolute"
         bottom="24"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Feather } from "@expo/vector-icons";
 
 import {
@@ -18,6 +18,8 @@ import LikeItem from "../organisms/LikeItem";
 import { RefreshControl } from "react-native";
 
 type LikeListTemplateProps = {
+  type: "farm" | "rental";
+  setType: Dispatch<SetStateAction<"farm" | "rental">>;
   likes: GetUserLikesResponse | undefined;
   deleteFarmLike: (farmId: number) => Promise<void>;
   deleteRentalLike: (likeId: number) => Promise<void>;
@@ -32,6 +34,8 @@ type LikeListTemplateProps = {
 };
 
 const LikeListTemplate = ({
+  type,
+  setType,
   likes,
   deleteRentalLike,
   deleteFarmLike,
@@ -42,7 +46,6 @@ const LikeListTemplate = ({
   goBackNavigationHandler,
 }: LikeListTemplateProps) => {
   const { t } = useTranslation("setting");
-  const [type, setType] = useState<"farm" | "rental">("farm");
 
   return (
     <Box flex={1} safeAreaTop>

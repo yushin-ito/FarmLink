@@ -17,8 +17,7 @@ const CommunityListScreen = ({
   const { t } = useTranslation("community");
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
-  const categories = getCategories();
-  categories.splice(0, 1, "all");
+  const categories = getCategories().splice(0, 1, "all");
   const [categoryIndex, setCategoryIndex] = useState(0);
   const {
     data: communities,

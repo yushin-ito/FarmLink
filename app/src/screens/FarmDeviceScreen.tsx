@@ -9,10 +9,10 @@ import { useQueryDevice } from "../hooks/device/query";
 
 const FarmDeviceScreen = () => {
   const { navigation } = useNavigation<FarmStackScreenProps<"FarmDevice">>();
-  const route = useRoute<RouteProp<FarmStackParamList, "FarmDevice">>();
+  const {params} = useRoute<RouteProp<FarmStackParamList, "FarmDevice">>();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
-  const { data: device } = useQueryDevice(route.params.deviceId);
+  const { data: device } = useQueryDevice(params.deviceId);
 
   const settingNavigationHandler = useCallback(() => {
     navigation.navigate("TabNavigator", {
@@ -29,7 +29,7 @@ const FarmDeviceScreen = () => {
 
   return (
     <FarmDeviceTemplate
-      title={route.params.name}
+      title={params.name}
       user={user}
       device={device}
       settingNavigationHandler={settingNavigationHandler}

@@ -5,16 +5,17 @@ import { showAlert } from "../functions";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
-import { MapStackScreenProps } from "../types";
+import { MapStackParamList, MapStackScreenProps } from "../types";
 import {
   SearchRentalsResponse,
   useSearchRentals,
 } from "../hooks/rental/mutate";
+import { useRoute, RouteProp } from "@react-navigation/native";
 
 const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
-  const { t } = useTranslation("farm");
+  const { t } = useTranslation("map");
   const toast = useToast();
-
+  const { params } = useRoute<RouteProp<MapStackParamList, "SearchMap">>();
   const [searchFarmsResult, setSearchFarmsResult] =
     useState<SearchFarmsResponse>();
   const [searchRentalsResult, setSearchRentalsResult] =
@@ -78,7 +79,7 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
 
   const mapNavigationHandler = useCallback(
     async (latitude: number | null, longitude: number | null) => {
-      navigation.navigate("Map", { latitude, longitude });
+      navigation.navigate("Map", { latitude, longitude, type: params.type });
     },
     []
   );
@@ -89,6 +90,7 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
 
   return (
     <SearchMapTemplate
+      type={params.type}
       searchFarmsResult={searchFarmsResult}
       searchRentalsResult={searchRentalsResult}
       searchFarms={searchFarms}

@@ -14,14 +14,16 @@ import { useRoute, RouteProp } from "@react-navigation/native";
 const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { t } = useTranslation("map");
   const toast = useToast();
-  const { data: queryFarms } = useQueryFarms(null);
-  const { data: queryRentals } = useQueryRentals(null);
+  const { data: queryFarms } = useQueryFarms();
+  const { data: queryRentals } = useQueryRentals();
   const [farms, setFarms] = useState<GetFarmsResponse>();
   const [rentals, setRentals] = useState<GetRentalsResponse>();
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
+  const [type, setType] = useState<"farm" | "rental">("farm");
 
   useEffect(() => {
     !params?.latitude && !params?.longitude && getCurrentPosition();
+    params?.type && setType(params.type);
   }, [params]);
 
   const {
@@ -84,12 +86,14 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   }, []);
 
   const searchMapNavigationHandler = useCallback(() => {
-    navigation.navigate("SearchMap");
+    navigation.navigate("SearchMap", { type: "rental" });
   }, []);
 
   return (
     <MapTemplate
-      params={params}
+      type={type}
+      setType={setType}
+      params={{ latitude: params?.latitude, longitude: params?.longitude }}
       position={position}
       farms={farms}
       rentals={rentals}

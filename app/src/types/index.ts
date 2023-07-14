@@ -28,8 +28,9 @@ export type MapStackParamList = {
   Map: {
     latitude: number | null | undefined;
     longitude: number | null | undefined;
+    type: "farm" | "rental";
   };
-  SearchMap: undefined;
+  SearchMap: { type: "farm" | "rental" };
   RentalDetail: { rentalId: number };
   FarmDetail: { farmId: number };
 };

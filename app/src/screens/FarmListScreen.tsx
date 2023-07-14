@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import FarmListTemplate from "../components/templates/FarmListTemplate";
-import { useQueryFarms } from "../hooks/farm/query";
+import { useQueryUserFarms } from "../hooks/farm/query";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import useAuth from "../hooks/auth/useAuth";
@@ -19,8 +19,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     data: farms,
     refetch,
     isLoading: isLoadingFarms,
-  } = useQueryFarms(session?.user.id);
-
+  } = useQueryUserFarms(session?.user.id);
   const [isRefetchingFarms, setIsRefetchingFarms] = useState(false);
 
   const { mutateAsync: mutateAsyncDeleteFarm } = useDeleteFarm({

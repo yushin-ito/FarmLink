@@ -21,6 +21,7 @@ const LikeListScreen = ({
     isLoading: isLoadingLikes,
   } = useQueryUserLikes(session?.user.id);
   const [isRefetchingLikes, setIsRefetchingRentals] = useState(false);
+  const [type, setType] = useState<"farm" | "rental">("farm");
 
   const { mutateAsync: mutateAsyncDeleteFarmLike } = useDeleteFarmLike({
     onSuccess: async () => {
@@ -78,7 +79,7 @@ const LikeListScreen = ({
         screen: "MapNavigator",
         params: {
           screen: "Map",
-          params: { latitude, longitude },
+          params: { latitude, longitude, type },
         },
       });
     },
@@ -90,6 +91,8 @@ const LikeListScreen = ({
 
   return (
     <LikeListTemplate
+      type={type}
+      setType={setType}
       likes={likes}
       deleteFarmLike={deleteFarmLike}
       deleteRentalLike={deleteRentalLike}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Feather } from "@expo/vector-icons";
 
 import {
@@ -9,8 +9,6 @@ import {
   Icon,
   FlatList,
   Spinner,
-  Pressable,
-  Text,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
@@ -18,9 +16,9 @@ import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import SearchMapItem from "../organisms/SearchMapItem";
 import { SearchFarmsResponse } from "../../hooks/farm/mutate";
 import { SearchRentalsResponse } from "../../hooks/rental/mutate";
-import { useTranslation } from "react-i18next";
 
 type SearchMapTemplateProps = {
+  type: "farm" | "rental";
   searchFarmsResult: SearchFarmsResponse | undefined;
   searchRentalsResult: SearchRentalsResponse | undefined;
   searchFarms: (query: string) => Promise<void>;
@@ -39,6 +37,7 @@ type FormValues = {
 };
 
 const SearchMapTemplate = ({
+  type,
   searchFarmsResult,
   searchRentalsResult,
   searchFarms,
@@ -48,8 +47,6 @@ const SearchMapTemplate = ({
   mapNavigationHandler,
   goBackNavigationHandler,
 }: SearchMapTemplateProps) => {
-  const { t } = useTranslation("map");
-  const [type, setType] = useState<"farm" | "rental">("farm");
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -84,7 +81,7 @@ const SearchMapTemplate = ({
                   value={value}
                   onChangeText={(text) => {
                     onChange(text);
-                    searchFarms(text)
+                    searchFarms(text);
                     searchRentals(text);
                   }}
                 />
@@ -98,34 +95,6 @@ const SearchMapTemplate = ({
                 opacity: 0.5,
               }}
             />
-          </HStack>
-          <HStack ml="6" space="2">
-            <Pressable onPress={() => setType("farm")}>
-              <Box
-                px="3"
-                py="1"
-                rounded="full"
-                bg={type === "farm" ? "brand.600" : "muted.200"}
-                alignItems="center"
-              >
-                <Text color={type === "farm" ? "white" : "black"}>
-                  {t("farm")}
-                </Text>
-              </Box>
-            </Pressable>
-            <Pressable onPress={() => setType("rental")}>
-              <Box
-                px="3"
-                py="1"
-                rounded="full"
-                bg={type === "rental" ? "brand.600" : "muted.200"}
-                alignItems="center"
-              >
-                <Text color={type === "rental" ? "white" : "black"}>
-                  {t("rental")}
-                </Text>
-              </Box>
-            </Pressable>
           </HStack>
           {isLoadingSearchFarms || isLoadingSearchRentals ? (
             <Spinner color="muted.400" />
