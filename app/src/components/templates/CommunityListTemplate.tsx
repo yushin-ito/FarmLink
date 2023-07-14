@@ -23,6 +23,7 @@ import { GetUserResponse } from "../../hooks/user/query";
 import { GetCommunitiesResponse } from "../../hooks/community/query";
 import CategoryActionSheet from "../organisms/CategoryActionSheet";
 import { Category, getCategories } from "../../functions";
+import SkeltonCommunityList from "../organisms/SkeltonCommunityList";
 
 type CommunityListTemplateProps = {
   categoryIndex: number;
@@ -103,7 +104,7 @@ const CommunityListTemplate = ({
         </HStack>
       </Pressable>
       {isLoadingCommunities ? (
-        <Spinner color="muted.400" />
+        <SkeltonCommunityList />
       ) : (
         <FlatList
           w="100%"
