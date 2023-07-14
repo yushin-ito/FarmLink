@@ -14,15 +14,15 @@ import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
 
-type RentalItemProps = {
+type LikeItemProps = {
   type: "farm" | "rental";
   item: GetUserLikesResponse[number];
   onPress: () => void;
   onPressRight: () => void;
 };
 
-const RentalItem = memo(
-  ({ type, item, onPressRight, onPress }: RentalItemProps) => {
+const LikeItem = memo(
+  ({ type, item, onPressRight, onPress }: LikeItemProps) => {
     const { t } = useTranslation("setting");
     return (
       <Swipeable
@@ -41,8 +41,12 @@ const RentalItem = memo(
           </Pressable>
         )}
       >
-        <TouchableHighlight onPress={onPress} underlayColor="#e5e5e5">
-          <VStack alignItems="center" bg="white">
+        <TouchableHighlight
+          onPress={onPress}
+          style={{ backgroundColor: "white" }}
+          underlayColor="#f5f5f5"
+        >
+          <VStack alignItems="center">
             <HStack
               w="100%"
               px="6"
@@ -107,4 +111,4 @@ const RentalItem = memo(
   }
 );
 
-export default RentalItem;
+export default LikeItem;

@@ -39,8 +39,12 @@ const RentalItem = memo(({ item, onPressRight, onPress }: RentalItemProps) => {
         </Pressable>
       )}
     >
-      <TouchableHighlight onPress={onPress} underlayColor="#e5e5e5">
-        <VStack alignItems="center" bg="white">
+      <TouchableHighlight
+        onPress={onPress}
+        style={{ backgroundColor: "white" }}
+        underlayColor="#f5f5f5"
+      >
+        <VStack alignItems="center">
           <HStack
             w="100%"
             px="6"

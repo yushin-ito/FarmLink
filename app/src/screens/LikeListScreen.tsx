@@ -83,7 +83,7 @@ const LikeListScreen = ({
         },
       });
     },
-    []
+    [type]
   );
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

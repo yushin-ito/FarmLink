@@ -4,7 +4,6 @@ import {
   FlatList,
   Heading,
   HStack,
-  Spinner,
   VStack,
   Text,
 } from "native-base";
@@ -18,6 +17,7 @@ import Avatar from "../molecules/Avatar";
 import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
 import { GetTalksResponse } from "../../hooks/talk/query";
+import SkeltonTalkList from "../organisms/SkeltonTalkList";
 
 type TalkListTemplateProps = {
   locale: "en" | "ja" | null;
@@ -71,7 +71,7 @@ const TalkListTemplate = ({
         />
       </VStack>
       {isLoadingTalks ? (
-        <Spinner color="muted.400" />
+        <SkeltonTalkList />
       ) : (
         <FlatList
           w="100%"

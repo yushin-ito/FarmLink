@@ -41,9 +41,13 @@ const TalkItem = memo(
           </Pressable>
         )}
       >
-        <TouchableHighlight onPress={onPress} underlayColor="#e5e5e5">
-          <VStack bg="white">
-            <HStack px="9" py="4">
+        <TouchableHighlight
+          onPress={onPress}
+          style={{ backgroundColor: "white" }}
+          underlayColor="#f5f5f5"
+        >
+          <VStack>
+            <HStack h="20" px="9" py="3">
               <Box w="20%">
                 <Avatar
                   size="md"
