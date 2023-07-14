@@ -104,7 +104,7 @@ const CommunityListTemplate = ({
         </HStack>
       </Pressable>
       {isLoadingCommunities ? (
-        <SkeltonCommunityList />
+        <SkeltonCommunityList rows={4}/>
       ) : (
         <FlatList
           w="100%"

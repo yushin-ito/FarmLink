@@ -53,7 +53,7 @@ const RentalItem = memo(({ item, onPressRight, onPress }: RentalItemProps) => {
             justifyContent="space-between"
           >
             <HStack alignItems="center" space="3">
-              <Center size="12" rounded="md" bg="muted.200">
+              <Center size="12" rounded="md" bg="muted.200" overflow="hidden">
                 {item.imageUrls?.length ? (
                   <Image
                     style={{ width: 48, height: 48 }}

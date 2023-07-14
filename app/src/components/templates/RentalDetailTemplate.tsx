@@ -13,7 +13,7 @@ import {
   Button,
   Text,
   Center,
-  Spinner,
+  Skeleton,
 } from "native-base";
 import { Image } from "expo-image";
 import { GetRentalResponse } from "../../hooks/rental/query";
@@ -58,14 +58,6 @@ const RentalDetailTemplate = ({
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (isLoading) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
-
   return (
     <Box flex={1} safeAreaTop>
       <HStack
@@ -88,7 +80,9 @@ const RentalDetailTemplate = ({
       </HStack>
       <ScrollView>
         <VStack space="2">
-          {rental?.imageUrls?.length ? (
+          {isLoading ? (
+            <Skeleton w={width} h="240" mb="3" />
+          ) : rental?.imageUrls?.length ? (
             <FlatList
               showsHorizontalScrollIndicator={false}
               horizontal
@@ -122,75 +116,94 @@ const RentalDetailTemplate = ({
               />
             </Center>
           )}
-          <HStack w="100%" alignItems="center" justifyContent="center">
-            {rental?.imageUrls?.map((_item, index) => (
-              <Box
-                key={index}
-                mr="1"
-                rounded="full"
-                size={Number(index) === currentIndex ? "1.5" : "1"}
-                bg={Number(index) === currentIndex ? "info.500" : "muted.400"}
-              />
-            ))}
-          </HStack>
+          {!isLoading && (
+            <HStack w="100%" alignItems="center" justifyContent="center">
+              {rental?.imageUrls?.map((_item, index) => (
+                <Box
+                  key={index}
+                  mr="1"
+                  rounded="full"
+                  size={Number(index) === currentIndex ? "1.5" : "1"}
+                  bg={Number(index) === currentIndex ? "info.500" : "muted.400"}
+                />
+              ))}
+            </HStack>
+          )}
         </VStack>
         <VStack mt="2" px="6">
           <HStack alignItems="center" justifyContent="space-between">
-            <VStack>
-              <Heading numberOfLines={2} ellipsizeMode="tail">
-                {rental?.name}
-              </Heading>
-              <Text>
-                {address && (
-                  <Text color="muted.600">{`${address.city} ${address.name}`}</Text>
-                )}
-              </Text>
-            </VStack>
-            <HStack alignItems="center">
+            {isLoading ? (
+              <Skeleton.Text lines={2} w="40" />
+            ) : (
+              <VStack>
+                <Heading numberOfLines={2} ellipsizeMode="tail">
+                  {rental?.name}
+                </Heading>
+                <Text>
+                  {address && (
+                    <Text color="muted.600">{`${address.city} ${address.name}`}</Text>
+                  )}
+                </Text>
+              </VStack>
+            )}
+            <HStack alignItems="center" space="1">
               <Avatar
                 isDisabled
-                mr="1"
-                size="xs"
+                isLoading={isLoading}
+                size="7"
                 text={rental?.user?.name?.charAt(0)}
                 uri={rental?.user?.avatarUrl}
                 color={rental?.user?.color}
                 updatedAt={rental?.user?.updatedAt}
               />
-              <Text>{rental?.user?.name}</Text>
+              {isLoading ? (
+                <Skeleton.Text lines={1} w="12" />
+              ) : (
+                <Text>{rental?.user?.name}</Text>
+              )}
             </HStack>
           </HStack>
-          <HStack mt="6" alignItems="center" justifyContent="space-between">
-            <VStack>
-              <Text color="muted.600">{t("area")}</Text>
+          {isLoading ? (
+            <Skeleton.Text mt="6" lines={2} />
+          ) : (
+            <HStack mt="6" alignItems="center" justifyContent="space-between">
+              <VStack>
+                <Text color="muted.600">{t("area")}</Text>
+                <Text bold fontSize="md">
+                  {rental?.area ? rental.area : t("unknown")}
+                </Text>
+              </VStack>
+              <VStack>
+                <Text color="muted.600">{t("equipment")}</Text>
+                <Text bold fontSize="md">
+                  {rental?.equipment ? rental.equipment : t("unknown")}
+                </Text>
+              </VStack>
+              <VStack>
+                <Text color="muted.600">{t("fee")}</Text>
+                <Text bold fontSize="md">
+                  {rental?.fee ? rental.fee : t("unknown")}
+                </Text>
+              </VStack>
+              <VStack>
+                <Text color="muted.600">{t("like")}</Text>
+                <Text bold textAlign="center">
+                  {likes?.length ?? 0}
+                </Text>
+              </VStack>
+            </HStack>
+          )}
+          {isLoading ? (
+            <Skeleton.Text mt="8" lines={6} />
+          ) : (
+            <VStack mt="8">
+              <Text color="muted.600">{t("description")}</Text>
+
               <Text bold fontSize="md">
-                {rental?.area ? rental.area : t("unknown")}
+                {rental?.description}
               </Text>
             </VStack>
-            <VStack>
-              <Text color="muted.600">{t("equipment")}</Text>
-              <Text bold fontSize="md">
-                {rental?.equipment ? rental.equipment : t("unknown")}
-              </Text>
-            </VStack>
-            <VStack>
-              <Text color="muted.600">{t("fee")}</Text>
-              <Text bold fontSize="md">
-                {rental?.fee ? rental.fee : t("unknown")}
-              </Text>
-            </VStack>
-            <VStack>
-              <Text color="muted.600">{t("like")}</Text>
-              <Text bold textAlign="center">
-                {likes?.length ?? 0}
-              </Text>
-            </VStack>
-          </HStack>
-          <VStack mt="8">
-            <Text color="muted.600">{t("description")}</Text>
-            <Text bold fontSize="md">
-              {rental?.description}
-            </Text>
-          </VStack>
+          )}
         </VStack>
       </ScrollView>
       <HStack

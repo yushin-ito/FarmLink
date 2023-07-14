@@ -9,13 +9,12 @@ import {
   Icon,
   FlatList,
   Text,
-  Spinner,
-  Center,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import RentalItem from "../organisms/RentalItem";
 import { Alert, RefreshControl } from "react-native";
+import SkeletonRentalList from "../organisms/SkeltonRentalList";
 
 type RentalListTemplateProps = {
   rentals: GetRentalsResponse | undefined;
@@ -58,9 +57,7 @@ const RentalListTemplate = ({
       </HStack>
       <Box flex={1}>
         {isLoadingRentals ? (
-          <Center flex={1}>
-            <Spinner color="muted.400" />
-          </Center>
+          <SkeletonRentalList rows={4} />
         ) : (
           <FlatList
             data={rentals}

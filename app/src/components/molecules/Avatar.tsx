@@ -4,7 +4,7 @@ import {
   IPressableProps,
   Text,
   Avatar as NativeBaseAvatar,
-  Box,
+  Skeleton,
 } from "native-base";
 import { supabaseUrl } from "../../supabase";
 
@@ -30,7 +30,7 @@ const Avatar = memo(
     ...props
   }: AvatarProps & IPressableProps) => {
     return isLoading ? (
-      <Box size={size} bg="muted.300" rounded="full" />
+        <Skeleton size={size} rounded="full" />
     ) : (
       <Pressable
         _pressed={{
@@ -38,21 +38,21 @@ const Avatar = memo(
         }}
         {...props}
       >
-        {
+        {uri ? (
           <NativeBaseAvatar
             size={size}
             source={{
-              uri: uri?.match(supabaseUrl)
-                ? uri + `?${updatedAt}`
-                : uri ?? undefined,
+              uri: uri.match(supabaseUrl) ? uri + `?=${updatedAt}` : uri,
             }}
-            bg={uri ? "muted.300" : color}
-          >
+            bg="muted.100"
+          />
+        ) : (
+          <NativeBaseAvatar size={size} source={{ uri: undefined }} bg={color}>
             <Text color="white" fontSize={fontSize}>
               {text}
             </Text>
           </NativeBaseAvatar>
-        }
+        )}
       </Pressable>
     );
   }

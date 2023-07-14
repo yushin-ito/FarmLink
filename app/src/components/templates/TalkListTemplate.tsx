@@ -71,7 +71,7 @@ const TalkListTemplate = ({
         />
       </VStack>
       {isLoadingTalks ? (
-        <SkeltonTalkList />
+        <SkeltonTalkList rows={6} />
       ) : (
         <FlatList
           w="100%"
