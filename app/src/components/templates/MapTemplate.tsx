@@ -14,6 +14,7 @@ import React, {
   useCallback,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE, Region } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
@@ -55,6 +56,7 @@ const MapTemplate = ({
 }: MapTemplateProps) => {
   const { t } = useTranslation("map");
   const mapRef = useRef<MapView>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const animateToRegion = useCallback(
     (latitude: number, longitude: number) => {
@@ -71,15 +73,17 @@ const MapTemplate = ({
   );
 
   useEffect(() => {
-    params?.latitude &&
+    !isLoading &&
+      params?.latitude &&
       params?.longitude &&
       animateToRegion(params.latitude, params.longitude);
-  }, [params.latitude, params.longitude]);
+  }, [isLoading, params?.latitude, params?.longitude]);
 
   useEffect(() => {
-    position?.coords &&
+    !isLoading &&
+      position?.coords &&
       animateToRegion(position?.coords.latitude, position?.coords.longitude);
-  }, [position?.coords]);
+  }, [isLoading, position?.coords]);
 
   return (
     <Box flex={1}>
@@ -94,6 +98,9 @@ const MapTemplate = ({
           longitude: 135,
           latitudeDelta: 1,
           longitudeDelta: 1,
+        }}
+        onMapLoaded={() => {
+          setIsLoading(false);
         }}
         style={{ flex: 1 }}
         onRegionChangeComplete={onRegionChange}

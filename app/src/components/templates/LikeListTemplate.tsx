@@ -11,6 +11,7 @@ import {
   Text,
   Pressable,
   Spinner,
+  Center,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
@@ -92,7 +93,9 @@ const LikeListTemplate = ({
           </Pressable>
         </HStack>
         {isLoadingLikes ? (
-          <Spinner color="muted.400" />
+          <Center flex={1}>
+            <Spinner color="muted.400" />
+          </Center>
         ) : type === "farm" ? (
           <FlatList
             data={likes?.filter((item) => item.farmId)}

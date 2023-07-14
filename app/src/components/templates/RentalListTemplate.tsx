@@ -10,6 +10,7 @@ import {
   FlatList,
   Text,
   Spinner,
+  Center,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
@@ -57,7 +58,9 @@ const RentalListTemplate = ({
       </HStack>
       <Box flex={1}>
         {isLoadingRentals ? (
-          <Spinner color="muted.400" />
+          <Center flex={1}>
+            <Spinner color="muted.400" />
+          </Center>
         ) : (
           <FlatList
             data={rentals}
