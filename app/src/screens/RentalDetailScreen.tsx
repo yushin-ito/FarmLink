@@ -163,7 +163,7 @@ const RentalDetailScreen = ({
         />
       );
     }
-  }, [talks]);
+  }, [talks, session?.user, rental]);
 
   const postLike = useCallback(async () => {
     session &&
