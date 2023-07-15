@@ -27,7 +27,7 @@ const getTabStyle = (route: Partial<Route<string, object | undefined>>) => {
     routeName === "TalkChat" ||
     routeName === "PostTalk" ||
     routeName === "SearchTalk" ||
-    routeName === "FarmDevice" ||
+    routeName === "FarmDetail" ||
     routeName === "PostFarm" ||
     routeName === "PostProfile" ||
     routeName === "PostRental" ||

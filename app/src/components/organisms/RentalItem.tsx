@@ -59,7 +59,6 @@ const RentalItem = memo(({ item, onPressRight, onPress }: RentalItemProps) => {
                     style={{ width: 48, height: 48 }}
                     source={{ uri: item.imageUrls[0] }}
                     contentFit="contain"
-                    recyclingKey={item.rentalId.toString()}
                   />
                 ) : (
                   <Icon

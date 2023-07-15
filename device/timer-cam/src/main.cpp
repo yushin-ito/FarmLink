@@ -9,7 +9,7 @@
 
 #include "env.h"
 
-#define SLEEP_TIME 1 * 60 // X分
+#define SLEEP_TIME 20 * 60 // X分
 
 const char* bucket = "image";
 const char* directory = "device";
@@ -38,7 +38,7 @@ bool init_camera(void) {
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
   config.frame_size = FRAMESIZE_SXGA;
-  config.jpeg_quality = 8;
+  config.jpeg_quality = 10;
   config.fb_count = 2;
 
   esp_err_t err = esp_camera_init(&config);
@@ -49,9 +49,9 @@ bool init_camera(void) {
 
   sensor_t* s = esp_camera_sensor_get();
 
-  s->set_vflip(s, 1);
-  s->set_brightness(s, 0);
-  s->set_saturation(s, 0);
+  s->set_vflip(s, 1); // 反転
+  s->set_brightness(s, 2); // 明るさ
+  s->set_saturation(s, 0); // 彩度
 
   return true;
 }
@@ -95,7 +95,7 @@ void setup() {
     http.addHeader("apikey", String(SUPABASE_KEY));
     http.addHeader("Authorization", "Bearer " + String(SUPABASE_KEY));
     http.addHeader("Connection", "close");
-    http_code = http.sendRequest("PUT", fb->buf, fb->len);
+    http_code = http.sendRequest("PUT", fb->buf, fb->len); // "POST" or "PUT"
     if (http_code > 0) {
       String response = http.getString();
       Serial.print("code: ");
@@ -113,10 +113,10 @@ void setup() {
   // 画像URLをデータベースに送信
   if (http.begin(client, String(SUPABASE_URL) + "/rest/v1/" + String(table))) {
     http.addHeader("Content-Type", "application/json");
-    http.addHeader("apikey", Stringa(SUPABASE_KEY));
+    http.addHeader("apikey", String(SUPABASE_KEY));
     http.addHeader("Authorization", "Bearer " + String(SUPABASE_KEY));
-1
-    String image_url = String(SUPABASE_URL) + "/storage/v1/object/pulic/" + String(bucket) + "/" + String(directory) + "/" + String(UUID) + ".jpg";
+    http.addHeader("Prefer", "resolution=merge-duplicates"); // UPSERT
+    String image_url = String(SUPABASE_URL) + "/storage/v1/object/public/" + String(bucket) + "/" + String(directory) + "/" + String(UUID) + ".jpg";
     String payload = "{\"deviceId\":\"" + String(UUID) + "\",\"imageUrl\":\"" + image_url + "\",\"battery\":\"" + String(bat_get_voltage() * 0.001) + "\"}";
     http_code = http.sendRequest("POST", payload);
     if (http_code > 0) {

@@ -48,9 +48,9 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     await mutateAsyncDeleteFarm(FarmId);
   }, []);
 
-  const farmDeviceNavigationHandler = useCallback(
-    (deviceId: string | null, name: string | null) => {
-      navigation.navigate("FarmDevice", { deviceId, name });
+  const farmDetailNavigationHandler = useCallback(
+    (farmId: number, deviceId: string | null, name: string | null) => {
+      navigation.navigate("FarmDetail", { farmId, deviceId, name });
     },
     []
   );
@@ -76,7 +76,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
       isRefetchingFarms={isRefetchingFarms}
       refetchFarms={refetchFarms}
       deleteFarm={deleteFarm}
-      farmDeviceNavigationHandler={farmDeviceNavigationHandler}
+      farmDetailNavigationHandler={farmDetailNavigationHandler}
       postFarmNavigationHandler={postFarmNavigationHandler}
       settingNavigationHandler={settingNavigationHandler}
     />

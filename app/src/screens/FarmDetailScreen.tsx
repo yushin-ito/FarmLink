@@ -1,18 +1,21 @@
 import React from "react";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import FarmDeviceTemplate from "../components/templates/FarmDeviceTemplate";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import FarmDetailTemplate from "../components/templates/FarmDetailTemplate";
 import { FarmStackParamList, FarmStackScreenProps } from "../types";
 import { useCallback } from "react";
 import useAuth from "../hooks/auth/useAuth";
 import { useQueryUser } from "../hooks/user/query";
 import { useQueryDevice } from "../hooks/device/query";
+import { useQueryFarm } from "../hooks/farm/query";
 
-const FarmDeviceScreen = () => {
-  const { navigation } = useNavigation<FarmStackScreenProps<"FarmDevice">>();
-  const {params} = useRoute<RouteProp<FarmStackParamList, "FarmDevice">>();
+const FarmDetailScreen = ({
+  navigation,
+}: FarmStackScreenProps<"FarmDetail">) => {
+  const { params } = useRoute<RouteProp<FarmStackParamList, "FarmDetail">>();
   const { session } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
-  const { data: device } = useQueryDevice(params.deviceId);
+  const {data: farm, refetch: refetchFarm} = useQueryFarm(params.farmId)
+  const { data: device, refetch: refetchDevice } = useQueryDevice(params.deviceId);
 
   const settingNavigationHandler = useCallback(() => {
     navigation.navigate("TabNavigator", {
@@ -28,7 +31,7 @@ const FarmDeviceScreen = () => {
   }, []);
 
   return (
-    <FarmDeviceTemplate
+    <FarmDetailTemplate
       title={params.name}
       user={user}
       device={device}
@@ -38,4 +41,4 @@ const FarmDeviceScreen = () => {
   );
 };
 
-export default FarmDeviceScreen;
+export default FarmDetailScreen;

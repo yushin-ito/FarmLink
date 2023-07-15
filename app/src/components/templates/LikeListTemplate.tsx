@@ -100,7 +100,8 @@ const LikeListTemplate = ({
               <LikeItem
                 item={item}
                 onPress={() =>
-                  item.farm &&
+                  item.farm.latitude &&
+                  item.farm.longitude &&
                   mapNavigationHandler(item.farm.latitude, item.farm.longitude)
                 }
                 type="farm"

@@ -30,7 +30,8 @@
     "notExistProfile": "No profile",
     "enterMessage": "Enter message",
     "back": "Back",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "dev": "This function is currently under development"
   },
   "map": {
     "farm": "farm",
@@ -57,7 +58,8 @@
     "permitRequestCam": "Please grant camera permission",
     "delete": "Delete",
     "cancel": "Cancel",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "dev": "This function is currently under development"
   },
   "community": {
     "community": "Community",
@@ -84,11 +86,11 @@
     "disease": "Disease",
     "people": "People",
     "join": "Join",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "dev": "This function is currently under development"
   },
   "farm": {
     "myFarm": "My farm",
-    "error": "An error occurred",
     "createFarm": "Create farm",
     "deleteFarm": "Delete farm",
     "askDeleteFarm": "Are you sure you want to delete farm?",
@@ -108,7 +110,10 @@
     "descriptionMaxLength": "Description must be 100 or less",
     "deviceId": "Device ID",
     "invalidDeviceId": "Device ID is invalid",
-    "create": "Create"
+    "create": "Create",
+    "edit": "Edit",
+    "error": "An error occurred",
+    "dev": "This function is currently under development"
   },
   "talk": {
     "talk": "Talk",
@@ -123,7 +128,8 @@
     "delete": "Delete",
     "search": "Search",
     "create": "Create",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "dev": "This function is currently under development"
   },
   "setting": {
     "setting": "Settings",
@@ -136,7 +142,6 @@
     "image": "Pick by library",
     "deleteImage": "Delete image",
     "cancel": "Cancel",
-    "error": "An error occurred",
     "displayName": "User name",
     "displayNameRequired": "User name is required",
     "displayNameMaxLength": "User name must be 20 or less",
@@ -172,6 +177,8 @@
     "description": "Description",
     "descriptionRequired": "Description is required",
     "descriptionMaxLength": "Description must be 100 or less",
-    "create": "Create"
+    "create": "Create",
+    "error": "An error occurred",
+    "dev": "This function is currently under development"
   }
 }

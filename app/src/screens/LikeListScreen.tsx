@@ -74,7 +74,7 @@ const LikeListScreen = ({
   const mapNavigationHandler = useCallback(
     async (latitude: number | null, longitude: number | null) => {
       navigation.goBack();
-      await wait(0.1); // 800ms
+      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "MapNavigator",
         params: {

@@ -20,7 +20,10 @@ import ChatBar from "../organisms/ChatBar";
 import { GetUserResponse } from "../../hooks/user/query";
 import ChatActionSheet from "../organisms/ChatActionSheet";
 import { useTranslation } from "react-i18next";
-import { GetCommunityChatsResponse, GetTalkChatsResponse } from "../../hooks/chat/query";
+import {
+  GetCommunityChatsResponse,
+  GetTalkChatsResponse,
+} from "../../hooks/chat/query";
 
 type ChatTemplateProps = {
   type: "community" | "talk";
@@ -33,7 +36,7 @@ type ChatTemplateProps = {
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;
   deleteRoom: () => Promise<void>;
-  deleteChat: (chatId: number | null) => Promise<void>
+  deleteChat: (chatId: number | null) => Promise<void>;
   pickImageByCamera: () => Promise<void>;
   pickImageByLibrary: () => Promise<void>;
   readMore: () => void;
@@ -60,14 +63,6 @@ const ChatTemplate = ({
   const { t } = useTranslation(["chat", "community", "talk"]);
   const { isOpen, onOpen, onClose } = useDisclose();
   const [chatId, setChatId] = useState<number | null>(null);
-
-  if (isLoadingChats) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
 
   return (
     <KeyboardAvoidingView
@@ -152,30 +147,37 @@ const ChatTemplate = ({
             </Menu.Item>
           </Menu>
         </HStack>
-        <FlatList
-          w="100%"
-          px="5"
-          bg="muted.100"
-          inverted
-          data={chats}
-          onEndReached={readMore}
-          onEndReachedThreshold={0.3}
-          ListFooterComponent={
-            <Center>{hasMore && <Spinner color="muted.400" />}</Center>
-          }
-          renderItem={({ item }) => (
-            <ChatItem
-              item={item}
-              authored={item.authorId === user?.userId}
-              locale={locale}
-              onLongPress={() => {
-                onOpen();
-                setChatId(item.chatId);
-              }}
-            />
-          )}
-          keyExtractor={(item) => item.chatId.toString()}
-        />
+
+        {isLoadingChats ? (
+          <Center flex={1} bg="muted.100">
+            <Spinner color="muted.400" />
+          </Center>
+        ) : (
+          <FlatList
+            w="100%"
+            px="5"
+            bg="muted.100"
+            inverted
+            data={chats}
+            onEndReached={readMore}
+            onEndReachedThreshold={0.3}
+            ListFooterComponent={
+              <Center>{hasMore && <Spinner color="muted.400" />}</Center>
+            }
+            renderItem={({ item }) => (
+              <ChatItem
+                item={item}
+                authored={item.authorId === user?.userId}
+                locale={locale}
+                onLongPress={() => {
+                  onOpen();
+                  setChatId(item.chatId);
+                }}
+              />
+            )}
+            keyExtractor={(item) => item.chatId.toString()}
+          />
+        )}
         <ChatBar
           onSend={onSend}
           isLoading={isLoadingPostChat}

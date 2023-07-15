@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { MapStackParamList, MapStackScreenProps } from "../types";
 import RentalDetailTemplate from "../components/templates/RentalDetailTemplate";
@@ -20,9 +20,11 @@ const RentalDetailScreen = ({
   const toast = useToast();
   const { t } = useTranslation("map");
   const { params } = useRoute<RouteProp<MapStackParamList, "RentalDetail">>();
-  const { data: rental, isLoading: isLoadingRental } = useQueryRental(
-    params.rentalId
-  );
+  const {
+    data: rental,
+    isLoading: isLoadingRental,
+    refetch: refetchRental,
+  } = useQueryRental(params.rentalId);
   const { session } = useAuth();
   const { data: talks, refetch: refetchTalks } = useQueryTalks(
     session?.user.id
@@ -32,6 +34,7 @@ const RentalDetailScreen = ({
     refetch: refetchLikes,
     isLoading: isLoadingLikes,
   } = useQueryRentalLikes(params.rentalId);
+  const [isRefetchingRental, setIsRefetchingRental] = useState(false);
   const liked =
     likes?.some(
       (item) =>
@@ -41,6 +44,13 @@ const RentalDetailScreen = ({
   useEffect(() => {
     rental && getAddress(rental.latitude, rental.longitude);
   }, [rental]);
+
+  const refetch = useCallback(async () => {
+    setIsRefetchingRental(true);
+    await refetchRental();
+    await refetchLikes();
+    setIsRefetchingRental(false);
+  }, []);
 
   const { mutateAsync: mutateAsyncPostLike, isLoading: isLoadingPostLike } =
     usePostRentalLike({
@@ -189,12 +199,14 @@ const RentalDetailScreen = ({
       likes={likes}
       postLike={postLike}
       deleteLike={deleteLike}
+      refetch={refetch}
       owned={session?.user.id === rental?.ownerId}
       address={address}
       rental={rental}
       isLoading={isLoadingRental || isLoadingLikes || isLoadingAddress}
       isLoadingPostTalk={isLoadingPostTalk}
       isLoadingPostLike={isLoadingPostLike}
+      isRefetching={isRefetchingRental}
       isLoadingDeleteLike={isLoadingDeleteLike}
       talkChatNavigationHandler={talkChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}

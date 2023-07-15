@@ -20,7 +20,7 @@ const RentalListScreen = ({
     refetch,
     isLoading: isLoadingRentals,
   } = useQueryUserRentals(session?.user.id);
-  const [isRefreshingRentals, setIsRefetchingRentals] = useState(false);
+  const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
 
   const { mutateAsync: mutateAsyncDeleteRental } = useDeleteRental({
     onSuccess: async () => {
@@ -73,7 +73,7 @@ const RentalListScreen = ({
       rentals={rentals}
       deleteRental={deleteRental}
       isLoadingRentals={isLoadingRentals}
-      isRefetchingRentals={isRefreshingRentals}
+      isRefetchingRentals={isRefetchingRentals}
       refetchRentals={refetchRentals}
       mapNavigationHandler={mapNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}

@@ -30,7 +30,7 @@
     "notExistProfile": "プロフィールがありません",
     "enterMessage": "メッセージを入力",
     "back": "戻る",
-    "fetchError": "データの取得に失敗しました"
+    "dev": "この機能は現在開発中です"
   },
   "map": {
     "farm": "農園",
@@ -58,7 +58,8 @@
     "delete": "削除",
     "cancel": "キャンセル",
     "permitRequestCam": "カメラを許可してください",
-    "error": "エラーが発生しました"
+    "error": "エラーが発生しました",
+    "dev": "この機能は現在開発中です"
   },
   "community": {
     "community": "コミュニティ",
@@ -85,11 +86,11 @@
     "disease": "病気",
     "people": "参加人数",
     "join": "参加する",
-    "error": "エラーが発生しました"
+    "error": "エラーが発生しました",
+    "dev": "この機能は現在開発中です"
   },
   "farm": {
     "myFarm": "自分の農園",
-    "error": "エラーが発生しました",
     "createFarm": "農園を作成",
     "deleteFarm": "農園削除",
     "askDeleteFarm": "農園を削除してもよろしいですか",
@@ -109,7 +110,10 @@
     "description": "詳細",
     "descriptionRequired": "詳細を入力してください",
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
-    "create": "作成"
+    "create": "作成",
+    "edit": "編集する",
+    "error": "エラーが発生しました",
+    "dev": "この機能は現在開発中です"
   },
   "talk": {
     "talk": "トーク",
@@ -124,7 +128,8 @@
     "delete": "削除",
     "search": "検索",
     "create": "作成",
-    "error": "エラーが発生しました"
+    "error": "エラーが発生しました",
+    "dev": "この機能は現在開発中です"
   },
   "setting": {
     "setting": "設定",
@@ -137,7 +142,7 @@
     "image": "写真を選択",
     "deleteImage": "画像を削除",
     "cancel": "キャンセル",
-    "error": "エラーが発生しました",
+
     "displayName": "ユーザー名",
     "displayNameRequired": "ユーザー名を入力してください",
     "displayNameMaxLength": "ユーザー名は20文字以内で入力してください",
@@ -173,6 +178,8 @@
     "description": "詳細",
     "descriptionRequired": "詳細を入力してください",
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
-    "create": "作成"
+    "create": "作成",
+    "error": "エラーが発生しました",
+    "dev": "この機能は現在開発中です"
   }
 }

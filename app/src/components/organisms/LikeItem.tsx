@@ -57,12 +57,11 @@ const LikeItem = memo(
               {type === "farm" ? (
                 <HStack alignItems="center" space="3">
                   <Center size="12" rounded="md" bg="muted.100">
-                    {item.farm?.imageUrls?.length ? (
+                    {item.farm?.imageUrl? (
                       <Image
                         style={{ width: 48, height: 48 }}
-                        source={{ uri: item.farm.imageUrls[0] }}
+                        source={{ uri: item.farm.imageUrl }}
                         contentFit="contain"
-                        recyclingKey={item.farm.farmId.toString()}
                       />
                     ) : (
                       <Icon
@@ -85,7 +84,6 @@ const LikeItem = memo(
                         style={{ width: 48, height: 48 }}
                         source={{ uri: item.rental.imageUrls[0] }}
                         contentFit="contain"
-                        recyclingKey={item.rental.rentalId.toString()}
                       />
                     ) : (
                       <Icon

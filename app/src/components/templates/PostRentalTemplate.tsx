@@ -143,8 +143,8 @@ const PostRentalTemplate = ({
                 )}
                 onMomentumScrollEnd={(event) => {
                   const currentIndex = Math.floor(
-                    Math.floor(event.nativeEvent.contentOffset.x) /
-                      Math.floor(event.nativeEvent.layoutMeasurement.width)
+                    event.nativeEvent.contentOffset.x /
+                      event.nativeEvent.layoutMeasurement.width
                   );
                   setCurrentIndex(currentIndex);
                 }}
@@ -207,13 +207,9 @@ const PostRentalTemplate = ({
                             <Icon as={<Feather name="alert-circle" />} />
                           }
                         >
-                          {errors.name && (
-                            <Text>{errors.name.message}</Text>
-                          )}
+                          {errors.name && <Text>{errors.name.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">
-                          {value?.length ?? 0} / 20
-                        </Text>
+                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -304,9 +300,7 @@ const PostRentalTemplate = ({
                         >
                           {errors.fee && <Text>{errors.fee.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">
-                          {value?.length ?? 0} / 20
-                        </Text>
+                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -356,9 +350,7 @@ const PostRentalTemplate = ({
                         >
                           {errors.area && <Text>{errors.area.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">
-                          {value?.length ?? 0} / 20
-                        </Text>
+                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -410,9 +402,7 @@ const PostRentalTemplate = ({
                             <Text>{errors.equipment.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">
-                          {value?.length ?? 0} / 20
-                        </Text>
+                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );

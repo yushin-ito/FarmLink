@@ -48,7 +48,7 @@ export type CommunityStackParamList = {
 
 export type FarmStackParamList = {
   FarmList: undefined;
-  FarmDevice: { deviceId: string | null; name: string | null };
+  FarmDetail: { farmId: number; deviceId: string | null; name: string | null };
   PostFarm: undefined;
 };
 

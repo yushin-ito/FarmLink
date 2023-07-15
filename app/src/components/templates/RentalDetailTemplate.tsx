@@ -17,7 +17,7 @@ import {
 } from "native-base";
 import { Image } from "expo-image";
 import { GetRentalResponse } from "../../hooks/rental/query";
-import { Alert, useWindowDimensions } from "react-native";
+import { Alert, RefreshControl, useWindowDimensions } from "react-native";
 import { useTranslation } from "react-i18next";
 import { LocationGeocodedAddress } from "expo-location";
 import { GetRentalLikesResponse } from "../../hooks/like/query";
@@ -29,12 +29,14 @@ type RentalDetailTemplateProps = {
   likes: GetRentalLikesResponse | undefined;
   rental: GetRentalResponse | undefined;
   address: LocationGeocodedAddress | undefined;
+  postLike: () => Promise<void>;
+  deleteLike: () => Promise<void>;
+  refetch: () => Promise<void>;
   isLoading: boolean;
   isLoadingPostTalk: boolean;
   isLoadingPostLike: boolean;
   isLoadingDeleteLike: boolean;
-  postLike: () => Promise<void>;
-  deleteLike: () => Promise<void>;
+  isRefetching: boolean;
   talkChatNavigationHandler: () => void;
   goBackNavigationHandler: () => void;
 };
@@ -45,12 +47,14 @@ const RentalDetailTemplate = ({
   owned,
   rental,
   address,
+  postLike,
+  deleteLike,
+  refetch,
   isLoading,
   isLoadingPostTalk,
   isLoadingPostLike,
   isLoadingDeleteLike,
-  postLike,
-  deleteLike,
+  isRefetching,
   talkChatNavigationHandler,
   goBackNavigationHandler,
 }: RentalDetailTemplateProps) => {
@@ -78,10 +82,17 @@ const RentalDetailTemplate = ({
           variant="unstyled"
         />
       </HStack>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={refetch}
+          />
+        }
+      >
         <VStack space="2">
           {isLoading ? (
-            <Skeleton w={width} h="240" mb="3" />
+            <Skeleton w={width} h="64" />
           ) : rental?.imageUrls?.length ? (
             <FlatList
               showsHorizontalScrollIndicator={false}
@@ -89,7 +100,7 @@ const RentalDetailTemplate = ({
               pagingEnabled
               data={rental.imageUrls}
               renderItem={({ item }) => (
-                <Box w={width} h="240" bg="muted.100">
+                <Box w={width} h="64" bg="muted.100">
                   <Image
                     source={{ uri: item }}
                     style={{ flex: 1 }}
@@ -116,9 +127,10 @@ const RentalDetailTemplate = ({
               />
             </Center>
           )}
-          {!isLoading && (
-            <HStack w="100%" alignItems="center" justifyContent="center">
-              {rental?.imageUrls?.map((_item, index) => (
+
+          <HStack w="100%" alignItems="center" justifyContent="center">
+            {!isLoading &&
+              rental?.imageUrls?.map((_item, index) => (
                 <Box
                   key={index}
                   mr="1"
@@ -127,14 +139,20 @@ const RentalDetailTemplate = ({
                   bg={Number(index) === currentIndex ? "info.500" : "muted.400"}
                 />
               ))}
-            </HStack>
-          )}
+          </HStack>
         </VStack>
-        <VStack mt="2" px="6">
-          <HStack alignItems="center" justifyContent="space-between">
-            {isLoading ? (
-              <Skeleton.Text lines={2} w="40" />
-            ) : (
+        {isLoading ? (
+          <VStack mt="2" px="6">
+            <HStack alignItems="center" justifyContent="space-between">
+              <Skeleton w="40" h="7" rounded="16" />
+              <Skeleton size="7" rounded="full" />
+            </HStack>
+            <Skeleton.Text mt="12" lines={4} />
+            <Skeleton.Text mt="12" lines={4} />
+          </VStack>
+        ) : (
+          <VStack mt="2" px="6">
+            <HStack alignItems="center" justifyContent="space-between">
               <VStack>
                 <Heading numberOfLines={2} ellipsizeMode="tail">
                   {rental?.name}
@@ -145,27 +163,18 @@ const RentalDetailTemplate = ({
                   )}
                 </Text>
               </VStack>
-            )}
-            <HStack alignItems="center" space="1">
-              <Avatar
-                isDisabled
-                isLoading={isLoading}
-                size="7"
-                text={rental?.user?.name?.charAt(0)}
-                uri={rental?.user?.avatarUrl}
-                color={rental?.user?.color}
-                updatedAt={rental?.user?.updatedAt}
-              />
-              {isLoading ? (
-                <Skeleton.Text lines={1} w="12" />
-              ) : (
+              <HStack alignItems="center" space="1">
+                <Avatar
+                  isDisabled
+                  size="7"
+                  text={rental?.user?.name?.charAt(0)}
+                  uri={rental?.user?.avatarUrl}
+                  color={rental?.user?.color}
+                  updatedAt={rental?.user?.updatedAt}
+                />
                 <Text>{rental?.user?.name}</Text>
-              )}
+              </HStack>
             </HStack>
-          </HStack>
-          {isLoading ? (
-            <Skeleton.Text mt="6" lines={2} />
-          ) : (
             <HStack mt="6" alignItems="center" justifyContent="space-between">
               <VStack>
                 <Text color="muted.600">{t("area")}</Text>
@@ -192,10 +201,6 @@ const RentalDetailTemplate = ({
                 </Text>
               </VStack>
             </HStack>
-          )}
-          {isLoading ? (
-            <Skeleton.Text mt="8" lines={6} />
-          ) : (
             <VStack mt="8">
               <Text color="muted.600">{t("description")}</Text>
 
@@ -203,8 +208,8 @@ const RentalDetailTemplate = ({
                 {rental?.description}
               </Text>
             </VStack>
-          )}
-        </VStack>
+          </VStack>
+        )}
       </ScrollView>
       <HStack
         w="100%"

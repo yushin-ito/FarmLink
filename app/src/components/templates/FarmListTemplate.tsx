@@ -13,7 +13,7 @@ import React from "react";
 import { RefreshControl } from "react-native";
 import CircleButton from "../molecules/CircleButton";
 import FarmItem from "../organisms/FarmItem";
-import { GetFarmsResponse } from "../../hooks/farm/query";
+import { GetUserFarmsResponse } from "../../hooks/farm/query";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
 import { Feather } from "@expo/vector-icons";
@@ -21,12 +21,13 @@ import { useTranslation } from "react-i18next";
 
 type FarmListTemplateProps = {
   user: GetUserResponse | null | undefined;
-  farms: GetFarmsResponse | null | undefined;
+  farms: GetUserFarmsResponse | null | undefined;
   isLoadingFarms: boolean;
   isRefetchingFarms: boolean;
   refetchFarms: () => Promise<void>;
   deleteFarm: (farmId: number) => Promise<void>;
-  farmDeviceNavigationHandler: (
+  farmDetailNavigationHandler: (
+    farmId: number,
     deviceId: string | null,
     name: string | null
   ) => void;
@@ -41,7 +42,7 @@ const FarmListTemplate = ({
   isRefetchingFarms,
   refetchFarms,
   deleteFarm,
-  farmDeviceNavigationHandler,
+  farmDetailNavigationHandler,
   postFarmNavigationHandler,
   settingNavigationHandler,
 }: FarmListTemplateProps) => {
@@ -70,16 +71,15 @@ const FarmListTemplate = ({
       </VStack>
       <FlatList
         w="100%"
-        px="8"
         mb="20"
         data={farms}
         renderItem={({ item }) => (
           <FarmItem
             item={item}
-            deleteFarm={deleteFarm}
             onPress={() =>
-              farmDeviceNavigationHandler(item.deviceId, item.name)
+              farmDetailNavigationHandler(item.farmId, item.deviceId, item.name)
             }
+            onPressRight={() => deleteFarm(item.farmId)}
           />
         )}
         ListEmptyComponent={

@@ -8,7 +8,7 @@ export type GetRentalLikesResponse = Awaited<ReturnType<typeof getRentalLikes>>;
 const getUserLikes = async (userId: string | undefined) => {
   const { data, error } = await supabase
     .from("like")
-    .select("*, farm(*), rental(*)")
+    .select("*, farm(*, device(imageUrl)), rental(*)")
     .eq("userId", userId);
   if (error) {
     throw error;
@@ -17,8 +17,24 @@ const getUserLikes = async (userId: string | undefined) => {
   return data
     .map((item) =>
       Array.isArray(item.farm)
-        ? { ...item, farm: item.farm[0] }
-        : { ...item, farm: item.farm }
+        ? {
+            ...item,
+            farm: {
+              ...item.farm[0],
+              imageUrl: Array.isArray(item.farm[0].device)
+                ? item.farm[0].device[0].imageUrl
+                : item.farm[0].device?.imageUrl,
+            },
+          }
+        : {
+            ...item,
+            farm: {
+              ...item.farm,
+              imageUrl: Array.isArray(item.farm?.device)
+                ? item.farm?.device[0].imageUrl
+                : item.farm?.device?.imageUrl,
+            },
+          }
     )
     .map((item) =>
       Array.isArray(item.rental)
