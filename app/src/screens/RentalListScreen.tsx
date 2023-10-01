@@ -50,14 +50,14 @@ const RentalListScreen = ({
   }, []);
 
   const mapNavigationHandler = useCallback(
-    async (latitude: number | null, longitude: number | null) => {
+    async (id: number, latitude: number, longitude: number) => {
       navigation.goBack();
       await wait(0.1); // 800ms
       navigation.navigate("TabNavigator", {
         screen: "MapNavigator",
         params: {
           screen: "Map",
-          params: { latitude, longitude, type: "rental" },
+          params: { id, latitude, longitude, type: "rental" },
         },
       });
     },

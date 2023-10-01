@@ -14,7 +14,9 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   const toast = useToast();
   const { t } = useTranslation("farm");
   const { session } = useAuth();
-  const { data: user } = useQueryUser(session?.user.id);
+  const { data: user, isLoading: isLoadingUser } = useQueryUser(
+    session?.user.id
+  );
   const {
     data: farms,
     refetch,
@@ -44,13 +46,13 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     setIsRefetchingFarms(false);
   }, []);
 
-  const deleteFarm = useCallback(async (FarmId: number) => {
-    await mutateAsyncDeleteFarm(FarmId);
+  const deleteFarm = useCallback(async (farmId: number) => {
+    await mutateAsyncDeleteFarm(farmId);
   }, []);
 
   const farmDetailNavigationHandler = useCallback(
-    (farmId: number, deviceId: string | null, name: string | null) => {
-      navigation.navigate("FarmDetail", { farmId, deviceId, name });
+    (farmId: number, deviceId: string) => {
+      navigation.navigate("FarmDetail", { farmId, deviceId });
     },
     []
   );
@@ -72,7 +74,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     <FarmListTemplate
       user={user}
       farms={farms}
-      isLoadingFarms={isLoadingFarms}
+      isLoading={isLoadingUser || isLoadingFarms}
       isRefetchingFarms={isRefetchingFarms}
       refetchFarms={refetchFarms}
       deleteFarm={deleteFarm}

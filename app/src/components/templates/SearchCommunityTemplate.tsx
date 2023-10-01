@@ -21,10 +21,7 @@ type SearchCommunityTemplateProps = {
   searchResult: GetCommunitiesResponse | undefined;
   searchCommunities: (query: string) => Promise<void>;
   isLoadingSearchCommunities: boolean;
-  communityChatNavigationHandler: (
-    communityId: number,
-    name: string | null
-  ) => void;
+  communityChatNavigationHandler: (communityId: number, name: string) => void;
   goBackNavigationHandler: () => void;
 };
 

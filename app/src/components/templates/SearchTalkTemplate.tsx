@@ -14,7 +14,8 @@ type SearchTalkTemplateProps = {
   searchTalks: (query: string) => Promise<void>;
   talkChatNavigationHandler: (
     talkId: number,
-    name: string | null | undefined
+    token: string | null,
+    name: string
   ) => void;
   goBackNavigationHandler: () => void;
 };
@@ -29,7 +30,7 @@ const SearchTalkTemplate = ({
   talkChatNavigationHandler,
   goBackNavigationHandler,
 }: SearchTalkTemplateProps) => {
-    const { t } = useTranslation("talk");
+  const { t } = useTranslation("talk");
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -86,7 +87,7 @@ const SearchTalkTemplate = ({
               <SearchTalkItem
                 item={item}
                 onPress={() =>
-                  talkChatNavigationHandler(item.talkId, item.to.name)
+                  talkChatNavigationHandler(item.talkId, item.to.token, item.to.name)
                 }
               />
             )}

@@ -1,26 +1,30 @@
 import { useQuery } from "react-query";
 import { supabase } from "../../../supabase";
+import { Device, Farm, User } from "../../../types";
 
 export type GetFarmResponse = Awaited<ReturnType<typeof getFarm>>;
 export type GetFarmsResponse = Awaited<ReturnType<typeof getFarms>>;
 export type GetUserFarmsResponse = Awaited<ReturnType<typeof getUserFarms>>;
 
-const getFarm = async (farmId: number | null) => {
+const getFarm = async (farmId: number) => {
   const { data, error } = await supabase
     .from("farm")
-    .select("*")
-    .eq("farmId", farmId);
+    .select("*, user(*), device(*)")
+    .eq("farmId", farmId)
+    .returns<(Farm["Row"] & { user: User["Row"]; device: Device["Row"] })[]>();
+
   if (error) {
     throw error;
   }
-  return data;
+  return data[0];
 };
 
 const getFarms = async () => {
   const { data, error } = await supabase
     .from("farm")
-    .select("*")
-    .eq("privated", false);
+    .select("*, device(*)")
+    .eq("privated", false)
+    .returns<(Farm["Row"] & { device: Device["Row"] })[]>();
   if (error) {
     throw error;
   }
@@ -30,20 +34,17 @@ const getFarms = async () => {
 const getUserFarms = async (ownerId: string | undefined) => {
   const { data, error } = await supabase
     .from("farm")
-    .select("*, device(imageUrl)")
+    .select("*, device(*)")
     .eq("ownerId", ownerId)
-    .order("createdAt", { ascending: false });
+    .order("createdAt", { ascending: false })
+    .returns<(Farm["Row"] & { device: Device["Row"] })[]>();
   if (error) {
     throw error;
   }
-  return data.map((item) =>
-    Array.isArray(item.device)
-      ? { ...item, imageUrl: item.device[0].imageUrl }
-      : { ...item, imageUrl: item.device?.imageUrl }
-  );
+  return data;
 };
 
-export const useQueryFarm = (farmId: number | null) =>
+export const useQueryFarm = (farmId: number) =>
   useQuery({
     queryKey: ["farm", farmId],
     queryFn: async () => await getFarm(farmId),

@@ -7,36 +7,34 @@ import {
   VStack,
   Text,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import React, {
   Dispatch,
   SetStateAction,
   useCallback,
   useEffect,
   useRef,
-  useState,
 } from "react";
-import MapView, { Marker, PROVIDER_GOOGLE, Region } from "react-native-maps";
+import MapView, { Marker, LatLng } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
-import CircleButton from "../molecules/CircleButton";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import { LocationObject } from "expo-location";
 import { useTranslation } from "react-i18next";
+import FarmPreviewList from "../organisms/FarmPreviewList";
+import RentalPreviewList from "../organisms/RentalPreviewList";
 
 type MapTemplateProps = {
   type: "farm" | "rental";
   setType: Dispatch<SetStateAction<"farm" | "rental">>;
-  params: {
-    latitude: number | null | undefined;
-    longitude: number | null | undefined;
-  };
+  id: number | null;
+  region: LatLng | null;
+  setRegion: Dispatch<SetStateAction<LatLng | null>>;
   position: LocationObject | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
-  getCurrentPosition: () => Promise<void>;
-  onRegionChange: (region: Region) => void;
-  isLoadingPosition: boolean;
+  isLoading: boolean;
+  farmDetailNavigationHandler: (farmId: number) => void;
   rentalDetailNavigationHandler: (rentalId: number) => void;
   searchMapNavigationHandler: () => void;
 };
@@ -44,28 +42,28 @@ type MapTemplateProps = {
 const MapTemplate = ({
   type,
   setType,
-  params,
+  id,
+  region,
+  setRegion,
   position,
   farms,
   rentals,
-  getCurrentPosition,
-  isLoadingPosition,
-  onRegionChange,
+  isLoading,
+  farmDetailNavigationHandler,
   rentalDetailNavigationHandler,
   searchMapNavigationHandler,
 }: MapTemplateProps) => {
   const { t } = useTranslation("map");
   const mapRef = useRef<MapView>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   const animateToRegion = useCallback(
-    (latitude: number, longitude: number) => {
-      if (mapRef.current && latitude && longitude) {
+    (region: LatLng | null) => {
+      if (mapRef.current && region) {
         mapRef.current.animateToRegion({
-          latitude,
-          longitude,
-          latitudeDelta: 0.0005,
-          longitudeDelta: 0.0005,
+          latitude: region.latitude,
+          longitude: region.longitude,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
         });
       }
     },
@@ -73,25 +71,13 @@ const MapTemplate = ({
   );
 
   useEffect(() => {
-    !isLoading &&
-      params?.latitude &&
-      params?.longitude &&
-      animateToRegion(params.latitude, params.longitude);
-  }, [isLoading, params?.latitude, params?.longitude]);
-
-  useEffect(() => {
-    !isLoading &&
-      position?.coords &&
-      animateToRegion(position?.coords.latitude, position?.coords.longitude);
-  }, [isLoading, position?.coords]);
+    animateToRegion(region);
+  }, [region, mapRef.current]);
 
   return (
     <Box flex={1}>
       <MapView
-        provider={PROVIDER_GOOGLE}
         ref={mapRef}
-        mapType="satellite"
-        loadingEnabled
         showsCompass={false}
         initialRegion={{
           latitude: 35,
@@ -99,13 +85,19 @@ const MapTemplate = ({
           latitudeDelta: 1,
           longitudeDelta: 1,
         }}
-        onMapLoaded={() => {
-          setIsLoading(false);
-        }}
         style={{ flex: 1 }}
-        onRegionChangeComplete={onRegionChange}
       >
-        {position && <Marker coordinate={position.coords} />}
+        {position && (
+          <Marker coordinate={position.coords}>
+            <Text color="blueGray.600">{t("current")}</Text>
+            <Icon
+              as={<MaterialIcons />}
+              name="location-pin"
+              size="3xl"
+              color="red.500"
+            />
+          </Marker>
+        )}
         {type === "farm"
           ? farms?.map(
               (item) =>
@@ -113,17 +105,18 @@ const MapTemplate = ({
                 item.longitude && (
                   <Marker
                     key={item.farmId}
-                    pinColor={
-                      item.latitude === params?.latitude &&
-                      item.longitude === params?.longitude
-                        ? "tomato"
-                        : "green"
-                    }
                     coordinate={{
                       latitude: item.latitude,
                       longitude: item.longitude,
                     }}
-                  />
+                  >
+                    <Icon
+                      as={<MaterialIcons />}
+                      name="location-pin"
+                      size="3xl"
+                      color="brand.600"
+                    />
+                  </Marker>
                 )
             )
           : rentals?.map(
@@ -132,34 +125,51 @@ const MapTemplate = ({
                 item.longitude && (
                   <Marker
                     key={item.rentalId}
-                    pinColor={
-                      item.latitude === params?.latitude &&
-                      item.longitude === params?.longitude
-                        ? "aqua"
-                        : "blue"
-                    }
                     coordinate={{
                       latitude: item.latitude,
                       longitude: item.longitude,
                     }}
                     onPress={() => rentalDetailNavigationHandler(item.rentalId)}
-                  />
+                  >
+                    <Icon
+                      as={<MaterialIcons />}
+                      name="location-pin"
+                      size="3xl"
+                      color="brand.600"
+                    />
+                  </Marker>
                 )
             )}
       </MapView>
       <VStack w="80%" position="absolute" top="16" alignSelf="center" space="4">
-        <SearchBar
-          isReadOnly
-          placeholder={t(type === "farm" ? "searchFarm" : "searchRental")}
-          onPressIn={searchMapNavigationHandler}
-        />
+        <Box shadow="1" rounded="lg" bg="white">
+          <SearchBar
+            isReadOnly
+            bg="white"
+            placeholder={t(type === "farm" ? "searchFarm" : "searchRental")}
+            onPressIn={searchMapNavigationHandler}
+          />
+        </Box>
         <HStack space="2">
-          <Pressable onPress={() => setType("farm")}>
+          <Pressable
+            onPress={() => {
+              if (farms?.length) {
+                farms[0].latitude &&
+                  farms[0].longitude &&
+                  animateToRegion({
+                    latitude: farms[0].latitude,
+                    longitude: farms[0].longitude,
+                  });
+              }
+              setType("farm");
+            }}
+          >
             <Box
               px="3"
               py="1"
               rounded="full"
-              bg={type === "farm" ? "brand.600" : "muted.200"}
+              bg={type === "farm" ? "brand.600" : "white"}
+              shadow="1"
               alignItems="center"
             >
               <Text color={type === "farm" ? "white" : "black"}>
@@ -167,12 +177,22 @@ const MapTemplate = ({
               </Text>
             </Box>
           </Pressable>
-          <Pressable onPress={() => setType("rental")}>
+          <Pressable
+            onPress={() => {
+              rentals &&
+                animateToRegion({
+                  latitude: rentals[0].latitude,
+                  longitude: rentals[0].longitude,
+                });
+              setType("rental");
+            }}
+          >
             <Box
               px="3"
               py="1"
               rounded="full"
-              bg={type === "rental" ? "brand.600" : "muted.200"}
+              bg={type === "rental" ? "brand.600" : "white"}
+              shadow="1"
               alignItems="center"
             >
               <Text color={type === "rental" ? "white" : "black"}>
@@ -182,15 +202,22 @@ const MapTemplate = ({
           </Pressable>
         </HStack>
       </VStack>
-      <CircleButton
-        position="absolute"
-        bottom="24"
-        right="6"
-        onPress={getCurrentPosition}
-      >
-        <Icon as={<Feather />} name="navigation" size="xl" color="white" />
-      </CircleButton>
-      {isLoadingPosition && (
+      {type === "farm" ? (
+        <FarmPreviewList
+          farms={farms}
+          farmId={type === "farm" ? id : null}
+          setRegion={setRegion}
+          farmDetailNavigationHandler={farmDetailNavigationHandler}
+        />
+      ) : (
+        <RentalPreviewList
+          rentals={rentals}
+          rentalId={type === "rental" ? id : null}
+          setRegion={setRegion}
+          rentalDetailNavigationHandler={rentalDetailNavigationHandler}
+        />
+      )}
+      {isLoading && (
         <Spinner
           position="absolute"
           top="0"

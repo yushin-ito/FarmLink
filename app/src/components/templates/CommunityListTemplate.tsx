@@ -12,11 +12,10 @@ import {
   useDisclose,
 } from "native-base";
 import React, { Dispatch, SetStateAction } from "react";
-import CircleButton from "../molecules/CircleButton";
+import Fab from "../molecules/Fab";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import CommunityItem from "../organisms/CommunityItem";
-import { RefreshControl } from "react-native";
 import Avatar from "../molecules/Avatar";
 import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
@@ -30,7 +29,7 @@ type CommunityListTemplateProps = {
   setCategoryIndex: Dispatch<SetStateAction<number>>;
   user: GetUserResponse | null | undefined;
   communities: GetCommunitiesResponse | null | undefined;
-  isLoadingCommunities: boolean;
+  isLoading: boolean;
   isRefetchingCommunities: boolean;
   hasMore: boolean | undefined;
   refetchCommunities: () => Promise<void>;
@@ -38,7 +37,7 @@ type CommunityListTemplateProps = {
   readMore: () => void;
   communityChatNavigationHandler: (
     communityId: number,
-    name: string | null
+    name: string
   ) => void;
   postCommunityNavigationHandler: () => void;
   settingNavigationHandler: () => void;
@@ -50,7 +49,7 @@ const CommunityListTemplate = ({
   setCategoryIndex,
   user,
   communities,
-  isLoadingCommunities,
+  isLoading,
   isRefetchingCommunities,
   hasMore,
   refetchCommunities,
@@ -82,6 +81,7 @@ const CommunityListTemplate = ({
             color={user?.color}
             onPress={settingNavigationHandler}
             updatedAt={user?.updatedAt}
+            isLoading={isLoading}
           />
         </HStack>
         <SearchBar
@@ -103,8 +103,8 @@ const CommunityListTemplate = ({
           <Icon as={<AntDesign name="caretdown" />} size="2" />
         </HStack>
       </Pressable>
-      {isLoadingCommunities ? (
-        <SkeltonCommunityList rows={4}/>
+      {isLoading ? (
+        <SkeltonCommunityList rows={4} />
       ) : (
         <FlatList
           w="100%"
@@ -124,23 +124,19 @@ const CommunityListTemplate = ({
             />
           )}
           keyExtractor={(item) => item.communityId.toString()}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefetchingCommunities}
-              onRefresh={refetchCommunities}
-            />
-          }
+          refreshing={isRefetchingCommunities}
+          onRefresh={refetchCommunities}
         />
       )}
 
-      <CircleButton
+      <Fab
         position="absolute"
         bottom="24"
         right="6"
         onPress={postCommunityNavigationHandler}
       >
         <Icon as={<Feather name="plus" />} size="4xl" color="white" />
-      </CircleButton>
+      </Fab>
     </Box>
   );
 };

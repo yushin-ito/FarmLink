@@ -1,16 +1,11 @@
 import { decode } from "base64-arraybuffer";
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
-import { Chat, UseMutationResult } from "../../../types/db";
+import { Chat, UseMutationResult } from "../../../types";
 
 export type PostChatResponse = Awaited<ReturnType<typeof postChat>>;
 export type DeleteChatResponse = Awaited<ReturnType<typeof deleteChat>>;
-export type PostCommunityChatImageResponse = Awaited<
-  ReturnType<typeof postCommunityChatImage>
->;
-export type PostTalkChatImageResponse = Awaited<
-  ReturnType<typeof postTalkChatImage>
->;
+export type PostChatImageResponse = Awaited<ReturnType<typeof postChatImage>>;
 
 const postChat = async (chat: Chat["Insert"]) => {
   const { data, error } = await supabase.from("chat").upsert(chat).select();
@@ -20,7 +15,7 @@ const postChat = async (chat: Chat["Insert"]) => {
   return data;
 };
 
-const deleteChat = async (chatId: number |null) => {
+const deleteChat = async (chatId: number | null) => {
   const { data, error } = await supabase
     .from("chat")
     .delete()
@@ -31,19 +26,9 @@ const deleteChat = async (chatId: number |null) => {
   return data;
 };
 
-const postCommunityChatImage = async ({
-  base64,
-  size,
-  communityId,
-  authorId,
-}: {
-  base64: string;
-  size: { width: number; height: number };
-  communityId: number;
-  authorId: string;
-}) => {
+const postChatImage = async (base64: string) => {
   const filePath = `chat/${Math.random()}.png`;
-  const { error } = await supabase.storage
+  const { data, error } = await supabase.storage
     .from("image")
     .upload(filePath, decode(base64), {
       contentType: "image",
@@ -51,44 +36,8 @@ const postCommunityChatImage = async ({
   if (error) {
     throw error;
   }
-  const { data } = supabase.storage.from("image").getPublicUrl(filePath);
-  await postChat({
-    communityId,
-    authorId,
-    imageUrl: data.publicUrl,
-    width: size.width,
-    height: size.height,
-  });
-};
 
-const postTalkChatImage = async ({
-  base64,
-  size,
-  talkId,
-  authorId,
-}: {
-  base64: string;
-  size: { width: number; height: number };
-  talkId: number;
-  authorId: string;
-}) => {
-  const filePath = `chat/${Math.random()}.png`;
-  const { error } = await supabase.storage
-    .from("image")
-    .upload(filePath, decode(base64), {
-      contentType: "image",
-    });
-  if (error) {
-    throw error;
-  }
-  const { data } = supabase.storage.from("image").getPublicUrl(filePath);
-  await postChat({
-    talkId,
-    authorId,
-    imageUrl: data.publicUrl,
-    width: size.width,
-    height: size.height,
-  });
+  return data;
 };
 
 export const usePostChat = ({
@@ -111,22 +60,12 @@ export const useDeleteChat = ({
     onError,
   });
 
-export const usePostCommunityChatImage = ({
+export const usePostChatImage = ({
   onSuccess,
   onError,
-}: UseMutationResult<PostCommunityChatImageResponse, Error>) =>
+}: UseMutationResult<PostChatImageResponse, Error>) =>
   useMutation({
-    mutationFn: postCommunityChatImage,
-    onSuccess,
-    onError,
-  });
-
-export const usePostTalkChatImage = ({
-  onSuccess,
-  onError,
-}: UseMutationResult<PostTalkChatImageResponse, Error>) =>
-  useMutation({
-    mutationFn: postTalkChatImage,
+    mutationFn: postChatImage,
     onSuccess,
     onError,
   });

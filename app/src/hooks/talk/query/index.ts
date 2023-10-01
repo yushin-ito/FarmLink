@@ -1,9 +1,8 @@
 import { supabase } from "../../../supabase";
 import { useQuery } from "react-query";
-import { Talk, User } from "../../../types/db";
+import { Talk, User } from "../../../types"
 
 export type GetTalksResponse = Awaited<ReturnType<typeof getTalks>>;
-
 
 const getTalks = async (userId: string | undefined) => {
   const { data, error } = await supabase
@@ -23,8 +22,6 @@ const getTalks = async (userId: string | undefined) => {
     return item;
   });
 };
-
-
 
 export const useQueryTalks = (userId: string | undefined) =>
   useQuery({

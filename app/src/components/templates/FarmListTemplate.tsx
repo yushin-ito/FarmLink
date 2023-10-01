@@ -3,34 +3,28 @@ import {
   VStack,
   HStack,
   Heading,
-  Center,
-  Spinner,
   Icon,
   FlatList,
   Text,
 } from "native-base";
 import React from "react";
-import { RefreshControl } from "react-native";
-import CircleButton from "../molecules/CircleButton";
+import Fab from "../molecules/Fab";
 import FarmItem from "../organisms/FarmItem";
 import { GetUserFarmsResponse } from "../../hooks/farm/query";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import SkeltonFarmList from "../organisms/SkeltonFarmList";
 
 type FarmListTemplateProps = {
   user: GetUserResponse | null | undefined;
   farms: GetUserFarmsResponse | null | undefined;
-  isLoadingFarms: boolean;
+  isLoading: boolean;
   isRefetchingFarms: boolean;
   refetchFarms: () => Promise<void>;
   deleteFarm: (farmId: number) => Promise<void>;
-  farmDetailNavigationHandler: (
-    farmId: number,
-    deviceId: string | null,
-    name: string | null
-  ) => void;
+  farmDetailNavigationHandler: (farmId: number, deviceId: string) => void;
   postFarmNavigationHandler: () => void;
   settingNavigationHandler: () => void;
 };
@@ -38,7 +32,7 @@ type FarmListTemplateProps = {
 const FarmListTemplate = ({
   user,
   farms,
-  isLoadingFarms,
+  isLoading,
   isRefetchingFarms,
   refetchFarms,
   deleteFarm,
@@ -47,13 +41,6 @@ const FarmListTemplate = ({
   settingNavigationHandler,
 }: FarmListTemplateProps) => {
   const { t } = useTranslation("farm");
-  if (isLoadingFarms) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
 
   return (
     <Box flex={1} safeAreaTop>
@@ -66,48 +53,49 @@ const FarmListTemplate = ({
             color={user?.color}
             updatedAt={user?.updatedAt}
             onPress={settingNavigationHandler}
+            isLoading={isLoading}
           />
         </HStack>
       </VStack>
-      <FlatList
-        w="100%"
-        mb="20"
-        data={farms}
-        renderItem={({ item }) => (
-          <FarmItem
-            item={item}
-            onPress={() =>
-              farmDetailNavigationHandler(item.farmId, item.deviceId, item.name)
-            }
-            onPressRight={() => deleteFarm(item.farmId)}
-          />
-        )}
-        ListEmptyComponent={
-          <Text
-            bold
-            lineHeight="2xl"
-            fontSize="md"
-            textAlign="center"
-            color="muted.600"
-          >
-            {t("notExistFarm")}
-          </Text>
-        }
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefetchingFarms}
-            onRefresh={refetchFarms}
-          />
-        }
-      />
-      <CircleButton
+      {isLoading ? (
+        <SkeltonFarmList rows={6} />
+      ) : (
+        <FlatList
+          w="100%"
+          mb="20"
+          data={farms}
+          renderItem={({ item }) => (
+            <FarmItem
+              item={item}
+              onPress={() =>
+                farmDetailNavigationHandler(item.farmId, item.deviceId)
+              }
+              onPressRight={() => deleteFarm(item.farmId)}
+            />
+          )}
+          ListEmptyComponent={
+            <Text
+              bold
+              lineHeight="2xl"
+              fontSize="md"
+              textAlign="center"
+              color="muted.600"
+            >
+              {t("notExistFarm")}
+            </Text>
+          }
+          refreshing={isRefetchingFarms}
+          onRefresh={refetchFarms}
+        />
+      )}
+      <Fab
         position="absolute"
         bottom="24"
         right="6"
         onPress={postFarmNavigationHandler}
       >
         <Icon as={<Feather name="plus" />} size="4xl" color="white" />
-      </CircleButton>
+      </Fab>
     </Box>
   );
 };

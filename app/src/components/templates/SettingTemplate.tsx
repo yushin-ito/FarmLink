@@ -21,8 +21,9 @@ import ImageActionSheet from "../organisms/ImageActionSheet";
 
 type SettingTemplateProps = {
   user: GetUserResponse | null | undefined;
+  isLoadingAvatar: boolean;
   isLoadingSignOut: boolean;
-  isLoadingPostAvatar: boolean;
+  deleteAvatar: () => Promise<void>;
   signOut: () => Promise<void>;
   pickImageByCamera: () => Promise<void>;
   pickImageByLibrary: () => Promise<void>;
@@ -34,8 +35,9 @@ type SettingTemplateProps = {
 
 const SettingTemplate = ({
   user,
+  isLoadingAvatar,
   isLoadingSignOut,
-  isLoadingPostAvatar,
+  deleteAvatar,
   signOut,
   pickImageByCamera,
   pickImageByLibrary,
@@ -60,6 +62,7 @@ const SettingTemplate = ({
       <ImageActionSheet
         isOpen={isOpen}
         onClose={onClose}
+        onDelete={deleteAvatar}
         pickImageByCamera={pickImageByCamera}
         pickImageByLibrary={pickImageByLibrary}
       />
@@ -70,10 +73,10 @@ const SettingTemplate = ({
             <Avatar
               text={user?.name?.charAt(0)}
               uri={user?.avatarUrl}
-              color={user?.name}
-              isLoading={isLoadingPostAvatar}
+              color={user?.color}
+              isLoading={isLoadingAvatar}
               size="16"
-              fontSize="2xl"
+              fontSize="3xl"
               updatedAt={user?.updatedAt}
               onPress={onOpen}
             />
@@ -82,7 +85,9 @@ const SettingTemplate = ({
             <Text fontSize="xl" bold>
               {user?.name}
             </Text>
-            <Text color="muted.600">{user?.introduction}</Text>
+            <Text color="muted.600" numberOfLines={2} ellipsizeMode="tail">
+              {user?.introduction}
+            </Text>
           </VStack>
         </HStack>
         <Pressable
@@ -159,9 +164,12 @@ const SettingTemplate = ({
             opacity: 0.5,
           }}
         >
-          <HStack p="2" space="3" alignItems="center" rounded="md">
-            <Icon as={<Feather />} name="log-out" size="5" />
-            <Text fontSize="md">{t("signout")}</Text>
+          <HStack alignItems="center" justifyContent="space-between">
+            <HStack p="2" space="2" alignItems="center" rounded="md">
+              <Icon as={<Feather />} name="log-out" size="5" />
+              <Text fontSize="md">{t("signout")}</Text>
+            </HStack>
+            <Icon as={<Feather />} name="chevron-right" size="5" />
           </HStack>
         </Pressable>
       </VStack>

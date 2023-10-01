@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
-import { UseMutationResult } from "../../../types/db";
+import { UseMutationResult } from "../../../types";
 
 export type SearchDeviceResponse = Awaited<ReturnType<typeof searchDevice>>;
 

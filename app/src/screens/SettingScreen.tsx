@@ -8,14 +8,19 @@ import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
 import SettingTemplate from "../components/templates/SettingTemplate";
 import useImage from "../hooks/sdk/useImage";
-import { usePostAvatar } from "../hooks/user/mutate";
+import { usePostAvatar, usePostUser } from "../hooks/user/mutate";
 import { SettingStackScreenProps } from "../types";
+import { supabase } from "../supabase";
 
 const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
   const toast = useToast();
   const { t } = useTranslation("setting");
   const { session } = useAuth();
-  const { data: user, refetch } = useQueryUser(session?.user.id);
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    refetch,
+  } = useQueryUser(session?.user.id);
 
   const { mutateAsync: mutateAsyncSignOut, isLoading: isLoadingSignOut } =
     useSignOut({
@@ -31,10 +36,32 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncPostAvatar, isLoading: isLoadingPostAvatar } =
-    usePostAvatar({
+  const { mutateAsync: mutateAsyncPostUser, isLoading: isLoadingPostUser } =
+    usePostUser({
       onSuccess: async () => {
         await refetch();
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
+
+  const { mutateAsync: mutateAsyncPostAvatar, isLoading: isLoadingPostAvatar } =
+    usePostAvatar({
+      onSuccess: async ({ path }) => {
+        const { data } = supabase.storage.from("image").getPublicUrl(path);
+        session?.user &&
+          mutateAsyncPostUser({
+            userId: session.user.id,
+            avatarUrl: data.publicUrl,
+          });
       },
       onError: () => {
         showAlert(
@@ -51,7 +78,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
   const { pickImageByCamera, pickImageByLibrary } = useImage({
     onSuccess: async ({ base64 }) => {
       if (session?.user && base64) {
-        await mutateAsyncPostAvatar({ base64, userId: session.user.id });
+        await mutateAsyncPostAvatar(base64);
       }
     },
     onDisable: () => {
@@ -76,6 +103,11 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     },
   });
 
+  const deleteAvatar = useCallback(async () => {
+    session?.user &&
+      (await mutateAsyncPostUser({ userId: session.user.id, avatarUrl: null }));
+  }, [session?.user]);
+
   const signOut = useCallback(async () => {
     await mutateAsyncSignOut();
   }, []);
@@ -92,18 +124,21 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     navigation.navigate("RentalList");
   }, []);
 
-    const likeListNavigationHandler = useCallback(() => {
-      navigation.navigate("LikeList");
-    }, []);
+  const likeListNavigationHandler = useCallback(() => {
+    navigation.navigate("LikeList");
+  }, []);
 
   return (
     <SettingTemplate
       user={user}
-      isLoadingPostAvatar={isLoadingPostAvatar}
+      isLoadingAvatar={
+        isLoadingUser || isLoadingPostUser || isLoadingPostAvatar
+      }
       isLoadingSignOut={isLoadingSignOut}
       signOut={signOut}
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
+      deleteAvatar={deleteAvatar}
       postRentalNavigationHandler={postRentalNavigationHandler}
       postProfileNavigationHandler={postProfileNavigationHandler}
       rentalListNavigationHandler={rentalListNavigationHandler}

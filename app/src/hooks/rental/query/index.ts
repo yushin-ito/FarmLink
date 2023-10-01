@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { supabase } from "../../../supabase";
+import { Rental, User } from "../../../types";
 
 export type GetRentalResponse = Awaited<ReturnType<typeof getRental>>;
 export type GetRentalsResponse = Awaited<ReturnType<typeof getRentals>>;
@@ -10,19 +11,15 @@ const getRental = async (rentalId: number) => {
     .from("rental")
     .select("*, user(*)")
     .eq("rentalId", rentalId)
-    .single();
-
+    .returns<(Rental["Row"] & { user: User["Row"] })[]>();
   if (error) {
     throw error;
   }
-  return Array.isArray(data.user)
-    ? { ...data, user: data.user[0] }
-    : { ...data, user: data.user };
+  return data[0];
 };
 
 const getRentals = async () => {
   const { data, error } = await supabase.from("rental").select("*");
-
   if (error) {
     throw error;
   }
@@ -36,7 +33,6 @@ const getUserRentals = async (ownerId: string | undefined) => {
     .select("*")
     .eq("ownerId", ownerId)
     .order("createdAt", { ascending: false });
-
   if (error) {
     throw error;
   }

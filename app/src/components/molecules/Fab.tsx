@@ -2,17 +2,17 @@ import React, { ReactNode, memo } from "react";
 
 import { Center, Pressable, IPressableProps } from "native-base";
 
-type CirCleButtonProps = {
+type FabProps = {
   buttonSize?: string;
   children: ReactNode;
 };
 
-const CircleButton = memo(
+const Fab = memo(
   ({
     buttonSize = "md",
     children,
     ...props
-  }: CirCleButtonProps & IPressableProps) => {
+  }: FabProps & IPressableProps) => {
     return (
       <Pressable {...props} mb="3">
         {({ isPressed }) => {
@@ -39,4 +39,4 @@ const CircleButton = memo(
   }
 );
 
-export default CircleButton;
+export default Fab;

@@ -4,6 +4,26 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Database } from "./schema";
+
+export type UseQueryResult<T1, T2> = {
+  onSuccess?: (response: T1) => void;
+  onError?: (error: T2) => void;
+};
+
+export type UseMutationResult<T1, T2> = {
+  onSuccess?: (response: T1) => void;
+  onError?: (error: T2) => void;
+};
+
+export type User = Database["public"]["Tables"]["user"];
+export type Chat = Database["public"]["Tables"]["chat"];
+export type Community = Database["public"]["Tables"]["community"];
+export type Farm = Database["public"]["Tables"]["farm"];
+export type Talk = Database["public"]["Tables"]["talk"];
+export type Rental = Database["public"]["Tables"]["rental"];
+export type Like = Database["public"]["Tables"]["like"];
+export type Device = Database["public"]["Tables"]["device"];
 
 export type RootStackParamList = {
   AuthNavigator: NavigatorScreenParams<AuthStackParamList> | undefined;
@@ -26,8 +46,9 @@ export type TabParamList = {
 
 export type MapStackParamList = {
   Map: {
-    latitude: number | null | undefined;
-    longitude: number | null | undefined;
+    id: number;
+    latitude: number;
+    longitude: number;
     type: "farm" | "rental";
   };
   SearchMap: { type: "farm" | "rental" };
@@ -39,7 +60,7 @@ export type CommunityStackParamList = {
   CommunityList: undefined;
   CommunityChat: {
     communityId: number;
-    name: string | null;
+    name: string;
     category: string;
   };
   PostCommunity: undefined;
@@ -48,13 +69,13 @@ export type CommunityStackParamList = {
 
 export type FarmStackParamList = {
   FarmList: undefined;
-  FarmDetail: { farmId: number; deviceId: string | null; name: string | null };
+  FarmDetail: { farmId: number; deviceId: string };
   PostFarm: undefined;
 };
 
 export type TalkStackParamList = {
   TalkList: undefined;
-  TalkChat: { talkId: number; name: string | null | undefined };
+  TalkChat: { talkId: number; token: string | null; name: string };
   PostTalk: undefined;
   SearchTalk: undefined;
 };

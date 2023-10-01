@@ -84,10 +84,7 @@ const RentalDetailTemplate = ({
       </HStack>
       <ScrollView
         refreshControl={
-          <RefreshControl
-            refreshing={isRefetching}
-            onRefresh={refetch}
-          />
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
         }
       >
         <VStack space="2">
@@ -203,7 +200,6 @@ const RentalDetailTemplate = ({
             </HStack>
             <VStack mt="8">
               <Text color="muted.600">{t("description")}</Text>
-
               <Text bold fontSize="md">
                 {rental?.description}
               </Text>
@@ -235,7 +231,6 @@ const RentalDetailTemplate = ({
           variant="unstyled"
           borderWidth="1"
           rounded="lg"
-          p="2"
           borderColor="muted.300"
           onPress={() => {
             !liked ? postLike() : deleteLike();

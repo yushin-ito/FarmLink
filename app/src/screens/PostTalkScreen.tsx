@@ -25,7 +25,9 @@ const PostTalkScreen = () => {
     onSuccess: (data) => {
       setSearchResult(
         data.filter(
-          (item) => !talks?.some((talk) => talk.to.userId === item.userId)
+          (item) =>
+            !talks?.some((talk) => talk.to.userId === item.userId) &&
+            session?.user.id !== item.userId
         )
       );
     },
@@ -62,24 +64,26 @@ const PostTalkScreen = () => {
     });
 
   const searchUsers = useCallback(
-    async (text: string) => {
-      if (text === "") {
+    async (query: string) => {
+      if (query === "") {
         setSearchResult([]);
         return;
       }
-      await mutateAsyncSearchUsers({ userId: session?.user.id, text });
+      await mutateAsyncSearchUsers(query);
     },
-    [session?.user]
+    [session]
   );
 
   const postTalk = useCallback(
     async (recieverId: string) => {
-      session && await mutateAsyncPostTalk({
-        senderId: session?.user.id,
-        recieverId,
-      });
+      if (session) {
+        await mutateAsyncPostTalk({
+          senderId: session?.user.id,
+          recieverId,
+        });
+      }
     },
-    [session?.user]
+    [session]
   );
 
   const goBackNavigationHandler = useCallback(() => {

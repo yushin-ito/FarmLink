@@ -57,7 +57,7 @@ const LikeItem = memo(
               {type === "farm" ? (
                 <HStack alignItems="center" space="3">
                   <Center size="12" rounded="md" bg="muted.100">
-                    {item.farm?.imageUrl? (
+                    {item.farm?.imageUrl ? (
                       <Image
                         style={{ width: 48, height: 48 }}
                         source={{ uri: item.farm.imageUrl }}
@@ -72,9 +72,19 @@ const LikeItem = memo(
                       />
                     )}
                   </Center>
-                  <Text bold fontSize="md">
-                    {item?.farm?.name}
-                  </Text>
+                  <VStack space="1">
+                    <Text bold fontSize="md">
+                      {item.farm.name}
+                    </Text>
+                    <Text
+                      color="muted.600"
+                      fontSize="xs"
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.farm.description ?? t("noDescription")}
+                    </Text>
+                  </VStack>
                 </HStack>
               ) : (
                 <HStack alignItems="center" space="3">
@@ -94,9 +104,19 @@ const LikeItem = memo(
                       />
                     )}
                   </Center>
-                  <Text bold fontSize="md">
-                    {item?.rental?.name}
-                  </Text>
+                  <VStack space="1">
+                    <Text bold fontSize="md">
+                      {item.rental.name}
+                    </Text>
+                    <Text
+                      color="muted.600"
+                      fontSize="xs"
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.rental.description}
+                    </Text>
+                  </VStack>
                 </HStack>
               )}
               <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />

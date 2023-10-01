@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
-import { Like, UseMutationResult } from "../../../types/db";
+import { Like, UseMutationResult } from "../../../types";
 
 export type PostFarmLikeResponse = Awaited<ReturnType<typeof postFarmLike>>;
 export type PostRentalLikeResponse = Awaited<ReturnType<typeof postRentalLike>>;

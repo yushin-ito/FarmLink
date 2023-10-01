@@ -1,4 +1,8 @@
 {
+  "common": {
+    "permitRequestNoti": "Please grant notification permission",
+    "fetchError": "Failed to fetch data."
+  },
   "auth": {
     "app": "FarmLink is an app that allows you to start farming with peace of mind.",
     "enter": "Enter",
@@ -35,11 +39,16 @@
   },
   "map": {
     "farm": "farm",
+    "current": "Current",
     "search": "Search",
     "rental": "rental",
     "searchFarm": "Search Farm",
     "searchRental": "Search rental",
     "permitRequestGPS": "Please grant GPS permission",
+    "noDescription": "No description",
+    "temperture": "Temp",
+    "humidity": "Humi",
+    "moisture": "Moi",
     "fee": "Fee",
     "equipment": "Equipment",
     "area": "Area",
@@ -55,7 +64,9 @@
     "enterMessage": "Enter message",
     "camera": "Pick by camera",
     "image": "Pick by library",
+    "sendImage": "Image sent",
     "permitRequestCam": "Please grant camera permission",
+    "permitRequestNoti": "Please grant notification permission",
     "delete": "Delete",
     "cancel": "Cancel",
     "error": "An error occurred",
@@ -90,7 +101,12 @@
     "dev": "This function is currently under development"
   },
   "farm": {
+    "farm": "farm",
     "myFarm": "My farm",
+    "temperture": "Temp",
+    "humidity": "Humi",
+    "moisture": "Moi",
+    "unknown": "Unknown",
     "createFarm": "Create farm",
     "deleteFarm": "Delete farm",
     "askDeleteFarm": "Are you sure you want to delete farm?",
@@ -112,6 +128,7 @@
     "invalidDeviceId": "Device ID is invalid",
     "create": "Create",
     "edit": "Edit",
+    "chat": "Chat",
     "error": "An error occurred",
     "dev": "This function is currently under development"
   },
@@ -136,6 +153,7 @@
     "profile": "Profile",
     "editProfile": "Edit profile",
     "noProfile": "No profile",
+    "noDescription": "No description",
     "signout": "Sign out",
     "askSignout": "Are you sure you want to sign out?",
     "camera": "Pick by camera",

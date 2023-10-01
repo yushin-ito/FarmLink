@@ -27,8 +27,9 @@ type SearchMapTemplateProps = {
   isLoadingSearchFarms: boolean;
   isLoadingSearchRentals: boolean;
   mapNavigationHandler: (
-    latitude: number | null,
-    longitude: number | null
+    id: number,
+    latitude: number,
+    longitude: number
   ) => void;
   goBackNavigationHandler: () => void;
 };
@@ -111,7 +112,13 @@ const SearchMapTemplate = ({
                 <SearchMapItem
                   item={item}
                   onPress={() =>
-                    mapNavigationHandler(item.latitude, item.longitude)
+                    item.latitude &&
+                    item.longitude &&
+                    mapNavigationHandler(
+                      item.farmId,
+                      item.latitude,
+                      item.longitude
+                    )
                   }
                 />
               )}
@@ -124,7 +131,13 @@ const SearchMapTemplate = ({
                 <SearchMapItem
                   item={item}
                   onPress={() =>
-                    mapNavigationHandler(item.latitude, item.longitude)
+                    item.latitude &&
+                    item.longitude &&
+                    mapNavigationHandler(
+                      item.rentalId,
+                      item.latitude,
+                      item.longitude
+                    )
                   }
                 />
               )}

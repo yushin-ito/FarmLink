@@ -83,12 +83,12 @@ const PostFarmScreen = () => {
     },
   });
 
-  const searchDevice = useCallback(async (text: string) => {
-    if (text === "") {
+  const searchDevice = useCallback(async (query: string) => {
+    if (query === "") {
       setSearchResult(undefined);
       return;
     }
-    await mutateAsyncSearchDevice(text);
+    await mutateAsyncSearchDevice(query);
   }, []);
 
   const postFarm = useCallback(
@@ -98,17 +98,19 @@ const PostFarmScreen = () => {
       description: string,
       privated: boolean
     ) => {
-      await mutateAsyncPostFarm({
-        name,
-        deviceId,
-        description,
-        ownerId: session?.user.id,
-        privated,
-        longitude: privated ? null : position?.coords.longitude,
-        latitude: privated ? null : position?.coords.latitude,
-      });
+      if (session) {
+        await mutateAsyncPostFarm({
+          name,
+          deviceId,
+          description,
+          ownerId: session.user.id,
+          privated,
+          longitude: privated ? null : position?.coords.longitude,
+          latitude: privated ? null : position?.coords.latitude,
+        });
+      }
     },
-    [session?.user, position?.coords]
+    [session, position]
   );
 
   const goBackNavigationHandler = useCallback(() => {

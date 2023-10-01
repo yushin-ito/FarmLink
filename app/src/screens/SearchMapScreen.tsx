@@ -20,7 +20,7 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
     useState<SearchFarmsResponse>();
   const [searchRentalsResult, setSearchRentalsResult] =
     useState<SearchRentalsResponse>();
-
+    
   const {
     mutateAsync: mutateAsyncSearchFarms,
     isLoading: isLoadingSearchFarms,
@@ -41,12 +41,12 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
     },
   });
 
-  const searchFarms = useCallback(async (text: string) => {
-    if (text === "") {
+  const searchFarms = useCallback(async (query: string) => {
+    if (query === "") {
       setSearchFarmsResult([]);
       return;
     }
-    await mutateAsyncSearchFarms(text);
+    await mutateAsyncSearchFarms(query);
   }, []);
 
   const {
@@ -78,8 +78,8 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
   }, []);
 
   const mapNavigationHandler = useCallback(
-    async (latitude: number | null, longitude: number | null) => {
-      navigation.navigate("Map", { latitude, longitude, type: params.type });
+    async (id: number, latitude: number, longitude: number) => {
+      navigation.navigate("Map", { id, latitude, longitude, type: params.type });
     },
     []
   );

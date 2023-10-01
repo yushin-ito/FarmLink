@@ -5,7 +5,7 @@ import {
 } from "@supabase/supabase-js";
 import { supabase, supabaseUrl } from "../../../supabase";
 import { useMutation } from "react-query";
-import { UseMutationResult } from "../../../types/db";
+import { UseMutationResult } from "../../../types";
 import { makeRedirectUri, startAsync } from "expo-auth-session";
 
 export type SignUpResponse = Awaited<ReturnType<typeof signUp>>;
@@ -54,6 +54,8 @@ const signInWithProvider = async (provider: string) => {
     return data;
   } else if (authResponse.type === "error") {
     throw authResponse.error;
+  } else {
+    console.error(authResponse);
   }
   return null;
 };

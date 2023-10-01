@@ -8,11 +8,11 @@ import {
   Text,
 } from "native-base";
 import React from "react";
-import CircleButton from "../molecules/CircleButton";
+import Fab from "../molecules/Fab";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import TalkItem from "../organisms/TalkItem";
-import { Alert, RefreshControl } from "react-native";
+import { Alert } from "react-native";
 import Avatar from "../molecules/Avatar";
 import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
@@ -23,13 +23,14 @@ type TalkListTemplateProps = {
   locale: "en" | "ja" | null;
   user: GetUserResponse | null | undefined;
   talks: GetTalksResponse | null | undefined;
-  isLoadingTalks: boolean;
+  isLoading: boolean;
   isRefetchingTalks: boolean;
   refetchTalks: () => Promise<void>;
   deleteTalk: (talkId: number) => Promise<void>;
   talkChatNavigationHandler: (
     talkId: number,
-    name: string | null | undefined
+    token: string | null,
+    name: string
   ) => void;
   postTalkNavigationHandler: () => void;
   settingNavigationHandler: () => void;
@@ -40,7 +41,7 @@ const TalkListTemplate = ({
   locale,
   user,
   talks,
-  isLoadingTalks,
+  isLoading,
   isRefetchingTalks,
   refetchTalks,
   deleteTalk,
@@ -59,9 +60,10 @@ const TalkListTemplate = ({
           <Avatar
             text={user?.name?.charAt(0)}
             uri={user?.avatarUrl}
-            color={user?.name}
+            color={user?.color}
             updatedAt={user?.updatedAt}
             onPress={settingNavigationHandler}
+            isLoading={isLoading}
           />
         </HStack>
         <SearchBar
@@ -70,7 +72,7 @@ const TalkListTemplate = ({
           onPressIn={searchTalkNavigationHandler}
         />
       </VStack>
-      {isLoadingTalks ? (
+      {isLoading ? (
         <SkeltonTalkList rows={6} />
       ) : (
         <FlatList
@@ -93,7 +95,11 @@ const TalkListTemplate = ({
               item={item}
               locale={locale}
               onPress={() =>
-                talkChatNavigationHandler(item.talkId, item.to.name)
+                talkChatNavigationHandler(
+                  item.talkId,
+                  item.to.token,
+                  item.to.name
+                )
               }
               onPressRight={() =>
                 Alert.alert(t("deleteTalk"), t("askDeleteTalk"), [
@@ -111,22 +117,18 @@ const TalkListTemplate = ({
             />
           )}
           keyExtractor={(item) => item.talkId.toString()}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefetchingTalks}
-              onRefresh={refetchTalks}
-            />
-          }
+          refreshing={isRefetchingTalks}
+          onRefresh={refetchTalks}
         />
       )}
-      <CircleButton
+      <Fab
         position="absolute"
         bottom="24"
         right="6"
         onPress={postTalkNavigationHandler}
       >
         <Icon as={<Feather name="plus" />} size="4xl" color="white" />
-      </CircleButton>
+      </Fab>
     </Box>
   );
 };

@@ -45,7 +45,6 @@ type PostFarmTemplateProps = {
 type FormValues = {
   name: string;
   deviceId: string;
-  private: boolean;
   description: string;
 };
 

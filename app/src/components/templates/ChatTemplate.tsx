@@ -68,7 +68,6 @@ const ChatTemplate = ({
     <KeyboardAvoidingView
       flex={1}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={-30}
     >
       <Box flex={1} safeAreaTop>
         <ChatActionSheet

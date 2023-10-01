@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 type ImageActionSheetProps = {
   isOpen: boolean;
   onClose: () => void;
+  onDelete: () => void;
   pickImageByCamera: () => void;
   pickImageByLibrary: () => void;
 };
@@ -14,6 +15,7 @@ const ImageActionSheet = memo(
   ({
     isOpen,
     onClose,
+    onDelete,
     pickImageByCamera,
     pickImageByLibrary,
   }: ImageActionSheetProps) => {
@@ -47,7 +49,10 @@ const ImageActionSheet = memo(
             startIcon={<Icon as={<Feather />} name="trash" size="6" />}
             rounded="lg"
             _pressed={{ bg: "muted.300" }}
-            onPress={() => onClose()}
+            onPress={() => {
+              onDelete();
+              onClose();
+            }}
           >
             {t("delete")}
           </Actionsheet.Item>

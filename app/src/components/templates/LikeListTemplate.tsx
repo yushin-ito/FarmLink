@@ -14,7 +14,6 @@ import {
 import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
 import LikeItem from "../organisms/LikeItem";
-import { RefreshControl } from "react-native";
 import SkeltonLikeList from "../organisms/SkeletonLikeList";
 
 type LikeListTemplateProps = {
@@ -25,8 +24,9 @@ type LikeListTemplateProps = {
   deleteRentalLike: (likeId: number) => Promise<void>;
   refetchLikes: () => Promise<void>;
   mapNavigationHandler: (
-    latitude: number | null,
-    longitude: number | null
+    id: number,
+    latitude: number,
+    longitude: number
   ) => Promise<void>;
   isLoadingLikes: boolean;
   isRefetchingLikes: boolean;
@@ -100,9 +100,14 @@ const LikeListTemplate = ({
               <LikeItem
                 item={item}
                 onPress={() =>
+                  item.farm.farmId &&
                   item.farm.latitude &&
                   item.farm.longitude &&
-                  mapNavigationHandler(item.farm.latitude, item.farm.longitude)
+                  mapNavigationHandler(
+                    item.farm.farmId,
+                    item.farm.latitude,
+                    item.farm.longitude
+                  )
                 }
                 type="farm"
                 onPressRight={() => item.farmId && deleteFarmLike(item.farmId)}
@@ -119,13 +124,9 @@ const LikeListTemplate = ({
                 {t("notExistFarmLike")}
               </Text>
             }
+            refreshing={isRefetchingLikes}
+            onRefresh={refetchLikes}
             keyExtractor={(item) => item.likeId.toString()}
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefetchingLikes}
-                onRefresh={refetchLikes}
-              />
-            }
           />
         ) : (
           <FlatList
@@ -136,6 +137,7 @@ const LikeListTemplate = ({
                 onPress={() =>
                   item.rental &&
                   mapNavigationHandler(
+                    item.rental.rentalId,
                     item.rental.latitude,
                     item.rental.longitude
                   )
@@ -157,13 +159,9 @@ const LikeListTemplate = ({
                 {t("notExistRentalLike")}
               </Text>
             }
+            refreshing={isRefetchingLikes}
+            onRefresh={refetchLikes}
             keyExtractor={(item) => item.likeId.toString()}
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefetchingLikes}
-                onRefresh={refetchLikes}
-              />
-            }
           />
         )}
       </Box>

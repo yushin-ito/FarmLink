@@ -11,7 +11,8 @@ import {
 } from "native-base";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import React from "react-native";
+import React, { useEffect, useState } from "react";
+import { Keyboard } from "react-native";
 import Stagger from "./Stagger";
 import { memo } from "react";
 
@@ -36,6 +37,21 @@ const ChatBar = memo(
     const { t } = useTranslation("chat");
     const { control, handleSubmit, reset } = useForm<FormValues>();
     const { isOpen, onToggle } = useDisclose();
+    const [showKeyboard, setShowKeyboard] = useState<boolean>(false);
+
+    useEffect(() => {
+      const showKeyboard = Keyboard.addListener("keyboardWillShow", () => {
+        setShowKeyboard(true);
+      });
+      const hideKeyboard = Keyboard.addListener("keyboardWillHide", () => {
+        setShowKeyboard(false);
+      });
+
+      return () => {
+        showKeyboard.remove();
+        hideKeyboard.remove();
+      };
+    }, []);
 
     return (
       <HStack
@@ -47,7 +63,7 @@ const ChatBar = memo(
         bg="white"
         alignItems="flex-end"
         justifyContent="space-between"
-        safeAreaBottom
+        pb={showKeyboard ? "1" : "9"}
       >
         <Center>
           <Box position="absolute" bottom="12">

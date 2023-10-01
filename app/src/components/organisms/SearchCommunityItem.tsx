@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { SearchCommunitiesResponse } from "../../hooks/community/mutate";
-import { Divider, HStack, Pressable, Text, Icon } from "native-base";
+import { Divider, HStack, Pressable, Text, Icon, VStack } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import Avatar from "../molecules/Avatar";
 
@@ -32,9 +32,19 @@ const SearchCommunityItem = memo(
               color={item.color}
               updatedAt={item.updatedAt}
             />
-            <Text bold fontSize="md">
-              {item.name}
-            </Text>
+            <VStack w="80%" space="1">
+              <Text bold fontSize="md">
+                {item.name}
+              </Text>
+              <Text
+                color="muted.600"
+                fontSize="xs"
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {item.description}
+              </Text>
+            </VStack>
           </HStack>
           <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
         </HStack>

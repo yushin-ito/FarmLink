@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
-import { Farm, UseMutationResult } from "../../../types/db";
+import { Farm, UseMutationResult } from "../../../types";
 
 export type PostFarmResponse = Awaited<ReturnType<typeof postFarm>>;
 export type DeleteFarmResponse = Awaited<ReturnType<typeof deleteFarm>>;
@@ -29,8 +29,10 @@ const deleteFarm = async (farmId: number) => {
 const searchFarms = async (text: string) => {
   const { data, error } = await supabase
     .from("farm")
-    .select()
-    .ilike("name", `%${text}%`);
+    .select("*, device(imageUrl)")
+    .ilike("name", `%${text}%`)
+    .returns<(Farm["Row"] & { imageUrl: string | null })[]>();
+
   if (error) {
     throw error;
   }

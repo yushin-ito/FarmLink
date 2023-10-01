@@ -69,9 +69,19 @@ const RentalItem = memo(({ item, onPressRight, onPress }: RentalItemProps) => {
                   />
                 )}
               </Center>
-              <Text bold fontSize="md">
-                {item?.name}
-              </Text>
+              <VStack space="1">
+                <Text bold fontSize="md">
+                  {item.name}
+                </Text>
+                <Text
+                  color="muted.600"
+                  fontSize="xs"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {item.description}
+                </Text>
+              </VStack>
             </HStack>
             <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
           </HStack>

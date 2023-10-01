@@ -129,16 +129,13 @@ const PostRentalTemplate = ({
                     </Center>
                   </Pressable>
                 }
-                renderItem={({ item, index }) => (
+                renderItem={({ item }) => (
                   <Box w={width - 80} h="100%" bg="muted.200">
                     <Image
                       source={{ uri: "data:image/png;base64," + item }}
                       style={{ flex: 1 }}
                       contentFit="contain"
                     />
-                    <Text position="absolute" top="1" left="3">
-                      {index + 1}
-                    </Text>
                   </Box>
                 )}
                 onMomentumScrollEnd={(event) => {

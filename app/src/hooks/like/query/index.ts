@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { supabase } from "../../../supabase";
+import { Farm, Like, Rental } from "../../../types";
 
 export type GetUserLikesResponse = Awaited<ReturnType<typeof getUserLikes>>;
 export type GetFarmLikesResponse = Awaited<ReturnType<typeof getFarmLikes>>;
@@ -9,38 +10,18 @@ const getUserLikes = async (userId: string | undefined) => {
   const { data, error } = await supabase
     .from("like")
     .select("*, farm(*, device(imageUrl)), rental(*)")
-    .eq("userId", userId);
+    .eq("userId", userId)
+    .returns<
+      (Like["Row"] & {
+        farm: Farm["Row"] & { imageUrl: string | null };
+        rental: Rental["Row"];
+      })[]
+    >();
   if (error) {
     throw error;
   }
 
-  return data
-    .map((item) =>
-      Array.isArray(item.farm)
-        ? {
-            ...item,
-            farm: {
-              ...item.farm[0],
-              imageUrl: Array.isArray(item.farm[0].device)
-                ? item.farm[0].device[0].imageUrl
-                : item.farm[0].device?.imageUrl,
-            },
-          }
-        : {
-            ...item,
-            farm: {
-              ...item.farm,
-              imageUrl: Array.isArray(item.farm?.device)
-                ? item.farm?.device[0].imageUrl
-                : item.farm?.device?.imageUrl,
-            },
-          }
-    )
-    .map((item) =>
-      Array.isArray(item.rental)
-        ? { ...item, rental: item.rental[0] }
-        : { ...item, rental: item.rental }
-    );
+  return data;
 };
 
 const getFarmLikes = async (farmId: number) => {

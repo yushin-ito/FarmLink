@@ -1,39 +1,31 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
-import { Rental, UseMutationResult } from "../../../types/db";
+import { Rental, UseMutationResult } from "../../../types";
 import { decode } from "base64-arraybuffer";
 
 export type PostRentalResponse = Awaited<ReturnType<typeof postRental>>;
+export type PostRentalImageResponse = Awaited<
+  ReturnType<typeof postRentalImage>
+>;
 export type DeleteRentalResponse = Awaited<ReturnType<typeof deleteRental>>;
 export type SearchRentalsResponse = Awaited<ReturnType<typeof searchRentals>>;
 
-const postRental = async ({
-  base64,
-  rental,
-}: {
-  base64: string[];
-  rental: Rental["Insert"];
-}) => {
-  const imageUrls: string[] = [];
-  await Promise.all(
-    base64.map(async (item) => {
-      const filePath = `rental/${Math.random()}.png`;
-      const { error } = await supabase.storage
-        .from("image")
-        .upload(filePath, decode(item), {
-          contentType: "image",
-        });
-      if (error) {
-        throw error;
-      }
-      const { data } = supabase.storage.from("image").getPublicUrl(filePath);
-      imageUrls.push(data.publicUrl);
-    })
-  );
-  const { data, error } = await supabase
-    .from("rental")
-    .upsert({ ...rental, imageUrls })
-    .select();
+const postRental = async (rental: Rental["Insert"]) => {
+  const { data, error } = await supabase.from("rental").upsert(rental).select();
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const postRentalImage = async (base64: string) => {
+  const filePath = `rental/${Math.random()}.png`;
+  const { data, error } = await supabase.storage
+    .from("image")
+    .upload(filePath, decode(base64), {
+      contentType: "image",
+      upsert: true,
+    });
   if (error) {
     throw error;
   }
@@ -60,7 +52,10 @@ const searchRentals = async (text: string) => {
   if (error) {
     throw error;
   }
-  return data;
+  return data.map((item) => ({
+    ...item,
+    imageUrl: item.imageUrls && item.imageUrls[0],
+  }));
 };
 
 export const usePostRental = ({
@@ -69,6 +64,16 @@ export const usePostRental = ({
 }: UseMutationResult<PostRentalResponse, Error>) =>
   useMutation({
     mutationFn: postRental,
+    onSuccess,
+    onError,
+  });
+
+export const usePostRentalImage = ({
+  onSuccess,
+  onError,
+}: UseMutationResult<PostRentalImageResponse, Error>) =>
+  useMutation({
+    mutationFn: postRentalImage,
     onSuccess,
     onError,
   });

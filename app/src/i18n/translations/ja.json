@@ -1,4 +1,8 @@
 {
+  "common": {
+    "permitRequestNoti": "通知を許可してください",
+    "fetchError": "データの取得に失敗しました。"
+  },
   "auth": {
     "app": " FarmLinkは安心して農業が始められるアプリです。",
     "enter": "入力してください",
@@ -30,14 +34,20 @@
     "notExistProfile": "プロフィールがありません",
     "enterMessage": "メッセージを入力",
     "back": "戻る",
+    "error": "エラーが発生しました",
     "dev": "この機能は現在開発中です"
   },
   "map": {
     "farm": "農園",
+    "current": "現在地",
     "search": "探す",
     "rental": "レンタル",
     "searchFarm": "農園を探す",
     "searchRental": "レンタルを探す",
+    "noDescription": "詳細がありません",
+    "temperture": "温度",
+    "humidity": "湿度",
+    "moisture": "水分",
     "fee": "料金",
     "equipment": "設備",
     "area": "面積",
@@ -57,7 +67,9 @@
     "image": "写真を選択",
     "delete": "削除",
     "cancel": "キャンセル",
+    "sendImage": "写真が送信されました",
     "permitRequestCam": "カメラを許可してください",
+    "permitRequestNoti": "通知を許可してください",
     "error": "エラーが発生しました",
     "dev": "この機能は現在開発中です"
   },
@@ -90,7 +102,12 @@
     "dev": "この機能は現在開発中です"
   },
   "farm": {
+    "farm": "農園",
     "myFarm": "自分の農園",
+    "temperture": "温度",
+    "humidity": "湿度",
+    "moisture": "水分",
+    "unknown": "不明",
     "createFarm": "農園を作成",
     "deleteFarm": "農園削除",
     "askDeleteFarm": "農園を削除してもよろしいですか",
@@ -112,6 +129,7 @@
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
     "create": "作成",
     "edit": "編集する",
+    "chat": "チャットする",
     "error": "エラーが発生しました",
     "dev": "この機能は現在開発中です"
   },
@@ -136,13 +154,13 @@
     "profile": "プロフィール",
     "editProfile": "プロフィールを編集",
     "noProfile": "プロフィールがありません",
+    "noDescription": "詳細がありません",
     "signout": "サインアウト",
     "askSignout": "サインアウトしてもよろしいですか",
     "camera": "カメラで撮影",
     "image": "写真を選択",
     "deleteImage": "画像を削除",
     "cancel": "キャンセル",
-
     "displayName": "ユーザー名",
     "displayNameRequired": "ユーザー名を入力してください",
     "displayNameMaxLength": "ユーザー名は20文字以内で入力してください",

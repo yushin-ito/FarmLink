@@ -36,15 +36,15 @@ const PostProfileScreen = () => {
 
   const postProfile = useCallback(
     async (name: string, introduction: string) => {
-      if (session?.user) {
+      if (session) {
         await mutateAsync({
-          userId: session?.user.id,
+          userId: session.user.id,
           name,
           introduction,
         });
       }
     },
-    [session?.user]
+    [session]
   );
 
   const goBackNavigationHandler = useCallback(() => {

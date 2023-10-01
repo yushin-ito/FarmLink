@@ -126,7 +126,11 @@ const RentalDetailScreen = ({
             screen: "TalkNavigator",
             params: {
               screen: "TalkChat",
-              params: { talkId: talk.talkId, name: talk.to.name },
+              params: {
+                talkId: talk.talkId,
+                token: talk.to.token,
+                name: talk.to.name,
+              },
             },
           });
         }
@@ -145,7 +149,7 @@ const RentalDetailScreen = ({
 
   const talkChatNavigationHandler = useCallback(async () => {
     const talk = talks?.find((item) => item.to.userId === rental?.ownerId);
-    if (talk && talk.talkId && talk.to.name) {
+    if (talk) {
       navigation.navigate("TabNavigator", {
         screen: "TalkNavigator",
         params: {
@@ -157,10 +161,14 @@ const RentalDetailScreen = ({
         screen: "TalkNavigator",
         params: {
           screen: "TalkChat",
-          params: { talkId: talk.talkId, name: talk.to.name },
+          params: {
+            talkId: talk.talkId,
+            token: talk.to.token,
+            name: talk.to.name,
+          },
         },
       });
-    } else if (session?.user.id && rental?.ownerId) {
+    } else if (session && rental) {
       await mutateAsyncPostTalk({
         senderId: session.user.id,
         recieverId: rental.ownerId,
@@ -175,15 +183,16 @@ const RentalDetailScreen = ({
         />
       );
     }
-  }, [talks, session?.user, rental]);
+  }, [talks, session, rental]);
 
   const postLike = useCallback(async () => {
-    session &&
-      (await mutateAsyncPostLike({
+    if (session) {
+      await mutateAsyncPostLike({
         userId: session.user.id,
         rentalId: params.rentalId,
-      }));
-  }, [session?.user]);
+      });
+    }
+  }, [session]);
 
   const deleteLike = useCallback(async () => {
     await mutateAsyncDeleteLike(params.rentalId);
@@ -195,12 +204,12 @@ const RentalDetailScreen = ({
 
   return (
     <RentalDetailTemplate
+      owned={session?.user.id === rental?.ownerId}
       liked={liked}
       likes={likes}
       postLike={postLike}
       deleteLike={deleteLike}
       refetch={refetch}
-      owned={session?.user.id === rental?.ownerId}
       address={address}
       rental={rental}
       isLoading={isLoadingRental || isLoadingLikes || isLoadingAddress}

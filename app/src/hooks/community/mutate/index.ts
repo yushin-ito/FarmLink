@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
-import { Community, UseMutationResult } from "../../../types/db";
+import { Community, UseMutationResult } from "../../../types";
 
 export type PostCommunityResponse = Awaited<ReturnType<typeof postCommunity>>;
 export type DeleteCommunityResponse = Awaited<

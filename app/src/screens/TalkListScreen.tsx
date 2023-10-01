@@ -14,7 +14,9 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
   const toast = useToast();
   const { t } = useTranslation("talk");
   const { session, locale } = useAuth();
-  const { data: user } = useQueryUser(session?.user.id);
+  const { data: user, isLoading: isLoadingUser } = useQueryUser(
+    session?.user.id
+  );
   const {
     data: talks,
     isLoading: isLoadingTalks,
@@ -49,8 +51,8 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
   }, []);
 
   const talkChatNavigationHandler = useCallback(
-    (talkId: number, name: string | null | undefined) => {
-      navigation.navigate("TalkChat", { talkId, name });
+    (talkId: number, token: string | null, name: string) => {
+      navigation.navigate("TalkChat", { talkId, name, token });
     },
     []
   );
@@ -60,7 +62,12 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
   }, []);
 
   const settingNavigationHandler = useCallback(() => {
-    navigation.navigate("SettingNavigator", { screen: "Setting" });
+    navigation.navigate("TabNavigator", {
+      screen: "SettingNavigator",
+      params: {
+        screen: "Setting",
+      },
+    });
   }, []);
 
   const searchTalkNavigationHandler = useCallback(() => {
@@ -72,7 +79,7 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
       locale={locale}
       talks={talks}
       user={user}
-      isLoadingTalks={isLoadingTalks}
+      isLoading={isLoadingUser || isLoadingTalks}
       isRefetchingTalks={isRefetchingTalks}
       refetchTalks={refetchTalks}
       deleteTalk={deleteTalk}

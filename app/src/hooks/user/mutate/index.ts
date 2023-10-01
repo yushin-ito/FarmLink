@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
-import { UseMutationResult, User } from "../../../types/db";
+import { UseMutationResult, User } from "../../../types";
 import { PostgrestError } from "@supabase/supabase-js";
 import { decode } from "base64-arraybuffer";
 
@@ -16,15 +16,9 @@ const postUser = async (user: User["Insert"]) => {
   return data;
 };
 
-const postAvatar = async ({
-  base64,
-  userId,
-}: {
-  base64: string;
-  userId: string;
-}) => {
-  const filePath = `avatar/${userId}.png`;
-  const { error } = await supabase.storage
+const postAvatar = async (base64: string) => {
+  const filePath = `avatar/${Math.random()}.png`;
+  const { data, error } = await supabase.storage
     .from("image")
     .upload(filePath, decode(base64), {
       contentType: "image",
@@ -33,22 +27,14 @@ const postAvatar = async ({
   if (error) {
     throw error;
   }
-  const { data } = supabase.storage.from("image").getPublicUrl(filePath);
-  await postUser({ userId, avatarUrl: data.publicUrl });
+  return data;
 };
 
-const searchUsers = async ({
-  userId,
-  text,
-}: {
-  userId: string | undefined;
-  text: string;
-}) => {
+const searchUsers = async (query: string) => {
   const { data, error } = await supabase
     .from("user")
     .select("*")
-    .neq("userId", userId)
-    .ilike("name", `%${text}%`);
+    .ilike("name", `%${query}%`);
   if (error) {
     throw error;
   }

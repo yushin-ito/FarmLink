@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
@@ -12,16 +12,17 @@ import useAuth from "../hooks/auth/useAuth";
 import { useQueryTalks } from "../hooks/talk/query";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
-import { useTalkChat } from "../hooks/chat";
 import {
   useDeleteChat,
   usePostChat,
-  usePostTalkChatImage,
+  usePostChatImage,
 } from "../hooks/chat/mutate";
 import { useInfiniteQueryTalkChats } from "../hooks/chat/query";
+import { supabase } from "../supabase";
+import useNotification from "../hooks/sdk/useNotification";
 
 const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
-  const { t } = useTranslation("talk");
+  const { t } = useTranslation("chat");
   const toast = useToast();
   const { session, locale } = useAuth();
   const { data: user } = useQueryUser(session?.user.id);
@@ -35,9 +36,27 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     refetch: refetchChats,
   } = useInfiniteQueryTalkChats(params.talkId);
 
-  useTalkChat(params.talkId, async () => {
-    await refetchChats();
-  });
+  useEffect(() => {
+    const channel = supabase
+      .channel("chat")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "chat",
+          filter: `talkId=eq.${params.talkId}`,
+        },
+        () => {
+          refetchChats();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [params]);
 
   const { mutateAsync: mutateAsyncPostTalk } = usePostTalk({
     onSuccess: async () => {
@@ -99,7 +118,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostChatImage } = usePostTalkChatImage({
+  const { mutateAsync: mutateAsyncPostChatImage } = usePostChatImage({
     onSuccess: async () => {
       await refetchChats();
     },
@@ -117,14 +136,28 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   const { pickImageByCamera, pickImageByLibrary } = useImage({
     onSuccess: async ({ base64, size }) => {
-      session &&
-        base64 &&
-        (await mutateAsyncPostChatImage({
-          base64,
+      if (session && user && base64) {
+        const { path } = await mutateAsyncPostChatImage(base64);
+        const { data } = supabase.storage.from("image").getPublicUrl(path);
+        await mutateAsyncPostTalk({
+          talkId: params.talkId,
+          lastMessage: t("sendImage"),
+        });
+        await mutateAsyncPostChat({
           talkId: params.talkId,
           authorId: session.user.id,
-          size,
-        }));
+          imageUrl: data.publicUrl,
+          width: size.width,
+          height: size.height,
+        });
+        params.token &&
+          (await sendNotification({
+            to: params.token,
+            title: user.name,
+            body: t("sendImage"),
+            data: { screenName: "TalkChat" },
+          }));
+      }
     },
     onDisable: () => {
       showAlert(
@@ -148,20 +181,51 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
+  const { sendNotification } = useNotification({
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestNoti")}
+        />
+      );
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
   const onSend = useCallback(
     async (message: string) => {
-      await mutateAsyncPostTalk({
-        talkId: params.talkId,
-        lastMessage: message,
-      });
-      session &&
-        (await mutateAsyncPostChat({
+      if (session && user) {
+        await mutateAsyncPostTalk({
+          talkId: params.talkId,
+          lastMessage: message,
+        });
+        await mutateAsyncPostChat({
           message,
           talkId: params.talkId,
           authorId: session.user.id,
-        }));
+        });
+        params.token &&
+          (await sendNotification({
+            to: params.token,
+            title: user.name,
+            body: message,
+            data: { screenName: "TalkChat" },
+          }));
+      }
     },
-    [session?.user]
+    [session, params, user]
   );
 
   const deleteChat = useCallback(async (chatId: number | null) => {

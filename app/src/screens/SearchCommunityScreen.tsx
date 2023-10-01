@@ -40,16 +40,16 @@ const SearchCommunitieScreen = ({
     },
   });
 
-  const searchCommunities = useCallback(async (text: string) => {
-    if (text === "") {
+  const searchCommunities = useCallback(async (query: string) => {
+    if (query === "") {
       setSearchResult([]);
       return;
     }
-    await mutateAsyncSearchCommunities(text);
+    await mutateAsyncSearchCommunities(query);
   }, []);
 
   const communityChatNavigationHandler = useCallback(
-    (communityId: number, name: string | null) => {
+    (communityId: number, name: string) => {
       navigation.goBack();
       navigation.navigate("CommunityChat", {
         communityId,

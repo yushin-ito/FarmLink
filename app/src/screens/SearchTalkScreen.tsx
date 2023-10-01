@@ -11,25 +11,24 @@ const SearchTalkScreen = ({
   const { session } = useAuth();
   const { data } = useQueryTalks(session?.user.id);
 
-  const searchTalks = useCallback(async (text: string) => {
-    if (text === "") {
+  const searchTalks = useCallback(async (query: string) => {
+    if (query === "") {
       setSearchResult([]);
       return;
     }
     setSearchResult(
       data?.filter(
         (item) =>
-          item.to?.name
-            ?.toUpperCase()
-            .indexOf(text.trim().toUpperCase()) !== -1
+          item.to?.name?.toUpperCase().indexOf(query.trim().toUpperCase()) !==
+          -1
       )
     );
   }, []);
 
   const talkChatNavigationHandler = useCallback(
-    (talkId: number, name: string | null | undefined) => {
+    (talkId: number, token: string | null, name: string) => {
       navigation.goBack();
-      navigation.navigate("TalkChat", { talkId, name });
+      navigation.navigate("TalkChat", { talkId, token, name });
     },
     []
   );

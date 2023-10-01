@@ -1,45 +1,87 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon, Text } from "native-base";
+import { Icon, Text, useToast } from "native-base";
 import { TabParamList } from "../types";
 import MapNavigator from "./MapNavigator";
 import FarmNavigator from "./FarmNavigator";
 import SettingNavigator from "./SettingNavigator";
 import CommunityNavigator from "./CommunityNavigator";
 import { Route, getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import CircleButton from "../components/molecules/CircleButton";
+import Fab from "../components/molecules/Fab";
 import TalkNavigator from "./TalkNavigator";
 import { useTranslation } from "react-i18next";
 import { Image } from "expo-image";
+import useNotification from "../hooks/sdk/useNotification";
+import { showAlert } from "../functions";
+import Alert from "../components/molecules/Alert";
+import useAuth from "../hooks/auth/useAuth";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-const getTabStyle = (route: Partial<Route<string, object | undefined>>) => {
-  const routeName = getFocusedRouteNameFromRoute(route);
-  if (
-    routeName === "SearchMap" ||
-    routeName === "RentalDetail" ||
-    routeName === "CommunityChat" ||
-    routeName === "PostCommunity" ||
-    routeName === "SearchCommunity" ||
-    routeName === "TalkChat" ||
-    routeName === "PostTalk" ||
-    routeName === "SearchTalk" ||
-    routeName === "FarmDetail" ||
-    routeName === "PostFarm" ||
-    routeName === "PostProfile" ||
-    routeName === "PostRental" ||
-    routeName === "RentalList"
-  )
-    return false;
-
-  return true;
-};
-
 const TabNavigator = () => {
-  const { t } = useTranslation(["map", "community", "talk", "setting"]);
+  const { t } = useTranslation([
+    "common",
+    "map",
+    "community",
+    "talk",
+    "setting",
+  ]);
+  const toast = useToast();
+  const { session } = useAuth();
+
+  useEffect(() => {
+    postToken(session?.user.id);
+  }, [session]);
+
+  const { postToken } = useNotification({
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("common:permitRequestNoti")}
+        />
+      );
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("map:error")}
+        />
+      );
+    },
+  });
+
+  const getTabStyle = useCallback(
+    (route: Partial<Route<string, object | undefined>>) => {
+      const routeName = getFocusedRouteNameFromRoute(route);
+      if (
+        routeName === "SearchMap" ||
+        routeName === "RentalDetail" ||
+        routeName === "CommunityChat" ||
+        routeName === "PostCommunity" ||
+        routeName === "SearchCommunity" ||
+        routeName === "TalkChat" ||
+        routeName === "PostTalk" ||
+        routeName === "SearchTalk" ||
+        routeName === "FarmDetail" ||
+        routeName === "PostFarm" ||
+        routeName === "PostProfile" ||
+        routeName === "PostRental" ||
+        routeName === "RentalList"
+      )
+        return false;
+
+      return true;
+    },
+    []
+  );
 
   return (
     <Tab.Navigator
@@ -112,12 +154,12 @@ const TabNavigator = () => {
         component={FarmNavigator}
         options={{
           tabBarButton: ({ onPress }) => (
-            <CircleButton top="-35" onPress={onPress}>
+            <Fab top="-35" onPress={onPress}>
               <Image
                 source={require("../../assets/seedling.png")}
                 style={{ width: 40, height: 40 }}
               />
-            </CircleButton>
+            </Fab>
           ),
         }}
       />
@@ -127,6 +169,7 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
+              style={{ transform: [{ rotate: "-95deg" }] }}
               as={<Feather />}
               name="message-circle"
               size={focused ? "lg" : "md"}

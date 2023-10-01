@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
@@ -15,10 +15,10 @@ import { useQueryUser } from "../hooks/user/query";
 import {
   useDeleteChat,
   usePostChat,
-  usePostCommunityChatImage,
+  usePostChatImage,
 } from "../hooks/chat/mutate";
-import { useCommunityChat } from "../hooks/chat";
 import { useInfiniteQueryCommunityChats } from "../hooks/chat/query";
+import { supabase } from "../supabase";
 
 const CommunityChatScreen = ({
   navigation,
@@ -40,9 +40,27 @@ const CommunityChatScreen = ({
     refetch: refetchChats,
   } = useInfiniteQueryCommunityChats(params.communityId);
 
-  useCommunityChat(params.communityId, async () => {
-    await refetchChats();
-  });
+  useEffect(() => {
+    const channel = supabase
+      .channel("chat")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "chat",
+          filter: `communityId=eq.${params.communityId}`,
+        },
+        () => {
+          refetchChats();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [params]);
 
   const { mutateAsync: mutateAsyncPostChat, isLoading: isLoadingPostChat } =
     usePostChat({
@@ -88,10 +106,7 @@ const CommunityChatScreen = ({
     },
   });
 
-  const { mutateAsync: mutateAsyncPostChatImage } = usePostCommunityChatImage({
-    onSuccess: async () => {
-      await refetchChats();
-    },
+  const { mutateAsync: mutateAsyncPostChatImage } = usePostChatImage({
     onError: () => {
       showAlert(
         toast,
@@ -106,12 +121,15 @@ const CommunityChatScreen = ({
 
   const { pickImageByCamera, pickImageByLibrary } = useImage({
     onSuccess: async ({ base64, size }) => {
-      if (session?.user && base64) {
-        await mutateAsyncPostChatImage({
-          base64,
-          size,
+      if (session && base64) {
+        const { path } = await mutateAsyncPostChatImage(base64);
+        const { data } = supabase.storage.from("image").getPublicUrl(path);
+        await mutateAsyncPostChat({
           communityId: params.communityId,
-          authorId: session?.user.id,
+          authorId: session.user.id,
+          imageUrl: data.publicUrl,
+          width: size.width,
+          height: size.height,
         });
       }
     },
@@ -135,18 +153,19 @@ const CommunityChatScreen = ({
         />
       );
     },
-  });
+  })
 
   const onSend = useCallback(
     async (message: string) => {
-      session &&
-        (await mutateAsyncPostChat({
+      if (session) {
+        await mutateAsyncPostChat({
           message,
           communityId: params.communityId,
           authorId: session.user.id,
-        }));
+        });
+      }
     },
-    [session?.user]
+    [session]
   );
 
   const deleteChat = useCallback(async (chatId: number | null) => {
@@ -155,7 +174,7 @@ const CommunityChatScreen = ({
 
   const deleteCommunity = useCallback(async () => {
     await mutateAsyncDeleteCommunity(params.communityId);
-  }, []);
+  }, [params]);
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

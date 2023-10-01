@@ -3,13 +3,14 @@ import PostRentalTemplate from "../components/templates/PostRentalTemplate";
 import { useToast } from "native-base";
 import { showAlert, wait } from "../functions";
 import Alert from "../components/molecules/Alert";
-import { usePostRental } from "../hooks/rental/mutate";
+import { usePostRental, usePostRentalImage } from "../hooks/rental/mutate";
 import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUserRentals } from "../hooks/rental/query";
 import { SettingStackScreenProps } from "../types";
+import { supabase } from "../supabase";
 
 const PostRentalScreen = ({
   navigation,
@@ -22,21 +23,33 @@ const PostRentalScreen = ({
 
   const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
     usePostRental({
-      onSuccess: async () => {
+      onSuccess: async (data) => {
         await refetch();
         navigation.goBack();
-        await wait(0.1); // 800ms
-        navigation.navigate("TabNavigator", {
-          screen: "MapNavigator",
-          params: {
-            screen: "Map",
+        if (position) {
+          await wait(0.1); // 800ms
+          navigation.navigate("TabNavigator", {
+            screen: "MapNavigator",
             params: {
-              latitude: position?.coords.latitude,
-              longitude: position?.coords.longitude,
-              type: "rental",
+              screen: "Map",
+              params: {
+                id: data[0].rentalId,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                type: "rental",
+              },
             },
-          },
-        });
+          });
+        } else {
+          showAlert(
+            toast,
+            <Alert
+              status="error"
+              onPressCloseButton={() => toast.closeAll()}
+              text={t("error")}
+            />
+          );
+        }
       },
       onError: () => {
         navigation.goBack();
@@ -50,6 +63,22 @@ const PostRentalScreen = ({
         );
       },
     });
+
+  const {
+    mutateAsync: mutateAsyncPostRentalImage,
+    isLoading: isLoadingPostRentalImage,
+  } = usePostRentalImage({
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   const { pickImageByLibrary } = useImage({
     onSuccess: async ({ base64 }) => {
@@ -130,23 +159,28 @@ const PostRentalScreen = ({
       area: string,
       equipment: string
     ) => {
-      session &&
-        position &&
-        (await mutateAsyncPostRental({
-          base64,
-          rental: {
-            name,
-            description,
-            ownerId: session.user.id,
-            longitude: position.coords.longitude,
-            latitude: position.coords.latitude,
-            fee,
-            area,
-            equipment,
-          },
-        }));
+      if (session && position) {
+        const publicUrls = await Promise.all(
+          base64.map(async (item) => {
+            const { path } = await mutateAsyncPostRentalImage(item);
+            const { data } = supabase.storage.from("image").getPublicUrl(path);
+            return data.publicUrl;
+          })
+        );
+        await mutateAsyncPostRental({
+          name,
+          description,
+          ownerId: session.user.id,
+          longitude: position.coords.longitude,
+          latitude: position.coords.latitude,
+          fee,
+          area,
+          equipment,
+          imageUrls: publicUrls,
+        });
+      }
     },
-    [session?.user, position?.coords, base64]
+    [session, position, base64]
   );
 
   const goBackNavigationHandler = useCallback(() => {
@@ -156,7 +190,7 @@ const PostRentalScreen = ({
   return (
     <PostRentalTemplate
       base64={base64}
-      isLoadingPostRental={isLoadingPostRental}
+      isLoadingPostRental={isLoadingPostRental || isLoadingPostRentalImage}
       isLoadingPosition={isLoadingPosition}
       position={position}
       address={address}

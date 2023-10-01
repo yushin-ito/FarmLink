@@ -48,12 +48,13 @@ const TalkItem = memo(({ item, onPressRight, onPress }: TalkItemProps) => {
         <VStack>
           <HStack h="20" px="9" py="3">
             <Box w="20%">
-              <Center size="12" rounded="md" bg="muted.200">
-                {item.imageUrl ? (
+              <Center size="12" rounded="md" bg="muted.200" overflow="hidden">
+                {item.device?.imageUrl ? (
                   <Image
                     style={{ width: 48, height: 48 }}
-                    source={{ uri: item.imageUrl }}
-                    contentFit="contain"
+                    source={{
+                      uri: item.device.imageUrl + "?=" + item.device.updatedAt,
+                    }}
                   />
                 ) : (
                   <Icon
@@ -65,11 +66,56 @@ const TalkItem = memo(({ item, onPressRight, onPress }: TalkItemProps) => {
                 )}
               </Center>
             </Box>
-            <VStack w="80%" space="1">
-              <Text bold fontSize="md">
-                {item.name}
-              </Text>
-            </VStack>
+            <HStack w="80%" justifyContent="space-between" pr="4">
+              <VStack space="1">
+                <Text bold fontSize="md">
+                  {item.name}
+                </Text>
+                <Text
+                  color="muted.600"
+                  fontSize="xs"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {item.description}
+                </Text>
+              </VStack>
+              <HStack mt="1" space="6" justifyContent="center">
+                <VStack alignItems="center">
+               
+                  <Text color="muted.400" bold fontSize="xs">
+                    {t("temperture")}
+                  </Text>
+                  <Text color="muted.600" bold fontSize="sm">
+                    {item?.device?.temperture
+                      ? item.device.temperture + "℃"
+                      : t("unknown")}
+                  </Text>
+                </VStack>
+                <VStack alignItems="center">
+                 
+                  <Text color="muted.400" bold fontSize="xs">
+                    {t("humidity")}
+                  </Text>
+                  <Text color="muted.600" bold fontSize="sm">
+                    {item?.device?.humidity
+                      ? item.device.humidity + "%"
+                      : t("unknown")}
+                  </Text>
+                </VStack>
+                <VStack alignItems="center">
+               
+                  <Text color="muted.400" bold fontSize="xs">
+                    {t("moisture")}
+                  </Text>
+                  <Text color="muted.600" bold fontSize="sm">
+                    {item?.device?.moisture
+                      ? item.device.moisture + "℃"
+                      : t("unknown")}
+                  </Text>
+                </VStack>
+              </HStack>
+            </HStack>
           </HStack>
           <Divider w="80%" alignSelf="center" bg="muted.200" />
         </VStack>

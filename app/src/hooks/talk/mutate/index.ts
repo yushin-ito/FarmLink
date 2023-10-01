@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import { supabase } from "../../../supabase";
-import {  Talk, UseMutationResult } from "../../../types/db";
+import { Talk, UseMutationResult } from "../../../types";
 
 export type PostTalkResponse = Awaited<ReturnType<typeof postTalk>>;
 export type DeleteTalkResponse = Awaited<ReturnType<typeof deleteTalk>>;
@@ -25,7 +25,6 @@ const deleteTalk = async (talkId: number) => {
   return data;
 };
 
-
 export const usePostTalk = ({
   onSuccess,
   onError,
@@ -45,4 +44,3 @@ export const useDeleteTalk = ({
     onSuccess,
     onError,
   });
-

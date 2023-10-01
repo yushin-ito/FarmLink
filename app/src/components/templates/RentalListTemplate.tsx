@@ -13,7 +13,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import RentalItem from "../organisms/RentalItem";
-import { Alert, RefreshControl } from "react-native";
+import { Alert } from "react-native";
 import SkeletonRentalList from "../organisms/SkeltonRentalList";
 
 type RentalListTemplateProps = {
@@ -21,8 +21,9 @@ type RentalListTemplateProps = {
   deleteRental: (rentalId: number) => Promise<void>;
   refetchRentals: () => Promise<void>;
   mapNavigationHandler: (
-    latitude: number | null,
-    longitude: number | null
+    id: number,
+    latitude: number,
+    longitude: number
   ) => Promise<void>;
   isLoadingRentals: boolean;
   isRefetchingRentals: boolean;
@@ -65,7 +66,11 @@ const RentalListTemplate = ({
               <RentalItem
                 item={item}
                 onPress={() =>
-                  mapNavigationHandler(item.latitude, item.longitude)
+                  mapNavigationHandler(
+                    item.rentalId,
+                    item.latitude,
+                    item.longitude
+                  )
                 }
                 onPressRight={() =>
                   Alert.alert(t("deleteRental"), t("askDeleteRental"), [
@@ -93,12 +98,8 @@ const RentalListTemplate = ({
                 {t("notExistRental")}
               </Text>
             }
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefetchingRentals}
-                onRefresh={refetchRentals}
-              />
-            }
+            refreshing={isRefetchingRentals}
+            onRefresh={refetchRentals}
             keyExtractor={(item) => item.rentalId.toString()}
           />
         )}

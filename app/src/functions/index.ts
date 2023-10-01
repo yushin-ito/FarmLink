@@ -2,12 +2,13 @@ import { IToastService } from "native-base/lib/typescript/components/composites/
 import * as Linking from "expo-linking";
 import { format, formatDistance } from "date-fns";
 import { ja, enUS } from "date-fns/locale";
+import { ReactNode } from "react";
 
 export const wait = (sec: number) => {
   return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 };
 
-export const showAlert = (toast: IToastService, Alert: React.ReactNode) => {
+export const showAlert = (toast: IToastService, Alert: ReactNode) => {
   if (!toast.isActive(1)) {
     toast.show({
       id: 1,
@@ -36,7 +37,7 @@ const getTimeDistanceForJa = (date: string) => {
   if (distance.indexOf("未満") !== -1) {
     return "たった今";
   } else if (distance.indexOf("か月") !== -1 || distance.indexOf("年") !== -1) {
-    return format(new Date(date), "yyyy/M/d/", {
+    return format(new Date(date), "yyyy/M/d", {
       locale: ja,
     });
   } else {

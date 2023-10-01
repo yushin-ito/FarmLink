@@ -10,6 +10,13 @@ export const resources = {
   ja,
 } as const;
 
+declare module "i18next" {
+  interface CustomTypeOptions {
+    returnNull: false;
+    resources: (typeof resources)["en"];
+  }
+}
+
 const languageDetector: LanguageDetectorAsyncModule = {
   type: "languageDetector",
   async: true,
@@ -40,7 +47,7 @@ i18n
       }
       return "en";
     },
-    ns: ["auth", "map", "chat", "community", "farm", "setting"],
+    ns: ["common", "auth", "map", "chat", "community", "farm", "setting"],
     resources,
     interpolation: {
       escapeValue: false,
