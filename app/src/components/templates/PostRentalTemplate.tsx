@@ -412,7 +412,6 @@ const PostRentalTemplate = ({
                 }}
               />
             </FormControl>
-
             <VStack space="1">
               <HStack justifyContent="space-between">
                 <Text bold color="muted.600">

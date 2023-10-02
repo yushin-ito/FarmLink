@@ -26,6 +26,7 @@ const LikeItem = memo(
     const { t } = useTranslation("setting");
     return (
       <Swipeable
+        enabled={!(item.farm?.privated || item.rental?.privated)}
         renderRightActions={() => (
           <Pressable
             onPress={onPressRight}
@@ -43,8 +44,12 @@ const LikeItem = memo(
       >
         <TouchableHighlight
           onPress={onPress}
-          style={{ backgroundColor: "white" }}
+          style={{
+            backgroundColor: "white",
+            opacity: item.farm?.privated || item.rental?.privated ? 0.6 : 1,
+          }}
           underlayColor="#f5f5f5"
+          disabled={item.farm?.privated || item.rental?.privated}
         >
           <VStack alignItems="center">
             <HStack
@@ -56,12 +61,21 @@ const LikeItem = memo(
             >
               {type === "farm" ? (
                 <HStack alignItems="center" space="3">
-                  <Center size="12" rounded="md" bg="muted.100">
-                    {item.farm?.imageUrl ? (
+                  <Center
+                    size="12"
+                    rounded="md"
+                    bg="muted.100"
+                    overflow="hidden"
+                  >
+                    {item.farm.device.imageUrl ? (
                       <Image
                         style={{ width: 48, height: 48 }}
-                        source={{ uri: item.farm.imageUrl }}
-                        contentFit="contain"
+                        source={{
+                          uri:
+                            item.farm.device.imageUrl +
+                            "?=" +
+                            item.farm.device.updatedAt,
+                        }}
                       />
                     ) : (
                       <Icon
@@ -88,12 +102,17 @@ const LikeItem = memo(
                 </HStack>
               ) : (
                 <HStack alignItems="center" space="3">
-                  <Center size="12" p="1" rounded="md" bg="muted.100">
-                    {item.rental?.imageUrls?.length ? (
+                  <Center
+                    size="12"
+                    p="1"
+                    rounded="md"
+                    bg="muted.100"
+                    overflow="hidden"
+                  >
+                    {item.rental.imageUrls?.length ? (
                       <Image
                         style={{ width: 48, height: 48 }}
                         source={{ uri: item.rental.imageUrls[0] }}
-                        contentFit="contain"
                       />
                     ) : (
                       <Icon
@@ -119,7 +138,13 @@ const LikeItem = memo(
                   </VStack>
                 </HStack>
               )}
-              <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
+              {item.farm?.privated || item.rental?.privated ? (
+                <Text bold>
+                  {t("private")}
+                </Text>
+              ) : (
+                <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
+              )}
             </HStack>
             <Divider w="90%" bg="muted.200" />
           </VStack>

@@ -2,9 +2,9 @@ import React, { useCallback, useState } from "react";
 import RentalListTemplate from "../components/templates/RentalListTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
-import { useQueryUserRentals } from "../hooks/rental/query";
+import { useQueryRentals, useQueryUserRentals } from "../hooks/rental/query";
 import { showAlert, wait } from "../functions";
-import { useDeleteRental } from "../hooks/rental/mutate";
+import { useDeleteRental, usePostRental } from "../hooks/rental/mutate";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
@@ -15,16 +15,36 @@ const RentalListScreen = ({
   const { t } = useTranslation("farm");
   const toast = useToast();
   const { session } = useAuth();
+  const { refetch } = useQueryRentals();
   const {
     data: rentals,
-    refetch,
+    refetch: refetchUserRentals,
     isLoading: isLoadingRentals,
   } = useQueryUserRentals(session?.user.id);
   const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
 
+  const { mutateAsync: mutateAsyncPostRental } = usePostRental({
+    onSuccess: async () => {
+      await refetch();
+      await refetchUserRentals();
+    },
+    onError: () => {
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
   const { mutateAsync: mutateAsyncDeleteRental } = useDeleteRental({
     onSuccess: async () => {
       await refetch();
+      await refetchUserRentals();
     },
     onError: () => {
       navigation.goBack();
@@ -49,6 +69,14 @@ const RentalListScreen = ({
     setIsRefetchingRentals(false);
   }, []);
 
+  const privateRental = useCallback(async (rentalId: number) => {
+    await mutateAsyncPostRental({ rentalId, privated: true });
+  }, []);
+
+  const publicRental = useCallback(async (rentalId: number) => {
+    await mutateAsyncPostRental({ rentalId, privated: false });
+  }, []);
+
   const mapNavigationHandler = useCallback(
     async (id: number, latitude: number, longitude: number) => {
       navigation.goBack();
@@ -64,6 +92,11 @@ const RentalListScreen = ({
     []
   );
 
+  const postRentalNavigationHandler = useCallback(() => {
+    navigation.goBack();
+    navigation.navigate("PostRental");
+  }, []);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -75,7 +108,10 @@ const RentalListScreen = ({
       isLoadingRentals={isLoadingRentals}
       isRefetchingRentals={isRefetchingRentals}
       refetchRentals={refetchRentals}
+      publicRental={publicRental}
+      privateRental={privateRental}
       mapNavigationHandler={mapNavigationHandler}
+      postRentalNavigationHandler={postRentalNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

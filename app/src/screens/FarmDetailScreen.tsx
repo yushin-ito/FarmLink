@@ -26,7 +26,7 @@ const FarmDetailScreen = ({
     refetch: refetchFarm,
     isLoading: isLoadingFarm,
   } = useQueryFarm(params.farmId);
-  const { session } = useAuth();
+  const { session, locale } = useAuth();
   const { data: talks, refetch: refetchTalks } = useQueryTalks(
     session?.user.id
   );
@@ -209,6 +209,7 @@ const FarmDetailScreen = ({
 
   return (
     <FarmDetailTemplate
+      locale={locale}
       owned={session?.user.id === farm?.ownerId}
       liked={liked}
       likes={likes}

@@ -31,7 +31,12 @@ type FarmPreviewListProps = {
 };
 
 const FarmPreviewList = memo(
-  ({ farms, farmId, setRegion, farmDetailNavigationHandler }: FarmPreviewListProps) => {
+  ({
+    farms,
+    farmId,
+    setRegion,
+    farmDetailNavigationHandler,
+  }: FarmPreviewListProps) => {
     const { t } = useTranslation("map");
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
@@ -58,9 +63,7 @@ const FarmPreviewList = memo(
         data={farms}
         keyExtractor={(item) => item.farmId.toString()}
         renderItem={({ item }) => (
-          <Pressable
-            onPress={() => farmDetailNavigationHandler(item.farmId)}
-          >
+          <Pressable onPress={() => farmDetailNavigationHandler(item.farmId)}>
             {({ isPressed }) => (
               <HStack
                 mx={width * 0.1}
@@ -90,14 +93,12 @@ const FarmPreviewList = memo(
                     <Image
                       source={{ uri: item.device?.imageUrl }}
                       style={{ width: 96, height: 96 }}
-                      contentFit="contain"
-                      cachePolicy="memory-disk"
                     />
                   ) : (
                     <Icon
                       as={<Feather />}
                       name="image"
-                      size="lg"
+                      size="2xl"
                       color="muted.600"
                     />
                   )}

@@ -19,8 +19,10 @@ import { GetFarmResponse } from "../../hooks/farm/query";
 import { GetFarmLikesResponse } from "../../hooks/like/query";
 import { LocationGeocodedAddress } from "expo-location";
 import Avatar from "../molecules/Avatar";
+import { getTimeDistance } from "../../functions";
 
 type FarmDetailTemplateProps = {
+  locale: "en" | "ja" | null;
   owned: boolean;
   liked: boolean;
   likes: GetFarmLikesResponse | undefined;
@@ -39,6 +41,7 @@ type FarmDetailTemplateProps = {
 };
 
 const FarmDetailTemplate = ({
+  locale,
   owned,
   liked,
   likes,
@@ -108,8 +111,8 @@ const FarmDetailTemplate = ({
         ) : (
           <VStack mt="6" px="6">
             <HStack alignItems="center" justifyContent="space-between">
-              <VStack>
-                <Heading numberOfLines={2} ellipsizeMode="tail">
+              <VStack w="70%">
+                <Heading numberOfLines={1} ellipsizeMode="tail">
                   {farm?.name}
                 </Heading>
                 <Text>
@@ -127,86 +130,102 @@ const FarmDetailTemplate = ({
                   color={farm?.user?.color}
                   updatedAt={farm?.user?.updatedAt}
                 />
-                <Text>{farm?.user?.name}</Text>
+                <Text w="20" numberOfLines={1} ellipsizeMode="tail">
+                  {farm?.user?.name}
+                </Text>
               </HStack>
             </HStack>
-            <HStack alignItems="center" justifyContent="space-between" pr="3">
-              <Text>{farm?.description}</Text>
+            <HStack mt="6" alignItems="center" justifyContent="space-between">
               <VStack>
-                <IconButton
-                  icon={
-                    <Icon
-                      as={<AntDesign />}
-                      name={liked ? "heart" : "hearto"}
-                      size="md"
-                      color={liked ? "red.400" : "muted.300"}
-                    />
-                  }
-                  variant="unstyled"
-                  onPress={() => {
-                    !liked ? postLike() : deleteLike();
-                  }}
-                  isDisabled={isLoadingPostLike || isLoadingDeleteLike}
-                  pb="0"
-                />
+                <Text bold color="muted.400">
+                  {t("battery")}
+                </Text>
+                <Text bold textAlign="center">
+                  {farm?.device.battery + "%" ?? t("unknown")}
+                </Text>
+              </VStack>
+              <VStack>
+                <Text bold color="muted.400">
+                  {t("update")}
+                </Text>
+                <Text bold textAlign="center">
+                  {farm?.device.updatedAt &&
+                    getTimeDistance(farm.device.updatedAt, locale)}
+                </Text>
+              </VStack>
+              <VStack>
+                <Text bold color="muted.400">
+                  {t("status")}
+                </Text>
+                <Text bold textAlign="center">
+                  {farm?.privated ? t("private") : t("public")}
+                </Text>
+              </VStack>
+              <VStack>
+                <Text bold color="muted.400">
+                  {t("like")}
+                </Text>
                 <Text bold textAlign="center">
                   {likes?.length ?? 0}
                 </Text>
               </VStack>
             </HStack>
+            <VStack mt="8">
+              <Text bold color="muted.400">
+                {t("description")}
+              </Text>
+              <Text bold fontSize="md">
+                {farm?.description}
+              </Text>
+            </VStack>
+            <HStack mt="8" mx="4" justifyContent="space-between">
+              <VStack alignItems="center" space="1">
+                <Image
+                  source={require("../../../assets/temperture.png")}
+                  style={{ width: 52, height: 52 }}
+                  contentFit="contain"
+                />
+                <Text color="muted.400" bold fontSize="sm">
+                  {t("temperture")}
+                </Text>
+                <Text bold fontSize="md">
+                  {farm?.device?.temperture
+                    ? farm.device.temperture + "℃"
+                    : t("unknown")}
+                </Text>
+              </VStack>
+              <VStack alignItems="center" space="1">
+                <Image
+                  source={require("../../../assets/humidity.png")}
+                  style={{ width: 52, height: 52 }}
+                  contentFit="contain"
+                />
+                <Text color="muted.400" bold fontSize="sm">
+                  {t("humidity")}
+                </Text>
+                <Text bold fontSize="md">
+                  {farm?.device?.humidity
+                    ? farm.device.humidity + "%"
+                    : t("unknown")}
+                </Text>
+              </VStack>
+              <VStack alignItems="center" space="1">
+                <Image
+                  source={require("../../../assets/moisture.png")}
+                  style={{ width: 52, height: 52 }}
+                  contentFit="contain"
+                />
+                <Text color="muted.400" bold fontSize="sm">
+                  {t("moisture")}
+                </Text>
+                <Text bold fontSize="md">
+                  {farm?.device?.moisture
+                    ? farm.device.moisture + "℃"
+                    : t("unknown")}
+                </Text>
+              </VStack>
+            </HStack>
           </VStack>
-        )}
-        {!isLoading && (
-          <HStack mt="9" space="10" justifyContent="center">
-            <VStack alignItems="center" space="1">
-              <Image
-                source={require("../../../assets/temperture.png")}
-                style={{ width: 52, height: 52 }}
-                contentFit="contain"
-                cachePolicy="memory-disk"
-              />
-              <Text color="muted.400" bold fontSize="sm">
-                {t("temperture")}
-              </Text>
-              <Text bold fontSize="md">
-                {farm?.device?.temperture
-                  ? farm.device.temperture + "℃"
-                  : t("unknown")}
-              </Text>
-            </VStack>
-            <VStack alignItems="center" space="1">
-              <Image
-                source={require("../../../assets/humidity.png")}
-                style={{ width: 52, height: 52 }}
-                contentFit="contain"
-                cachePolicy="memory-disk"
-              />
-              <Text color="muted.400" bold fontSize="sm">
-                {t("humidity")}
-              </Text>
-              <Text bold fontSize="md">
-                {farm?.device?.humidity
-                  ? farm.device.humidity + "%"
-                  : t("unknown")}
-              </Text>
-            </VStack>
-            <VStack alignItems="center" space="1">
-              <Image
-                source={require("../../../assets/moisture.png")}
-                style={{ width: 52, height: 52 }}
-                contentFit="contain"
-                cachePolicy="memory-disk"
-              />
-              <Text color="muted.400" bold fontSize="sm">
-                {t("moisture")}
-              </Text>
-              <Text bold fontSize="md">
-                {farm?.device?.moisture
-                  ? farm.device.moisture + "℃"
-                  : t("unknown")}
-              </Text>
-            </VStack>
-          </HStack>
         )}
       </ScrollView>
       <HStack
@@ -221,20 +240,40 @@ const FarmDetailTemplate = ({
         alignItems="center"
         justifyContent="space-between"
       >
-        <IconButton
-          icon={
-            <Icon
-              as={<Octicons />}
-              name="bell-fill"
-              size="md"
-              color="muted.300"
-            />
-          }
-          variant="unstyled"
-          borderWidth="1"
-          rounded="lg"
-          borderColor="muted.300"
-        />
+        <HStack space="5">
+          <IconButton
+            icon={
+              <Icon
+                as={<Octicons />}
+                name="bell-fill"
+                size="md"
+                color="muted.300"
+              />
+            }
+            variant="unstyled"
+            borderWidth="1"
+            rounded="lg"
+            borderColor="muted.300"
+          />
+          <IconButton
+            icon={
+              <Icon
+                as={<AntDesign />}
+                name="heart"
+                size="md"
+                color={liked ? "red.400" : "muted.300"}
+              />
+            }
+            onPress={() => {
+              !liked ? postLike() : deleteLike();
+            }}
+            isDisabled={isLoadingPostLike || isLoadingDeleteLike}
+            variant="unstyled"
+            borderWidth="1"
+            rounded="lg"
+            borderColor="muted.300"
+          />
+        </HStack>
         <Button
           w="40"
           colorScheme="brand"

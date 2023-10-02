@@ -42,9 +42,9 @@ type RentalDetailTemplateProps = {
 };
 
 const RentalDetailTemplate = ({
+  owned,
   liked,
   likes,
-  owned,
   rental,
   address,
   postLike,
@@ -150,8 +150,8 @@ const RentalDetailTemplate = ({
         ) : (
           <VStack mt="2" px="6">
             <HStack alignItems="center" justifyContent="space-between">
-              <VStack>
-                <Heading numberOfLines={2} ellipsizeMode="tail">
+              <VStack w="70%">
+                <Heading numberOfLines={1} ellipsizeMode="tail">
                   {rental?.name}
                 </Heading>
                 <Text>
@@ -169,37 +169,49 @@ const RentalDetailTemplate = ({
                   color={rental?.user?.color}
                   updatedAt={rental?.user?.updatedAt}
                 />
-                <Text>{rental?.user?.name}</Text>
+                <Text w="20" numberOfLines={1} ellipsizeMode="tail">
+                  {rental?.user?.name}
+                </Text>
               </HStack>
             </HStack>
             <HStack mt="6" alignItems="center" justifyContent="space-between">
               <VStack>
-                <Text color="muted.600">{t("area")}</Text>
+                <Text bold color="muted.400">
+                  {t("area")}
+                </Text>
                 <Text bold fontSize="md">
                   {rental?.area ? rental.area : t("unknown")}
                 </Text>
               </VStack>
               <VStack>
-                <Text color="muted.600">{t("equipment")}</Text>
+                <Text bold color="muted.400">
+                  {t("equipment")}
+                </Text>
                 <Text bold fontSize="md">
                   {rental?.equipment ? rental.equipment : t("unknown")}
                 </Text>
               </VStack>
               <VStack>
-                <Text color="muted.600">{t("fee")}</Text>
+                <Text bold color="muted.400">
+                  {t("fee")}
+                </Text>
                 <Text bold fontSize="md">
                   {rental?.fee ? rental.fee : t("unknown")}
                 </Text>
               </VStack>
               <VStack>
-                <Text color="muted.600">{t("like")}</Text>
+                <Text bold color="muted.400">
+                  {t("like")}
+                </Text>
                 <Text bold textAlign="center">
                   {likes?.length ?? 0}
                 </Text>
               </VStack>
             </HStack>
             <VStack mt="8">
-              <Text color="muted.600">{t("description")}</Text>
+              <Text bold color="muted.400">
+                {t("description")}
+              </Text>
               <Text bold fontSize="md">
                 {rental?.description}
               </Text>

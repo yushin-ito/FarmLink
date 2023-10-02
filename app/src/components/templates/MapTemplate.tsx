@@ -179,11 +179,14 @@ const MapTemplate = ({
           </Pressable>
           <Pressable
             onPress={() => {
-              rentals &&
-                animateToRegion({
-                  latitude: rentals[0].latitude,
-                  longitude: rentals[0].longitude,
-                });
+              if (rentals?.length) {
+                rentals[0].latitude &&
+                  rentals[0].longitude &&
+                  animateToRegion({
+                    latitude: rentals[0].latitude,
+                    longitude: rentals[0].longitude,
+                  });
+              }
               setType("rental");
             }}
           >

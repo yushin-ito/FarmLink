@@ -136,6 +136,8 @@ const LikeListTemplate = ({
                 item={item}
                 onPress={() =>
                   item.rental &&
+                  item.rental.latitude &&
+                  item.rental.longitude &&
                   mapNavigationHandler(
                     item.rental.rentalId,
                     item.rental.latitude,

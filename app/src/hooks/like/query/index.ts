@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { supabase } from "../../../supabase";
-import { Farm, Like, Rental } from "../../../types";
+import { Device, Farm, Like, Rental } from "../../../types";
 
 export type GetUserLikesResponse = Awaited<ReturnType<typeof getUserLikes>>;
 export type GetFarmLikesResponse = Awaited<ReturnType<typeof getFarmLikes>>;
@@ -9,11 +9,11 @@ export type GetRentalLikesResponse = Awaited<ReturnType<typeof getRentalLikes>>;
 const getUserLikes = async (userId: string | undefined) => {
   const { data, error } = await supabase
     .from("like")
-    .select("*, farm(*, device(imageUrl)), rental(*)")
+    .select("*, farm(*, device(*)), rental(*)")
     .eq("userId", userId)
     .returns<
       (Like["Row"] & {
-        farm: Farm["Row"] & { imageUrl: string | null };
+        farm: Farm["Row"] & { device: Device["Row"] };
         rental: Rental["Row"];
       })[]
     >();

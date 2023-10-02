@@ -8,7 +8,7 @@ import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
-import { useQueryUserRentals } from "../hooks/rental/query";
+import { useQueryRentals } from "../hooks/rental/query";
 import { SettingStackScreenProps } from "../types";
 import { supabase } from "../supabase";
 
@@ -18,7 +18,7 @@ const PostRentalScreen = ({
   const toast = useToast();
   const { t } = useTranslation("setting");
   const { session } = useAuth();
-  const { refetch } = useQueryUserRentals(session?.user.id);
+  const { refetch } = useQueryRentals();
   const [base64, setBase64] = useState<string[]>([]);
 
   const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
@@ -177,6 +177,7 @@ const PostRentalScreen = ({
           area,
           equipment,
           imageUrls: publicUrls,
+          privated: false,
         });
       }
     },

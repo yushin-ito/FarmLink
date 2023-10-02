@@ -17,26 +17,41 @@ import { useTranslation } from "react-i18next";
 type RentalItemProps = {
   item: GetRentalsResponse[number];
   onPress: () => void;
+  onPressLeft: () => void;
   onPressRight: () => void;
 };
 
-const RentalItem = memo(({ item, onPressRight, onPress }: RentalItemProps) => {
+const RentalItem = memo(({ item, onPress, onPressLeft, onPressRight }: RentalItemProps) => {
   const { t } = useTranslation("setting");
   return (
     <Swipeable
       renderRightActions={() => (
-        <Pressable
-          onPress={onPressRight}
-          _pressed={{
-            opacity: 0.5,
-          }}
-        >
-          <Center h="100%" px="6" bg="red.500">
-            <Text color="white" bold fontSize="md">
-              {t("delete")}
-            </Text>
-          </Center>
-        </Pressable>
+        <HStack>
+          <Pressable
+            onPress={onPressLeft}
+            _pressed={{
+              opacity: 0.5,
+            }}
+          >
+            <Center h="100%" w="24" bg="blue.500">
+              <Text color="white" bold fontSize="md">
+                {item.privated ? t("public") : t("private")}
+              </Text>
+            </Center>
+          </Pressable>
+          <Pressable
+            onPress={onPressRight}
+            _pressed={{
+              opacity: 0.5,
+            }}
+          >
+            <Center h="100%" w="24" bg="red.500">
+              <Text color="white" bold fontSize="md">
+                {t("delete")}
+              </Text>
+            </Center>
+          </Pressable>
+        </HStack>
       )}
     >
       <TouchableHighlight
@@ -58,7 +73,6 @@ const RentalItem = memo(({ item, onPressRight, onPress }: RentalItemProps) => {
                   <Image
                     style={{ width: 48, height: 48 }}
                     source={{ uri: item.imageUrls[0] }}
-                    contentFit="contain"
                   />
                 ) : (
                   <Icon

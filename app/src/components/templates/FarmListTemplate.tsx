@@ -16,6 +16,7 @@ import Avatar from "../molecules/Avatar";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import SkeltonFarmList from "../organisms/SkeltonFarmList";
+import { Alert } from "react-native";
 
 type FarmListTemplateProps = {
   user: GetUserResponse | null | undefined;
@@ -24,7 +25,12 @@ type FarmListTemplateProps = {
   isRefetchingFarms: boolean;
   refetchFarms: () => Promise<void>;
   deleteFarm: (farmId: number) => Promise<void>;
-  farmDetailNavigationHandler: (farmId: number, deviceId: string) => void;
+  privateFarm: (farmId: number) => Promise<void>;
+  publicFarm: (farmId: number) => Promise<void>;
+  farmDetailNavigationHandler: (
+    farmId: number,
+    deviceId: string | null
+  ) => void;
   postFarmNavigationHandler: () => void;
   settingNavigationHandler: () => void;
 };
@@ -36,6 +42,8 @@ const FarmListTemplate = ({
   isRefetchingFarms,
   refetchFarms,
   deleteFarm,
+  privateFarm,
+  publicFarm,
   farmDetailNavigationHandler,
   postFarmNavigationHandler,
   settingNavigationHandler,
@@ -70,7 +78,24 @@ const FarmListTemplate = ({
               onPress={() =>
                 farmDetailNavigationHandler(item.farmId, item.deviceId)
               }
-              onPressRight={() => deleteFarm(item.farmId)}
+              onPressLeft={() =>
+                item.privated
+                  ? publicFarm(item.farmId)
+                  : privateFarm(item.farmId)
+              }
+              onPressRight={() =>
+                Alert.alert(t("deleteFarm"), t("askDeleteFarm"), [
+                  {
+                    text: t("cancel"),
+                    style: "cancel",
+                  },
+                  {
+                    text: t("delete"),
+                    onPress: () => deleteFarm(item.farmId),
+                    style: "destructive",
+                  },
+                ])
+              }
             />
           )}
           ListEmptyComponent={

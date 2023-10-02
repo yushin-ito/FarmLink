@@ -82,7 +82,7 @@ const SettingTemplate = ({
             />
           </Box>
           <VStack w="75%">
-            <Text fontSize="xl" bold>
+            <Text fontSize="xl" bold numberOfLines={1} ellipsizeMode="tail">
               {user?.name}
             </Text>
             <Text color="muted.600" numberOfLines={2} ellipsizeMode="tail">

@@ -19,7 +19,10 @@ const getRental = async (rentalId: number) => {
 };
 
 const getRentals = async () => {
-  const { data, error } = await supabase.from("rental").select("*");
+  const { data, error } = await supabase
+    .from("rental")
+    .select("*")
+    .eq("privated", false);
   if (error) {
     throw error;
   }

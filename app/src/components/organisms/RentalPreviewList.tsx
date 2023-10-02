@@ -97,14 +97,12 @@ const RentalPreviewList = memo(
                     <Image
                       source={{ uri: item.imageUrls[0] }}
                       style={{ width: 96, height: 96 }}
-                      contentFit="contain"
-                      cachePolicy="memory-disk"
                     />
                   ) : (
                     <Icon
                       as={<Feather />}
                       name="image"
-                      size="lg"
+                      size="2xl"
                       color="muted.600"
                     />
                   )}

@@ -15,18 +15,22 @@ import { GetRentalsResponse } from "../../hooks/rental/query";
 import RentalItem from "../organisms/RentalItem";
 import { Alert } from "react-native";
 import SkeletonRentalList from "../organisms/SkeltonRentalList";
+import Fab from "../molecules/Fab";
 
 type RentalListTemplateProps = {
   rentals: GetRentalsResponse | undefined;
   deleteRental: (rentalId: number) => Promise<void>;
   refetchRentals: () => Promise<void>;
+  privateRental: (rentalId: number) => Promise<void>;
+  publicRental: (rentalId: number) => Promise<void>;
+  isLoadingRentals: boolean;
+  isRefetchingRentals: boolean;
   mapNavigationHandler: (
     id: number,
     latitude: number,
     longitude: number
   ) => Promise<void>;
-  isLoadingRentals: boolean;
-  isRefetchingRentals: boolean;
+  postRentalNavigationHandler: () => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -36,7 +40,10 @@ const RentalListTemplate = ({
   isLoadingRentals,
   isRefetchingRentals,
   refetchRentals,
+  privateRental,
+  publicRental,
   mapNavigationHandler,
+  postRentalNavigationHandler,
   goBackNavigationHandler,
 }: RentalListTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -66,11 +73,18 @@ const RentalListTemplate = ({
               <RentalItem
                 item={item}
                 onPress={() =>
+                  item.latitude &&
+                  item.longitude &&
                   mapNavigationHandler(
                     item.rentalId,
                     item.latitude,
                     item.longitude
                   )
+                }
+                onPressLeft={() =>
+                  item.privated
+                    ? publicRental(item.rentalId)
+                    : privateRental(item.rentalId)
                 }
                 onPressRight={() =>
                   Alert.alert(t("deleteRental"), t("askDeleteRental"), [
@@ -104,6 +118,14 @@ const RentalListTemplate = ({
           />
         )}
       </Box>
+      <Fab
+        position="absolute"
+        bottom="16"
+        right="8"
+        onPress={postRentalNavigationHandler}
+      >
+        <Icon as={<Feather name="plus" />} size="4xl" color="white" />
+      </Fab>
     </Box>
   );
 };
