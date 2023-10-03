@@ -12,6 +12,7 @@ import React, {
   Dispatch,
   SetStateAction,
   memo,
+  useCallback,
   useEffect,
   useRef,
 } from "react";
@@ -22,6 +23,7 @@ import { useWindowDimensions } from "react-native";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { LatLng } from "react-native-maps";
 import { useTranslation } from "react-i18next";
+import { wait } from "../../functions";
 
 type FarmPreviewListProps = {
   farms: GetFarmsResponse | undefined;
@@ -40,15 +42,24 @@ const FarmPreviewList = memo(
     const { t } = useTranslation("map");
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
+
+    const scrollToOffset = useCallback(
+      async (index: number) => {
+        if (previewRef.current) {
+          await wait(0.2);
+          previewRef.current.scrollToOffset({
+            animated: true,
+            offset: width * index,
+          });
+        }
+      },
+      [previewRef.current]
+    );
+
     useEffect(() => {
       const index = farms?.findIndex((item) => item.farmId === farmId);
-      if (index) {
-        previewRef.current?.scrollToOffset({
-          animated: true,
-          offset: width * index,
-        });
-      }
-    }, [farms, farmId]);
+      index && scrollToOffset(index);
+    }, [farms, farmId, previewRef.current]);
 
     return (
       <FlatList

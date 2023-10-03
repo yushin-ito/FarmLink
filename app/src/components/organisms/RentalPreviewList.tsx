@@ -12,6 +12,7 @@ import React, {
   Dispatch,
   SetStateAction,
   memo,
+  useCallback,
   useEffect,
   useRef,
 } from "react";
@@ -22,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import { useWindowDimensions } from "react-native";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import { LatLng } from "react-native-maps";
+import { wait } from "../../functions";
 
 type RentalPreviewListProps = {
   rentals: GetRentalsResponse | undefined;
@@ -41,15 +43,23 @@ const RentalPreviewList = memo(
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
 
+    const scrollToOffset = useCallback(
+      async (index: number) => {
+        if (previewRef.current) {
+          await wait(0.2);
+          previewRef.current.scrollToOffset({
+            animated: true,
+            offset: width * index,
+          });
+        }
+      },
+      [previewRef.current]
+    );
+
     useEffect(() => {
       const index = rentals?.findIndex((item) => item.rentalId === rentalId);
-      if (index) {
-        previewRef.current?.scrollToOffset({
-          animated: true,
-          offset: width * index,
-        });
-      }
-    }, [rentals, rentalId]);
+      index && scrollToOffset(index);
+    }, [rentals, rentalId, previewRef.current]);
 
     return (
       <FlatList

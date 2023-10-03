@@ -23,7 +23,6 @@ const getFarms = async () => {
   const { data, error } = await supabase
     .from("farm")
     .select("*, device(*)")
-    .eq("privated", false)
     .returns<(Farm["Row"] & { device: Device["Row"] })[]>();
   if (error) {
     throw error;

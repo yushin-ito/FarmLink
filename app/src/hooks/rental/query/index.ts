@@ -22,7 +22,6 @@ const getRentals = async () => {
   const { data, error } = await supabase
     .from("rental")
     .select("*")
-    .eq("privated", false);
   if (error) {
     throw error;
   }

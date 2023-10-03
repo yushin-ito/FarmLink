@@ -34,7 +34,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       getCurrentPosition();
     }
     params?.type === "farm" && refetchFarms();
-    params?.type === "rental" && refetchRentals;
+    params?.type === "rental" && refetchRentals();
     params?.type && setType(params.type);
     params?.id && setId(params.id);
   }, [params]);

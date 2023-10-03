@@ -23,6 +23,7 @@ import { LocationObject } from "expo-location";
 import { useTranslation } from "react-i18next";
 import FarmPreviewList from "../organisms/FarmPreviewList";
 import RentalPreviewList from "../organisms/RentalPreviewList";
+import { wait } from "../../functions";
 
 type MapTemplateProps = {
   type: "farm" | "rental";
@@ -57,8 +58,9 @@ const MapTemplate = ({
   const mapRef = useRef<MapView>(null);
 
   const animateToRegion = useCallback(
-    (region: LatLng | null) => {
+    async (region: LatLng | null) => {
       if (mapRef.current && region) {
+        await wait(0.2);
         mapRef.current.animateToRegion({
           latitude: region.latitude,
           longitude: region.longitude,
@@ -89,7 +91,9 @@ const MapTemplate = ({
       >
         {position && (
           <Marker coordinate={position.coords}>
-            <Text bold color="blueGray.600">{t("current")}</Text>
+            <Text bold color="blueGray.600">
+              {t("current")}
+            </Text>
             <Icon
               as={<MaterialIcons />}
               name="location-pin"

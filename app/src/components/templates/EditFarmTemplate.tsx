@@ -76,13 +76,16 @@ const EditFarmTemplate = ({
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
+    getCurrentPosition();
+  }, []);
+
+  useEffect(() => {
     if (farm) {
       farm.name && setValue("name", farm.name);
       farm.deviceId && setValue("deviceId", farm.deviceId);
       farm.deviceId && searchDevice(farm.deviceId);
       farm.description && setValue("description", farm.description);
       setPrivated(farm.privated);
-      !farm.privated && getCurrentPosition();
     }
   }, [farm]);
 

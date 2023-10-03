@@ -105,8 +105,8 @@ const PostFarmScreen = () => {
           description,
           ownerId: session.user.id,
           privated,
-          longitude: privated ? null : position?.coords.longitude,
-          latitude: privated ? null : position?.coords.latitude,
+          longitude: position?.coords.longitude,
+          latitude: position?.coords.latitude,
         });
       }
     },

@@ -67,8 +67,12 @@ const PostFarmTemplate = ({
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const [privated, setPrivated] = useState(true);
+  const [privated, setPrivated] = useState(false);
   const mapRef = useRef<MapView>(null);
+
+  useEffect(() => {
+    getCurrentPosition();
+  }, []);
 
   useEffect(() => {
     if (mapRef.current && position) {
@@ -203,6 +207,7 @@ const PostFarmTemplate = ({
                 {t("doPublic")}
               </Text>
               <Switch
+                defaultIsChecked
                 colorScheme="brand"
                 onValueChange={async (value) => {
                   setPrivated(!value);
