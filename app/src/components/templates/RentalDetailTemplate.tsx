@@ -38,6 +38,7 @@ type RentalDetailTemplateProps = {
   isLoadingDeleteLike: boolean;
   isRefetching: boolean;
   talkChatNavigationHandler: () => void;
+  editRentalNavigationHandler: (rentalId: number) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -56,6 +57,7 @@ const RentalDetailTemplate = ({
   isLoadingDeleteLike,
   isRefetching,
   talkChatNavigationHandler,
+  editRentalNavigationHandler,
   goBackNavigationHandler,
 }: RentalDetailTemplateProps) => {
   const { t } = useTranslation("map");
@@ -124,19 +126,25 @@ const RentalDetailTemplate = ({
               />
             </Center>
           )}
-
-          <HStack w="100%" alignItems="center" justifyContent="center">
-            {!isLoading &&
-              rental?.imageUrls?.map((_item, index) => (
-                <Box
-                  key={index}
-                  mr="1"
-                  rounded="full"
-                  size={Number(index) === currentIndex ? "1.5" : "1"}
-                  bg={Number(index) === currentIndex ? "info.500" : "muted.400"}
-                />
-              ))}
-          </HStack>
+          {!isLoading && (
+            <HStack w="100%" alignItems="center" justifyContent="center">
+              {rental?.imageUrls?.length ? (
+                rental.imageUrls.map((_item, index) => (
+                  <Box
+                    key={index}
+                    mr="1"
+                    rounded="full"
+                    size={Number(index) === currentIndex ? "1.5" : "1"}
+                    bg={
+                      Number(index) === currentIndex ? "info.500" : "muted.400"
+                    }
+                  />
+                ))
+              ) : (
+                <Box rounded="full" size="1.5" bg="info.500" />
+              )}
+            </HStack>
+          )}
         </VStack>
         {isLoading ? (
           <VStack mt="2" px="6">
@@ -249,19 +257,23 @@ const RentalDetailTemplate = ({
           }}
           isDisabled={isLoadingPostLike || isLoadingDeleteLike}
         />
-        <Button
-          w="40"
-          colorScheme="brand"
-          rounded="lg"
-          isLoading={isLoadingPostTalk}
-          onPress={() =>
-            owned ? Alert.alert(t("dev")) : talkChatNavigationHandler()
-          }
-        >
-          <Text bold fontSize="md" color="white">
-            {owned ? t("edit") : t("chat")}
-          </Text>
-        </Button>
+        {!isLoading && (
+          <Button
+            w="40"
+            colorScheme="brand"
+            rounded="lg"
+            isLoading={isLoadingPostTalk}
+            onPress={() =>
+              owned
+                ? rental && editRentalNavigationHandler(rental.rentalId)
+                : talkChatNavigationHandler()
+            }
+          >
+            <Text bold fontSize="md" color="white">
+              {owned ? t("edit") : t("chat")}
+            </Text>
+          </Button>
+        )}
       </HStack>
     </Box>
   );

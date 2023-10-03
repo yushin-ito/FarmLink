@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import FarmDetailTemplate from "../components/templates/FarmDetailTemplate";
-import { FarmStackParamList, FarmStackScreenProps } from "../types";
+import { MapStackParamList, MapStackScreenProps } from "../types";
 import { useCallback } from "react";
 import { useQueryFarm } from "../hooks/farm/query";
 import { useQueryFarmLikes } from "../hooks/like/query";
@@ -17,10 +17,10 @@ import { useQueryTalks } from "../hooks/talk/query";
 
 const FarmDetailScreen = ({
   navigation,
-}: FarmStackScreenProps<"FarmDetail">) => {
+}: MapStackScreenProps<"FarmDetail">) => {
   const toast = useToast();
   const { t } = useTranslation("farm");
-  const { params } = useRoute<RouteProp<FarmStackParamList, "FarmDetail">>();
+  const { params } = useRoute<RouteProp<MapStackParamList, "FarmDetail">>();
   const {
     data: farm,
     refetch: refetchFarm,
@@ -203,7 +203,7 @@ const FarmDetailScreen = ({
     }
   }, [talks, session, farm]);
 
-  const editFarmNavigationHandler = useCallback((farmId: number) => {
+  const editFarmNavigationHandler = useCallback(async(farmId: number) => {
     navigation.goBack();
     navigation.navigate("EditFarm", { farmId });
   }, []);

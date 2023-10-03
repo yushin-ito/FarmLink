@@ -42,7 +42,9 @@ const RentalDetailScreen = ({
     ) ?? false;
 
   useEffect(() => {
-    rental && getAddress(rental.latitude, rental.longitude);
+    rental?.latitude &&
+      rental?.longitude &&
+      getAddress(rental.latitude, rental.longitude);
   }, [rental]);
 
   const refetch = useCallback(async () => {
@@ -147,6 +149,19 @@ const RentalDetailScreen = ({
       },
     });
 
+  const postLike = useCallback(async () => {
+    if (session) {
+      await mutateAsyncPostLike({
+        userId: session.user.id,
+        rentalId: params.rentalId,
+      });
+    }
+  }, [session]);
+
+  const deleteLike = useCallback(async () => {
+    await mutateAsyncDeleteLike(params.rentalId);
+  }, []);
+
   const talkChatNavigationHandler = useCallback(async () => {
     const talk = talks?.find((item) => item.to.userId === rental?.ownerId);
     if (talk) {
@@ -185,17 +200,9 @@ const RentalDetailScreen = ({
     }
   }, [talks, session, rental]);
 
-  const postLike = useCallback(async () => {
-    if (session) {
-      await mutateAsyncPostLike({
-        userId: session.user.id,
-        rentalId: params.rentalId,
-      });
-    }
-  }, [session]);
-
-  const deleteLike = useCallback(async () => {
-    await mutateAsyncDeleteLike(params.rentalId);
+  const editRentalNavigationHandler = useCallback(async (rentalId: number) => {
+    navigation.goBack();
+    navigation.navigate("EditRental", { rentalId });
   }, []);
 
   const goBackNavigationHandler = useCallback(() => {
@@ -218,6 +225,7 @@ const RentalDetailScreen = ({
       isRefetching={isRefetchingRental}
       isLoadingDeleteLike={isLoadingDeleteLike}
       talkChatNavigationHandler={talkChatNavigationHandler}
+      editRentalNavigationHandler={editRentalNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

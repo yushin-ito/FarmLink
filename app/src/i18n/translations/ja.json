@@ -57,6 +57,8 @@
     "permitRequestGPS": "位置情報を許可してください",
     "edit": "編集する",
     "chat": "チャットする",
+    "saved": "保存しました",
+    "permitRequestCam": "カメラを許可してください",
     "error": "エラーが発生しました",
     "dev": "この機能は現在開発中です"
   },

@@ -45,7 +45,7 @@ const FarmPreviewList = memo(
     const previewRef = useRef<ReactNativeFlatList>(null);
 
     const scrollToOffset = useCallback(
-      (index: number) => {
+      async (index: number) => {
         if (previewRef.current) {
           previewRef.current.scrollToOffset({
             animated: true,

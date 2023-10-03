@@ -65,8 +65,8 @@ const MapTemplate = ({
         mapRef.current.animateToRegion({
           latitude: region.latitude,
           longitude: region.longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
         });
       }
     },
@@ -92,15 +92,17 @@ const MapTemplate = ({
       >
         {position && (
           <Marker coordinate={position.coords}>
-            <Text bold color="blueGray.600">
-              {t("current")}
-            </Text>
-            <Icon
-              as={<MaterialIcons />}
-              name="location-pin"
-              size="3xl"
-              color="red.500"
-            />
+            <VStack alignItems="center">
+              <Text bold color="blueGray.600" fontSize="xs">
+                {t("current")}
+              </Text>
+              <Icon
+                as={<MaterialIcons />}
+                name="location-pin"
+                size="lg"
+                color="red.500"
+              />
+            </VStack>
           </Marker>
         )}
         {type === "farm"
@@ -114,13 +116,22 @@ const MapTemplate = ({
                       latitude: item.latitude,
                       longitude: item.longitude,
                     }}
+                    onPress={() => farmDetailNavigationHandler(item.farmId)}
                   >
-                    <Icon
-                      as={<MaterialIcons />}
-                      name="location-pin"
-                      size="3xl"
-                      color="brand.600"
-                    />
+                    <VStack alignItems="center">
+                      {item.latitude === region?.latitude &&
+                        item.longitude === region?.longitude && (
+                          <Text bold color="blueGray.600" fontSize="xs">
+                            {item.name}
+                          </Text>
+                        )}
+                      <Icon
+                        as={<MaterialIcons />}
+                        name="location-pin"
+                        size="lg"
+                        color="brand.600"
+                      />
+                    </VStack>
                   </Marker>
                 )
             )
@@ -136,12 +147,20 @@ const MapTemplate = ({
                     }}
                     onPress={() => rentalDetailNavigationHandler(item.rentalId)}
                   >
-                    <Icon
-                      as={<MaterialIcons />}
-                      name="location-pin"
-                      size="3xl"
-                      color="brand.600"
-                    />
+                    <VStack alignItems="center">
+                      {item.latitude === region?.latitude &&
+                        item.longitude === region?.longitude && (
+                          <Text bold color="blueGray.600" fontSize="xs">
+                            {item.name}
+                          </Text>
+                        )}
+                      <Icon
+                        as={<MaterialIcons />}
+                        name="location-pin"
+                        size="lg"
+                        color="brand.600"
+                      />
+                    </VStack>
                   </Marker>
                 )
             )}
@@ -161,7 +180,7 @@ const MapTemplate = ({
               if (farms?.length) {
                 farms[0].latitude &&
                   farms[0].longitude &&
-                  animateToRegion({
+                  setRegion({
                     latitude: farms[0].latitude,
                     longitude: farms[0].longitude,
                   });
@@ -187,7 +206,7 @@ const MapTemplate = ({
               if (rentals?.length) {
                 rentals[0].latitude &&
                   rentals[0].longitude &&
-                  animateToRegion({
+                  setRegion({
                     latitude: rentals[0].latitude,
                     longitude: rentals[0].longitude,
                   });

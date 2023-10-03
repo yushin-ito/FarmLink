@@ -57,6 +57,8 @@
     "description": "Description",
     "edit": "Edit",
     "chat": "Chat",
+    "saved": "Saved in",
+    "permitRequestCam": "Please grant camera permission",
     "error": "An error occurred",
     "dev": "This function is currently under development"
   },

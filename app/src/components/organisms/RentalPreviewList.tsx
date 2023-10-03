@@ -27,7 +27,7 @@ import { wait } from "../../functions";
 
 type RentalPreviewListProps = {
   rentals: GetRentalsResponse | undefined;
-  userId: string;
+  userId: string
   rentalId: number | null;
   setRegion: Dispatch<SetStateAction<LatLng | null>>;
   rentalDetailNavigationHandler: (rentalId: number) => void;
@@ -46,8 +46,9 @@ const RentalPreviewList = memo(
     const previewRef = useRef<ReactNativeFlatList>(null);
 
     const scrollToOffset = useCallback(
-      (index: number) => {
+      async (index: number) => {
         if (previewRef.current) {
+          await wait(0.2);
           previewRef.current.scrollToOffset({
             animated: true,
             offset: width * index,

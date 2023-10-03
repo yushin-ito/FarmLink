@@ -28,8 +28,9 @@ type FarmListTemplateProps = {
   privateFarm: (farmId: number) => Promise<void>;
   publicFarm: (farmId: number) => Promise<void>;
   farmDetailNavigationHandler: (
-    farmId: number,
-    deviceId: string | null
+    id: number,
+    latitude: number,
+    longitude: number
   ) => void;
   postFarmNavigationHandler: () => void;
   settingNavigationHandler: () => void;
@@ -76,7 +77,13 @@ const FarmListTemplate = ({
             <FarmItem
               item={item}
               onPress={() =>
-                farmDetailNavigationHandler(item.farmId, item.deviceId)
+                item.latitude &&
+                item.longitude &&
+                farmDetailNavigationHandler(
+                  item.farmId,
+                  item.latitude,
+                  item.longitude
+                )
               }
               onPressLeft={() =>
                 item.privated

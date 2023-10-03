@@ -36,9 +36,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const [region, setRegion] = useState<LatLng | null>(null);
 
   useEffect(() => {
-    if (!params?.latitude && !params?.longitude) {
-      getCurrentPosition();
-    }
+    !params?.latitude && !params?.longitude && getCurrentPosition();
     params?.type === "farm" && refetchFarms();
     params?.type === "rental" && refetchRentals();
     params?.type && setType(params.type);

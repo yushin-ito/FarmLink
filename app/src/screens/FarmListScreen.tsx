@@ -78,8 +78,14 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   }, []);
 
   const farmDetailNavigationHandler = useCallback(
-    (farmId: number, deviceId: string | null) => {
-      navigation.navigate("FarmDetail", { farmId, deviceId });
+    (id: number, latitude: number, longitude: number) => {
+      navigation.navigate("TabNavigator", {
+        screen: "MapNavigator",
+        params: {
+          screen: "Map",
+          params: { id, latitude, longitude, type: "farm" },
+        },
+      });
     },
     []
   );

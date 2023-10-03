@@ -53,7 +53,9 @@ export type MapStackParamList = {
   };
   SearchMap: { type: "farm" | "rental" };
   RentalDetail: { rentalId: number };
+  EditRental: { rentalId: number };
   FarmDetail: { farmId: number };
+  EditFarm: { farmId: number };
 };
 
 export type CommunityStackParamList = {
@@ -69,9 +71,7 @@ export type CommunityStackParamList = {
 
 export type FarmStackParamList = {
   FarmList: undefined;
-  FarmDetail: { farmId: number; deviceId: string | null };
   PostFarm: undefined;
-  EditFarm: { farmId: number };
 };
 
 export type TalkStackParamList = {

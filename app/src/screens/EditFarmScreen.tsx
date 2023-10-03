@@ -14,12 +14,12 @@ import {
   useQueryUserFarms,
 } from "../hooks/farm/query";
 import useLocation from "../hooks/sdk/useLocation";
-import { FarmStackParamList, FarmStackScreenProps } from "../types";
+import { MapStackParamList, MapStackScreenProps } from "../types";
 
-const EditFarmScreen = ({ navigation }: FarmStackScreenProps<"EditFarm">) => {
+const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   const toast = useToast();
   const { t } = useTranslation("farm");
-  const { params } = useRoute<RouteProp<FarmStackParamList, "EditFarm">>();
+  const { params } = useRoute<RouteProp<MapStackParamList, "EditFarm">>();
   const { data: farm, isLoading: isLoadingFarm } = useQueryFarm(params.farmId);
   const { session } = useAuth();
   const { refetch } = useQueryFarms();

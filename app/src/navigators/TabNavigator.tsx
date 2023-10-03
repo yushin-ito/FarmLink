@@ -75,6 +75,7 @@ const TabNavigator = () => {
         routeName === "EditFarm" ||
         routeName === "PostProfile" ||
         routeName === "PostRental" ||
+        routeName === "EditRental" ||
         routeName === "RentalList"
       )
         return false;
