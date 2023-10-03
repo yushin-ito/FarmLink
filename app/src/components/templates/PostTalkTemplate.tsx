@@ -11,6 +11,7 @@ import {
   Icon,
   Spinner,
   Heading,
+  Text,
   Button,
   KeyboardAvoidingView,
 } from "native-base";
@@ -140,7 +141,9 @@ const PostTalkTemplate = ({
               await postTalk(recieverId);
             }}
           >
-            {t("create")}
+            <Text bold color="white" fontSize="md">
+              {t("create")}
+            </Text>
           </Button>
         </Box>
       </TouchableWithoutFeedback>

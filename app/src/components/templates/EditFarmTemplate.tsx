@@ -23,10 +23,10 @@ import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SearchDeviceResponse } from "../../hooks/device/mutate";
 import { LocationGeocodedAddress, LocationObject } from "expo-location";
+import { GetFarmResponse } from "../../hooks/farm/query";
 
-type PostFarmTemplateProps = {
-  isLoadingPostFarm: boolean;
-  isLoadingPosition: boolean;
+type EditFarmTemplateProps = {
+  farm: GetFarmResponse | null | undefined;
   searchResult: SearchDeviceResponse[0] | undefined;
   position: LocationObject | undefined;
   address: LocationGeocodedAddress | undefined;
@@ -39,6 +39,9 @@ type PostFarmTemplateProps = {
     privated: boolean
   ) => Promise<void>;
   searchDevice: (query: string) => Promise<void>;
+  isLoadingFarm: boolean;
+  isLoadingPostFarm: boolean;
+  isLoadingPosition: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -48,9 +51,8 @@ type FormValues = {
   description: string;
 };
 
-const PostFarmTemplate = ({
-  isLoadingPostFarm,
-  isLoadingPosition,
+const EditFarmTemplate = ({
+  farm,
   position,
   address,
   getCurrentPosition,
@@ -58,8 +60,11 @@ const PostFarmTemplate = ({
   searchResult,
   postFarm,
   searchDevice,
+  isLoadingFarm,
+  isLoadingPostFarm,
+  isLoadingPosition,
   goBackNavigationHandler,
-}: PostFarmTemplateProps) => {
+}: EditFarmTemplateProps) => {
   const { t } = useTranslation("farm");
   const {
     control,
@@ -69,6 +74,17 @@ const PostFarmTemplate = ({
   } = useForm<FormValues>();
   const [privated, setPrivated] = useState(true);
   const mapRef = useRef<MapView>(null);
+
+  useEffect(() => {
+    if (farm) {
+      farm.name && setValue("name", farm.name);
+      farm.deviceId && setValue("deviceId", farm.deviceId);
+      farm.deviceId && searchDevice(farm.deviceId);
+      farm.description && setValue("description", farm.description);
+      setPrivated(farm.privated);
+      !farm.privated && getCurrentPosition();
+    }
+  }, [farm]);
 
   useEffect(() => {
     if (mapRef.current && position) {
@@ -82,6 +98,14 @@ const PostFarmTemplate = ({
     }
   }, [isLoadingPosition]);
 
+  if (isLoadingFarm) {
+    return (
+      <Center flex={1}>
+        <Spinner color="muted.400" />
+      </Center>
+    );
+  }
+
   return (
     <Box flex={1} safeAreaTop>
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
@@ -90,7 +114,7 @@ const PostFarmTemplate = ({
           icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("createFarm")}</Heading>
+        <Heading textAlign="center">{t("editFarm")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" />}
@@ -203,6 +227,7 @@ const PostFarmTemplate = ({
                 {t("doPublic")}
               </Text>
               <Switch
+                defaultIsChecked={!farm?.privated}
                 colorScheme="brand"
                 onValueChange={async (value) => {
                   setPrivated(!value);
@@ -285,12 +310,37 @@ const PostFarmTemplate = ({
                     >
                       {position && (
                         <Marker coordinate={position.coords}>
-                          <Icon
-                            as={<MaterialIcons />}
-                            name="location-pin"
-                            size="xl"
-                            color="red.500"
-                          />
+                          <VStack alignItems="center">
+                            <Text bold color="blueGray.600" fontSize="2xs">
+                              {t("current")}
+                            </Text>
+                            <Icon
+                              as={<MaterialIcons />}
+                              name="location-pin"
+                              size="xl"
+                              color="red.500"
+                            />
+                          </VStack>
+                        </Marker>
+                      )}
+                      {farm?.latitude && farm?.longitude && (
+                        <Marker
+                          coordinate={{
+                            latitude: farm.latitude,
+                            longitude: farm.longitude,
+                          }}
+                        >
+                          <VStack alignItems="center">
+                            <Text bold color="blueGray.600" fontSize="2xs">
+                              {t("previous")}
+                            </Text>
+                            <Icon
+                              as={<MaterialIcons />}
+                              name="location-pin"
+                              size="xl"
+                              color="brand.600"
+                            />
+                          </VStack>
                         </Marker>
                       )}
                     </MapView>
@@ -321,8 +371,8 @@ const PostFarmTemplate = ({
               );
             })}
           >
-            <Text bold color="white" fontSize="md">
-              {t("create")}
+            <Text bold fontSize="md" color="white">
+              {t("save")}
             </Text>
           </Button>
         </Box>
@@ -331,4 +381,4 @@ const PostFarmTemplate = ({
   );
 };
 
-export default PostFarmTemplate;
+export default EditFarmTemplate;

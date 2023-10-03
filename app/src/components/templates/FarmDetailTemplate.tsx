@@ -37,6 +37,7 @@ type FarmDetailTemplateProps = {
   isLoadingDeleteLike: boolean;
   isRefetching: boolean;
   talkChatNavigationHandler: () => void;
+  editFarmNavigationHandler: (farmId: number) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -56,6 +57,7 @@ const FarmDetailTemplate = ({
   isLoadingDeleteLike,
   isRefetching,
   talkChatNavigationHandler,
+  editFarmNavigationHandler,
   goBackNavigationHandler,
 }: FarmDetailTemplateProps) => {
   const { t } = useTranslation("farm");
@@ -274,19 +276,23 @@ const FarmDetailTemplate = ({
             borderColor="muted.300"
           />
         </HStack>
-        <Button
-          w="40"
-          colorScheme="brand"
-          rounded="lg"
-          isLoading={isLoadingPostTalk}
-          onPress={() =>
-            owned ? Alert.alert(t("dev")) : talkChatNavigationHandler()
-          }
-        >
-          <Text bold fontSize="md" color="white">
-            {owned ? t("edit") : t("chat")}
-          </Text>
-        </Button>
+        {!isLoading && (
+          <Button
+            w="40"
+            colorScheme="brand"
+            rounded="lg"
+            isLoading={isLoadingPostTalk}
+            onPress={() =>
+              owned
+                ? farm && editFarmNavigationHandler(farm.farmId)
+                : talkChatNavigationHandler()
+            }
+          >
+            <Text bold fontSize="md" color="white">
+              {owned ? t("edit") : t("chat")}
+            </Text>
+          </Button>
+        )}
       </HStack>
     </Box>
   );

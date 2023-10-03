@@ -124,6 +124,8 @@
     "setPosition": "現在地から農園の場所を設定",
     "refetch": "再取得",
     "address": "住所",
+    "current": "現在地",
+    "previous": "前の場所",
     "permitRequestGPS": "位置情報を許可してください",
     "deviceId": "デバイスID",
     "invalidDeviceId": "デバイスIDが無効です",
@@ -135,6 +137,9 @@
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
     "create": "作成",
     "edit": "編集する",
+    "editFarm": "農園を編集",
+    "save": "保存",
+    "saved": "保存しました",
     "chat": "チャットする",
     "error": "エラーが発生しました",
     "dev": "この機能は現在開発中です"

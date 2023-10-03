@@ -72,6 +72,7 @@ const TabNavigator = () => {
         routeName === "SearchTalk" ||
         routeName === "FarmDetail" ||
         routeName === "PostFarm" ||
+        routeName === "EditFarm" ||
         routeName === "PostProfile" ||
         routeName === "PostRental" ||
         routeName === "RentalList"

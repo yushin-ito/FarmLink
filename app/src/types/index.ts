@@ -71,6 +71,7 @@ export type FarmStackParamList = {
   FarmList: undefined;
   FarmDetail: { farmId: number; deviceId: string | null };
   PostFarm: undefined;
+  EditFarm: { farmId: number };
 };
 
 export type TalkStackParamList = {

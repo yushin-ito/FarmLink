@@ -89,7 +89,7 @@ const MapTemplate = ({
       >
         {position && (
           <Marker coordinate={position.coords}>
-            <Text color="blueGray.600">{t("current")}</Text>
+            <Text bold color="blueGray.600">{t("current")}</Text>
             <Icon
               as={<MaterialIcons />}
               name="location-pin"

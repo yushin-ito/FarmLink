@@ -123,6 +123,8 @@
     "setPosition": "Set location of farm from your location",
     "refetch": "Refetch",
     "address": "Address",
+    "current": "Current",
+    "previous": "Previous",
     "permitRequestGPS": "Please grant GPS permission",
     "description": "Description",
     "like": "Like",
@@ -134,6 +136,9 @@
     "invalidDeviceId": "Device ID is invalid",
     "create": "Create",
     "edit": "Edit",
+    "editFarm": "Edit farm",
+    "save": "Save",
+    "saved": "Saved in",
     "chat": "Chat",
     "error": "An error occurred",
     "dev": "This function is currently under development"

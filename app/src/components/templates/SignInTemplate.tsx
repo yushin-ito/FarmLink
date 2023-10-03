@@ -146,7 +146,9 @@ const SignInTemplate = memo(
                 )}
                 isLoading={isLoading}
               >
-                {t("signin")}
+                <Text bold color="white" fontSize="md">
+                  {t("signin")}
+                </Text>
               </Button>
               <HStack mt="2" alignItems="center" space="2">
                 <Text color="muted.400">{t("notHaveAccount")}</Text>

@@ -152,6 +152,19 @@ const FarmDetailScreen = ({
       },
     });
 
+  const postLike = useCallback(async () => {
+    if (session) {
+      await mutateAsyncPostLike({
+        userId: session.user.id,
+        farmId: params.farmId,
+      });
+    }
+  }, [session]);
+
+  const deleteLike = useCallback(async () => {
+    await mutateAsyncDeleteLike(params.farmId);
+  }, []);
+
   const talkChatNavigationHandler = useCallback(async () => {
     const talk = talks?.find((item) => item.to.userId === farm?.ownerId);
     if (talk) {
@@ -190,17 +203,9 @@ const FarmDetailScreen = ({
     }
   }, [talks, session, farm]);
 
-  const postLike = useCallback(async () => {
-    if (session) {
-      await mutateAsyncPostLike({
-        userId: session.user.id,
-        farmId: params.farmId,
-      });
-    }
-  }, [session]);
-
-  const deleteLike = useCallback(async () => {
-    await mutateAsyncDeleteLike(params.farmId);
+  const editFarmNavigationHandler = useCallback((farmId: number) => {
+    navigation.goBack();
+    navigation.navigate("EditFarm", { farmId });
   }, []);
 
   const goBackNavigationHandler = useCallback(() => {
@@ -223,8 +228,9 @@ const FarmDetailScreen = ({
       isLoadingPostLike={isLoadingPostLike}
       isLoadingDeleteLike={isLoadingDeleteLike}
       isRefetching={isRefetchingFarm}
-      goBackNavigationHandler={goBackNavigationHandler}
+      editFarmNavigationHandler={editFarmNavigationHandler}
       talkChatNavigationHandler={talkChatNavigationHandler}
+      goBackNavigationHandler={goBackNavigationHandler}
     />
   );
 };

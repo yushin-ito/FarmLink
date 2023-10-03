@@ -14,9 +14,13 @@ const PostProfileScreen = () => {
   const { t } = useTranslation("setting");
   const navigation = useNavigation();
   const { session } = useAuth();
-  const { data: user, refetch } = useQueryUser(session?.user.id);
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    refetch,
+  } = useQueryUser(session?.user.id);
 
-  const { mutateAsync, isLoading } = usePostUser({
+  const { mutateAsync, isLoading: isLoadingPostProfile } = usePostUser({
     onSuccess: async () => {
       await refetch();
       navigation.goBack();
@@ -54,7 +58,8 @@ const PostProfileScreen = () => {
   return (
     <PostProfileTemplate
       user={user}
-      isLoading={isLoading}
+      isLoadingUser={isLoadingUser}
+      isLoadingPostProfile={isLoadingPostProfile}
       postProfile={postProfile}
       goBackNavigationHandler={goBackNavigationHandler}
     />

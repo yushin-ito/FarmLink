@@ -485,7 +485,9 @@ const PostRentalTemplate = ({
               );
             })}
           >
-            {t("create")}
+            <Text bold color="white" fontSize="md">
+              {t("create")}
+            </Text>
           </Button>
         </Box>
       </KeyboardAwareScrollView>

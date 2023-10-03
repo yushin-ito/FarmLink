@@ -13,6 +13,8 @@ import {
   HStack,
   IconButton,
   Icon,
+  Center,
+  Spinner,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -21,7 +23,8 @@ import { GetUserResponse } from "../../hooks/user/query";
 
 type PostProfileTemplateProps = {
   user: GetUserResponse | null | undefined;
-  isLoading: boolean;
+  isLoadingUser: boolean
+  isLoadingPostProfile: boolean;
   postProfile: (name: string, introduction: string) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
@@ -33,7 +36,8 @@ type FormValues = {
 
 const PostProfileTemplate = ({
   user,
-  isLoading,
+  isLoadingUser,
+  isLoadingPostProfile,
   postProfile,
   goBackNavigationHandler,
 }: PostProfileTemplateProps) => {
@@ -46,13 +50,18 @@ const PostProfileTemplate = ({
   } = useForm<FormValues>();
 
   useEffect(() => {
-    if (user?.name) {
-      setValue("name", user.name);
-    }
-    if (user?.introduction) {
-      setValue("introduction", user.introduction);
-    }
+    user?.name && setValue("name", user.name);
+    user?.introduction && setValue("introduction", user.introduction);
   }, [user]);
+
+  
+  if (isLoadingUser) {
+    return (
+      <Center flex={1}>
+        <Spinner color="muted.400" />
+      </Center>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -194,12 +203,14 @@ const PostProfileTemplate = ({
             size="lg"
             rounded="lg"
             colorScheme="brand"
-            isLoading={isLoading}
+            isLoading={isLoadingPostProfile}
             onPress={handleSubmit(async (data) => {
               await postProfile(data.name, data.introduction);
             })}
           >
-            {t("save")}
+            <Text bold color="white" fontSize="md">
+              {t("save")}
+            </Text>
           </Button>
         </Box>
       </TouchableWithoutFeedback>
