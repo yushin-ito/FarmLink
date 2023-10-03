@@ -27,6 +27,7 @@ import { wait } from "../../functions";
 
 type RentalPreviewListProps = {
   rentals: GetRentalsResponse | undefined;
+  userId: string;
   rentalId: number | null;
   setRegion: Dispatch<SetStateAction<LatLng | null>>;
   rentalDetailNavigationHandler: (rentalId: number) => void;
@@ -35,6 +36,7 @@ type RentalPreviewListProps = {
 const RentalPreviewList = memo(
   ({
     rentals,
+    userId,
     rentalId,
     setRegion,
     rentalDetailNavigationHandler,
@@ -44,9 +46,8 @@ const RentalPreviewList = memo(
     const previewRef = useRef<ReactNativeFlatList>(null);
 
     const scrollToOffset = useCallback(
-      async (index: number) => {
+      (index: number) => {
         if (previewRef.current) {
-          await wait(0.2);
           previewRef.current.scrollToOffset({
             animated: true,
             offset: width * index,
@@ -78,86 +79,92 @@ const RentalPreviewList = memo(
           <Pressable
             onPress={() => rentalDetailNavigationHandler(item.rentalId)}
           >
-            {({ isPressed }) => (
-              <HStack
-                mx={width * 0.1}
-                w={width * 0.8}
-                h="32"
-                p="4"
-                space="4"
-                rounded="xl"
-                bg={isPressed ? "muted.100" : "white"}
-                shadow="1"
-                style={{
-                  transform: [
-                    {
-                      scale: isPressed ? 0.98 : 1,
-                    },
-                  ],
-                }}
-              >
-                <Center
-                  w="24"
-                  h="24"
-                  rounded="md"
-                  bg="muted.100"
-                  overflow="hidden"
+            {({ isPressed }) =>
+              (!item.privated || userId === item.ownerId) && (
+                <HStack
+                  mx={width * 0.1}
+                  w={width * 0.8}
+                  h="32"
+                  p="4"
+                  space="4"
+                  rounded="xl"
+                  bg={isPressed ? "muted.100" : "white"}
+                  shadow="1"
+                  style={{
+                    transform: [
+                      {
+                        scale: isPressed ? 0.98 : 1,
+                      },
+                    ],
+                  }}
                 >
-                  {item.imageUrls?.length ? (
-                    <Image
-                      source={{ uri: item.imageUrls[0] }}
-                      style={{ width: 96, height: 96 }}
-                    />
-                  ) : (
-                    <Icon
-                      as={<Feather />}
-                      name="image"
-                      size="2xl"
-                      color="muted.600"
-                    />
-                  )}
-                </Center>
-                <VStack w="60%">
-                  <Heading fontSize="lg" numberOfLines={1} ellipsizeMode="tail">
-                    {item.name}
-                  </Heading>
-                  <Text
-                    color="muted.600"
-                    fontSize="xs"
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
+                  <Center
+                    w="24"
+                    h="24"
+                    rounded="md"
+                    bg="muted.100"
+                    overflow="hidden"
                   >
-                    {item.description ?? t("noDescription")}
-                  </Text>
-                  <HStack mt="2" space="6">
-                    <VStack alignItems="center">
-                      <Text color="muted.400" bold fontSize="xs">
-                        {t("area")}
-                      </Text>
-                      <Text color="muted.600" bold fontSize="sm">
-                        {item?.area ?? t("unknown")}
-                      </Text>
-                    </VStack>
-                    <VStack alignItems="center">
-                      <Text color="muted.400" bold fontSize="xs">
-                        {t("fee")}
-                      </Text>
-                      <Text color="muted.600" bold fontSize="sm">
-                        {item?.fee ?? t("unknown")}
-                      </Text>
-                    </VStack>
-                    <VStack alignItems="center">
-                      <Text color="muted.400" bold fontSize="xs">
-                        {t("equipment")}
-                      </Text>
-                      <Text color="muted.600" bold fontSize="sm">
-                        {item?.equipment ?? t("unknown")}
-                      </Text>
-                    </VStack>
-                  </HStack>
-                </VStack>
-              </HStack>
-            )}
+                    {item.imageUrls?.length ? (
+                      <Image
+                        source={{ uri: item.imageUrls[0] }}
+                        style={{ width: 96, height: 96 }}
+                      />
+                    ) : (
+                      <Icon
+                        as={<Feather />}
+                        name="image"
+                        size="2xl"
+                        color="muted.600"
+                      />
+                    )}
+                  </Center>
+                  <VStack w="60%">
+                    <Heading
+                      fontSize="lg"
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.name}
+                    </Heading>
+                    <Text
+                      color="muted.600"
+                      fontSize="xs"
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.description ?? t("noDescription")}
+                    </Text>
+                    <HStack mt="2" space="6">
+                      <VStack alignItems="center">
+                        <Text color="muted.400" bold fontSize="xs">
+                          {t("area")}
+                        </Text>
+                        <Text color="muted.600" bold fontSize="sm">
+                          {item?.area ?? t("unknown")}
+                        </Text>
+                      </VStack>
+                      <VStack alignItems="center">
+                        <Text color="muted.400" bold fontSize="xs">
+                          {t("fee")}
+                        </Text>
+                        <Text color="muted.600" bold fontSize="sm">
+                          {item?.fee ?? t("unknown")}
+                        </Text>
+                      </VStack>
+                      <VStack alignItems="center">
+                        <Text color="muted.400" bold fontSize="xs">
+                          {t("equipment")}
+                        </Text>
+                        <Text color="muted.600" bold fontSize="sm">
+                          {item?.equipment ?? t("unknown")}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                  </VStack>
+                </HStack>
+              )
+            }
           </Pressable>
         )}
         onMomentumScrollEnd={(event) => {

@@ -10,10 +10,16 @@ import { useQueryFarms } from "../hooks/farm/query";
 import { useQueryRentals } from "../hooks/rental/query";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { LatLng } from "react-native-maps";
+import { useQueryUser } from "../hooks/user/query";
+import useAuth from "../hooks/auth/useAuth";
 
 const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { t } = useTranslation("map");
   const toast = useToast();
+  const { session } = useAuth();
+  const { data: user, isLoading: isLoadingUser } = useQueryUser(
+    session?.user.id
+  );
   const {
     data: farms,
     refetch: refetchFarms,
@@ -110,6 +116,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       region={region}
       setRegion={setRegion}
       position={position}
+      user={user}
       farms={farms?.sort(
         (a, b) =>
           getDistance(a.latitude, a.longitude) -
@@ -120,7 +127,9 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           getDistance(a.latitude, a.longitude) -
           getDistance(b.latitude, b.longitude)
       )}
-      isLoading={isLoadingPosition || isLoadingRentals || isLoadingFarms}
+      isLoading={
+        isLoadingPosition || isLoadingUser || isLoadingRentals || isLoadingFarms
+      }
       farmDetailNavigationHandler={farmDetailNavigationHandler}
       rentalDetailNavigationHandler={rentalDetailNavigationHandler}
       searchMapNavigationHandler={searchMapNavigationHandler}

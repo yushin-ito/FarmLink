@@ -23,7 +23,7 @@ import { LocationObject } from "expo-location";
 import { useTranslation } from "react-i18next";
 import FarmPreviewList from "../organisms/FarmPreviewList";
 import RentalPreviewList from "../organisms/RentalPreviewList";
-import { wait } from "../../functions";
+import { GetUserResponse } from "../../hooks/user/query";
 
 type MapTemplateProps = {
   type: "farm" | "rental";
@@ -32,6 +32,7 @@ type MapTemplateProps = {
   region: LatLng | null;
   setRegion: Dispatch<SetStateAction<LatLng | null>>;
   position: LocationObject | undefined;
+  user: GetUserResponse | null | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
   isLoading: boolean;
@@ -47,6 +48,7 @@ const MapTemplate = ({
   region,
   setRegion,
   position,
+  user,
   farms,
   rentals,
   isLoading,
@@ -58,9 +60,8 @@ const MapTemplate = ({
   const mapRef = useRef<MapView>(null);
 
   const animateToRegion = useCallback(
-    async (region: LatLng | null) => {
+    (region: LatLng | null) => {
       if (mapRef.current && region) {
-        await wait(0.2);
         mapRef.current.animateToRegion({
           latitude: region.latitude,
           longitude: region.longitude,
@@ -209,21 +210,25 @@ const MapTemplate = ({
           </Pressable>
         </HStack>
       </VStack>
-      {type === "farm" ? (
-        <FarmPreviewList
-          farms={farms}
-          farmId={type === "farm" ? id : null}
-          setRegion={setRegion}
-          farmDetailNavigationHandler={farmDetailNavigationHandler}
-        />
-      ) : (
-        <RentalPreviewList
-          rentals={rentals}
-          rentalId={type === "rental" ? id : null}
-          setRegion={setRegion}
-          rentalDetailNavigationHandler={rentalDetailNavigationHandler}
-        />
-      )}
+      {type === "farm"
+        ? user && (
+            <FarmPreviewList
+              farms={farms}
+              userId={user.userId}
+              farmId={type === "farm" ? id : null}
+              setRegion={setRegion}
+              farmDetailNavigationHandler={farmDetailNavigationHandler}
+            />
+          )
+        : user && (
+            <RentalPreviewList
+              rentals={rentals}
+              userId={user.userId}
+              rentalId={type === "rental" ? id : null}
+              setRegion={setRegion}
+              rentalDetailNavigationHandler={rentalDetailNavigationHandler}
+            />
+          )}
       {isLoading && (
         <Spinner
           position="absolute"
