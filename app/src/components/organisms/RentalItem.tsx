@@ -83,7 +83,7 @@ const RentalItem = memo(({ item, onPress, onPressLeft, onPressRight }: RentalIte
                   />
                 )}
               </Center>
-              <VStack space="1">
+              <VStack w="80%" space="1">
                 <Text bold fontSize="md">
                   {item.name}
                 </Text>
@@ -97,7 +97,7 @@ const RentalItem = memo(({ item, onPress, onPressLeft, onPressRight }: RentalIte
                 </Text>
               </VStack>
             </HStack>
-            <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
+            <Icon as={<Feather />} name="chevron-right" size="md" />
           </HStack>
           <Divider w="90%" bg="muted.200" />
         </VStack>

@@ -14,7 +14,6 @@ import {
   Switch,
   Spinner,
   Center,
-  Link,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import MapView, { Marker } from "react-native-maps";
@@ -99,7 +98,7 @@ const EditFarmTemplate = ({
       });
       getAddress(position.coords.latitude, position.coords.longitude);
     }
-  }, [isLoadingPosition]);
+  }, [position, mapRef.current]);
 
   if (isLoadingFarm) {
     return (
@@ -283,17 +282,9 @@ const EditFarmTemplate = ({
                   />
                 </FormControl>
                 <VStack space="1">
-                  <HStack justifyContent="space-between">
-                    <Text bold color="muted.600">
-                      {t("setPosition")}
-                    </Text>
-                    <Link
-                      _text={{ color: "brand.600" }}
-                      onPress={getCurrentPosition}
-                    >
-                      {t("refetch")}
-                    </Link>
-                  </HStack>
+                  <Text bold color="muted.600" fontSize="md">
+                    {t("setPosition")}
+                  </Text>
                   {isLoadingPosition ? (
                     <Center h="40" bg="muted.200" rounded="xl">
                       <Spinner color="muted.400" />
@@ -301,8 +292,6 @@ const EditFarmTemplate = ({
                   ) : (
                     <MapView
                       ref={mapRef}
-                      loadingBackgroundColor="#e5e5e5"
-                      loadingEnabled
                       showsCompass={false}
                       style={{
                         width: "100%",

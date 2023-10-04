@@ -11,6 +11,7 @@ import useImage from "../hooks/sdk/useImage";
 import { usePostAvatar, usePostUser } from "../hooks/user/mutate";
 import { SettingStackScreenProps } from "../types";
 import { supabase } from "../supabase";
+import { useQueryNotifications } from "../hooks/notification/query";
 
 const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
   const toast = useToast();
@@ -21,6 +22,8 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     isLoading: isLoadingUser,
     refetch,
   } = useQueryUser(session?.user.id);
+  const { data: notifications, isLoading: isLoadingNotifications } =
+    useQueryNotifications(session?.user.id);
 
   const { mutateAsync: mutateAsyncSignOut, isLoading: isLoadingSignOut } =
     useSignOut({
@@ -112,6 +115,10 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     await mutateAsyncSignOut();
   }, []);
 
+  const notificationNavigationHandler = useCallback(() => {
+    navigation.navigate("Notification");
+  }, []);
+
   const postProfileNavigationHandler = useCallback(() => {
     navigation.navigate("PostProfile");
   }, []);
@@ -131,6 +138,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
   return (
     <SettingTemplate
       user={user}
+      unread={notifications?.filter((item) => !item.clicked).length ?? 0}
       isLoadingAvatar={
         isLoadingUser || isLoadingPostUser || isLoadingPostAvatar
       }
@@ -139,6 +147,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
       deleteAvatar={deleteAvatar}
+      notificationNavigationHandler={notificationNavigationHandler}
       postRentalNavigationHandler={postRentalNavigationHandler}
       postProfileNavigationHandler={postProfileNavigationHandler}
       rentalListNavigationHandler={rentalListNavigationHandler}

@@ -13,7 +13,9 @@ const postFarmLike = async (like: Like["Insert"]) => {
   const { data, error } = await supabase
     .from("like")
     .upsert(like)
-    .eq("farmId", like.farmId);
+    .eq("farmId", like.farmId)
+    .select()
+    .single();
   if (error) {
     throw error;
   }
@@ -24,7 +26,9 @@ const postRentalLike = async (like: Like["Insert"]) => {
   const { data, error } = await supabase
     .from("like")
     .upsert(like)
-    .eq("rentalId", like.rentalId);
+    .eq("rentalId", like.rentalId)
+    .select()
+    .single();
   if (error) {
     throw error;
   }

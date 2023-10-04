@@ -21,7 +21,12 @@ const SkeltonLikeList = memo(({ rows }: SkeltonLikeListProps) => (
             <Skeleton size="12" rounded="md" />
             <Skeleton.Text w="40" lines={1} />
           </HStack>
-          <Icon as={<Feather />} name="chevron-right" size="4" />
+          <Icon
+            as={<Feather />}
+            name="chevron-right"
+            size="md"
+            color="muted.200"
+          />
         </HStack>
         <Divider w="90%" bg="muted.200" />
       </VStack>

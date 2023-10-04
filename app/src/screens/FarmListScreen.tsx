@@ -77,7 +77,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     await mutateAsyncPostFarm({ farmId, privated: false });
   }, []);
 
-  const farmDetailNavigationHandler = useCallback(
+  const mapNavigationHandler = useCallback(
     (id: number, latitude: number, longitude: number) => {
       navigation.navigate("TabNavigator", {
         screen: "MapNavigator",
@@ -113,7 +113,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
       deleteFarm={deleteFarm}
       privateFarm={privateFarm}
       publicFarm={publicFarm}
-      farmDetailNavigationHandler={farmDetailNavigationHandler}
+      mapNavigationHandler={mapNavigationHandler}
       postFarmNavigationHandler={postFarmNavigationHandler}
       settingNavigationHandler={settingNavigationHandler}
     />

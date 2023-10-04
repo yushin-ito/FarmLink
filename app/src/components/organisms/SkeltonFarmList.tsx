@@ -16,7 +16,7 @@ const SkeltonFarmList = memo(({ rows }: SkeltonFarmListProps) => (
           justifyContent="space-between"
         >
           <Box w="20%">
-            <Skeleton size="12" rounded="full" />
+            <Skeleton size="12" rounded="md" />
           </Box>
           <Box w="80%">
             <Skeleton.Text lines={2} />

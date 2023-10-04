@@ -17,7 +17,7 @@ import {
 } from "native-base";
 import { Image } from "expo-image";
 import { GetRentalResponse } from "../../hooks/rental/query";
-import { Alert, RefreshControl, useWindowDimensions } from "react-native";
+import { Alert, Platform, RefreshControl, useWindowDimensions } from "react-native";
 import { useTranslation } from "react-i18next";
 import { LocationGeocodedAddress } from "expo-location";
 import { GetRentalLikesResponse } from "../../hooks/like/query";
@@ -227,37 +227,39 @@ const RentalDetailTemplate = ({
           </VStack>
         )}
       </ScrollView>
-      <HStack
-        w="100%"
-        pt="2"
-        pb="8"
-        px="6"
-        space="2"
-        shadow="2"
-        borderTopRadius="3xl"
-        bg="white"
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <IconButton
-          icon={
-            <Icon
-              as={<AntDesign />}
-              name="heart"
-              size="md"
-              color={liked ? "red.400" : "muted.300"}
-            />
-          }
-          variant="unstyled"
-          borderWidth="1"
-          rounded="lg"
-          borderColor="muted.300"
-          onPress={() => {
-            !liked ? postLike() : deleteLike();
-          }}
-          isDisabled={isLoadingPostLike || isLoadingDeleteLike}
-        />
-        {!isLoading && (
+      {!isLoading && (
+        <HStack
+          w="100%"
+          pt="2"
+          pb={Platform.OS === "android" ? "2" : "9"}
+          px="6"
+          space="2"
+          shadow="2"
+          borderColor="muted.200"
+          borderTopWidth={Platform.OS === "android" ? "1" : "0"}
+          borderTopRadius={Platform.OS === "android" ? "none" : "3xl"}
+          bg="white"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <IconButton
+            icon={
+              <Icon
+                as={<AntDesign />}
+                name="heart"
+                size="md"
+                color={liked ? "red.400" : "muted.300"}
+              />
+            }
+            variant="unstyled"
+            borderWidth="1"
+            rounded="lg"
+            borderColor="muted.300"
+            onPress={() => {
+              !liked ? postLike() : deleteLike();
+            }}
+            isDisabled={isLoadingPostLike || isLoadingDeleteLike}
+          />
           <Button
             w="40"
             colorScheme="brand"
@@ -273,8 +275,8 @@ const RentalDetailTemplate = ({
               {owned ? t("edit") : t("chat")}
             </Text>
           </Button>
-        )}
-      </HStack>
+        </HStack>
+      )}
     </Box>
   );
 };

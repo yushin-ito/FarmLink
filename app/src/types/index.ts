@@ -24,6 +24,7 @@ export type Talk = Database["public"]["Tables"]["talk"];
 export type Rental = Database["public"]["Tables"]["rental"];
 export type Like = Database["public"]["Tables"]["like"];
 export type Device = Database["public"]["Tables"]["device"];
+export type Notification = Database["public"]["Tables"]["notification"];
 
 export type RootStackParamList = {
   AuthNavigator: NavigatorScreenParams<AuthStackParamList> | undefined;
@@ -76,7 +77,12 @@ export type FarmStackParamList = {
 
 export type TalkStackParamList = {
   TalkList: undefined;
-  TalkChat: { talkId: number; token: string | null; name: string };
+  TalkChat: {
+    talkId: number;
+    recieverId: string;
+    token: string | null;
+    name: string;
+  };
   PostTalk: undefined;
   SearchTalk: undefined;
 };
@@ -87,6 +93,7 @@ export type SettingStackParamList = {
   PostRental: undefined;
   PostProfile: undefined;
   LikeList: undefined;
+  Notification: undefined;
 };
 
 export type MapStackScreenProps<Screen extends keyof MapStackParamList> =

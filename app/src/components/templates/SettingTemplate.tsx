@@ -21,12 +21,14 @@ import ImageActionSheet from "../organisms/ImageActionSheet";
 
 type SettingTemplateProps = {
   user: GetUserResponse | null | undefined;
+  unread: number;
   isLoadingAvatar: boolean;
   isLoadingSignOut: boolean;
   deleteAvatar: () => Promise<void>;
   signOut: () => Promise<void>;
   pickImageByCamera: () => Promise<void>;
   pickImageByLibrary: () => Promise<void>;
+  notificationNavigationHandler: () => void;
   postRentalNavigationHandler: () => void;
   postProfileNavigationHandler: () => void;
   rentalListNavigationHandler: () => void;
@@ -35,12 +37,14 @@ type SettingTemplateProps = {
 
 const SettingTemplate = ({
   user,
+  unread,
   isLoadingAvatar,
   isLoadingSignOut,
   deleteAvatar,
   signOut,
   pickImageByCamera,
   pickImageByLibrary,
+  notificationNavigationHandler,
   postRentalNavigationHandler,
   postProfileNavigationHandler,
   rentalListNavigationHandler,
@@ -86,10 +90,31 @@ const SettingTemplate = ({
               {user?.name}
             </Text>
             <Text color="muted.600" numberOfLines={2} ellipsizeMode="tail">
-              {user?.introduction}
+              {user?.introduction ?? t("noProfile")}
             </Text>
           </VStack>
         </HStack>
+        <Pressable
+          _pressed={{
+            opacity: 0.5,
+          }}
+          onPress={notificationNavigationHandler}
+        >
+          <HStack alignItems="center" justifyContent="space-between">
+            <HStack p="2" space="3" alignItems="center" rounded="md">
+              <Icon as={<Feather />} name="bell" size="5" />
+              <Text fontSize="md">{t("notification")}</Text>
+            </HStack>
+            <HStack alignItems="center" space="1">
+              {unread !== 0 && (
+                <Center size="6" bg="brand.600" rounded="full">
+                  <Text color="white">{unread}</Text>
+                </Center>
+              )}
+              <Icon as={<Feather />} name="chevron-right" size="5" />
+            </HStack>
+          </HStack>
+        </Pressable>
         <Pressable
           _pressed={{
             opacity: 0.5,

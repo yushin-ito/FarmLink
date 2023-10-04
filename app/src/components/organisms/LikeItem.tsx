@@ -86,7 +86,7 @@ const LikeItem = memo(
                       />
                     )}
                   </Center>
-                  <VStack space="1">
+                  <VStack w="80%" space="1">
                     <Text bold fontSize="md">
                       {item.farm.name}
                     </Text>
@@ -123,7 +123,7 @@ const LikeItem = memo(
                       />
                     )}
                   </Center>
-                  <VStack space="1">
+                  <VStack w="80%" space="1">
                     <Text bold fontSize="md">
                       {item.rental.name}
                     </Text>
@@ -139,11 +139,9 @@ const LikeItem = memo(
                 </HStack>
               )}
               {item.farm?.privated || item.rental?.privated ? (
-                <Text bold>
-                  {t("private")}
-                </Text>
+                <Text bold>{t("private")}</Text>
               ) : (
-                <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
+                <Icon as={<Feather />} name="chevron-right" size="md" />
               )}
             </HStack>
             <Divider w="90%" bg="muted.200" />

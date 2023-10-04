@@ -6,6 +6,7 @@ import {
   Spinner,
   VStack,
   Text,
+  Center,
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, {
@@ -61,6 +62,7 @@ const MapTemplate = ({
 
   const animateToRegion = useCallback(
     (region: LatLng | null) => {
+      console.log("fucused");
       if (mapRef.current && region) {
         mapRef.current.animateToRegion({
           latitude: region.latitude,
@@ -77,6 +79,14 @@ const MapTemplate = ({
     animateToRegion(region);
   }, [region, mapRef.current]);
 
+  if (isLoading) {
+    return (
+      <Center flex={1}>
+        <Spinner color="muted.400" />
+      </Center>
+    );
+  }
+
   return (
     <Box flex={1}>
       <MapView
@@ -90,24 +100,45 @@ const MapTemplate = ({
         }}
         style={{ flex: 1 }}
       >
-        {position && (
-          <Marker coordinate={position.coords}>
-            <VStack alignItems="center">
-              <Text bold color="blueGray.600" fontSize="xs">
-                {t("current")}
-              </Text>
-              <Icon
-                as={<MaterialIcons />}
-                name="location-pin"
-                size="lg"
-                color="red.500"
-              />
-            </VStack>
-          </Marker>
-        )}
+        {position &&
+          !farms?.some((item) => {
+            if (item.latitude && item.longitude) {
+              return (
+                type === "farm" &&
+                Math.floor(position.coords.latitude * 100000) ===
+                  Math.floor(item.latitude * 100000)
+              );
+            }
+            return false;
+          }) &&
+          !rentals?.some((item) => {
+            if (item.latitude && item.longitude) {
+              return (
+                type === "rental" &&
+                Math.floor(position.coords.latitude * 100000) ===
+                  Math.floor(item.latitude * 100000)
+              );
+            }
+            return false;
+          }) && (
+            <Marker coordinate={position.coords}>
+              <VStack alignItems="center">
+                <Text bold color="blueGray.600" fontSize="xs">
+                  {t("current")}
+                </Text>
+                <Icon
+                  as={<MaterialIcons />}
+                  name="location-pin"
+                  size="lg"
+                  color="red.500"
+                />
+              </VStack>
+            </Marker>
+          )}
         {type === "farm"
           ? farms?.map(
               (item) =>
+                (!item.privated || user?.userId === item.ownerId) &&
                 item.latitude &&
                 item.longitude && (
                   <Marker
@@ -137,6 +168,7 @@ const MapTemplate = ({
             )
           : rentals?.map(
               (item) =>
+                (!item.privated || user?.userId === item.ownerId) &&
                 item.latitude &&
                 item.longitude && (
                   <Marker
@@ -248,18 +280,6 @@ const MapTemplate = ({
               rentalDetailNavigationHandler={rentalDetailNavigationHandler}
             />
           )}
-      {isLoading && (
-        <Spinner
-          position="absolute"
-          top="0"
-          bottom="0"
-          left="0"
-          right="0"
-          alignItems="center"
-          justifyContent="center"
-          color="muted.500"
-        />
-      )}
     </Box>
   );
 };

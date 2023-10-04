@@ -13,6 +13,7 @@ import Alert from "../components/molecules/Alert";
 import useLocation from "../hooks/sdk/useLocation";
 import { useQueryRentalLikes } from "../hooks/like/query";
 import { useDeleteRentalLike, usePostRentalLike } from "../hooks/like/mutate";
+import { usePostNotification } from "../hooks/notification/mutate";
 
 const RentalDetailScreen = ({
   navigation,
@@ -54,10 +55,34 @@ const RentalDetailScreen = ({
     setIsRefetchingRental(false);
   }, []);
 
+  const {
+    mutateAsync: mutateAsyncPostNotification,
+    isLoading: isLoadingPostNotification,
+  } = usePostNotification({
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
   const { mutateAsync: mutateAsyncPostLike, isLoading: isLoadingPostLike } =
     usePostRentalLike({
-      onSuccess: async () => {
+      onSuccess: async ({ rentalId }) => {
         await refetchLikes();
+        if (session && rentalId && rental?.ownerId) {
+          await mutateAsyncPostNotification({
+            recieverId: rental.ownerId,
+            senderId: session.user.id,
+            rentalId,
+            clicked: false,
+          });
+        }
       },
       onError: () => {
         showAlert(
@@ -130,6 +155,7 @@ const RentalDetailScreen = ({
               screen: "TalkChat",
               params: {
                 talkId: talk.talkId,
+                recieverId: talk.to.userId,
                 token: talk.to.token,
                 name: talk.to.name,
               },
@@ -178,6 +204,7 @@ const RentalDetailScreen = ({
           screen: "TalkChat",
           params: {
             talkId: talk.talkId,
+            recieverId: talk.to.userId,
             token: talk.to.token,
             name: talk.to.name,
           },
@@ -221,7 +248,7 @@ const RentalDetailScreen = ({
       rental={rental}
       isLoading={isLoadingRental || isLoadingLikes || isLoadingAddress}
       isLoadingPostTalk={isLoadingPostTalk}
-      isLoadingPostLike={isLoadingPostLike}
+      isLoadingPostLike={isLoadingPostLike || isLoadingPostNotification}
       isRefetching={isRefetchingRental}
       isLoadingDeleteLike={isLoadingDeleteLike}
       talkChatNavigationHandler={talkChatNavigationHandler}

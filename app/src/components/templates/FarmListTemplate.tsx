@@ -27,7 +27,7 @@ type FarmListTemplateProps = {
   deleteFarm: (farmId: number) => Promise<void>;
   privateFarm: (farmId: number) => Promise<void>;
   publicFarm: (farmId: number) => Promise<void>;
-  farmDetailNavigationHandler: (
+  mapNavigationHandler: (
     id: number,
     latitude: number,
     longitude: number
@@ -45,7 +45,7 @@ const FarmListTemplate = ({
   deleteFarm,
   privateFarm,
   publicFarm,
-  farmDetailNavigationHandler,
+  mapNavigationHandler,
   postFarmNavigationHandler,
   settingNavigationHandler,
 }: FarmListTemplateProps) => {
@@ -79,7 +79,7 @@ const FarmListTemplate = ({
               onPress={() =>
                 item.latitude &&
                 item.longitude &&
-                farmDetailNavigationHandler(
+                mapNavigationHandler(
                   item.farmId,
                   item.latitude,
                   item.longitude

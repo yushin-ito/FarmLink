@@ -17,6 +17,7 @@ import useNotification from "../hooks/sdk/useNotification";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
 import useAuth from "../hooks/auth/useAuth";
+import { Platform } from "react-native";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -93,20 +94,19 @@ const TabNavigator = () => {
         tabBarStyle: {
           position: "absolute",
           display: getTabStyle(route) ? "flex" : "none",
-          borderTopWidth: 0,
-          shadowColor: "#414141",
+          borderColor: "#e5e5e5",
+          borderTopWidth: Platform.OS === "android" ? 1 : 0,
+          shadowColor: "#737373",
           shadowOffset: {
             width: 0,
             height: -0.5,
           },
-          minHeight: 64,
           shadowOpacity: 0.25,
           shadowRadius: 4,
-          elevation: 24,
-          paddingTop: 12,
+          height: Platform.OS === "android" ? 70 : 90,
+          paddingTop: 6,
+          paddingBottom: Platform.OS === "android" ? 16 : 32,
           paddingHorizontal: 10,
-          borderTopRightRadius: 20,
-          borderTopLeftRadius: 20,
         },
         headerShown: false,
       })}
@@ -121,11 +121,14 @@ const TabNavigator = () => {
               name="map-pin"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
-              mb="1"
+              mt="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
-            <Text fontSize="xs" color={focused ? "brand.600" : "muted.400"}>
+            <Text
+              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
+              color={focused ? "brand.600" : "muted.400"}
+            >
               {t("map:search")}
             </Text>
           ),
@@ -141,11 +144,14 @@ const TabNavigator = () => {
               name="users"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
-              mb="1"
+              mt="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
-            <Text fontSize="xs" color={focused ? "brand.600" : "muted.400"}>
+            <Text
+              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
+              color={focused ? "brand.600" : "muted.400"}
+            >
               {t("community:community")}
             </Text>
           ),
@@ -176,11 +182,14 @@ const TabNavigator = () => {
               name="message-circle"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
-              mb="1"
+              mt="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
-            <Text fontSize="xs" color={focused ? "brand.600" : "muted.400"}>
+            <Text
+              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
+              color={focused ? "brand.600" : "muted.400"}
+            >
               {t("talk:talk")}
             </Text>
           ),
@@ -196,11 +205,14 @@ const TabNavigator = () => {
               name="setting"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : "muted.400"}
-              mb="1"
+              mt="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
-            <Text fontSize="xs" color={focused ? "brand.600" : "muted.400"}>
+            <Text
+              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
+              color={focused ? "brand.600" : "muted.400"}
+            >
               {t("setting:setting")}
             </Text>
           ),

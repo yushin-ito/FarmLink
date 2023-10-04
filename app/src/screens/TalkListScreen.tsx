@@ -51,8 +51,13 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
   }, []);
 
   const talkChatNavigationHandler = useCallback(
-    (talkId: number, token: string | null, name: string) => {
-      navigation.navigate("TalkChat", { talkId, name, token });
+    (
+      talkId: number,
+      recieverId: string,
+      token: string | null,
+      name: string
+    ) => {
+      navigation.navigate("TalkChat", { talkId, recieverId, name, token });
     },
     []
   );

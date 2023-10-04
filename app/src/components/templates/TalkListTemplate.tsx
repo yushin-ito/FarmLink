@@ -29,6 +29,7 @@ type TalkListTemplateProps = {
   deleteTalk: (talkId: number) => Promise<void>;
   talkChatNavigationHandler: (
     talkId: number,
+    recieverId: string,
     token: string | null,
     name: string
   ) => void;
@@ -97,6 +98,7 @@ const TalkListTemplate = ({
               onPress={() =>
                 talkChatNavigationHandler(
                   item.talkId,
+                  item.to.userId,
                   item.to.token,
                   item.to.name
                 )

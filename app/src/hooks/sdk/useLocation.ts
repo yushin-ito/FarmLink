@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import * as Location from "expo-location";
-import { Platform } from "react-native";
 
 type UseLocationType = {
   onError?: (error: Error) => void;
@@ -35,10 +34,7 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
         return;
       }
       const position = await Location.getCurrentPositionAsync({
-        accuracy:
-          Platform.OS === "android"
-            ? Location.Accuracy.Low
-            : Location.Accuracy.Lowest,
+        accuracy: Location.Accuracy.Lowest,
       });
 
       setPosition(position);

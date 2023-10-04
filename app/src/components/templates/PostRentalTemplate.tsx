@@ -13,7 +13,6 @@ import {
   Icon,
   Spinner,
   Center,
-  Link,
   FlatList,
   Pressable,
 } from "native-base";
@@ -90,7 +89,7 @@ const PostRentalTemplate = ({
       });
       getAddress(position.coords.latitude, position.coords.longitude);
     }
-  }, [position, isLoadingPosition]);
+  }, [position, mapRef.current]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -413,24 +412,9 @@ const PostRentalTemplate = ({
               />
             </FormControl>
             <VStack space="1">
-              <HStack justifyContent="space-between">
-                <Text bold color="muted.600">
-                  {t("setPosition")}
-                </Text>
-                <Link
-                  _text={{ color: "brand.600" }}
-                  onPress={async () => {
-                    await getCurrentPosition();
-                    position &&
-                      (await getAddress(
-                        position?.coords.latitude,
-                        position?.coords.longitude
-                      ));
-                  }}
-                >
-                  {t("refetch")}
-                </Link>
-              </HStack>
+              <Text bold color="muted.600" fontSize="md">
+                {t("setPosition")}
+              </Text>
               {isLoadingPosition ? (
                 <Center h="40" bg="muted.200" rounded="xl">
                   <Spinner color="muted.400" />
@@ -444,8 +428,6 @@ const PostRentalTemplate = ({
                     borderRadius: 12,
                     opacity: isLoadingPosition ? 0.5 : 1,
                   }}
-                  loadingBackgroundColor="#e5e5e5"
-                  loadingEnabled
                   showsCompass={false}
                 >
                   {position && (

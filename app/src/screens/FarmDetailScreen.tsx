@@ -14,12 +14,13 @@ import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import { useQueryTalks } from "../hooks/talk/query";
+import { usePostNotification } from "../hooks/notification/mutate";
 
 const FarmDetailScreen = ({
   navigation,
 }: MapStackScreenProps<"FarmDetail">) => {
   const toast = useToast();
-  const { t } = useTranslation("farm");
+  const { t } = useTranslation("map");
   const { params } = useRoute<RouteProp<MapStackParamList, "FarmDetail">>();
   const {
     data: farm,
@@ -57,10 +58,34 @@ const FarmDetailScreen = ({
     setIsRefetchingFarm(false);
   }, []);
 
+  const {
+    mutateAsync: mutateAsyncPostNotification,
+    isLoading: isLoadingPostNotification,
+  } = usePostNotification({
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
   const { mutateAsync: mutateAsyncPostLike, isLoading: isLoadingPostLike } =
     usePostFarmLike({
-      onSuccess: async () => {
+      onSuccess: async ({ farmId }) => {
         await refetchLikes();
+        if (session && farmId && farm?.ownerId) {
+          await mutateAsyncPostNotification({
+            recieverId: farm.ownerId,
+            senderId: session.user.id,
+            farmId,
+            clicked: false,
+          });
+        }
       },
       onError: () => {
         showAlert(
@@ -133,6 +158,7 @@ const FarmDetailScreen = ({
               screen: "TalkChat",
               params: {
                 talkId: talk.talkId,
+                recieverId: talk.to.userId,
                 token: talk.to.token,
                 name: talk.to.name,
               },
@@ -153,13 +179,13 @@ const FarmDetailScreen = ({
     });
 
   const postLike = useCallback(async () => {
-    if (session) {
+    if (session && farm) {
       await mutateAsyncPostLike({
         userId: session.user.id,
         farmId: params.farmId,
       });
     }
-  }, [session]);
+  }, [session, farm]);
 
   const deleteLike = useCallback(async () => {
     await mutateAsyncDeleteLike(params.farmId);
@@ -181,6 +207,7 @@ const FarmDetailScreen = ({
           screen: "TalkChat",
           params: {
             talkId: talk.talkId,
+            recieverId: talk.to.userId,
             token: talk.to.token,
             name: talk.to.name,
           },
@@ -203,7 +230,7 @@ const FarmDetailScreen = ({
     }
   }, [talks, session, farm]);
 
-  const editFarmNavigationHandler = useCallback(async(farmId: number) => {
+  const editFarmNavigationHandler = useCallback(async (farmId: number) => {
     navigation.goBack();
     navigation.navigate("EditFarm", { farmId });
   }, []);
@@ -225,7 +252,7 @@ const FarmDetailScreen = ({
       refetch={refetch}
       isLoading={isLoadingFarm || isLoadingLikes || isLoadingAddress}
       isLoadingPostTalk={isLoadingPostTalk}
-      isLoadingPostLike={isLoadingPostLike}
+      isLoadingPostLike={isLoadingPostLike || isLoadingPostNotification}
       isLoadingDeleteLike={isLoadingDeleteLike}
       isRefetching={isRefetchingFarm}
       editFarmNavigationHandler={editFarmNavigationHandler}

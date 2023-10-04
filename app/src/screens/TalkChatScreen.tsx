@@ -20,6 +20,7 @@ import {
 import { useInfiniteQueryTalkChats } from "../hooks/chat/query";
 import { supabase } from "../supabase";
 import useNotification from "../hooks/sdk/useNotification";
+import { usePostNotification } from "../hooks/notification/mutate";
 
 const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { t } = useTranslation("chat");
@@ -91,8 +92,48 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
+  const {
+    mutateAsync: mutateAsyncPostNotification,
+    isLoading: isLoadingPostNotification,
+  } = usePostNotification({
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
   const { mutateAsync: mutateAsyncPostChat, isLoading: isLoadingPostChat } =
     usePostChat({
+      onSuccess: async ({ chatId, authorId, message, imageUrl }) => {
+        if (params.token && user) {
+          message &&
+            (await sendNotification({
+              to: params.token,
+              title: user.name,
+              body: message,
+              data: { screenName: "TalkChat" },
+            }));
+          imageUrl &&
+            (await sendNotification({
+              to: params.token,
+              title: user.name,
+              body: t("sendImage"),
+              data: { screenName: "TalkChat" },
+            }));
+          await mutateAsyncPostNotification({
+            recieverId: params.recieverId,
+            senderId: authorId,
+            chatId,
+            clicked: false,
+          });
+        }
+      },
       onError: () => {
         showAlert(
           toast,
@@ -150,13 +191,6 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
           width: size.width,
           height: size.height,
         });
-        params.token &&
-          (await sendNotification({
-            to: params.token,
-            title: user.name,
-            body: t("sendImage"),
-            data: { screenName: "TalkChat" },
-          }));
       }
     },
     onDisable: () => {
@@ -206,7 +240,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   const onSend = useCallback(
     async (message: string) => {
-      if (session && user) {
+      if (session) {
         await mutateAsyncPostTalk({
           talkId: params.talkId,
           lastMessage: message,
@@ -216,13 +250,6 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
           talkId: params.talkId,
           authorId: session.user.id,
         });
-        params.token &&
-          (await sendNotification({
-            to: params.token,
-            title: user.name,
-            body: message,
-            data: { screenName: "TalkChat" },
-          }));
       }
     },
     [session, params, user]
@@ -254,7 +281,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
       pickImageByLibrary={pickImageByLibrary}
       readMore={fetchNextPage}
       isLoadingChats={isLoadingChats}
-      isLoadingPostChat={isLoadingPostChat}
+      isLoadingPostChat={isLoadingPostChat || isLoadingPostNotification}
       hasMore={hasMore}
       goBackNavigationHandler={goBackNavigationHandler}
     />

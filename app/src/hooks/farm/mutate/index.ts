@@ -31,12 +31,14 @@ const searchFarms = async (text: string) => {
     .from("farm")
     .select("*, device(imageUrl)")
     .ilike("name", `%${text}%`)
-    .returns<(Farm["Row"] & { imageUrl: string | null })[]>();
-
+    .returns<(Farm["Row"] & { device: { imageUrl: string } })[]>();
   if (error) {
     throw error;
   }
-  return data;
+  return data.map((item) => ({
+    ...item,
+    imageUrl: item.device.imageUrl,
+  }));
 };
 
 export const usePostFarm = ({

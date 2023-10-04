@@ -2,11 +2,11 @@ import { Divider, HStack, Icon, VStack, Skeleton } from "native-base";
 import React, { memo } from "react";
 import { Feather } from "@expo/vector-icons";
 
-type SkeletonRentalListProps = {
+type SkeletonNotificationProps = {
   rows: number;
 };
 
-const SkeletonRentalList = memo(({ rows }: SkeletonRentalListProps) => (
+const SkeletonNotification = memo(({ rows }: SkeletonNotificationProps) => (
   <VStack>
     {[...Array(rows)].map((_, index) => (
       <VStack alignItems="center" key={index}>
@@ -18,8 +18,8 @@ const SkeletonRentalList = memo(({ rows }: SkeletonRentalListProps) => (
           justifyContent="space-between"
         >
           <HStack alignItems="center" space="3">
-            <Skeleton size="12" rounded="md" />
-            <Skeleton.Text w="40" lines={1} />
+            <Skeleton size="12" rounded={index % 2 === 1 ? "md" : "full"} />
+            <Skeleton.Text w="40" lines={2} />
           </HStack>
           <Icon
             as={<Feather />}
@@ -34,4 +34,4 @@ const SkeletonRentalList = memo(({ rows }: SkeletonRentalListProps) => (
   </VStack>
 ));
 
-export default SkeletonRentalList;
+export default SkeletonNotification;

@@ -8,7 +8,11 @@ export type DeleteChatResponse = Awaited<ReturnType<typeof deleteChat>>;
 export type PostChatImageResponse = Awaited<ReturnType<typeof postChatImage>>;
 
 const postChat = async (chat: Chat["Insert"]) => {
-  const { data, error } = await supabase.from("chat").upsert(chat).select();
+  const { data, error } = await supabase
+    .from("chat")
+    .upsert(chat)
+    .select()
+    .single();
   if (error) {
     throw error;
   }

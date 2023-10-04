@@ -12,6 +12,7 @@ import {
   VStack,
 } from "native-base";
 import React from "react";
+import { Platform } from "react-native";
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { Alert, RefreshControl, useWindowDimensions } from "react-native";
@@ -60,7 +61,7 @@ const FarmDetailTemplate = ({
   editFarmNavigationHandler,
   goBackNavigationHandler,
 }: FarmDetailTemplateProps) => {
-  const { t } = useTranslation("farm");
+  const { t } = useTranslation("map");
   const { width } = useWindowDimensions();
 
   return (
@@ -230,53 +231,55 @@ const FarmDetailTemplate = ({
           </VStack>
         )}
       </ScrollView>
-      <HStack
-        w="100%"
-        pt="2"
-        pb="8"
-        px="6"
-        space="2"
-        shadow="2"
-        borderTopRadius="3xl"
-        bg="white"
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <HStack space="5">
-          <IconButton
-            icon={
-              <Icon
-                as={<Octicons />}
-                name="bell-fill"
-                size="md"
-                color="muted.300"
-              />
-            }
-            variant="unstyled"
-            borderWidth="1"
-            rounded="lg"
-            borderColor="muted.300"
-          />
-          <IconButton
-            icon={
-              <Icon
-                as={<AntDesign />}
-                name="heart"
-                size="md"
-                color={liked ? "red.400" : "muted.300"}
-              />
-            }
-            onPress={() => {
-              !liked ? postLike() : deleteLike();
-            }}
-            isDisabled={isLoadingPostLike || isLoadingDeleteLike}
-            variant="unstyled"
-            borderWidth="1"
-            rounded="lg"
-            borderColor="muted.300"
-          />
-        </HStack>
-        {!isLoading && (
+      {!isLoading && (
+        <HStack
+          w="100%"
+          pt="2"
+          pb={Platform.OS === "android" ? "2" : "9"}
+          px="6"
+          space="2"
+          shadow="2"
+          borderColor="muted.200"
+          borderTopWidth={Platform.OS === "android" ? "1" : "0"}
+          borderTopRadius={Platform.OS === "android" ? "none" : "3xl"}
+          bg="white"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <HStack space="5">
+            <IconButton
+              icon={
+                <Icon
+                  as={<Octicons />}
+                  name="bell-fill"
+                  size="md"
+                  color="muted.300"
+                />
+              }
+              variant="unstyled"
+              borderWidth="1"
+              rounded="lg"
+              borderColor="muted.300"
+            />
+            <IconButton
+              icon={
+                <Icon
+                  as={<AntDesign />}
+                  name="heart"
+                  size="md"
+                  color={liked ? "red.400" : "muted.300"}
+                />
+              }
+              onPress={() => {
+                !liked ? postLike() : deleteLike();
+              }}
+              isDisabled={isLoadingPostLike || isLoadingDeleteLike}
+              variant="unstyled"
+              borderWidth="1"
+              rounded="lg"
+              borderColor="muted.300"
+            />
+          </HStack>
           <Button
             w="40"
             colorScheme="brand"
@@ -292,8 +295,8 @@ const FarmDetailTemplate = ({
               {owned ? t("edit") : t("chat")}
             </Text>
           </Button>
-        )}
-      </HStack>
+        </HStack>
+      )}
     </Box>
   );
 };
