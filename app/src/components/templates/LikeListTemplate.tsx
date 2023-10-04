@@ -14,7 +14,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
 import LikeItem from "../organisms/LikeItem";
-import SkeltonLikeList from "../organisms/SkeletonLikeList";
+import SkeletonLikeList from "../organisms/SkeletonLikeList";
 
 type LikeListTemplateProps = {
   type: "farm" | "rental";
@@ -92,7 +92,7 @@ const LikeListTemplate = ({
           </Pressable>
         </HStack>
         {isLoadingLikes ? (
-          <SkeltonLikeList rows={4} />
+          <SkeletonLikeList rows={4} />
         ) : type === "farm" ? (
           <FlatList
             data={likes?.filter((item) => item.farmId)}

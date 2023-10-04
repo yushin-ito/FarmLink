@@ -10,7 +10,7 @@ import {
 import React, { useCallback } from "react";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import SkeletonNotificationList from "../organisms/SkeletonNotificationList";
+import SkeletonNotification from "../organisms/SkeletonNotification";
 import NotificationItem from "../organisms/NotificationItem";
 import { GetNotificationsResponse } from "../../hooks/notification/query";
 
@@ -80,7 +80,7 @@ const NotificationTemplate = ({
       </HStack>
       <Box flex={1}>
         {isLoadingNotifications ? (
-          <SkeletonNotificationList rows={4} />
+          <SkeletonNotification rows={4} />
         ) : (
           <FlatList
             data={notifications}

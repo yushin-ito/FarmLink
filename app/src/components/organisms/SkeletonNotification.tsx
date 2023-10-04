@@ -25,7 +25,7 @@ const SkeletonNotification = memo(({ rows }: SkeletonNotificationProps) => (
             as={<Feather />}
             name="chevron-right"
             size="md"
-            color="muted.200"
+            color="muted.300"
           />
         </HStack>
         <Divider w="90%" bg="muted.200" />

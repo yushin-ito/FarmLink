@@ -1,10 +1,10 @@
 import React, { memo } from "react";
 import { Box, Divider, HStack, Skeleton, VStack } from "native-base";
 
-type SkeltonFarmListProps = {
+type SkeletonFarmListProps = {
   rows: number;
 };
-const SkeltonFarmList = memo(({ rows }: SkeltonFarmListProps) => (
+const SkeletonFarmList = memo(({ rows }: SkeletonFarmListProps) => (
   <VStack>
     {[...Array(rows)].map((_, index) => (
       <VStack key={index} alignItems="center">
@@ -22,10 +22,10 @@ const SkeltonFarmList = memo(({ rows }: SkeltonFarmListProps) => (
             <Skeleton.Text lines={2} />
           </Box>
         </HStack>
-        <Divider w="80%" bg="muted.200" />
+        <Divider w="80%" bg="muted.300" />
       </VStack>
     ))}
   </VStack>
 ));
 
-export default SkeltonFarmList;
+export default SkeletonFarmList;

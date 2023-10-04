@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import RentalItem from "../organisms/RentalItem";
 import { Alert } from "react-native";
-import SkeletonRentalList from "../organisms/SkeltonRentalList";
+import SkeletonRentalList from "../organisms/SkeletonRentalList";
 import Fab from "../molecules/Fab";
 
 type RentalListTemplateProps = {

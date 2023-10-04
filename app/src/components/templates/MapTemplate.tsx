@@ -12,7 +12,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import React, {
   Dispatch,
   SetStateAction,
-  useCallback,
   useEffect,
   useRef,
 } from "react";
@@ -60,24 +59,16 @@ const MapTemplate = ({
   const { t } = useTranslation("map");
   const mapRef = useRef<MapView>(null);
 
-  const animateToRegion = useCallback(
-    (region: LatLng | null) => {
-      console.log("fucused");
-      if (mapRef.current && region) {
-        mapRef.current.animateToRegion({
-          latitude: region.latitude,
-          longitude: region.longitude,
-          latitudeDelta: 0.001,
-          longitudeDelta: 0.001,
-        });
-      }
-    },
-    [mapRef.current]
-  );
-
   useEffect(() => {
-    animateToRegion(region);
-  }, [region, mapRef.current]);
+    if (mapRef.current && region && !isLoading) {
+      mapRef.current.animateToRegion({
+        latitude: region.latitude,
+        longitude: region.longitude,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
+      });
+    }
+  }, [mapRef.current, region, isLoading]);
 
   if (isLoading) {
     return (

@@ -1,11 +1,11 @@
 import React, { memo } from "react";
 import { Box, Divider, HStack, Skeleton, VStack } from "native-base";
 
-type SkeltonCommunityListProps = {
+type SkeletonCommunityListProps = {
   rows: number;
 };
 
-const SkeltonCommunityList = memo(({ rows }: SkeltonCommunityListProps) => (
+const SkeletonCommunityList = memo(({ rows }: SkeletonCommunityListProps) => (
   <VStack>
     {[...Array(rows)].map((_, index) => (
       <VStack key={index} alignItems="center">
@@ -24,4 +24,4 @@ const SkeltonCommunityList = memo(({ rows }: SkeltonCommunityListProps) => (
   </VStack>
 ));
 
-export default SkeltonCommunityList;
+export default SkeletonCommunityList;

@@ -139,8 +139,12 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     <SettingTemplate
       user={user}
       unread={notifications?.filter((item) => !item.clicked).length ?? 0}
+      isLoading={isLoadingUser || isLoadingNotifications}
       isLoadingAvatar={
-        isLoadingUser || isLoadingPostUser || isLoadingPostAvatar
+        isLoadingUser ||
+        isLoadingNotifications ||
+        isLoadingPostUser ||
+        isLoadingPostAvatar
       }
       isLoadingSignOut={isLoadingSignOut}
       signOut={signOut}

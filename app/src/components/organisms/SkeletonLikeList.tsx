@@ -2,11 +2,11 @@ import { Divider, HStack, Icon, VStack, Skeleton } from "native-base";
 import React, { memo } from "react";
 import { Feather } from "@expo/vector-icons";
 
-type SkeltonLikeListProps = {
+type SkeletonLikeListProps = {
   rows: number;
 };
 
-const SkeltonLikeList = memo(({ rows }: SkeltonLikeListProps) => (
+const SkeletonLikeList = memo(({ rows }: SkeletonLikeListProps) => (
   <VStack>
     {[...Array(rows)].map((_, index) => (
       <VStack alignItems="center" key={index}>
@@ -25,7 +25,7 @@ const SkeltonLikeList = memo(({ rows }: SkeltonLikeListProps) => (
             as={<Feather />}
             name="chevron-right"
             size="md"
-            color="muted.200"
+            color="muted.300"
           />
         </HStack>
         <Divider w="90%" bg="muted.200" />
@@ -34,4 +34,4 @@ const SkeltonLikeList = memo(({ rows }: SkeltonLikeListProps) => (
   </VStack>
 ));
 
-export default SkeltonLikeList;
+export default SkeletonLikeList;

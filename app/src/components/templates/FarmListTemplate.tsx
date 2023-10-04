@@ -15,7 +15,7 @@ import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import SkeltonFarmList from "../organisms/SkeltonFarmList";
+import SkeletonFarmList from "../organisms/SkeletonFarmList";
 import { Alert } from "react-native";
 
 type FarmListTemplateProps = {
@@ -67,7 +67,7 @@ const FarmListTemplate = ({
         </HStack>
       </VStack>
       {isLoading ? (
-        <SkeltonFarmList rows={6} />
+        <SkeletonFarmList rows={6} />
       ) : (
         <FlatList
           w="100%"

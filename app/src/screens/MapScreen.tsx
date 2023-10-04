@@ -36,7 +36,11 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const [region, setRegion] = useState<LatLng | null>(null);
 
   useEffect(() => {
-    !params?.latitude && !params?.longitude && getCurrentPosition();
+    if (params?.latitude && params?.longitude) {
+      setRegion({ latitude: params.latitude, longitude: params.longitude });
+    } else {
+      getCurrentPosition();
+    }
     params?.type === "farm" && refetchFarms();
     params?.type === "rental" && refetchRentals();
     params?.type && setType(params.type);
@@ -65,12 +69,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       );
     },
   });
-
-  useEffect(() => {
-    if (params?.latitude && params?.longitude) {
-      setRegion({ latitude: params.latitude, longitude: params.longitude });
-    }
-  }, [params]);
 
   useEffect(() => {
     if (position) {
