@@ -16,7 +16,9 @@ const CommunityListScreen = ({
   const toast = useToast();
   const { t } = useTranslation("community");
   const { session } = useAuth();
-  const { data: user, isLoading: isLoadingUser } = useQueryUser(session?.user.id);
+  const { data: user, isLoading: isLoadingUser } = useQueryUser(
+    session?.user.id
+  );
   const categories = getCategories();
   categories.splice(0, 1, "all");
   const [categoryIndex, setCategoryIndex] = useState(0);
@@ -56,7 +58,7 @@ const CommunityListScreen = ({
   }, []);
 
   const communityChatNavigationHandler = useCallback(
-    (communityId: number, name: string) => {
+    (communityId: number, name: string | null) => {
       navigation.navigate("CommunityChat", {
         communityId,
         name,

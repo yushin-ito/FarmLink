@@ -20,7 +20,7 @@ const CommunityItem = memo(({ item, onPress }: CommunityItemProps) => {
             size="md"
             fontSize="2xl"
             disabled
-            text={item.name.charAt(0)}
+            text={item.name?.charAt(0)}
             uri={item.imageUrl}
             color={item.color}
             updatedAt={item.updatedAt}

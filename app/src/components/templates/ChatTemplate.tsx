@@ -24,6 +24,7 @@ import {
   GetCommunityChatsResponse,
   GetTalkChatsResponse,
 } from "../../hooks/chat/query";
+import ImageActionSheet from "../organisms/ImageActionSheet";
 
 type ChatTemplateProps = {
   type: "community" | "talk";
@@ -37,8 +38,11 @@ type ChatTemplateProps = {
   onSend: (message: string) => Promise<void>;
   deleteRoom: () => Promise<void>;
   deleteChat: (chatId: number | null) => Promise<void>;
-  pickImageByCamera: () => Promise<void>;
-  pickImageByLibrary: () => Promise<void>;
+  deleteImage?: () => Promise<void>;
+  pickIconImageByCamera?: () => Promise<void>;
+  pickIconImageByLibrary?: () => Promise<void>;
+  pickChatImageByCamera: () => Promise<void>;
+  pickChatImageByLibrary: () => Promise<void>;
   readMore: () => void;
   goBackNavigationHandler: () => void;
 };
@@ -55,13 +59,25 @@ const ChatTemplate = ({
   onSend,
   deleteRoom,
   deleteChat,
-  pickImageByCamera,
-  pickImageByLibrary,
+  deleteImage = async () => {},
+  pickIconImageByCamera = async () => {},
+  pickIconImageByLibrary = async () => {},
+  pickChatImageByCamera,
+  pickChatImageByLibrary,
   readMore,
   goBackNavigationHandler,
 }: ChatTemplateProps) => {
   const { t } = useTranslation(["chat", "community", "talk"]);
-  const { isOpen, onOpen, onClose } = useDisclose();
+  const {
+    isOpen: isChatOpen,
+    onOpen: onChatOpen,
+    onClose: onChatClose,
+  } = useDisclose();
+  const {
+    isOpen: isImageOpen,
+    onOpen: onImageOpen,
+    onClose: onImageClose,
+  } = useDisclose();
   const [chatId, setChatId] = useState<number | null>(null);
 
   return (
@@ -70,9 +86,16 @@ const ChatTemplate = ({
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Box flex={1} safeAreaTop>
+        <ImageActionSheet
+          isOpen={isImageOpen}
+          onClose={onImageClose}
+          onDelete={deleteImage}
+          pickImageByCamera={pickIconImageByCamera}
+          pickImageByLibrary={pickIconImageByLibrary}
+        />
         <ChatActionSheet
-          isOpen={isOpen}
-          onClose={onClose}
+          isOpen={isChatOpen}
+          onClose={onChatClose}
           deleteChat={() => deleteChat(chatId)}
         />
         <HStack
@@ -113,7 +136,17 @@ const ChatTemplate = ({
               />
             )}
           >
+            {type === "community" && (
+              <Menu.Item
+                pl="1"
+                onPress={onImageOpen}
+                _pressed={{ bg: "muted.200" }}
+              >
+                <Text fontSize="md">{t("community:changeIcon")}</Text>
+              </Menu.Item>
+            )}
             <Menu.Item
+              pl="1"
               onPress={() =>
                 Alert.alert(
                   type === "community"
@@ -137,16 +170,14 @@ const ChatTemplate = ({
               }
               _pressed={{ bg: "muted.200" }}
             >
-              <Icon as={<Feather />} name="trash" size="md" />
-              <Text>
-                {(type === "community"
-                  ? t("community:community")
-                  : t("talk:talk")) + t("chat:delete")}
+              <Text fontSize="md">
+                {type === "community"
+                  ? t("community:deleteCommunity")
+                  : t("talk:deleteTalk")}
               </Text>
             </Menu.Item>
           </Menu>
         </HStack>
-
         {isLoadingChats ? (
           <Center flex={1} bg="muted.100">
             <Spinner color="muted.400" />
@@ -169,7 +200,7 @@ const ChatTemplate = ({
                 authored={item.authorId === user?.userId}
                 locale={locale}
                 onLongPress={() => {
-                  onOpen();
+                  onChatOpen();
                   setChatId(item.chatId);
                 }}
               />
@@ -180,8 +211,8 @@ const ChatTemplate = ({
         <ChatBar
           onSend={onSend}
           isLoading={isLoadingPostChat}
-          pickImageByCamera={pickImageByCamera}
-          pickImageByLibrary={pickImageByLibrary}
+          pickImageByCamera={pickChatImageByCamera}
+          pickImageByLibrary={pickChatImageByLibrary}
         />
       </Box>
     </KeyboardAvoidingView>

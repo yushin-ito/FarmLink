@@ -10,7 +10,7 @@ type PickerResult = {
 };
 
 type UseImageType = {
-  onSuccess?: ({ uri, base64 }: PickerResult) => void;
+  onSuccess?: ({ uri, base64, size }: PickerResult) => void;
   onDisable?: () => void;
   onError?: () => void;
 };

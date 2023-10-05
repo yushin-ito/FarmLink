@@ -5,7 +5,10 @@ import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import ChatTemplate from "../components/templates/ChatTemplate";
-import { useDeleteCommunity } from "../hooks/community/mutate";
+import {
+  useDeleteCommunity,
+  usePostCommunity,
+} from "../hooks/community/mutate";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
@@ -89,6 +92,22 @@ const CommunityChatScreen = ({
     },
   });
 
+  const { mutateAsync: mutateAsyncPostCommunity } = usePostCommunity({
+    onSuccess: async () => {
+      await refetchCommunities();
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
   const { mutateAsync: mutateAsyncDeleteCommunity } = useDeleteCommunity({
     onSuccess: async () => {
       await refetchCommunities();
@@ -119,7 +138,10 @@ const CommunityChatScreen = ({
     },
   });
 
-  const { pickImageByCamera, pickImageByLibrary } = useImage({
+  const {
+    pickImageByCamera: pickChatImageByCamera,
+    pickImageByLibrary: pickChatImageByLibrary,
+  } = useImage({
     onSuccess: async ({ base64, size }) => {
       if (session && base64) {
         const { path } = await mutateAsyncPostChatImage(base64);
@@ -153,7 +175,43 @@ const CommunityChatScreen = ({
         />
       );
     },
-  })
+  });
+
+  const {
+    pickImageByCamera: pickIconImageByCamera,
+    pickImageByLibrary: pickIconImageByLibrary,
+  } = useImage({
+    onSuccess: async ({ base64 }) => {
+      if (session && base64) {
+        const { path } = await mutateAsyncPostChatImage(base64);
+        const { data } = supabase.storage.from("image").getPublicUrl(path);
+        await mutateAsyncPostCommunity({
+          communityId: params.communityId,
+          imageUrl: data.publicUrl,
+        });
+      }
+    },
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestCam")}
+        />
+      );
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   const onSend = useCallback(
     async (message: string) => {
@@ -176,6 +234,13 @@ const CommunityChatScreen = ({
     await mutateAsyncDeleteCommunity(params.communityId);
   }, [params]);
 
+  const deleteImage = useCallback(async () => {
+    await mutateAsyncPostCommunity({
+      communityId: params.communityId,
+      imageUrl: null,
+    });
+  }, [params]);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -189,8 +254,11 @@ const CommunityChatScreen = ({
       chats={chats}
       deleteRoom={deleteCommunity}
       deleteChat={deleteChat}
-      pickImageByCamera={pickImageByCamera}
-      pickImageByLibrary={pickImageByLibrary}
+      deleteImage={deleteImage}
+      pickChatImageByCamera={pickChatImageByCamera}
+      pickChatImageByLibrary={pickChatImageByLibrary}
+      pickIconImageByCamera={pickIconImageByCamera}
+      pickIconImageByLibrary={pickIconImageByLibrary}
       onSend={onSend}
       readMore={fetchNextPage}
       isLoadingChats={isLoadingChats}

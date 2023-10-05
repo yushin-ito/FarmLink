@@ -63,7 +63,7 @@ export type CommunityStackParamList = {
   CommunityList: undefined;
   CommunityChat: {
     communityId: number;
-    name: string;
+    name: string | null;
     category: string;
   };
   PostCommunity: undefined;

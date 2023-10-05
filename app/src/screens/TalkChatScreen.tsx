@@ -291,8 +291,8 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
       onSend={onSend}
       deleteChat={deleteChat}
       deleteRoom={deleteTalk}
-      pickImageByCamera={pickImageByCamera}
-      pickImageByLibrary={pickImageByLibrary}
+      pickChatImageByCamera={pickImageByCamera}
+      pickChatImageByLibrary={pickImageByLibrary}
       readMore={fetchNextPage}
       isLoadingChats={isLoadingChats}
       isLoadingPostChat={isLoadingPostChat || isLoadingPostNotification}

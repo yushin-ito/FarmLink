@@ -15,7 +15,7 @@ type AvatarProps = {
   updatedAt: string | undefined;
   size?: string;
   fontSize?: string;
-  color: string | undefined;
+  color: string | null | undefined;
 };
 
 const Avatar = memo(

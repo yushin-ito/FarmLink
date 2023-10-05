@@ -37,7 +37,7 @@ type CommunityListTemplateProps = {
   readMore: () => void;
   communityChatNavigationHandler: (
     communityId: number,
-    name: string
+    name: string | null
   ) => void;
   postCommunityNavigationHandler: () => void;
   settingNavigationHandler: () => void;
