@@ -14,16 +14,18 @@ import { Image } from "expo-image";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 import Avatar from "../molecules/Avatar";
+import { getTimeDistance } from "../../functions";
 
 type NotificationItemProps = {
   type: "farm" | "rental" | "chat" | "unknown";
   item: GetNotificationsResponse[number];
+  locale: "en" | "ja" | null;
   onPress: () => void;
   onPressRight: () => void;
 };
 
 const NotificationItem = memo(
-  ({ type, item, onPress, onPressRight }: NotificationItemProps) => {
+  ({ type, item, locale, onPress, onPressRight }: NotificationItemProps) => {
     const { t } = useTranslation("setting");
 
     return (
@@ -74,14 +76,14 @@ const NotificationItem = memo(
                       }}
                     />
                   </Center>
-                  <Text
-                    w="80%"
-                    numberOfLines={3}
-                    ellipsizeMode="tail"
-                    fontSize="15"
-                  >
-                    {item.farm?.name + t("to") + item.from?.name + t("liked")}
-                  </Text>
+                  <VStack w="80%" space="1">
+                    <Text numberOfLines={3} ellipsizeMode="tail" fontSize="15">
+                      {item.farm?.name + t("to") + item.from?.name + t("liked")}
+                    </Text>
+                    <Text color="muted.500" fontSize="xs">
+                      {getTimeDistance(item.createdAt, locale)}
+                    </Text>
+                  </VStack>
                 </HStack>
               )}
               {type === "rental" && (
@@ -108,14 +110,17 @@ const NotificationItem = memo(
                       />
                     )}
                   </Center>
-                  <Text
-                    w="80%"
-                    numberOfLines={3}
-                    ellipsizeMode="tail"
-                    fontSize="15"
-                  >
-                    {item.rental?.name + t("to") + item.from?.name + t("liked")}
-                  </Text>
+                  <VStack w="80%" space="1">
+                    <Text numberOfLines={3} ellipsizeMode="tail" fontSize="15">
+                      {item.rental?.name +
+                        t("to") +
+                        item.from?.name +
+                        t("liked")}
+                    </Text>
+                    <Text color="muted.500" fontSize="xs">
+                      {getTimeDistance(item.createdAt, locale)}
+                    </Text>
+                  </VStack>
                 </HStack>
               )}
               {type === "chat" && (
@@ -129,14 +134,14 @@ const NotificationItem = memo(
                     color={item.from?.color}
                     updatedAt={item.from?.updatedAt}
                   />
-                  <Text
-                    w="80%"
-                    numberOfLines={3}
-                    ellipsizeMode="tail"
-                    fontSize="15"
-                  >
-                    {item.from?.name + t("send")}
-                  </Text>
+                  <VStack w="80%" space="1">
+                    <Text numberOfLines={3} ellipsizeMode="tail" fontSize="15">
+                      {item.from?.name + t("send")}
+                    </Text>
+                    <Text color="muted.500" fontSize="xs">
+                      {getTimeDistance(item.createdAt, locale)}
+                    </Text>
+                  </VStack>
                 </HStack>
               )}
               <Icon as={<Feather />} name="chevron-right" size="md" />
