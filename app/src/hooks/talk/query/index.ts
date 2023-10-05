@@ -1,6 +1,6 @@
 import { supabase } from "../../../supabase";
 import { useQuery } from "react-query";
-import { Talk, User } from "../../../types";
+import { Talk, User } from "../../../types"
 
 export type GetTalksResponse = Awaited<ReturnType<typeof getTalks>>;
 

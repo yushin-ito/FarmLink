@@ -26,7 +26,9 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { t } = useTranslation("chat");
   const toast = useToast();
   const { session, locale } = useAuth();
-  const { data: user } = useQueryUser(session?.user.id);
+  const { data: user} = useQueryUser(
+    session?.user.id
+  );
   const { params } = useRoute<RouteProp<TalkStackParamList, "TalkChat">>();
   const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
   const {
@@ -147,6 +149,18 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     });
 
   const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
+    onSuccess: async ({ message, imageUrl }) => {
+      message &&
+        mutateAsyncPostTalk({
+          talkId: params.talkId,
+          lastMessage: t("deleteMessage"),
+        });
+      imageUrl &&
+        mutateAsyncPostTalk({
+          talkId: params.talkId,
+          lastMessage: t("deleteImage"),
+        });
+    },
     onError: () => {
       showAlert(
         toast,

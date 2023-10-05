@@ -23,7 +23,9 @@ const deleteChat = async (chatId: number | null) => {
   const { data, error } = await supabase
     .from("chat")
     .delete()
-    .eq("chatId", chatId);
+    .eq("chatId", chatId)
+    .select()
+    .single();
   if (error) {
     throw error;
   }

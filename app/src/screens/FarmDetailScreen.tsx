@@ -217,6 +217,7 @@ const FarmDetailScreen = ({
       await mutateAsyncPostTalk({
         senderId: session.user.id,
         recieverId: farm.ownerId,
+        lastMessage: t("createdTalk"),
       });
     } else {
       showAlert(
