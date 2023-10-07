@@ -18,16 +18,17 @@ const EnvironmentScreen = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getEnvironment = useCallback(async () => {
-    const theme = await AsyncStorage.getItem("@theme");
-    setTheme(theme as ColorSchemeName);
     const locale = await AsyncStorage.getItem("@locale");
     setLocale(locale as Locale);
+    const theme = await AsyncStorage.getItem("@theme");
+    console.log(theme);
+    setTheme(theme as ColorSchemeName);
   }, []);
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     getEnvironment();
-    setIsLoading(false)
+    setIsLoading(false);
   }, []);
 
   const changeLanguage = useCallback(async (language: Locale) => {
@@ -41,17 +42,20 @@ const EnvironmentScreen = () => {
     }
   }, []);
 
-  const changeTheme = useCallback(async (theme: ColorSchemeName) => {
-    if (theme) {
-      await AsyncStorage.setItem("@theme", theme);
-      setColorMode(theme);
-      setTheme(theme);
-    } else {
-      await AsyncStorage.removeItem("@theme");
-      setColorMode(colorScheme);
-      setTheme(null);
-    }
-  }, []);
+  const changeTheme = useCallback(
+    async (theme: ColorSchemeName) => {
+      if (theme) {
+        await AsyncStorage.setItem("@theme", theme);
+        setColorMode(theme);
+        setTheme(theme);
+      } else {
+        await AsyncStorage.removeItem("@theme");
+        setColorMode(colorScheme);
+        setTheme(null);
+      }
+    },
+    [colorScheme]
+  );
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

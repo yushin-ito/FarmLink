@@ -55,7 +55,6 @@ const MapTemplate = ({
   const { t } = useTranslation("map");
   const mapRef = useRef<MapView>(null);
   const bgColor = useColorModeValue("white", "muted.800");
-  const textColor = useColorModeValue("black", "white");
 
   useEffect(() => {
     if (mapRef.current && region && !isLoading) {
@@ -217,7 +216,13 @@ const MapTemplate = ({
               shadow="1"
               alignItems="center"
             >
-              <Text color={type === "farm" ? "white" : textColor}>
+              <Text
+                color={
+                  type === "farm"
+                    ? "white"
+                    : useColorModeValue("black", "white")
+                }
+              >
                 {t("farm")}
               </Text>
             </Box>
@@ -243,7 +248,13 @@ const MapTemplate = ({
               shadow="1"
               alignItems="center"
             >
-              <Text color={type === "rental" ? "white" : textColor}>
+              <Text
+                color={
+                  type === "rental"
+                    ? "white"
+                    : useColorModeValue("black", "white")
+                }
+              >
                 {t("rental")}
               </Text>
             </Box>

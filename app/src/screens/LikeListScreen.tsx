@@ -18,7 +18,7 @@ const LikeListScreen = ({
   const {
     data: likes,
     refetch,
-    isLoading: isLoadingLikes,
+    isLoading,
   } = useQueryUserLikes(session?.user.id);
   const [isRefetchingLikes, setIsRefetchingRentals] = useState(false);
   const [type, setType] = useState<"farm" | "rental">("farm");
@@ -97,7 +97,7 @@ const LikeListScreen = ({
       deleteFarmLike={deleteFarmLike}
       deleteRentalLike={deleteRentalLike}
       refetchLikes={refetchLikes}
-      isLoadingLikes={isLoadingLikes}
+      isLoading={isLoading}
       isRefetchingLikes={isRefetchingLikes}
       mapNavigationHandler={mapNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}

@@ -71,7 +71,7 @@ const CommunityListTemplate = ({
   const bgColor = useColorModeValue("muted.200", "muted.700");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
-  const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclose();
+  const { isOpen, onOpen, onClose } = useDisclose();
   const categories = getCategories();
   categories.splice(0, 1, "all", "joined");
 

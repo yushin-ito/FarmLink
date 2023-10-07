@@ -29,7 +29,7 @@ type LikeListTemplateProps = {
     latitude: number,
     longitude: number
   ) => Promise<void>;
-  isLoadingLikes: boolean;
+  isLoading: boolean;
   isRefetchingLikes: boolean;
   goBackNavigationHandler: () => void;
 };
@@ -41,12 +41,13 @@ const LikeListTemplate = ({
   deleteRentalLike,
   deleteFarmLike,
   refetchLikes,
-  isLoadingLikes,
+  isLoading,
   isRefetchingLikes,
   mapNavigationHandler,
   goBackNavigationHandler,
 }: LikeListTemplateProps) => {
   const { t } = useTranslation("setting");
+  const bgColor = useColorModeValue("white", "muted.700");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
@@ -78,10 +79,16 @@ const LikeListTemplate = ({
               px="3"
               py="1"
               rounded="full"
-              bg={type === "farm" ? "brand.600" : "muted.200"}
+              bg={type === "farm" ? "brand.600" : bgColor}
               alignItems="center"
             >
-              <Text color={type === "farm" ? "white" : "black"}>
+              <Text
+                color={
+                  type === "farm"
+                    ? "white"
+                    : useColorModeValue("black", "white")
+                }
+              >
                 {t("farm")}
               </Text>
             </Box>
@@ -91,16 +98,22 @@ const LikeListTemplate = ({
               px="3"
               py="1"
               rounded="full"
-              bg={type === "rental" ? "brand.600" : "muted.200"}
+              bg={type === "rental" ? "brand.600" : bgColor}
               alignItems="center"
             >
-              <Text color={type === "rental" ? "white" : "black"}>
+              <Text
+                color={
+                  type === "rental"
+                    ? "white"
+                    : useColorModeValue("black", "white")
+                }
+              >
                 {t("rental")}
               </Text>
             </Box>
           </Pressable>
         </HStack>
-        {isLoadingLikes ? (
+        {isLoading ? (
           <SkeletonLikeList rows={4} />
         ) : type === "farm" ? (
           <FlatList

@@ -43,7 +43,7 @@ const CommunityItem = memo(
     const bgColor = useColorModeValue("white", "muted.800");
     const pressedColor = useColorModeValue("muted.100", "muted.800");
     const textColor = useColorModeValue("muted.600", "muted.300");
-    const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclose();
+    const { isOpen, onOpen, onClose } = useDisclose();
 
     return (
       <Pressable

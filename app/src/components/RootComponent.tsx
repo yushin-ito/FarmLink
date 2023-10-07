@@ -28,7 +28,7 @@ const RootComponent = () => {
   return (
     <NavigationContainer theme={useColorModeValue(lightTheme, darkTheme)}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar style="auto" />
+        <StatusBar style={useColorModeValue("dark", "light")} />
         <RootNavigator />
       </GestureHandlerRootView>
     </NavigationContainer>

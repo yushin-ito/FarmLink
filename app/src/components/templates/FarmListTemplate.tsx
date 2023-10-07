@@ -69,7 +69,7 @@ const FarmListTemplate = ({
         </HStack>
       </VStack>
       {isLoading ? (
-        <SkeletonFarmList rows={6} />
+        <SkeletonFarmList rows={3} />
       ) : (
         <FlatList
           w="100%"

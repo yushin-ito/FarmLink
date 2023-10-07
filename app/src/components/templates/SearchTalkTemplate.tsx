@@ -22,6 +22,7 @@ type SearchTalkTemplateProps = {
   searchTalks: (query: string) => Promise<void>;
   talkChatNavigationHandler: (
     talkId: number,
+    recieverId: string,
     token: string | null,
     name: string
   ) => void;
@@ -101,6 +102,7 @@ const SearchTalkTemplate = ({
                 onPress={() =>
                   talkChatNavigationHandler(
                     item.talkId,
+                    item.to.userId,
                     item.to.token,
                     item.to.name
                   )
