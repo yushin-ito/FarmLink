@@ -30,10 +30,15 @@ type CommunityListTemplateProps = {
   user: GetUserResponse | null | undefined;
   communities: GetCommunitiesResponse | null | undefined;
   isLoading: boolean;
+  isLoadingPostCommunity: boolean;
   isRefetchingCommunities: boolean;
   hasMore: boolean | undefined;
   refetchCommunities: () => Promise<void>;
-  deleteCommunity: (communityId: number) => Promise<void>;
+  joinCommunity: (
+    communityId: number,
+    name: string | null,
+    memberIds: string[]
+  ) => Promise<void>;
   readMore: () => void;
   communityChatNavigationHandler: (
     communityId: number,
@@ -50,9 +55,11 @@ const CommunityListTemplate = ({
   user,
   communities,
   isLoading,
+  isLoadingPostCommunity,
   isRefetchingCommunities,
   hasMore,
   refetchCommunities,
+  joinCommunity,
   readMore,
   communityChatNavigationHandler,
   postCommunityNavigationHandler,
@@ -60,9 +67,10 @@ const CommunityListTemplate = ({
   searchCommunityNavigationHandler,
 }: CommunityListTemplateProps) => {
   const { t } = useTranslation("community");
-  const { isOpen, onOpen, onClose } = useDisclose();
+
+  const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclose();
   const categories = getCategories();
-  categories.splice(0, 1, "all");
+  categories.splice(0, 1, "all", "joined");
 
   return (
     <Box flex={1} safeAreaTop>
@@ -118,9 +126,14 @@ const CommunityListTemplate = ({
           renderItem={({ item }) => (
             <CommunityItem
               item={item}
-              onPress={() =>
-                communityChatNavigationHandler(item.communityId, item.name)
+              joined={
+                item?.memberIds?.some(
+                  (memeberId) => user?.userId === memeberId
+                ) ?? false
               }
+              joinCommunity={joinCommunity}
+              isLoading={isLoadingPostCommunity}
+              communityChatNavigationHandler={communityChatNavigationHandler}
             />
           )}
           keyExtractor={(item) => item.communityId.toString()}

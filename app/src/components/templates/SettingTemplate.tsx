@@ -119,10 +119,10 @@ const SettingTemplate = ({
                 <Icon as={<Feather />} name="bell" size="md" />
                 <Text fontSize="md">{t("notification")}</Text>
               </HStack>
-              <HStack alignItems="center" space="1">
+              <HStack alignItems="center" space="2">
                 {unread !== 0 && (
-                  <Center size="6" bg="brand.600" rounded="full">
-                    <Text color="white">{unread}</Text>
+                  <Center size="5" bg="brand.600" rounded="full">
+                    <Text color="white" fontSize="xs">{unread}</Text>
                   </Center>
                 )}
                 <Icon as={<Feather />} name="chevron-right" size="md" />

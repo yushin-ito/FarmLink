@@ -19,7 +19,7 @@ const CategoryActionSheet = memo(
   }: CategoryActionSheetProps) => {
     const { t } = useTranslation("community");
     const categories = getCategories()
-    categories.splice(0, 1, "all")
+    categories.splice(0, 1, "all", "joined")
     return (
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>

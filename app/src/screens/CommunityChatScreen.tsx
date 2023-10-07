@@ -33,7 +33,8 @@ const CommunityChatScreen = ({
   const { params } =
     useRoute<RouteProp<CommunityStackParamList, "CommunityChat">>();
   const { refetch: refetchCommunities } = useInfiniteQueryCommunities(
-    params.category
+    params.category,
+    session?.user.id
   );
   const {
     data: chats,

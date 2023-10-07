@@ -64,6 +64,7 @@ export const getTimeDistance = (date: string, locale: "en" | "ja" | null) => {
 
 export type Category =
   | "all"
+  | "joined"
   | "none"
   | "vegetable"
   | "fruit"
@@ -71,6 +72,6 @@ export type Category =
   | "disease";
 
 export const getCategories = () => {
-  const categories = ["none", "vegetable", "fruit", "fertilizer", "disease"];
+  const categories = ["none", "vegetable", "fruit", "fertilizer", "disease"] as Category[];
   return categories;
 };

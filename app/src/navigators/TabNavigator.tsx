@@ -162,7 +162,7 @@ const TabNavigator = () => {
         component={FarmNavigator}
         options={{
           tabBarButton: ({ onPress }) => (
-            <Fab top="-35" onPress={onPress}>
+            <Fab top="-30" onPress={onPress}>
               <Image
                 source={require("../../assets/seedling.png")}
                 style={{ width: 40, height: 40 }}

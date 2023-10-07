@@ -7,6 +7,7 @@ import {
   Icon,
   Center,
   VStack,
+  Box,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { GetNotificationsResponse } from "../../hooks/notification/query";
@@ -53,31 +54,39 @@ const NotificationItem = memo(
           <VStack alignItems="center">
             <HStack
               w="100%"
-              px="6"
+              pl="3"
+              pr="6"
               py="5"
               alignItems="center"
               justifyContent="space-between"
             >
               {type === "farm" && (
                 <HStack alignItems="center" space="3">
-                  <Center
-                    size="12"
-                    rounded="md"
-                    bg="muted.200"
-                    overflow="hidden"
-                  >
-                    <Image
-                      style={{ width: 48, height: 48 }}
-                      source={{
-                        uri:
-                          item.farm.device.imageUrl +
-                          "?=" +
-                          item.farm.device.updatedAt,
-                      }}
+                  <HStack space="2">
+                    <Box
+                      size="2.5"
+                      rounded="full"
+                      bg={item.clicked ? "transparent" : "blue.500"}
                     />
-                  </Center>
-                  <VStack w="80%" space="1">
-                    <Text numberOfLines={3} ellipsizeMode="tail" fontSize="15">
+                    <Center
+                      size="12"
+                      rounded="md"
+                      bg="muted.200"
+                      overflow="hidden"
+                    >
+                      <Image
+                        style={{ width: 48, height: 48 }}
+                        source={{
+                          uri:
+                            item.farm.device.imageUrl +
+                            "?=" +
+                            item.farm.device.updatedAt,
+                        }}
+                      />
+                    </Center>
+                  </HStack>
+                  <VStack w="75%" space="1">
+                    <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
                       {item.farm?.name + t("to") + item.from?.name + t("liked")}
                     </Text>
                     <Text color="muted.500" fontSize="xs">
@@ -88,30 +97,37 @@ const NotificationItem = memo(
               )}
               {type === "rental" && (
                 <HStack alignItems="center" space="3">
-                  <Center
-                    size="12"
-                    rounded="md"
-                    bg="muted.200"
-                    overflow="hidden"
-                  >
-                    {item.rental.imageUrls?.length ? (
-                      <Image
-                        style={{ width: 48, height: 48 }}
-                        source={{
-                          uri: item.rental.imageUrls[0],
-                        }}
-                      />
-                    ) : (
-                      <Icon
-                        as={<Feather />}
-                        name="image"
-                        size="lg"
-                        color="muted.600"
-                      />
-                    )}
-                  </Center>
-                  <VStack w="80%" space="1">
-                    <Text numberOfLines={3} ellipsizeMode="tail" fontSize="15">
+                  <HStack space="2">
+                    <Box
+                      size="2.5"
+                      rounded="full"
+                      bg={item.clicked ? "transparent" : "blue.500"}
+                    />
+                    <Center
+                      size="12"
+                      rounded="md"
+                      bg="muted.200"
+                      overflow="hidden"
+                    >
+                      {item.rental.imageUrls?.length ? (
+                        <Image
+                          style={{ width: 48, height: 48 }}
+                          source={{
+                            uri: item.rental.imageUrls[0],
+                          }}
+                        />
+                      ) : (
+                        <Icon
+                          as={<Feather />}
+                          name="image"
+                          size="lg"
+                          color="muted.600"
+                        />
+                      )}
+                    </Center>
+                  </HStack>
+                  <VStack w="75%" space="1">
+                    <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
                       {item.rental?.name +
                         t("to") +
                         item.from?.name +
@@ -125,17 +141,24 @@ const NotificationItem = memo(
               )}
               {type === "chat" && (
                 <HStack alignItems="center" space="3">
-                  <Avatar
-                    size="md"
-                    fontSize="2xl"
-                    disabled
-                    text={item.from?.name.charAt(0)}
-                    uri={item.from?.avatarUrl}
-                    color={item.from?.color}
-                    updatedAt={item.from?.updatedAt}
-                  />
-                  <VStack w="80%" space="1">
-                    <Text numberOfLines={3} ellipsizeMode="tail" fontSize="15">
+                  <HStack space="2">
+                    <Box
+                      size="2.5"
+                      rounded="full"
+                      bg={item.clicked ? "transparent" : "blue.500"}
+                    />
+                    <Avatar
+                      size="md"
+                      fontSize="2xl"
+                      disabled
+                      text={item.from?.name.charAt(0)}
+                      uri={item.from?.avatarUrl}
+                      color={item.from?.color}
+                      updatedAt={item.from?.updatedAt}
+                    />
+                  </HStack>
+                  <VStack w="75%" space="1">
+                    <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
                       {item.from?.name + t("send")}
                     </Text>
                     <Text color="muted.500" fontSize="xs">

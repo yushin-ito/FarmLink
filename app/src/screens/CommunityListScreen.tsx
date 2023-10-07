@@ -4,11 +4,11 @@ import { getCategories, showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import { useInfiniteQueryCommunities } from "../hooks/community/query";
-import { useDeleteCommunity } from "../hooks/community/mutate";
 import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
 import { CommunityStackScreenProps } from "../types";
 import CommunityListTemplate from "../components/templates/CommunityListTemplate";
+import { usePostCommunity } from "../hooks/community/mutate";
 
 const CommunityListScreen = ({
   navigation,
@@ -20,21 +20,21 @@ const CommunityListScreen = ({
     session?.user.id
   );
   const categories = getCategories();
-  categories.splice(0, 1, "all");
-  const [categoryIndex, setCategoryIndex] = useState(0);
+  categories.splice(0, 1, "all", "joined");
+  const [categoryIndex, setCategoryIndex] = useState(1);
   const {
     data: communities,
     isLoading: isLoadingCommunities,
     refetch,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQueryCommunities(categories[categoryIndex]);
+  } = useInfiniteQueryCommunities(categories[categoryIndex], session?.user.id);
   const [isRefetchingCommunities, setIsRefetchingCommunitys] = useState(false);
 
-  const { mutateAsync: mutateAsyncDeleteCommunity } = useDeleteCommunity({
-    onSuccess: async () => {
-      await refetch();
-    },
+  const {
+    mutateAsync: mutateAsyncPostCommunity,
+    isLoading: isLoadingPostCommunity,
+  } = usePostCommunity({
     onError: () => {
       showAlert(
         toast,
@@ -53,9 +53,23 @@ const CommunityListScreen = ({
     setIsRefetchingCommunitys(false);
   }, []);
 
-  const deleteCommunity = useCallback(async (communityId: number) => {
-    await mutateAsyncDeleteCommunity(communityId);
-  }, []);
+  const joinCommunity = useCallback(
+    async (communityId: number, name: string | null, memberIds: string[]) => {
+      if (session) {
+        memberIds.push(session.user.id);
+        await mutateAsyncPostCommunity({
+          communityId,
+          memberIds,
+        });
+        navigation.navigate("CommunityChat", {
+          communityId,
+          name,
+          category: categories[categoryIndex],
+        });
+      }
+    },
+    [session, user, categoryIndex]
+  );
 
   const communityChatNavigationHandler = useCallback(
     (communityId: number, name: string | null) => {
@@ -94,11 +108,12 @@ const CommunityListScreen = ({
       communities={communities}
       user={user}
       isLoading={isLoadingUser || isLoadingCommunities}
+      isLoadingPostCommunity={isLoadingPostCommunity}
       isRefetchingCommunities={isRefetchingCommunities}
       hasMore={hasNextPage}
       readMore={fetchNextPage}
       refetchCommunities={refetchCommunities}
-      deleteCommunity={deleteCommunity}
+      joinCommunity={joinCommunity}
       communityChatNavigationHandler={communityChatNavigationHandler}
       postCommunityNavigationHandler={postCommunityNavigationHandler}
       settingNavigationHandler={settingNavigationHandler}

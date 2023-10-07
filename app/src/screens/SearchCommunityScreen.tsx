@@ -49,7 +49,7 @@ const SearchCommunitieScreen = ({
   }, []);
 
   const communityChatNavigationHandler = useCallback(
-    (communityId: number, name: string) => {
+    (communityId: number, name: string | null) => {
       navigation.goBack();
       navigation.navigate("CommunityChat", {
         communityId,

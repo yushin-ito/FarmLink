@@ -10,14 +10,11 @@ const SkeletonSetting = memo(({ rows }: SkeletonSettingProps) => (
     {[...Array(rows)].map((_, index) => (
       <HStack
         key={index}
-        mt="1"
+        mt="5"
         alignItems="center"
         justifyContent="space-between"
       >
-        <HStack p="2" space="3" alignItems="center" rounded="md">
-          <Skeleton size="7" rounded="full" />
-          <Skeleton.Text w="32" lines={1} />
-        </HStack>
+        <Skeleton.Text w="40" p="2" lines={1} />
         <Icon
           as={<Feather />}
           name="chevron-right"

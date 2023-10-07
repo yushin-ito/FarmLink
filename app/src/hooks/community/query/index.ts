@@ -2,32 +2,58 @@ import { supabase } from "../../../supabase";
 import { useInfiniteQuery } from "react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { useMemo } from "react";
+import { Category } from "../../../functions";
 
 export type GetCommunitiesResponse = Awaited<ReturnType<typeof getCommunities>>;
 
+const getCommunities = async (
+  category: Category,
+  from: number,
+  to: number,
+  userId: string | undefined
+) => {
+  if (category === "all") {
+    const { data, error } = await supabase
+      .from("community")
+      .select("*")
+      .order("createdAt", { ascending: false })
+      .range(from, to);
+    if (error) {
+      throw error;
+    }
 
-const getCommunities = async (category: string, from: number, to: number) => {
-  const { data, error } =
-    category === "all"
-      ? await supabase
-          .from("community")
-          .select("*")
-          .order("createdAt", { ascending: false })
-          .range(from, to)
-      : await supabase
-          .from("community")
-          .select("*")
-          .eq("category", category)
-          .order("createdAt", { ascending: false })
-          .range(from, to);
-  if (error) {
-    throw error;
+    return data;
+  } else if (category === "joined") {
+    const { data, error } = await supabase
+      .from("community")
+      .select("*")
+      .contains("memberIds", [userId])
+      .order("createdAt", { ascending: false })
+      .range(from, to);
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } else {
+    const { data, error } = await supabase
+      .from("community")
+      .select("*")
+      .eq("category", category)
+      .order("createdAt", { ascending: false })
+      .range(from, to);
+    if (error) {
+      throw error;
+    }
+
+    return data;
   }
-
-  return data;
 };
 
-export const useInfiniteQueryCommunities = (category: string) => {
+export const useInfiniteQueryCommunities = (
+  category: Category,
+  userId: string | undefined
+) => {
   const PAGE_COUNT = 15;
   const query = useInfiniteQuery<GetCommunitiesResponse, PostgrestError>({
     queryKey: ["community", category],
@@ -35,7 +61,8 @@ export const useInfiniteQueryCommunities = (category: string) => {
       return await getCommunities(
         category,
         pageParam,
-        pageParam + PAGE_COUNT - 1
+        pageParam + PAGE_COUNT - 1,
+        userId
       );
     },
     getNextPageParam: (lastPage, pages) => {
@@ -55,4 +82,3 @@ export const useInfiniteQueryCommunities = (category: string) => {
 
   return { ...query, data };
 };
-

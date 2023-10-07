@@ -5,6 +5,7 @@ import {
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Database } from "./schema";
+import { Category } from "../functions";
 
 export type UseQueryResult<T1, T2> = {
   onSuccess?: (response: T1) => void;
@@ -64,10 +65,10 @@ export type CommunityStackParamList = {
   CommunityChat: {
     communityId: number;
     name: string | null;
-    category: string;
+    category: Category;
   };
   PostCommunity: undefined;
-  SearchCommunity: { category: string };
+  SearchCommunity: { category: Category };
 };
 
 export type FarmStackParamList = {

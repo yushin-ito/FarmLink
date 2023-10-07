@@ -7,12 +7,14 @@ import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
 import { usePostCommunity } from "../hooks/community/mutate";
 import { useTranslation } from "react-i18next";
+import useAuth from "../hooks/auth/useAuth";
 
 const PostCommunityScreen = () => {
   const toast = useToast();
   const { t } = useTranslation("community");
   const navigation = useNavigation();
-  const { refetch } = useInfiniteQueryCommunities("all");
+  const { session } = useAuth();
+  const { refetch } = useInfiniteQueryCommunities("all", session?.user.id);
 
   const { mutateAsync, isLoading } = usePostCommunity({
     onSuccess: async () => {
@@ -34,14 +36,17 @@ const PostCommunityScreen = () => {
 
   const postCommunity = useCallback(
     async (name: string, description: string, category: string) => {
-      await mutateAsync({
-        name,
-        description,
-        category,
-        color: `hsl(${Math.floor(Math.random() * 360).toString()}, 60%, 60%)`,
-      });
+      if (session) {
+        await mutateAsync({
+          name,
+          description,
+          category,
+          ownerId: session?.user.id,
+          color: `hsl(${Math.floor(Math.random() * 360).toString()}, 60%, 60%)`,
+        });
+      }
     },
-    []
+    [session]
   );
 
   const goBackNavigationHandler = useCallback(() => {
