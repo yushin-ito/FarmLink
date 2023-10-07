@@ -9,6 +9,7 @@ import {
   Text,
   VStack,
   Icon,
+  useColorModeValue,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
@@ -25,6 +26,12 @@ type FarmItemProps = {
 const FarmItem = memo(
   ({ item, onPress, onPressRight, onPressLeft }: FarmItemProps) => {
     const { t } = useTranslation("farm");
+    const bgColor = useColorModeValue("white", "#171717");
+    const pressedColor = useColorModeValue("#f5f5f5", "#262626");
+    const imageColor = useColorModeValue("muted.200", "muted.600");
+    const textColor = useColorModeValue("muted.600", "muted.300");
+    const iconColor = useColorModeValue("muted.600", "muted.100");
+
     return (
       <Swipeable
         renderRightActions={() => (
@@ -58,13 +65,18 @@ const FarmItem = memo(
       >
         <TouchableHighlight
           onPress={onPress}
-          style={{ backgroundColor: "white" }}
-          underlayColor="#f5f5f5"
+          style={{ backgroundColor: bgColor }}
+          underlayColor={pressedColor}
         >
           <VStack>
             <HStack h="20" px="9" py="3">
               <Box w="20%">
-                <Center size="12" rounded="md" bg="muted.200" overflow="hidden">
+                <Center
+                  size="12"
+                  rounded="md"
+                  bg={imageColor}
+                  overflow="hidden"
+                >
                   {item.device?.imageUrl ? (
                     <Image
                       style={{ width: 48, height: 48 }}
@@ -78,7 +90,7 @@ const FarmItem = memo(
                       as={<Feather />}
                       name="image"
                       size="lg"
-                      color="muted.600"
+                      color={iconColor}
                     />
                   )}
                 </Center>
@@ -89,7 +101,7 @@ const FarmItem = memo(
                     {item.name}
                   </Text>
                   <Text
-                    color="muted.600"
+                    color={textColor}
                     fontSize="xs"
                     numberOfLines={1}
                     ellipsizeMode="tail"
@@ -102,7 +114,7 @@ const FarmItem = memo(
                     <Text color="muted.400" bold fontSize="xs">
                       {t("temperture")}
                     </Text>
-                    <Text color="muted.600" bold fontSize="sm">
+                    <Text color={textColor} bold fontSize="sm">
                       {item?.device?.temperture
                         ? item.device.temperture + "℃"
                         : t("unknown")}
@@ -112,7 +124,7 @@ const FarmItem = memo(
                     <Text color="muted.400" bold fontSize="xs">
                       {t("humidity")}
                     </Text>
-                    <Text color="muted.600" bold fontSize="sm">
+                    <Text color={textColor} bold fontSize="sm">
                       {item?.device?.humidity
                         ? item.device.humidity + "%"
                         : t("unknown")}
@@ -122,7 +134,7 @@ const FarmItem = memo(
                     <Text color="muted.400" bold fontSize="xs">
                       {t("moisture")}
                     </Text>
-                    <Text color="muted.600" bold fontSize="sm">
+                    <Text color={textColor} bold fontSize="sm">
                       {item?.device?.moisture
                         ? item.device.moisture + "℃"
                         : t("unknown")}

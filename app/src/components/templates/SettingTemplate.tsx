@@ -10,6 +10,7 @@ import {
   Spinner,
   useDisclose,
   Skeleton,
+  useColorModeValue,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
@@ -36,6 +37,7 @@ type SettingTemplateProps = {
   postProfileNavigationHandler: () => void;
   rentalListNavigationHandler: () => void;
   likeListNavigationHandler: () => void;
+  environmentNavigationHandler: () => void
 };
 
 const SettingTemplate = ({
@@ -53,8 +55,12 @@ const SettingTemplate = ({
   postProfileNavigationHandler,
   rentalListNavigationHandler,
   likeListNavigationHandler,
+  environmentNavigationHandler
 }: SettingTemplateProps) => {
   const { t } = useTranslation("setting");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const { isOpen, onOpen, onClose } = useDisclose();
 
   if (isLoadingSignOut) {
@@ -98,7 +104,7 @@ const SettingTemplate = ({
             <Text fontSize="xl" bold numberOfLines={1} ellipsizeMode="tail">
               {user?.name}
             </Text>
-            <Text color="muted.600" numberOfLines={2} ellipsizeMode="tail">
+            <Text color={textColor} numberOfLines={2} ellipsizeMode="tail">
               {user?.introduction ?? t("noProfile")}
             </Text>
           </VStack>
@@ -116,16 +122,28 @@ const SettingTemplate = ({
           >
             <HStack alignItems="center" justifyContent="space-between">
               <HStack p="2" space="3" alignItems="center" rounded="md">
-                <Icon as={<Feather />} name="bell" size="md" />
+                <Icon
+                  as={<Feather />}
+                  name="bell"
+                  size="md"
+                  color={iconColor}
+                />
                 <Text fontSize="md">{t("notification")}</Text>
               </HStack>
               <HStack alignItems="center" space="2">
                 {unread !== 0 && (
                   <Center size="5" bg="brand.600" rounded="full">
-                    <Text color="white" fontSize="xs">{unread}</Text>
+                    <Text color="white" fontSize="xs">
+                      {unread}
+                    </Text>
                   </Center>
                 )}
-                <Icon as={<Feather />} name="chevron-right" size="md" />
+                <Icon
+                  as={<Feather />}
+                  name="chevron-right"
+                  size="md"
+                  color={iconColor}
+                />
               </HStack>
             </HStack>
           </Pressable>
@@ -137,10 +155,20 @@ const SettingTemplate = ({
           >
             <HStack alignItems="center" justifyContent="space-between">
               <HStack p="2" space="3" alignItems="center" rounded="md">
-                <Icon as={<Feather />} name="heart" size="md" />
+                <Icon
+                  as={<Feather />}
+                  name="heart"
+                  size="md"
+                  color={iconColor}
+                />
                 <Text fontSize="md">{t("likeList")}</Text>
               </HStack>
-              <Icon as={<Feather />} name="chevron-right" size="md" />
+              <Icon
+                as={<Feather />}
+                name="chevron-right"
+                size="md"
+                color={iconColor}
+              />
             </HStack>
           </Pressable>
           <Pressable
@@ -151,10 +179,20 @@ const SettingTemplate = ({
           >
             <HStack alignItems="center" justifyContent="space-between">
               <HStack p="2" space="3" alignItems="center" rounded="md">
-                <Icon as={<Feather />} name="clipboard" size="md" />
+                <Icon
+                  as={<Feather />}
+                  name="clipboard"
+                  size="md"
+                  color={iconColor}
+                />
                 <Text fontSize="md">{t("rentalList")}</Text>
               </HStack>
-              <Icon as={<Feather />} name="chevron-right" size="md" />
+              <Icon
+                as={<Feather />}
+                name="chevron-right"
+                size="md"
+                color={iconColor}
+              />
             </HStack>
           </Pressable>
           <Pressable
@@ -165,10 +203,20 @@ const SettingTemplate = ({
           >
             <HStack alignItems="center" justifyContent="space-between">
               <HStack p="2" space="3" alignItems="center" rounded="md">
-                <Icon as={<Feather />} name="camera" size="md" />
+                <Icon
+                  as={<Feather />}
+                  name="camera"
+                  size="md"
+                  color={iconColor}
+                />
                 <Text fontSize="md">{t("rentalFarm")}</Text>
               </HStack>
-              <Icon as={<Feather />} name="chevron-right" size="md" />
+              <Icon
+                as={<Feather />}
+                name="chevron-right"
+                size="md"
+                color={iconColor}
+              />
             </HStack>
           </Pressable>
           <Pressable
@@ -179,10 +227,44 @@ const SettingTemplate = ({
           >
             <HStack alignItems="center" justifyContent="space-between">
               <HStack p="2" space="2" alignItems="center" rounded="md">
-                <Icon as={<Feather />} name="edit" size="md" />
+                <Icon
+                  as={<Feather />}
+                  name="edit"
+                  size="md"
+                  color={iconColor}
+                />
                 <Text fontSize="md">{t("editProfile")}</Text>
               </HStack>
-              <Icon as={<Feather />} name="chevron-right" size="md" />
+              <Icon
+                as={<Feather />}
+                name="chevron-right"
+                size="md"
+                color={iconColor}
+              />
+            </HStack>
+          </Pressable>
+          <Pressable
+            _pressed={{
+              opacity: 0.5,
+            }}
+            onPress={environmentNavigationHandler}
+          >
+            <HStack alignItems="center" justifyContent="space-between">
+              <HStack p="2" space="2" alignItems="center" rounded="md">
+                <Icon
+                  as={<Feather />}
+                  name="globe"
+                  size="md"
+                  color={iconColor}
+                />
+                <Text fontSize="md">{t("environment")}</Text>
+              </HStack>
+              <Icon
+                as={<Feather />}
+                name="chevron-right"
+                size="md"
+                color={iconColor}
+              />
             </HStack>
           </Pressable>
           <Pressable
@@ -205,10 +287,20 @@ const SettingTemplate = ({
           >
             <HStack alignItems="center" justifyContent="space-between">
               <HStack p="2" space="2" alignItems="center" rounded="md">
-                <Icon as={<Feather />} name="log-out" size="md" />
+                <Icon
+                  as={<Feather />}
+                  name="log-out"
+                  size="md"
+                  color={iconColor}
+                />
                 <Text fontSize="md">{t("signout")}</Text>
               </HStack>
-              <Icon as={<Feather />} name="chevron-right" size="md" />
+              <Icon
+                as={<Feather />}
+                name="chevron-right"
+                size="md"
+                color={iconColor}
+              />
             </HStack>
           </Pressable>
         </VStack>

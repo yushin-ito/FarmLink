@@ -1,7 +1,15 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 
-import { Box, VStack, HStack, IconButton, Icon, FlatList } from "native-base";
+import {
+  Box,
+  VStack,
+  HStack,
+  IconButton,
+  Icon,
+  FlatList,
+  useColorModeValue,
+} from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
@@ -31,6 +39,8 @@ const SearchTalkTemplate = ({
   goBackNavigationHandler,
 }: SearchTalkTemplateProps) => {
   const { t } = useTranslation("talk");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -73,7 +83,9 @@ const SearchTalkTemplate = ({
             />
             <IconButton
               onPress={goBackNavigationHandler}
-              icon={<Icon as={<Feather name="x" />} size="6" />}
+              icon={
+                <Icon as={<Feather name="x" />} size="6" color={iconColor} />
+              }
               variant="unstyled"
               _pressed={{
                 opacity: 0.5,
@@ -87,7 +99,11 @@ const SearchTalkTemplate = ({
               <SearchTalkItem
                 item={item}
                 onPress={() =>
-                  talkChatNavigationHandler(item.talkId, item.to.token, item.to.name)
+                  talkChatNavigationHandler(
+                    item.talkId,
+                    item.to.token,
+                    item.to.name
+                  )
                 }
               />
             )}

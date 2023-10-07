@@ -7,6 +7,7 @@ import {
   Icon,
   Center,
   VStack,
+  useColorModeValue,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -24,6 +25,12 @@ type LikeItemProps = {
 const LikeItem = memo(
   ({ type, item, onPressRight, onPress }: LikeItemProps) => {
     const { t } = useTranslation("setting");
+    const bgColor = useColorModeValue("white", "#171717");
+    const pressedColor = useColorModeValue("#f5f5f5", "#262626");
+    const imageColor = useColorModeValue("muted.200", "muted.600");
+    const textColor = useColorModeValue("muted.600", "muted.300");
+    const iconColor = useColorModeValue("muted.600", "muted.100");
+
     return (
       <Swipeable
         enabled={!(item.farm?.privated || item.rental?.privated)}
@@ -45,10 +52,10 @@ const LikeItem = memo(
         <TouchableHighlight
           onPress={onPress}
           style={{
-            backgroundColor: "white",
+            backgroundColor: bgColor,
             opacity: item.farm?.privated || item.rental?.privated ? 0.6 : 1,
           }}
-          underlayColor="#f5f5f5"
+          underlayColor={pressedColor}
           disabled={item.farm?.privated || item.rental?.privated}
         >
           <VStack alignItems="center">
@@ -64,7 +71,7 @@ const LikeItem = memo(
                   <Center
                     size="12"
                     rounded="md"
-                    bg="muted.100"
+                    bg={imageColor}
                     overflow="hidden"
                   >
                     {item.farm.device.imageUrl ? (
@@ -82,16 +89,23 @@ const LikeItem = memo(
                         as={<Feather />}
                         name="image"
                         size="lg"
-                        color="muted.600"
+                        color={iconColor}
                       />
                     )}
                   </Center>
-                  <VStack w="80%" space="1">
+                  <VStack
+                    w={
+                      item.farm?.privated || item.rental?.privated
+                        ? "70%"
+                        : "80%"
+                    }
+                    space="1"
+                  >
                     <Text bold fontSize="md">
                       {item.farm.name}
                     </Text>
                     <Text
-                      color="muted.600"
+                      color={textColor}
                       fontSize="xs"
                       numberOfLines={1}
                       ellipsizeMode="tail"
@@ -106,7 +120,7 @@ const LikeItem = memo(
                     size="12"
                     p="1"
                     rounded="md"
-                    bg="muted.100"
+                    bg={imageColor}
                     overflow="hidden"
                   >
                     {item.rental.imageUrls?.length ? (
@@ -119,7 +133,7 @@ const LikeItem = memo(
                         as={<Feather />}
                         name="image"
                         size="lg"
-                        color="muted.600"
+                        color={iconColor}
                       />
                     )}
                   </Center>
@@ -128,7 +142,7 @@ const LikeItem = memo(
                       {item.rental.name}
                     </Text>
                     <Text
-                      color="muted.600"
+                      color={textColor}
                       fontSize="xs"
                       numberOfLines={1}
                       ellipsizeMode="tail"
@@ -141,7 +155,12 @@ const LikeItem = memo(
               {item.farm?.privated || item.rental?.privated ? (
                 <Text bold>{t("private")}</Text>
               ) : (
-                <Icon as={<Feather />} name="chevron-right" size="md" />
+                <Icon
+                  as={<Feather />}
+                  name="chevron-right"
+                  size="md"
+                  color={iconColor}
+                />
               )}
             </HStack>
             <Divider w="90%" bg="muted.200" />

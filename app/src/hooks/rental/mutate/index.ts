@@ -33,6 +33,7 @@ const postRentalImage = async (base64: string) => {
 };
 
 const deleteRental = async (rentalId: number) => {
+  await supabase.from("notification").delete().eq("rental", rentalId);
   await supabase.from("like").delete().eq("rentalId", rentalId);
   const { data, error } = await supabase
     .from("rental")

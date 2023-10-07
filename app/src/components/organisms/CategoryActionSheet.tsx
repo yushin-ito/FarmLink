@@ -1,4 +1,4 @@
-import { Actionsheet, Text, Radio, Box } from "native-base";
+import { Actionsheet, Text, Radio, Box, useColorModeValue } from "native-base";
 import React, { Dispatch, SetStateAction, memo } from "react";
 import { Category, getCategories } from "../../functions";
 import { useTranslation } from "react-i18next";
@@ -18,8 +18,11 @@ const CategoryActionSheet = memo(
     setCategoryIndex,
   }: CategoryActionSheetProps) => {
     const { t } = useTranslation("community");
+    const textColor = useColorModeValue("muted.600", "muted.200");
+    
     const categories = getCategories()
     categories.splice(0, 1, "all", "joined")
+
     return (
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
@@ -42,7 +45,7 @@ const CategoryActionSheet = memo(
                   colorScheme="brand"
                 >
                   <Box ml="1" w="100%">
-                    <Text color="muted.600" bold>
+                    <Text color={textColor} bold>
                       {t(category as Category)}
                     </Text>
                   </Box>

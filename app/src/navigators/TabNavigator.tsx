@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon, Text, useToast } from "native-base";
+import { Icon, Text, useColorModeValue, useToast } from "native-base";
 import { TabParamList } from "../types";
 import MapNavigator from "./MapNavigator";
 import FarmNavigator from "./FarmNavigator";
@@ -29,6 +29,10 @@ const TabNavigator = () => {
     "talk",
     "setting",
   ]);
+  const bgColor = useColorModeValue("white", "#262626");
+  const borderColor = useColorModeValue("#d4d4d4", "#525252");
+  const iconColor = useColorModeValue("muted.400", "muted.200");
+
   const toast = useToast();
   const { session } = useAuth();
 
@@ -94,15 +98,9 @@ const TabNavigator = () => {
         tabBarStyle: {
           position: "absolute",
           display: getTabStyle(route) ? "flex" : "none",
-          borderColor: "#e5e5e5",
-          borderTopWidth: Platform.OS === "android" ? 1 : 0,
-          shadowColor: "#737373",
-          shadowOffset: {
-            width: 0,
-            height: -0.5,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 4,
+          backgroundColor: bgColor,
+          borderColor: borderColor,
+          borderTopWidth: 1,
           height: Platform.OS === "android" ? 70 : 90,
           paddingTop: 6,
           paddingBottom: Platform.OS === "android" ? 16 : 32,
@@ -120,14 +118,14 @@ const TabNavigator = () => {
               as={<Feather />}
               name="map-pin"
               size={focused ? "lg" : "md"}
-              color={focused ? "brand.600" : "muted.400"}
+              color={focused ? "brand.600" : iconColor}
               mt="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
               fontSize={Platform.OS === "android" ? "2xs" : "xs"}
-              color={focused ? "brand.600" : "muted.400"}
+              color={focused ? "brand.600" : iconColor}
             >
               {t("map:search")}
             </Text>
@@ -143,14 +141,14 @@ const TabNavigator = () => {
               as={<Feather />}
               name="users"
               size={focused ? "lg" : "md"}
-              color={focused ? "brand.600" : "muted.400"}
+              color={focused ? "brand.600" : iconColor}
               mt="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
               fontSize={Platform.OS === "android" ? "2xs" : "xs"}
-              color={focused ? "brand.600" : "muted.400"}
+              color={focused ? "brand.600" : iconColor}
             >
               {t("community:community")}
             </Text>
@@ -181,14 +179,14 @@ const TabNavigator = () => {
               as={<Feather />}
               name="message-circle"
               size={focused ? "lg" : "md"}
-              color={focused ? "brand.600" : "muted.400"}
+              color={focused ? "brand.600" : iconColor}
               mt="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
               fontSize={Platform.OS === "android" ? "2xs" : "xs"}
-              color={focused ? "brand.600" : "muted.400"}
+              color={focused ? "brand.600" : iconColor}
             >
               {t("talk:talk")}
             </Text>
@@ -204,14 +202,14 @@ const TabNavigator = () => {
               as={<AntDesign />}
               name="setting"
               size={focused ? "lg" : "md"}
-              color={focused ? "brand.600" : "muted.400"}
+              color={focused ? "brand.600" : iconColor}
               mt="1"
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
               fontSize={Platform.OS === "android" ? "2xs" : "xs"}
-              color={focused ? "brand.600" : "muted.400"}
+              color={focused ? "brand.600" : iconColor}
             >
               {t("setting:setting")}
             </Text>

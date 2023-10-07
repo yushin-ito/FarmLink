@@ -1,6 +1,14 @@
 import React, { memo } from "react";
 import { GetTalksResponse } from "../../hooks/talk/query";
-import { Divider, HStack, Pressable, Text, Icon, VStack } from "native-base";
+import {
+  Divider,
+  HStack,
+  Pressable,
+  Text,
+  Icon,
+  VStack,
+  useColorModeValue,
+} from "native-base";
 import { Feather } from "@expo/vector-icons";
 import Avatar from "../molecules/Avatar";
 
@@ -10,11 +18,15 @@ type SearchTalkItemProps = {
 };
 
 const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
+  const pressedColor = useColorModeValue("muted.100", "muted.800");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   return (
     <Pressable
       onPress={onPress}
       alignItems="center"
-      _pressed={{ bg: "muted.200" }}
+      _pressed={{ bg: pressedColor }}
     >
       <HStack
         w="100%"
@@ -36,7 +48,7 @@ const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
               {item.to.name}
             </Text>
             <Text
-              color="muted.600"
+              color={textColor}
               fontSize="xs"
               numberOfLines={1}
               ellipsizeMode="tail"
@@ -45,7 +57,12 @@ const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
             </Text>
           </VStack>
         </HStack>
-        <Icon as={<Feather />} name="chevron-right" size="md" />
+        <Icon
+          as={<Feather />}
+          name="chevron-right"
+          size="md"
+          color={iconColor}
+        />
       </HStack>
       <Divider w="90%" bg="muted.200" />
     </Pressable>

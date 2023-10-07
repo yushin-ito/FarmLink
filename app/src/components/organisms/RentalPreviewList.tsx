@@ -7,6 +7,7 @@ import {
   FlatList,
   Text,
   Pressable,
+  useColorModeValue,
 } from "native-base";
 import React, {
   Dispatch,
@@ -27,7 +28,7 @@ import { wait } from "../../functions";
 
 type RentalPreviewListProps = {
   rentals: GetRentalsResponse | undefined;
-  userId: string
+  userId: string;
   rentalId: number | null;
   setRegion: Dispatch<SetStateAction<LatLng | null>>;
   rentalDetailNavigationHandler: (rentalId: number) => void;
@@ -42,6 +43,12 @@ const RentalPreviewList = memo(
     rentalDetailNavigationHandler,
   }: RentalPreviewListProps) => {
     const { t } = useTranslation("map");
+    const bgColor = useColorModeValue("white", "muted.800");
+    const pressedColor = useColorModeValue("muted.100", "muted.900");
+    const imageColor = useColorModeValue("muted.200", "muted.600");
+    const textColor = useColorModeValue("muted.600", "muted.300");
+    const iconColor = useColorModeValue("muted.600", "muted.100");
+
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
 
@@ -89,7 +96,7 @@ const RentalPreviewList = memo(
                   p="4"
                   space="4"
                   rounded="xl"
-                  bg={isPressed ? "muted.100" : "white"}
+                  bg={isPressed ? pressedColor : bgColor}
                   shadow="1"
                   style={{
                     transform: [
@@ -103,7 +110,7 @@ const RentalPreviewList = memo(
                     w="24"
                     h="24"
                     rounded="md"
-                    bg="muted.100"
+                    bg={imageColor}
                     overflow="hidden"
                   >
                     {item.imageUrls?.length ? (
@@ -116,7 +123,7 @@ const RentalPreviewList = memo(
                         as={<Feather />}
                         name="image"
                         size="2xl"
-                        color="muted.600"
+                        color={iconColor}
                       />
                     )}
                   </Center>
@@ -129,7 +136,7 @@ const RentalPreviewList = memo(
                       {item.name}
                     </Heading>
                     <Text
-                      color="muted.600"
+                      color={textColor}
                       fontSize="xs"
                       numberOfLines={1}
                       ellipsizeMode="tail"
@@ -141,7 +148,7 @@ const RentalPreviewList = memo(
                         <Text color="muted.400" bold fontSize="xs">
                           {t("area")}
                         </Text>
-                        <Text color="muted.600" bold fontSize="sm">
+                        <Text color={textColor} bold fontSize="sm">
                           {item?.area ?? t("unknown")}
                         </Text>
                       </VStack>
@@ -149,7 +156,7 @@ const RentalPreviewList = memo(
                         <Text color="muted.400" bold fontSize="xs">
                           {t("fee")}
                         </Text>
-                        <Text color="muted.600" bold fontSize="sm">
+                        <Text color={textColor} bold fontSize="sm">
                           {item?.fee ?? t("unknown")}
                         </Text>
                       </VStack>
@@ -157,7 +164,7 @@ const RentalPreviewList = memo(
                         <Text color="muted.400" bold fontSize="xs">
                           {t("equipment")}
                         </Text>
-                        <Text color="muted.600" bold fontSize="sm">
+                        <Text color={textColor} bold fontSize="sm">
                           {item?.equipment ?? t("unknown")}
                         </Text>
                       </VStack>

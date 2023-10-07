@@ -6,6 +6,7 @@ import {
   Icon,
   FlatList,
   Text,
+  useColorModeValue,
 } from "native-base";
 import React from "react";
 import Fab from "../molecules/Fab";
@@ -50,6 +51,7 @@ const FarmListTemplate = ({
   settingNavigationHandler,
 }: FarmListTemplateProps) => {
   const { t } = useTranslation("farm");
+  const textColor = useColorModeValue("muted.600", "muted.300");
 
   return (
     <Box flex={1} safeAreaTop>
@@ -79,11 +81,7 @@ const FarmListTemplate = ({
               onPress={() =>
                 item.latitude &&
                 item.longitude &&
-                mapNavigationHandler(
-                  item.farmId,
-                  item.latitude,
-                  item.longitude
-                )
+                mapNavigationHandler(item.farmId, item.latitude, item.longitude)
               }
               onPressLeft={() =>
                 item.privated
@@ -111,7 +109,7 @@ const FarmListTemplate = ({
               lineHeight="2xl"
               fontSize="md"
               textAlign="center"
-              color="muted.600"
+              color={textColor}
             >
               {t("notExistFarm")}
             </Text>

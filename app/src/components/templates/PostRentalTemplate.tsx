@@ -15,6 +15,7 @@ import {
   Center,
   FlatList,
   Pressable,
+  useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import MapView, { Marker } from "react-native-maps";
@@ -65,6 +66,10 @@ const PostRentalTemplate = ({
   goBackNavigationHandler,
 }: PostRentalTemplateProps) => {
   const { t } = useTranslation("setting");
+  const imageColor = useColorModeValue("muted.200", "muted.600");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const {
     control,
     handleSubmit,
@@ -96,13 +101,19 @@ const PostRentalTemplate = ({
       <HStack mb="4" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather name="chevron-left" />}
+              size="2xl"
+              color={iconColor}
+            />
+          }
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("rental")}</Heading>
+        <Heading textAlign="center">{t("createRental")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="x" />} size="xl" />}
+          icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
           variant="unstyled"
         />
       </HStack>
@@ -123,13 +134,13 @@ const PostRentalTemplate = ({
                 data={base64}
                 ListFooterComponent={
                   <Pressable onPress={pickImageByLibrary}>
-                    <Center w={width - 80} h="100%" bg="muted.200">
+                    <Center w={width - 80} h="100%" bg={imageColor}>
                       <Icon as={<Feather />} name="camera" size="2xl" />
                     </Center>
                   </Pressable>
                 }
                 renderItem={({ item }) => (
-                  <Box w={width - 80} h="100%" bg="muted.200">
+                  <Box w={width - 80} h="100%" bg={imageColor}>
                     <Image
                       source={{ uri: "data:image/png;base64," + item }}
                       style={{ flex: 1 }}
@@ -205,7 +216,7 @@ const PostRentalTemplate = ({
                         >
                           {errors.name && <Text>{errors.name.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -243,7 +254,7 @@ const PostRentalTemplate = ({
                             <Text>{errors.description.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">
+                        <Text color={textColor}>
                           {value?.length ?? 0} / 100
                         </Text>
                       </HStack>
@@ -296,7 +307,7 @@ const PostRentalTemplate = ({
                         >
                           {errors.fee && <Text>{errors.fee.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -346,7 +357,7 @@ const PostRentalTemplate = ({
                         >
                           {errors.area && <Text>{errors.area.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -398,7 +409,7 @@ const PostRentalTemplate = ({
                             <Text>{errors.equipment.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -412,7 +423,7 @@ const PostRentalTemplate = ({
               />
             </FormControl>
             <VStack space="1">
-              <Text bold color="muted.600" fontSize="md">
+              <Text bold color={textColor} fontSize="md">
                 {t("setLocation")}
               </Text>
               {isLoadingPosition ? (
@@ -449,9 +460,9 @@ const PostRentalTemplate = ({
                 </Text>
               </HStack>
               {!isLoadingPosition && address && (
-                <Text mt="1" color="muted.600">{`${t("address")}: ${address.city}${
-                  address.name
-                }`}</Text>
+                <Text mt="1" color={textColor}>{`${t("address")}: ${
+                  address.city
+                }${address.name}`}</Text>
               )}
             </VStack>
           </VStack>

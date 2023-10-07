@@ -30,9 +30,7 @@ const languageDetector: LanguageDetectorAsyncModule = {
     }
     return locale;
   },
-  cacheUserLanguage: async (lng) => {
-    await AsyncStorage.setItem("@locale", lng);
-  },
+  cacheUserLanguage: () => {},
 };
 
 i18n

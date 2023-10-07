@@ -9,6 +9,7 @@ import {
   Icon,
   FlatList,
   Spinner,
+  useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
@@ -50,6 +51,8 @@ const SearchMapTemplate = ({
   goBackNavigationHandler,
 }: SearchMapTemplateProps) => {
   const { t } = useTranslation("map");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -95,7 +98,9 @@ const SearchMapTemplate = ({
             />
             <IconButton
               onPress={goBackNavigationHandler}
-              icon={<Icon as={<Feather name="x" />} size="6" />}
+              icon={
+                <Icon as={<Feather name="x" />} size="6" color={iconColor} />
+              }
               variant="unstyled"
               _pressed={{
                 opacity: 0.5,

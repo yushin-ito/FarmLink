@@ -95,6 +95,7 @@ export type SettingStackParamList = {
   PostProfile: undefined;
   LikeList: undefined;
   Notification: undefined;
+  Environment: undefined
 };
 
 export type MapStackScreenProps<Screen extends keyof MapStackParamList> =

@@ -10,6 +10,7 @@ import {
   FlatList,
   Text,
   Pressable,
+  useColorModeValue,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
@@ -46,19 +47,27 @@ const LikeListTemplate = ({
   goBackNavigationHandler,
 }: LikeListTemplateProps) => {
   const { t } = useTranslation("setting");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
 
   return (
     <Box flex={1} safeAreaTop>
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather name="chevron-left" />}
+              size="2xl"
+              color={iconColor}
+            />
+          }
           variant="unstyled"
         />
         <Heading textAlign="center">{t("likeList")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="x" />} size="xl" />}
+          icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
           variant="unstyled"
         />
       </HStack>
@@ -119,7 +128,7 @@ const LikeListTemplate = ({
                 lineHeight="2xl"
                 fontSize="md"
                 textAlign="center"
-                color="muted.600"
+                color={textColor}
               >
                 {t("notExistFarmLike")}
               </Text>
@@ -156,7 +165,7 @@ const LikeListTemplate = ({
                 lineHeight="2xl"
                 fontSize="md"
                 textAlign="center"
-                color="muted.600"
+                color={textColor}
               >
                 {t("notExistRentalLike")}
               </Text>

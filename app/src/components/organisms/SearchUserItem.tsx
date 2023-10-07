@@ -1,8 +1,18 @@
 import React, { memo } from "react";
 import { SearchUsersResponse } from "../../hooks/user/mutate";
-import { Divider, HStack, Pressable, Text, Icon, Center } from "native-base";
+import {
+  Divider,
+  HStack,
+  Pressable,
+  Text,
+  Icon,
+  Center,
+  useColorModeValue,
+  VStack,
+} from "native-base";
 import { Feather } from "@expo/vector-icons";
 import Avatar from "../molecules/Avatar";
+import { useTranslation } from "react-i18next";
 
 type SearchUserItemProps = {
   item: SearchUsersResponse[number];
@@ -12,11 +22,15 @@ type SearchUserItemProps = {
 
 const SearchUserItem = memo(
   ({ item, onPress, selected }: SearchUserItemProps) => {
+    const { t } = useTranslation("setting");
+    const pressedColor = useColorModeValue("muted.100", "muted.800");
+    const textColor = useColorModeValue("muted.600", "muted.300");
+
     return (
       <Pressable
         onPress={onPress}
         alignItems="center"
-        _pressed={{ bg: "muted.200" }}
+        _pressed={{ bg: pressedColor }}
       >
         <HStack
           w="100%"
@@ -33,9 +47,19 @@ const SearchUserItem = memo(
               size="9"
               updatedAt={item.updatedAt}
             />
-            <Text bold fontSize="md">
-              {item?.name}
-            </Text>
+            <VStack w="80%" space="1">
+              <Text bold fontSize="md">
+                {item?.name}
+              </Text>
+              <Text
+                color={textColor}
+                fontSize="xs"
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {item.introduction ?? t("noProfile")}
+              </Text>
+            </VStack>
           </HStack>
           <Center
             size="5"

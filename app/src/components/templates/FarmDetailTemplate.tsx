@@ -10,6 +10,7 @@ import {
   Skeleton,
   Text,
   VStack,
+  useColorModeValue,
 } from "native-base";
 import React from "react";
 import { Platform } from "react-native";
@@ -62,6 +63,10 @@ const FarmDetailTemplate = ({
   goBackNavigationHandler,
 }: FarmDetailTemplateProps) => {
   const { t } = useTranslation("map");
+  const bgColor = useColorModeValue("white", "muted.800");
+  const borderColor = useColorModeValue("muted.300", "muted.600");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const { width } = useWindowDimensions();
 
   return (
@@ -75,12 +80,21 @@ const FarmDetailTemplate = ({
       >
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather />} name="chevron-left" size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather />}
+              name="chevron-left"
+              size="2xl"
+              color={iconColor}
+            />
+          }
           variant="unstyled"
         />
         <IconButton
           onPress={() => Alert.alert(t("dev"))}
-          icon={<Icon as={<Feather />} name="share" size="lg" />}
+          icon={
+            <Icon as={<Feather />} name="share" size="lg" color={iconColor} />
+          }
           variant="unstyled"
         />
       </HStack>
@@ -120,7 +134,7 @@ const FarmDetailTemplate = ({
                 </Heading>
                 <Text>
                   {address && (
-                    <Text color="muted.600">{`${address.city} ${address.name}`}</Text>
+                    <Text color="muted.400">{`${address.city} ${address.name}`}</Text>
                   )}
                 </Text>
               </VStack>
@@ -239,10 +253,9 @@ const FarmDetailTemplate = ({
           px="6"
           space="2"
           shadow="2"
-          borderColor="muted.200"
-          borderTopWidth={Platform.OS === "android" ? "1" : "0"}
-          borderTopRadius={Platform.OS === "android" ? "none" : "3xl"}
-          bg="white"
+          borderColor={borderColor}
+          borderTopWidth="0.5"
+          bg={bgColor}
           alignItems="center"
           justifyContent="space-between"
         >
@@ -259,7 +272,7 @@ const FarmDetailTemplate = ({
               variant="unstyled"
               borderWidth="1"
               rounded="lg"
-              borderColor="muted.300"
+              borderColor={borderColor}
             />
             <IconButton
               icon={
@@ -277,7 +290,7 @@ const FarmDetailTemplate = ({
               variant="unstyled"
               borderWidth="1"
               rounded="lg"
-              borderColor="muted.300"
+              borderColor={borderColor}
             />
           </HStack>
           <Button

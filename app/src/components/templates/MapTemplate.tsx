@@ -7,14 +7,10 @@ import {
   VStack,
   Text,
   Center,
+  useColorModeValue,
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-} from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import MapView, { Marker, LatLng } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import { GetFarmsResponse } from "../../hooks/farm/query";
@@ -58,6 +54,8 @@ const MapTemplate = ({
 }: MapTemplateProps) => {
   const { t } = useTranslation("map");
   const mapRef = useRef<MapView>(null);
+  const bgColor = useColorModeValue("white", "muted.800");
+  const textColor = useColorModeValue("black", "white");
 
   useEffect(() => {
     if (mapRef.current && region && !isLoading) {
@@ -114,7 +112,7 @@ const MapTemplate = ({
           }) && (
             <Marker coordinate={position.coords}>
               <VStack alignItems="center">
-                <Text bold color="blueGray.600" fontSize="xs">
+                <Text bold fontSize="xs">
                   {t("current")}
                 </Text>
                 <Icon
@@ -143,7 +141,7 @@ const MapTemplate = ({
                     <VStack alignItems="center">
                       {item.latitude === region?.latitude &&
                         item.longitude === region?.longitude && (
-                          <Text bold color="blueGray.600" fontSize="xs">
+                          <Text bold fontSize="xs">
                             {item.name}
                           </Text>
                         )}
@@ -173,7 +171,7 @@ const MapTemplate = ({
                     <VStack alignItems="center">
                       {item.latitude === region?.latitude &&
                         item.longitude === region?.longitude && (
-                          <Text bold color="blueGray.600" fontSize="xs">
+                          <Text bold fontSize="xs">
                             {item.name}
                           </Text>
                         )}
@@ -192,7 +190,7 @@ const MapTemplate = ({
         <Box shadow="1" rounded="lg" bg="white">
           <SearchBar
             isReadOnly
-            bg="white"
+            bg={bgColor}
             placeholder={t(type === "farm" ? "searchFarm" : "searchRental")}
             onPressIn={searchMapNavigationHandler}
           />
@@ -215,11 +213,11 @@ const MapTemplate = ({
               px="3"
               py="1"
               rounded="full"
-              bg={type === "farm" ? "brand.600" : "white"}
+              bg={type === "farm" ? "brand.600" : bgColor}
               shadow="1"
               alignItems="center"
             >
-              <Text color={type === "farm" ? "white" : "black"}>
+              <Text color={type === "farm" ? "white" : textColor}>
                 {t("farm")}
               </Text>
             </Box>
@@ -241,11 +239,11 @@ const MapTemplate = ({
               px="3"
               py="1"
               rounded="full"
-              bg={type === "rental" ? "brand.600" : "white"}
+              bg={type === "rental" ? "brand.600" : bgColor}
               shadow="1"
               alignItems="center"
             >
-              <Text color={type === "rental" ? "white" : "black"}>
+              <Text color={type === "rental" ? "white" : textColor}>
                 {t("rental")}
               </Text>
             </Box>

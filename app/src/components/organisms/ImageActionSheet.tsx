@@ -1,4 +1,4 @@
-import { Actionsheet, Icon } from "native-base";
+import { Actionsheet, Icon, useColorModeValue } from "native-base";
 import React, { memo } from "react";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
@@ -20,13 +20,18 @@ const ImageActionSheet = memo(
     pickImageByLibrary,
   }: ImageActionSheetProps) => {
     const { t } = useTranslation("setting");
+    const pressedColor = useColorModeValue("muted.300", "muted.700");
+    const iconColor = useColorModeValue("muted.500", "muted.300");
+
     return (
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
           <Actionsheet.Item
-            startIcon={<Icon as={<Feather />} name="camera" size="6" />}
+            startIcon={
+              <Icon as={<Feather />} name="camera" size="6" color={iconColor} />
+            }
             rounded="lg"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: pressedColor }}
             onPress={() => {
               pickImageByCamera();
               onClose();
@@ -35,9 +40,11 @@ const ImageActionSheet = memo(
             {t("camera")}
           </Actionsheet.Item>
           <Actionsheet.Item
-            startIcon={<Icon as={<Feather />} name="image" size="6" />}
+            startIcon={
+              <Icon as={<Feather />} name="image" size="6" color={iconColor} />
+            }
             rounded="lg"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: pressedColor }}
             onPress={() => {
               pickImageByLibrary();
               onClose();
@@ -46,9 +53,11 @@ const ImageActionSheet = memo(
             {t("image")}
           </Actionsheet.Item>
           <Actionsheet.Item
-            startIcon={<Icon as={<Feather />} name="trash" size="6" />}
+            startIcon={
+              <Icon as={<Feather />} name="trash" size="6" color={iconColor} />
+            }
             rounded="lg"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: pressedColor }}
             onPress={() => {
               onDelete();
               onClose();
@@ -58,7 +67,7 @@ const ImageActionSheet = memo(
           </Actionsheet.Item>
           <Actionsheet.Item
             rounded="lg"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: pressedColor }}
             onPress={onClose}
           >
             {t("cancel")}

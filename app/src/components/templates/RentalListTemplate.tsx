@@ -9,6 +9,7 @@ import {
   Icon,
   FlatList,
   Text,
+  useColorModeValue,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
@@ -47,19 +48,27 @@ const RentalListTemplate = ({
   goBackNavigationHandler,
 }: RentalListTemplateProps) => {
   const { t } = useTranslation("setting");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
 
   return (
     <Box flex={1} safeAreaTop>
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather name="chevron-left" />}
+              size="2xl"
+              color={iconColor}
+            />
+          }
           variant="unstyled"
         />
         <Heading textAlign="center">{t("rentalList")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="x" />} size="xl" />}
+          icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
           variant="unstyled"
         />
       </HStack>
@@ -107,7 +116,7 @@ const RentalListTemplate = ({
                 lineHeight="2xl"
                 fontSize="md"
                 textAlign="center"
-                color="muted.600"
+                color={textColor}
               >
                 {t("notExistRental")}
               </Text>

@@ -7,6 +7,7 @@ import {
   FlatList,
   Text,
   Pressable,
+  useColorModeValue,
 } from "native-base";
 import React, {
   Dispatch,
@@ -41,6 +42,12 @@ const FarmPreviewList = memo(
     farmDetailNavigationHandler,
   }: FarmPreviewListProps) => {
     const { t } = useTranslation("map");
+    const bgColor = useColorModeValue("white", "muted.800");
+    const pressedColor = useColorModeValue("muted.100", "muted.900");
+    const imageColor = useColorModeValue("muted.200", "muted.600");
+    const textColor = useColorModeValue("muted.600", "muted.300");
+    const iconColor = useColorModeValue("muted.600", "muted.100");
+
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
 
@@ -84,7 +91,7 @@ const FarmPreviewList = memo(
                   p="4"
                   space="4"
                   rounded="xl"
-                  bg={isPressed ? "muted.100" : "white"}
+                  bg={isPressed ? pressedColor : bgColor}
                   shadow="1"
                   style={{
                     transform: [
@@ -98,10 +105,10 @@ const FarmPreviewList = memo(
                     w="24"
                     h="24"
                     rounded="md"
-                    bg="muted.100"
+                    bg={imageColor}
                     overflow="hidden"
                   >
-                    {item.device?.imageUrl ? (
+                    {item.device.imageUrl ? (
                       <Image
                         source={{ uri: item.device?.imageUrl }}
                         style={{ width: 96, height: 96 }}
@@ -111,7 +118,7 @@ const FarmPreviewList = memo(
                         as={<Feather />}
                         name="image"
                         size="2xl"
-                        color="muted.600"
+                        color={iconColor}
                       />
                     )}
                   </Center>
@@ -124,7 +131,7 @@ const FarmPreviewList = memo(
                       {item.name}
                     </Heading>
                     <Text
-                      color="muted.600"
+                      color={textColor}
                       fontSize="xs"
                       numberOfLines={1}
                       ellipsizeMode="tail"
@@ -136,7 +143,7 @@ const FarmPreviewList = memo(
                         <Text color="muted.400" bold fontSize="xs">
                           {t("temperture")}
                         </Text>
-                        <Text color="muted.600" bold fontSize="sm">
+                        <Text color={textColor} bold fontSize="sm">
                           {item?.device?.temperture
                             ? item.device.temperture + "℃"
                             : t("unknown")}
@@ -146,7 +153,7 @@ const FarmPreviewList = memo(
                         <Text color="muted.400" bold fontSize="xs">
                           {t("humidity")}
                         </Text>
-                        <Text color="muted.600" bold fontSize="sm">
+                        <Text color={textColor} bold fontSize="sm">
                           {item?.device?.humidity
                             ? item.device.humidity + "%"
                             : t("unknown")}
@@ -156,7 +163,7 @@ const FarmPreviewList = memo(
                         <Text color="muted.400" bold fontSize="xs">
                           {t("moisture")}
                         </Text>
-                        <Text color="muted.600" bold fontSize="sm">
+                        <Text color={textColor} bold fontSize="sm">
                           {item?.device?.moisture
                             ? item.device.moisture + "℃"
                             : t("unknown")}

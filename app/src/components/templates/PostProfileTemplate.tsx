@@ -15,6 +15,7 @@ import {
   Icon,
   Center,
   Spinner,
+  useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -23,7 +24,7 @@ import { GetUserResponse } from "../../hooks/user/query";
 
 type PostProfileTemplateProps = {
   user: GetUserResponse | null | undefined;
-  isLoadingUser: boolean
+  isLoadingUser: boolean;
   isLoadingPostProfile: boolean;
   postProfile: (name: string, introduction: string) => Promise<void>;
   goBackNavigationHandler: () => void;
@@ -42,6 +43,9 @@ const PostProfileTemplate = ({
   goBackNavigationHandler,
 }: PostProfileTemplateProps) => {
   const { t } = useTranslation("setting");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const {
     control,
     handleSubmit,
@@ -54,7 +58,6 @@ const PostProfileTemplate = ({
     user?.introduction && setValue("introduction", user.introduction);
   }, [user]);
 
-  
   if (isLoadingUser) {
     return (
       <Center flex={1}>
@@ -79,13 +82,21 @@ const PostProfileTemplate = ({
             >
               <IconButton
                 onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+                icon={
+                  <Icon
+                    as={<Feather name="chevron-left" />}
+                    size="2xl"
+                    color={iconColor}
+                  />
+                }
                 variant="unstyled"
               />
               <Heading textAlign="center">{t("editProfile")}</Heading>
               <IconButton
                 onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="x" />} size="xl" />}
+                icon={
+                  <Icon as={<Feather name="x" />} size="xl" color={iconColor} />
+                }
                 variant="unstyled"
               />
             </HStack>
@@ -128,7 +139,7 @@ const PostProfileTemplate = ({
                           >
                             {errors.name && <Text>{errors.name.message}</Text>}
                           </FormControl.ErrorMessage>
-                          <Text color="muted.600">{value?.length} / 20</Text>
+                          <Text color={textColor}>{value?.length} / 20</Text>
                         </HStack>
                       </VStack>
                     );
@@ -181,7 +192,7 @@ const PostProfileTemplate = ({
                               <Text>{errors.introduction.message}</Text>
                             )}
                           </FormControl.ErrorMessage>
-                          <Text color="muted.600">
+                          <Text color={textColor}>
                             {value?.length ?? 0} / 30
                           </Text>
                         </HStack>

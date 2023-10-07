@@ -7,6 +7,7 @@ import {
   Pressable,
   Text,
   VStack,
+  useColorModeValue,
 } from "native-base";
 import { GetTalksResponse } from "../../hooks/talk/query";
 import { useTranslation } from "react-i18next";
@@ -24,6 +25,10 @@ type TalkItemProps = {
 const TalkItem = memo(
   ({ item, locale, onPressRight, onPress }: TalkItemProps) => {
     const { t } = useTranslation("talk");
+    const bgColor = useColorModeValue("white", "#171717");
+    const pressedColor = useColorModeValue("#f5f5f5", "#262626");
+    const textColor = useColorModeValue("muted.600", "muted.300")
+
     return (
       <Swipeable
         renderRightActions={() => (
@@ -43,8 +48,8 @@ const TalkItem = memo(
       >
         <TouchableHighlight
           onPress={onPress}
-          style={{ backgroundColor: "white" }}
-          underlayColor="#f5f5f5"
+          style={{ backgroundColor: bgColor }}
+          underlayColor={pressedColor}
         >
           <VStack>
             <HStack h="20" px="9" py="3">
@@ -69,7 +74,7 @@ const TalkItem = memo(
                   </Text>
                 </HStack>
                 <Text
-                  color="muted.600"
+                  color={textColor}
                   fontSize="xs"
                   numberOfLines={1}
                   ellipsizeMode="tail"

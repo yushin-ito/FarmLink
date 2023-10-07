@@ -10,6 +10,7 @@ import {
   Menu,
   Spinner,
   Text,
+  useColorModeValue,
   useDisclose,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
@@ -68,6 +69,11 @@ const ChatTemplate = ({
   goBackNavigationHandler,
 }: ChatTemplateProps) => {
   const { t } = useTranslation(["chat", "community", "talk"]);
+  const bgColor = useColorModeValue("muted.100", "muted.800");
+  const menuColor = useColorModeValue("muted.100", "muted.700");
+  const pressedColor = useColorModeValue("muted.100", "muted.900");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const {
     isOpen: isChatOpen,
     onOpen: onChatOpen,
@@ -108,7 +114,13 @@ const ChatTemplate = ({
           <HStack alignItems="center">
             <IconButton
               onPress={goBackNavigationHandler}
-              icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+              icon={
+                <Icon
+                  as={<Feather name="chevron-left" />}
+                  size="2xl"
+                  color={iconColor}
+                />
+              }
               variant="unstyled"
             />
             <Heading fontSize="xl">{title}</Heading>
@@ -117,7 +129,7 @@ const ChatTemplate = ({
             mr="6"
             shadow="3"
             rounded="lg"
-            bg="white"
+            bg={menuColor}
             trigger={(props) => (
               <IconButton
                 icon={
@@ -126,6 +138,7 @@ const ChatTemplate = ({
                     name="align-justify"
                     size="md"
                     mr="3"
+                    color={iconColor}
                   />
                 }
                 variant="unstyled"
@@ -140,7 +153,7 @@ const ChatTemplate = ({
               <Menu.Item
                 pl="1"
                 onPress={onImageOpen}
-                _pressed={{ bg: "muted.200" }}
+                _pressed={{ bg: pressedColor }}
               >
                 <Text fontSize="md">{t("community:changeIcon")}</Text>
               </Menu.Item>
@@ -168,7 +181,7 @@ const ChatTemplate = ({
                   ]
                 )
               }
-              _pressed={{ bg: "muted.200" }}
+              _pressed={{ bg: pressedColor }}
             >
               <Text fontSize="md">
                 {type === "community"
@@ -179,14 +192,14 @@ const ChatTemplate = ({
           </Menu>
         </HStack>
         {isLoadingChats ? (
-          <Center flex={1} bg="muted.100">
+          <Center flex={1} bg={bgColor}>
             <Spinner color="muted.400" />
           </Center>
         ) : (
           <FlatList
             w="100%"
             px="5"
-            bg="muted.100"
+            bg={bgColor}
             inverted
             data={chats}
             onEndReached={readMore}

@@ -11,6 +11,7 @@ import {
   Link,
   Text,
   VStack,
+  useColorModeValue,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
@@ -40,8 +41,11 @@ const SignUpTemplate = memo(
     signInNavigationHandler,
     goBackNavigationHandler,
   }: SignUpTemplateProps) => {
-    const [showPassword, setShowPassword] = useState(false);
     const { t } = useTranslation("auth");
+    const textColor = useColorModeValue("muted.500", "muted.300");
+    const iconColor = useColorModeValue("muted.400", "muted.200");
+
+    const [showPassword, setShowPassword] = useState(false);
     const {
       control,
       handleSubmit,
@@ -52,7 +56,13 @@ const SignUpTemplate = memo(
       <VStack flex={1} safeAreaTop>
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather name="chevron-left" />}
+              size="2xl"
+              color={iconColor}
+            />
+          }
           alignSelf="flex-start"
           variant="unstyled"
         />
@@ -73,6 +83,7 @@ const SignUpTemplate = memo(
                   <Input
                     returnKeyType="done"
                     placeholder={t("enter")}
+                    placeholderTextColor="muted.400"
                     InputRightElement={
                       <Icon
                         as={<Feather />}
@@ -106,6 +117,7 @@ const SignUpTemplate = memo(
                     keyboardType="email-address"
                     returnKeyType="done"
                     placeholder={t("enter")}
+                    placeholderTextColor="muted.400"
                     InputRightElement={
                       <Icon
                         as={<Feather />}
@@ -142,6 +154,7 @@ const SignUpTemplate = memo(
                   <Input
                     returnKeyType="done"
                     placeholder={t("enter")}
+                    placeholderTextColor="muted.400"
                     type={showPassword ? "text" : "password"}
                     InputRightElement={
                       <IconButton
@@ -199,7 +212,7 @@ const SignUpTemplate = memo(
                 </Text>
               </Button>
               <HStack mt="2" alignItems="center" space="2">
-                <Text color="muted.400">{t("notHaveAccount")}</Text>
+                <Text color={textColor}>{t("notHaveAccount")}</Text>
                 <Link
                   _text={{ color: "brand.600" }}
                   onPress={signInNavigationHandler}

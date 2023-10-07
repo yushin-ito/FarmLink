@@ -14,10 +14,16 @@ import {
   Text,
   Center,
   Skeleton,
+  useColorModeValue,
 } from "native-base";
 import { Image } from "expo-image";
 import { GetRentalResponse } from "../../hooks/rental/query";
-import { Alert, Platform, RefreshControl, useWindowDimensions } from "react-native";
+import {
+  Alert,
+  Platform,
+  RefreshControl,
+  useWindowDimensions,
+} from "react-native";
 import { useTranslation } from "react-i18next";
 import { LocationGeocodedAddress } from "expo-location";
 import { GetRentalLikesResponse } from "../../hooks/like/query";
@@ -61,6 +67,11 @@ const RentalDetailTemplate = ({
   goBackNavigationHandler,
 }: RentalDetailTemplateProps) => {
   const { t } = useTranslation("map");
+  const bgColor = useColorModeValue("white", "muted.800");
+  const borderColor = useColorModeValue("muted.300", "muted.600");
+  const imageColor = useColorModeValue("muted.200", "muted.600");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -75,12 +86,21 @@ const RentalDetailTemplate = ({
       >
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather />} name="chevron-left" size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather />}
+              name="chevron-left"
+              size="2xl"
+              color={iconColor}
+            />
+          }
           variant="unstyled"
         />
         <IconButton
           onPress={() => Alert.alert(t("dev"))}
-          icon={<Icon as={<Feather />} name="share" size="lg" />}
+          icon={
+            <Icon as={<Feather />} name="share" size="lg" color={iconColor} />
+          }
           variant="unstyled"
         />
       </HStack>
@@ -99,7 +119,7 @@ const RentalDetailTemplate = ({
               pagingEnabled
               data={rental.imageUrls}
               renderItem={({ item }) => (
-                <Box w={width} h="64" bg="muted.100">
+                <Box w={width} h="64" bg={imageColor}>
                   <Image
                     source={{ uri: item }}
                     style={{ flex: 1 }}
@@ -164,7 +184,7 @@ const RentalDetailTemplate = ({
                 </Heading>
                 <Text>
                   {address && (
-                    <Text color="muted.600">{`${address.city} ${address.name}`}</Text>
+                    <Text color="muted.400">{`${address.city} ${address.name}`}</Text>
                   )}
                 </Text>
               </VStack>
@@ -235,10 +255,9 @@ const RentalDetailTemplate = ({
           px="6"
           space="2"
           shadow="2"
-          borderColor="muted.200"
-          borderTopWidth={Platform.OS === "android" ? "1" : "0"}
-          borderTopRadius={Platform.OS === "android" ? "none" : "3xl"}
-          bg="white"
+          borderColor={borderColor}
+          borderTopWidth="0.5"
+          bg={bgColor}
           alignItems="center"
           justifyContent="space-between"
         >
@@ -254,7 +273,7 @@ const RentalDetailTemplate = ({
             variant="unstyled"
             borderWidth="1"
             rounded="lg"
-            borderColor="muted.300"
+            borderColor={borderColor}
             onPress={() => {
               !liked ? postLike() : deleteLike();
             }}

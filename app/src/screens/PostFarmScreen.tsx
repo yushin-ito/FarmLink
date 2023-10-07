@@ -98,15 +98,15 @@ const PostFarmScreen = () => {
       description: string,
       privated: boolean
     ) => {
-      if (session) {
+      if (session && position) {
         await mutateAsyncPostFarm({
           name,
           deviceId,
           description,
           ownerId: session.user.id,
           privated,
-          longitude: position?.coords.longitude,
-          latitude: position?.coords.latitude,
+          longitude: position.coords.longitude,
+          latitude: position.coords.latitude,
         });
       }
     },

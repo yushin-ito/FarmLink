@@ -10,7 +10,6 @@ export type SearchCommunitiesResponse = Awaited<
   ReturnType<typeof searchCommunities>
 >;
 
-
 const postCommunity = async (community: Community["Insert"]) => {
   const { data, error } = await supabase
     .from("community")
@@ -23,6 +22,7 @@ const postCommunity = async (community: Community["Insert"]) => {
 };
 
 const deleteCommunity = async (communityId: number) => {
+  await supabase.from("notification").delete().eq("communityId", communityId);
   await supabase.from("chat").delete().eq("communityId", communityId);
   const { data, error } = await supabase
     .from("community")

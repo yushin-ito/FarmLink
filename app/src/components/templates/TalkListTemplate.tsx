@@ -6,6 +6,7 @@ import {
   HStack,
   VStack,
   Text,
+  useColorModeValue,
 } from "native-base";
 import React from "react";
 import Fab from "../molecules/Fab";
@@ -52,6 +53,7 @@ const TalkListTemplate = ({
   searchTalkNavigationHandler,
 }: TalkListTemplateProps) => {
   const { t } = useTranslation("talk");
+  const textColor = useColorModeValue("muted.600", "muted.300");
 
   return (
     <Box flex={1} safeAreaTop>
@@ -86,7 +88,7 @@ const TalkListTemplate = ({
               lineHeight="2xl"
               fontSize="md"
               textAlign="center"
-              color="muted.600"
+              color={textColor}
             >
               {t("notExistTalk")}
             </Text>

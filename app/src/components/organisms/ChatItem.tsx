@@ -1,5 +1,12 @@
 import React, { memo } from "react";
-import { Box, HStack, Pressable, Text, VStack } from "native-base";
+import {
+  Box,
+  HStack,
+  Pressable,
+  Text,
+  VStack,
+  useColorModeValue,
+} from "native-base";
 import Avatar from "../molecules/Avatar";
 import { getTimeDistance } from "../../functions";
 import { Image } from "expo-image";
@@ -18,6 +25,7 @@ type ChatItemProps = {
 
 const ChatItem = memo(
   ({ item, authored, locale, onLongPress }: ChatItemProps) => {
+    const textColor = useColorModeValue("muted.600", "muted.200");
     const ASPECT = 0.7;
     const dimension = useWindowDimensions();
 
@@ -58,7 +66,7 @@ const ChatItem = memo(
                   {item.message}
                 </Text>
               </Box>
-              <Text mx="1" fontSize="10" color="muted.600">
+              <Text mx="1" fontSize="10" color={textColor}>
                 {getTimeDistance(item.createdAt, locale)}
               </Text>
             </VStack>
@@ -87,7 +95,7 @@ const ChatItem = memo(
                   />
                 </Box>
               </Box>
-              <Text mx="1" fontSize="10" color="muted.600">
+              <Text mx="1" fontSize="10" color={textColor}>
                 {getTimeDistance(item.createdAt, locale)}
               </Text>
             </VStack>

@@ -19,7 +19,7 @@ const Alert = memo(({ onPressCloseButton, text, status }: AlertProps) => {
     <NativeBaseAlert status={status} rounded="md">
       <HStack space="2" alignItems="center">
         <NativeBaseAlert.Icon />
-        <Text fontSize="md">{text}</Text>
+        <Text fontSize="md" color="black">{text}</Text>
         <IconButton
           onPress={onPressCloseButton}
           icon={<Icon as={<Feather name="x" />} size="3" />}

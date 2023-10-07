@@ -1,6 +1,14 @@
 import React, { memo } from "react";
 import { SearchCommunitiesResponse } from "../../hooks/community/mutate";
-import { Divider, HStack, Pressable, Text, Icon, VStack } from "native-base";
+import {
+  Divider,
+  HStack,
+  Pressable,
+  Text,
+  Icon,
+  VStack,
+  useColorModeValue,
+} from "native-base";
 import { Feather } from "@expo/vector-icons";
 import Avatar from "../molecules/Avatar";
 
@@ -11,11 +19,15 @@ type SearchCommunityItemProps = {
 
 const SearchCommunityItem = memo(
   ({ item, onPress }: SearchCommunityItemProps) => {
+    const pressedColor = useColorModeValue("muted.100", "muted.800");
+    const textColor = useColorModeValue("muted.600", "muted.300");
+    const iconColor = useColorModeValue("muted.600", "muted.100");
+
     return (
       <Pressable
         onPress={onPress}
         alignItems="center"
-        _pressed={{ bg: "muted.200" }}
+        _pressed={{ bg: pressedColor }}
       >
         <HStack
           w="100%"
@@ -27,7 +39,7 @@ const SearchCommunityItem = memo(
           <HStack alignItems="center" space="3">
             <Avatar
               size="9"
-              text={item.name.charAt(0)}
+              text={item.name?.charAt(0)}
               uri={item.imageUrl}
               color={item.color}
               updatedAt={item.updatedAt}
@@ -37,7 +49,7 @@ const SearchCommunityItem = memo(
                 {item.name}
               </Text>
               <Text
-                color="muted.600"
+                color={textColor}
                 fontSize="xs"
                 numberOfLines={1}
                 ellipsizeMode="tail"
@@ -46,7 +58,13 @@ const SearchCommunityItem = memo(
               </Text>
             </VStack>
           </HStack>
-          <Icon as={<Feather />} name="chevron-right" size="4" ml="2" />
+          <Icon
+            as={<Feather />}
+            name="chevron-right"
+            size="4"
+            ml="2"
+            color={iconColor}
+          />
         </HStack>
         <Divider w="90%" bg="muted.200" />
       </Pressable>

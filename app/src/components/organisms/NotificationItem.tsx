@@ -8,6 +8,7 @@ import {
   Center,
   VStack,
   Box,
+  useColorModeValue,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import { GetNotificationsResponse } from "../../hooks/notification/query";
@@ -28,6 +29,11 @@ type NotificationItemProps = {
 const NotificationItem = memo(
   ({ type, item, locale, onPress, onPressRight }: NotificationItemProps) => {
     const { t } = useTranslation("setting");
+    const bgColor = useColorModeValue("white", "#171717");
+    const pressedColor = useColorModeValue("#f5f5f5", "#262626");
+    const imageColor = useColorModeValue("muted.200", "muted.600");
+    const textColor = useColorModeValue("muted.600", "muted.300");
+    const iconColor = useColorModeValue("muted.600", "muted.100");
 
     return (
       <Swipeable
@@ -48,8 +54,8 @@ const NotificationItem = memo(
       >
         <TouchableHighlight
           onPress={onPress}
-          style={{ backgroundColor: "white" }}
-          underlayColor="#f5f5f5"
+          style={{ backgroundColor: bgColor }}
+          underlayColor={pressedColor}
         >
           <VStack alignItems="center">
             <HStack
@@ -71,25 +77,34 @@ const NotificationItem = memo(
                     <Center
                       size="12"
                       rounded="md"
-                      bg="muted.200"
+                      bg={imageColor}
                       overflow="hidden"
                     >
-                      <Image
-                        style={{ width: 48, height: 48 }}
-                        source={{
-                          uri:
-                            item.farm.device.imageUrl +
-                            "?=" +
-                            item.farm.device.updatedAt,
-                        }}
-                      />
+                      {item.farm.device.imageUrl ? (
+                        <Image
+                          style={{ width: 48, height: 48 }}
+                          source={{
+                            uri:
+                              item.farm.device.imageUrl +
+                              "?=" +
+                              item.farm.device.updatedAt,
+                          }}
+                        />
+                      ) : (
+                        <Icon
+                          as={<Feather />}
+                          name="image"
+                          size="lg"
+                          color={iconColor}
+                        />
+                      )}
                     </Center>
                   </HStack>
                   <VStack w="75%" space="1">
                     <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
                       {item.farm?.name + t("to") + item.from?.name + t("liked")}
                     </Text>
-                    <Text color="muted.500" fontSize="xs">
+                    <Text color={textColor} fontSize="xs">
                       {getTimeDistance(item.createdAt, locale)}
                     </Text>
                   </VStack>
@@ -121,7 +136,7 @@ const NotificationItem = memo(
                           as={<Feather />}
                           name="image"
                           size="lg"
-                          color="muted.600"
+                          color={iconColor}
                         />
                       )}
                     </Center>
@@ -133,7 +148,7 @@ const NotificationItem = memo(
                         item.from?.name +
                         t("liked")}
                     </Text>
-                    <Text color="muted.500" fontSize="xs">
+                    <Text color={textColor} fontSize="xs">
                       {getTimeDistance(item.createdAt, locale)}
                     </Text>
                   </VStack>
@@ -161,13 +176,18 @@ const NotificationItem = memo(
                     <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
                       {item.from?.name + t("send")}
                     </Text>
-                    <Text color="muted.500" fontSize="xs">
+                    <Text color={textColor} fontSize="xs">
                       {getTimeDistance(item.createdAt, locale)}
                     </Text>
                   </VStack>
                 </HStack>
               )}
-              <Icon as={<Feather />} name="chevron-right" size="md" />
+              <Icon
+                as={<Feather />}
+                name="chevron-right"
+                size="md"
+                color={iconColor}
+              />
             </HStack>
             <Divider w="90%" bg="muted.200" />
           </VStack>

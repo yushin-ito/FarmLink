@@ -8,6 +8,7 @@ import {
   Icon,
   VStack,
   Center,
+  useColorModeValue,
 } from "native-base";
 import { Image } from "expo-image";
 import { Feather } from "@expo/vector-icons";
@@ -19,11 +20,16 @@ type SearchMapItemProps = {
 };
 
 const SearchMapItem = memo(({ item, onPress }: SearchMapItemProps) => {
+  const pressedColor = useColorModeValue("muted.100", "muted.800");
+  const imageColor = useColorModeValue("muted.200", "muted.600");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   return (
     <Pressable
       onPress={onPress}
       alignItems="center"
-      _pressed={{ bg: "muted.200" }}
+      _pressed={{ bg: pressedColor }}
     >
       <HStack
         w="100%"
@@ -33,7 +39,7 @@ const SearchMapItem = memo(({ item, onPress }: SearchMapItemProps) => {
         justifyContent="space-between"
       >
         <HStack alignItems="center" space="3">
-          <Center size="12" rounded="md" bg="muted.200" overflow="hidden">
+          <Center size="12" rounded="md" bg={imageColor} overflow="hidden">
             {item?.imageUrl ? (
               <Image
                 style={{ width: 48, height: 48 }}
@@ -42,7 +48,7 @@ const SearchMapItem = memo(({ item, onPress }: SearchMapItemProps) => {
                 }}
               />
             ) : (
-              <Icon as={<Feather />} name="image" size="lg" color="muted.600" />
+              <Icon as={<Feather />} name="image" size="lg" color={iconColor} />
             )}
           </Center>
           <VStack w="80%" space="1">
@@ -50,7 +56,7 @@ const SearchMapItem = memo(({ item, onPress }: SearchMapItemProps) => {
               {item.name}
             </Text>
             <Text
-              color="muted.600"
+              color={textColor}
               fontSize="xs"
               numberOfLines={1}
               ellipsizeMode="tail"
@@ -59,7 +65,12 @@ const SearchMapItem = memo(({ item, onPress }: SearchMapItemProps) => {
             </Text>
           </VStack>
         </HStack>
-        <Icon as={<Feather />} name="chevron-right" size="md" />
+        <Icon
+          as={<Feather />}
+          name="chevron-right"
+          size="md"
+          color={iconColor}
+        />
       </HStack>
       <Divider w="90%" bg="muted.200" />
     </Pressable>

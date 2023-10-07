@@ -8,6 +8,7 @@ import {
   Pressable,
   Text,
   VStack,
+  useColorModeValue,
   useDisclose,
 } from "native-base";
 import { GetCommunitiesResponse } from "../../hooks/community/query";
@@ -39,6 +40,9 @@ const CommunityItem = memo(
     communityChatNavigationHandler,
   }: CommunityItemProps) => {
     const { t } = useTranslation("community");
+    const bgColor = useColorModeValue("white", "muted.800");
+    const pressedColor = useColorModeValue("muted.100", "muted.800");
+    const textColor = useColorModeValue("muted.600", "muted.300");
     const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclose();
 
     return (
@@ -48,12 +52,12 @@ const CommunityItem = memo(
             ? communityChatNavigationHandler(item.communityId, item.name)
             : onOpen()
         }
-        _pressed={{ bg: "muted.100" }}
+        _pressed={{ bg: pressedColor }}
         rounded="md"
       >
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
-          <VStack w="75%" px="4" pt="4" pb="2" bg="#f2f2f2" rounded="2xl">
-            <Modal.CloseButton />
+          <VStack w="75%" px="4" pt="4" pb="2" bg={bgColor} rounded="2xl">
+            <Modal.CloseButton _pressed={{ bg: "transparent" }} />
             <VStack mt="6" alignItems="center" space="3">
               <Avatar
                 size="xl"
@@ -117,7 +121,7 @@ const CommunityItem = memo(
                 {item.name}
               </Text>
               <Text
-                color="muted.600"
+                color={textColor}
                 fontSize="xs"
                 numberOfLines={3}
                 ellipsizeMode="tail"

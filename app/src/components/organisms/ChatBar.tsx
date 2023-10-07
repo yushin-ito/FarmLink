@@ -8,6 +8,7 @@ import {
   Box,
   Center,
   Spinner,
+  useColorModeValue,
 } from "native-base";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -35,6 +36,10 @@ const ChatBar = memo(
     pickImageByLibrary,
   }: ChatBarProps) => {
     const { t } = useTranslation("chat");
+    const bgColor = useColorModeValue("muted.300", "muted.700");
+    const textColor = useColorModeValue("muted.600", "white");
+    const iconColor = useColorModeValue("muted.600", "muted.100");
+
     const { control, handleSubmit, reset } = useForm<FormValues>();
     const { isOpen, onToggle } = useDisclose();
     const [showKeyboard, setShowKeyboard] = useState<boolean>(false);
@@ -60,7 +65,6 @@ const ChatBar = memo(
         px="3"
         space="2"
         shadow="1"
-        bg="white"
         alignItems="flex-end"
         justifyContent="space-between"
         pb={showKeyboard ? "1" : "9"}
@@ -80,7 +84,7 @@ const ChatBar = memo(
                 name={isOpen ? "x" : "plus"}
                 mb="1"
                 size="6"
-                color="muted.600"
+                color={iconColor}
               />
             }
             variant="unstyled"
@@ -98,11 +102,11 @@ const ChatBar = memo(
                 multiline
                 maxH="40"
                 placeholder={t("enterMessage")}
-                placeholderTextColor="muted.600"
+                placeholderTextColor={textColor}
                 fontSize="md"
                 rounded="2xl"
-                bg="muted.300"
-                _focus={{ bg: "muted.300" }}
+                bg={bgColor}
+                _focus={{ bg: bgColor }}
                 value={value}
                 onChangeText={onChange}
               />

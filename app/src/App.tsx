@@ -1,15 +1,15 @@
 import React from "react";
-import { NativeBaseProvider } from "native-base";
+import { ColorMode, NativeBaseProvider, StorageManager } from "native-base";
 import { AuthProvider } from "./contexts/AuthProvider";
 import { QueryCache, QueryClient, QueryClientProvider } from "react-query";
 import "./i18n";
-import { Alert, LogBox } from "react-native";
+import { Alert, LogBox, useColorScheme } from "react-native";
 import RootComponent from "./components/RootComponent";
-
-LogBox.ignoreAllLogs();
-
 import { extendTheme } from "native-base";
 import { useTranslation } from "react-i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+LogBox.ignoreAllLogs();
 
 const App = () => {
   const { t } = useTranslation("common");
@@ -30,7 +30,24 @@ const App = () => {
       },
     },
     components: {},
+    config: {
+      useSystemColorMode: true,
+    },
   });
+
+  const colorScheme = useColorScheme();
+  const colorModeManager: StorageManager = {
+    get: async () => {
+      const theme = await AsyncStorage.getItem("@theme");
+      if (!theme) {
+        return colorScheme;
+      }
+      return theme === "dark" ? "dark" : "light";
+    },
+    set: async (value: ColorMode) => {
+      await AsyncStorage.setItem("@theme", value || "");
+    },
+  };
 
   const queryClient = new QueryClient({
     queryCache: new QueryCache({
@@ -43,7 +60,7 @@ const App = () => {
   });
 
   return (
-    <NativeBaseProvider theme={theme}>
+    <NativeBaseProvider theme={theme} colorModeManager={colorModeManager}>
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
           <RootComponent />

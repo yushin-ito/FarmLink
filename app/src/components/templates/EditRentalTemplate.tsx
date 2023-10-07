@@ -15,6 +15,7 @@ import {
   Center,
   FlatList,
   Pressable,
+  useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import MapView, { Marker } from "react-native-maps";
@@ -64,6 +65,10 @@ const EditRentalTemplate = ({
   goBackNavigationHandler,
 }: EditRentalTemplateProps) => {
   const { t } = useTranslation("setting");
+  const imageColor = useColorModeValue("muted.200", "muted.600");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const {
     control,
     handleSubmit,
@@ -109,13 +114,19 @@ const EditRentalTemplate = ({
       <HStack mb="4" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather name="chevron-left" />}
+              size="2xl"
+              color={iconColor}
+            />
+          }
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("rental")}</Heading>
+        <Heading textAlign="center">{t("editRental")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="x" />} size="xl" />}
+          icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
           variant="unstyled"
         />
       </HStack>
@@ -136,13 +147,18 @@ const EditRentalTemplate = ({
                 data={images}
                 ListFooterComponent={
                   <Pressable onPress={pickImageByLibrary}>
-                    <Center w={width - 80} h="100%" bg="muted.200">
-                      <Icon as={<Feather />} name="camera" size="2xl" />
+                    <Center w={width - 80} h="100%" bg={imageColor}>
+                      <Icon
+                        as={<Feather />}
+                        name="camera"
+                        size="2xl"
+                        color={iconColor}
+                      />
                     </Center>
                   </Pressable>
                 }
                 renderItem={({ item }) => (
-                  <Box w={width - 80} h="100%" bg="muted.200">
+                  <Box w={width - 80} h="100%" bg={imageColor}>
                     <Image
                       source={{
                         uri:
@@ -223,7 +239,7 @@ const EditRentalTemplate = ({
                         >
                           {errors.name && <Text>{errors.name.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -261,7 +277,7 @@ const EditRentalTemplate = ({
                             <Text>{errors.description.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">
+                        <Text color={textColor}>
                           {value?.length ?? 0} / 100
                         </Text>
                       </HStack>
@@ -314,7 +330,7 @@ const EditRentalTemplate = ({
                         >
                           {errors.fee && <Text>{errors.fee.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -364,7 +380,7 @@ const EditRentalTemplate = ({
                         >
                           {errors.area && <Text>{errors.area.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -416,7 +432,7 @@ const EditRentalTemplate = ({
                             <Text>{errors.equipment.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -430,42 +446,42 @@ const EditRentalTemplate = ({
               />
             </FormControl>
             <VStack space="1">
-              <Text bold color="muted.600" fontSize="md">
+              <Text bold color={textColor} fontSize="md">
                 {t("location")}
               </Text>
-              
-                <MapView
-                  ref={mapRef}
-                  style={{
-                    width: "100%",
-                    height: 160,
-                    borderRadius: 12,
-                  }}
-                  showsCompass={false}
-                >
-                  {rental?.latitude && rental?.longitude && (
-                    <Marker
-                      coordinate={{
-                        latitude: rental.latitude,
-                        longitude: rental.longitude,
-                      }}
-                    >
-                      <VStack alignItems="center">
-                        <Text bold color="blueGray.600" fontSize="2xs">
-                          {rental.name}
-                        </Text>
-                        <Icon
-                          as={<MaterialIcons />}
-                          name="location-pin"
-                          size="xl"
-                          color="brand.600"
-                        />
-                      </VStack>
-                    </Marker>
-                  )}
-                </MapView>
+
+              <MapView
+                ref={mapRef}
+                style={{
+                  width: "100%",
+                  height: 160,
+                  borderRadius: 12,
+                }}
+                showsCompass={false}
+              >
+                {rental?.latitude && rental?.longitude && (
+                  <Marker
+                    coordinate={{
+                      latitude: rental.latitude,
+                      longitude: rental.longitude,
+                    }}
+                  >
+                    <VStack alignItems="center">
+                      <Text bold color="blueGray.600" fontSize="2xs">
+                        {rental.name}
+                      </Text>
+                      <Icon
+                        as={<MaterialIcons />}
+                        name="location-pin"
+                        size="xl"
+                        color="brand.600"
+                      />
+                    </VStack>
+                  </Marker>
+                )}
+              </MapView>
               {address && (
-                <Text color="muted.600">{`${t("address")}: ${address.city}${
+                <Text color={textColor}>{`${t("address")}: ${address.city}${
                   address.name
                 }`}</Text>
               )}

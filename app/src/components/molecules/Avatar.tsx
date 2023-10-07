@@ -5,6 +5,7 @@ import {
   Text,
   Avatar as NativeBaseAvatar,
   Skeleton,
+  useColorModeValue,
 } from "native-base";
 import { supabaseUrl } from "../../supabase";
 
@@ -29,8 +30,10 @@ const Avatar = memo(
     fontSize = "md",
     ...props
   }: AvatarProps & IPressableProps) => {
+    const bgColor = useColorModeValue("muted.100", "muted.800");
+
     return isLoading ? (
-        <Skeleton size={size} rounded="full" />
+      <Skeleton size={size} rounded="full" />
     ) : (
       <Pressable
         _pressed={{
@@ -44,7 +47,7 @@ const Avatar = memo(
             source={{
               uri: uri.match(supabaseUrl) ? uri + `?=${updatedAt}` : uri,
             }}
-            bg="muted.100"
+            bg={bgColor}
           />
         ) : (
           <NativeBaseAvatar size={size} source={{ uri: undefined }} bg={color}>

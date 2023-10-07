@@ -14,6 +14,7 @@ import {
   Switch,
   Spinner,
   Center,
+  useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import MapView, { Marker } from "react-native-maps";
@@ -59,6 +60,9 @@ const EditFarmTemplate = ({
   goBackNavigationHandler,
 }: EditFarmTemplateProps) => {
   const { t } = useTranslation("farm");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const {
     control,
     handleSubmit,
@@ -103,13 +107,19 @@ const EditFarmTemplate = ({
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather name="chevron-left" />}
+              size="2xl"
+              color={iconColor}
+            />
+          }
           variant="unstyled"
         />
         <Heading textAlign="center">{t("editFarm")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="x" />} size="xl" />}
+          icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
           variant="unstyled"
         />
       </HStack>
@@ -156,7 +166,7 @@ const EditFarmTemplate = ({
                         >
                           {errors.name && <Text>{errors.name.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -215,7 +225,7 @@ const EditFarmTemplate = ({
               </FormControl.ErrorMessage>
             </FormControl>
             <HStack mt="4" alignItems="center" justifyContent="space-between">
-              <Text fontSize="md" bold color="muted.600">
+              <Text fontSize="md" bold color={textColor}>
                 {t("doPublic")}
               </Text>
               <Switch
@@ -252,7 +262,7 @@ const EditFarmTemplate = ({
                                 <Text>{errors.description.message}</Text>
                               )}
                             </FormControl.ErrorMessage>
-                            <Text color="muted.600">
+                            <Text color={textColor}>
                               {value?.length ?? 0} / 100
                             </Text>
                           </HStack>
@@ -271,7 +281,7 @@ const EditFarmTemplate = ({
                   />
                 </FormControl>
                 <VStack space="1">
-                  <Text bold color="muted.600" fontSize="md">
+                  <Text bold color={textColor} fontSize="md">
                     {t("location")}
                   </Text>
                   <MapView
@@ -305,7 +315,7 @@ const EditFarmTemplate = ({
                     )}
                   </MapView>
                   {address && (
-                    <Text color="muted.600">{`${t("address")}: ${address.city}${
+                    <Text color={textColor}>{`${t("address")}: ${address.city}${
                       address.name
                     }`}</Text>
                   )}

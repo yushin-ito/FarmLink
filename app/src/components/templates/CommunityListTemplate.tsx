@@ -10,6 +10,7 @@ import {
   Text,
   Pressable,
   useDisclose,
+  useColorModeValue,
 } from "native-base";
 import React, { Dispatch, SetStateAction } from "react";
 import Fab from "../molecules/Fab";
@@ -67,6 +68,8 @@ const CommunityListTemplate = ({
   searchCommunityNavigationHandler,
 }: CommunityListTemplateProps) => {
   const { t } = useTranslation("community");
+  const bgColor = useColorModeValue("muted.200", "muted.700");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
 
   const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclose();
   const categories = getCategories();
@@ -105,10 +108,14 @@ const CommunityListTemplate = ({
           py="1"
           space="2"
           rounded="full"
-          bg="muted.200"
+          bg={bgColor}
         >
           <Text>{t(categories[categoryIndex] as Category)}</Text>
-          <Icon as={<AntDesign name="caretdown" />} size="2" />
+          <Icon
+            as={<AntDesign name="caretdown" />}
+            size="2"
+            color={iconColor}
+          />
         </HStack>
       </Pressable>
       {isLoading ? (

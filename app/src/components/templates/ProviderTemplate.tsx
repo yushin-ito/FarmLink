@@ -7,6 +7,7 @@ import {
   Pressable,
   Icon,
   Box,
+  useColorModeValue,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { Feather } from "@expo/vector-icons";
@@ -27,6 +28,9 @@ const ProviderTemplate = memo(
     signInNavigationHandler,
   }: ProviderTemplateProps) => {
     const { t } = useTranslation("auth");
+    const textColor = useColorModeValue("muted.600", "muted.300");
+    const pressedColor = useColorModeValue("muted.100", "muted.700");
+    const iconColor = useColorModeValue("muted.600", "muted.100");
 
     return (
       <Box
@@ -40,7 +44,7 @@ const ProviderTemplate = memo(
           <Heading fontSize="3xl" color="brand.600">
             Welcome to FarmLink!
           </Heading>
-          <Text color="muted.600" bold>
+          <Text color={textColor} bold>
             {t("app")}
           </Text>
         </VStack>
@@ -51,11 +55,11 @@ const ProviderTemplate = memo(
             borderWidth="1"
             borderColor="muted.200"
             alignItems="center"
-            _pressed={{ bg: "muted.100" }}
+            _pressed={{ bg: pressedColor }}
             onPress={signInNavigationHandler}
           >
             <Center h="100%" position="absolute" top="3" left="5">
-              <Icon as={<Feather />} name="mail" size="5" />
+              <Icon as={<Feather />} name="mail" size="5" color={iconColor} />
             </Center>
             <Text>{t("signInWithEmail")}</Text>
           </Pressable>
@@ -65,7 +69,7 @@ const ProviderTemplate = memo(
             borderWidth="1"
             borderColor="muted.200"
             alignItems="center"
-            _pressed={{ bg: "muted.100" }}
+            _pressed={{ bg: pressedColor }}
             onPress={signInWithGoogle}
           >
             <Center h="100%" position="absolute" top="3" left="3">
@@ -83,7 +87,7 @@ const ProviderTemplate = memo(
             borderWidth="1"
             borderColor="muted.200"
             alignItems="center"
-            _pressed={{ bg: "muted.100" }}
+            _pressed={{ bg: pressedColor }}
             onPress={signInWithTwitter}
           >
             <Center h="100%" position="absolute" top="3" left="3">
@@ -101,7 +105,7 @@ const ProviderTemplate = memo(
             borderWidth="1"
             borderColor="muted.200"
             alignItems="center"
-            _pressed={{ bg: "muted.100" }}
+            _pressed={{ bg: pressedColor }}
             onPress={signInWithFacebook}
           >
             <Center h="100%" position="absolute" top="3" left="3">

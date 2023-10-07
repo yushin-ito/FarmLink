@@ -11,6 +11,7 @@ import {
   HStack,
   IconButton,
   Icon,
+  useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -40,6 +41,10 @@ const PostCommunityTemplate = ({
   goBackNavigationHandler,
 }: PostCommunityTemplateProps) => {
   const { t } = useTranslation("community");
+  const bgColor = useColorModeValue("muted.300", "muted.700");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const {
     control,
     handleSubmit,
@@ -57,13 +62,19 @@ const PostCommunityTemplate = ({
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather name="chevron-left" />}
+              size="2xl"
+              color={iconColor}
+            />
+          }
           variant="unstyled"
         />
         <Heading textAlign="center">{t("createCommunity")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="x" />} size="xl" />}
+          icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
           variant="unstyled"
         />
       </HStack>
@@ -110,9 +121,7 @@ const PostCommunityTemplate = ({
                         >
                           {errors.name && <Text>{errors.name.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">
-                          {value?.length ?? 0} / 20
-                        </Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
                       </HStack>
                     </VStack>
                   );
@@ -150,7 +159,7 @@ const PostCommunityTemplate = ({
                             <Text>{errors.description.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
-                        <Text color="muted.600">
+                        <Text color={textColor}>
                           {value?.length ?? 0} / 100
                         </Text>
                       </HStack>
@@ -174,11 +183,9 @@ const PostCommunityTemplate = ({
                     key={index}
                     colorScheme={index === categoryIndex ? "brand" : undefined}
                     variant={index === categoryIndex ? undefined : "unstyled"}
-                    bg={index === categoryIndex ? undefined : "muted.300"}
+                    bg={index === categoryIndex ? undefined : bgColor}
                     _text={
-                      index === categoryIndex
-                        ? undefined
-                        : { color: "muted.600" }
+                      index === categoryIndex ? undefined : { color: textColor }
                     }
                     onPress={() => setCategoryIndex(index)}
                   >

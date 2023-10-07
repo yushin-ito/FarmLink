@@ -14,6 +14,7 @@ import {
   Text,
   Button,
   KeyboardAvoidingView,
+  useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -43,6 +44,8 @@ const PostTalkTemplate = ({
   goBackNavigationHandler,
 }: PostTalkTemplateProps) => {
   const { t } = useTranslation("talk");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const { control, reset } = useForm<FormValues>();
   const [recieverId, setRecieverId] = useState<string>("");
 
@@ -62,13 +65,21 @@ const PostTalkTemplate = ({
             >
               <IconButton
                 onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+                icon={
+                  <Icon
+                    as={<Feather name="chevron-left" />}
+                    size="2xl"
+                    color={iconColor}
+                  />
+                }
                 variant="unstyled"
               />
               <Heading textAlign="center">{t("createTalk")}</Heading>
               <IconButton
                 onPress={goBackNavigationHandler}
-                icon={<Icon as={<Feather name="x" />} size="xl" />}
+                icon={
+                  <Icon as={<Feather name="x" />} size="xl" color={iconColor} />
+                }
                 variant="unstyled"
               />
             </HStack>

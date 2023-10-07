@@ -6,6 +6,7 @@ import {
   FlatList,
   Text,
   IconButton,
+  useColorModeValue,
 } from "native-base";
 import React, { useCallback } from "react";
 import { Feather } from "@expo/vector-icons";
@@ -39,7 +40,7 @@ type NotificationTemplateProps = {
 };
 
 const NotificationTemplate = ({
-    locale,
+  locale,
   notifications,
   deleteNotification,
   refetchNotifications,
@@ -50,6 +51,8 @@ const NotificationTemplate = ({
   goBackNavigationHandler,
 }: NotificationTemplateProps) => {
   const { t } = useTranslation("setting");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
 
   const getNotificationType = useCallback(
     (notification: GetNotificationsResponse[number]) => {
@@ -70,13 +73,19 @@ const NotificationTemplate = ({
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="chevron-left" />} size="2xl" />}
+          icon={
+            <Icon
+              as={<Feather name="chevron-left" />}
+              size="2xl"
+              color={iconColor}
+            />
+          }
           variant="unstyled"
         />
         <Heading textAlign="center">{t("notification")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
-          icon={<Icon as={<Feather name="x" />} size="xl" />}
+          icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
           variant="unstyled"
         />
       </HStack>
@@ -134,7 +143,7 @@ const NotificationTemplate = ({
                 lineHeight="2xl"
                 fontSize="md"
                 textAlign="center"
-                color="muted.600"
+                color={textColor}
               >
                 {t("notExistNotification")}
               </Text>

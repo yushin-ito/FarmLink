@@ -9,6 +9,7 @@ import {
   Icon,
   FlatList,
   Spinner,
+  useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
@@ -21,7 +22,10 @@ type SearchCommunityTemplateProps = {
   searchResult: GetCommunitiesResponse | undefined;
   searchCommunities: (query: string) => Promise<void>;
   isLoadingSearchCommunities: boolean;
-  communityChatNavigationHandler: (communityId: number, name: string) => void;
+  communityChatNavigationHandler: (
+    communityId: number,
+    name: string | null
+  ) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -37,6 +41,8 @@ const SearchCommunityTemplate = ({
   goBackNavigationHandler,
 }: SearchCommunityTemplateProps) => {
   const { t } = useTranslation("community");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+
   const { control, reset } = useForm<FormValues>();
 
   return (
@@ -79,7 +85,7 @@ const SearchCommunityTemplate = ({
             />
             <IconButton
               onPress={goBackNavigationHandler}
-              icon={<Icon as={<Feather name="x" />} size="6" />}
+              icon={<Icon as={<Feather name="x" />} size="6" color={iconColor}/>}
               variant="unstyled"
               _pressed={{
                 opacity: 0.5,

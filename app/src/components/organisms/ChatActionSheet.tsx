@@ -1,4 +1,4 @@
-import { Actionsheet, Icon } from "native-base";
+import { Actionsheet, Icon, useColorModeValue } from "native-base";
 import React, { memo } from "react";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
@@ -12,13 +12,18 @@ type ChatActionSheetProps = {
 const ChatActionSheet = memo(
   ({ isOpen, onClose, deleteChat }: ChatActionSheetProps) => {
     const { t } = useTranslation("chat");
+    const pressedColor = useColorModeValue("muted.300", "muted.700");
+    const iconColor = useColorModeValue("muted.500", "muted.300");
+
     return (
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
           <Actionsheet.Item
-            startIcon={<Icon as={<Feather />} name="trash" size="6" />}
+            startIcon={
+              <Icon as={<Feather />} name="trash" size="6" color={iconColor} />
+            }
             rounded="lg"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: pressedColor }}
             onPress={async () => {
               onClose();
               await deleteChat();
@@ -28,7 +33,7 @@ const ChatActionSheet = memo(
           </Actionsheet.Item>
           <Actionsheet.Item
             rounded="lg"
-            _pressed={{ bg: "muted.300" }}
+            _pressed={{ bg: pressedColor }}
             onPress={onClose}
           >
             {t("cancel")}
