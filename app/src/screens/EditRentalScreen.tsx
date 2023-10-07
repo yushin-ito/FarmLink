@@ -113,13 +113,7 @@ const EditRentalScreen = ({
     },
   });
 
-  const {
-    position,
-    address,
-    getCurrentPosition,
-    getAddress,
-    isLoadingPosition,
-  } = useLocation({
+  const { address, getAddress } = useLocation({
     onDisable: () => {
       navigation.goBack();
       showAlert(
@@ -152,7 +146,7 @@ const EditRentalScreen = ({
       area: string,
       equipment: string
     ) => {
-      if (session && position && rental) {
+      if (session && rental) {
         const publicUrls = await Promise.all(
           images.map(async (item) => {
             if (item.indexOf("http") == -1) {
@@ -171,8 +165,6 @@ const EditRentalScreen = ({
           name,
           description,
           ownerId: session.user.id,
-          longitude: position.coords.longitude,
-          latitude: position.coords.latitude,
           fee,
           area,
           equipment,
@@ -181,7 +173,7 @@ const EditRentalScreen = ({
         });
       }
     },
-    [session, position, images]
+    [session, images]
   );
 
   const goBackNavigationHandler = useCallback(() => {
@@ -194,11 +186,8 @@ const EditRentalScreen = ({
       images={images}
       isLoadingRental={isLoadingRental}
       isLoadingPostRental={isLoadingPostRental || isLoadingPostRentalImage}
-      isLoadingPosition={isLoadingPosition}
-      position={position}
       address={address}
       pickImageByLibrary={pickImageByLibrary}
-      getCurrentPosition={getCurrentPosition}
       getAddress={getAddress}
       postRental={postRental}
       goBackNavigationHandler={goBackNavigationHandler}

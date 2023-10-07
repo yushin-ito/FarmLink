@@ -11,7 +11,6 @@ import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
 import {
   useQueryFarm,
   useQueryFarms,
-  useQueryUserFarms,
 } from "../hooks/farm/query";
 import useLocation from "../hooks/sdk/useLocation";
 import { MapStackParamList, MapStackScreenProps } from "../types";
@@ -23,14 +22,12 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   const { data: farm, isLoading: isLoadingFarm } = useQueryFarm(params.farmId);
   const { session } = useAuth();
   const { refetch } = useQueryFarms();
-  const { refetch: refetchUserFarms } = useQueryUserFarms(session?.user.id);
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
 
   const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
     usePostFarm({
       onSuccess: async () => {
         await refetch();
-        await refetchUserFarms();
         navigation.goBack();
         showAlert(
           toast,
@@ -71,11 +68,8 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   });
 
   const {
-    position,
     address,
-    getCurrentPosition,
     getAddress,
-    isLoadingPosition,
   } = useLocation({
     onDisable: () => {
       showAlert(
@@ -122,12 +116,10 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
           description,
           ownerId: session.user.id,
           privated,
-          longitude: position?.coords.longitude,
-          latitude: position?.coords.latitude,
         });
       }
     },
-    [session, farm, position]
+    [session, farm]
   );
 
   const goBackNavigationHandler = useCallback(() => {
@@ -137,16 +129,13 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   return (
     <EditFarmTemplate
       farm={farm}
-      position={position}
       address={address}
       getAddress={getAddress}
-      getCurrentPosition={getCurrentPosition}
       searchResult={searchResult}
       postFarm={postFarm}
       searchDevice={searchDevice}
       isLoadingFarm={isLoadingFarm}
       isLoadingPostFarm={isLoadingPostFarm}
-      isLoadingPosition={isLoadingPosition}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

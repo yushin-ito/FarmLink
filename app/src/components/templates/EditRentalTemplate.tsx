@@ -23,7 +23,7 @@ import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
-import { LocationObject, LocationGeocodedAddress } from "expo-location";
+import { LocationGeocodedAddress } from "expo-location";
 import { GetRentalResponse } from "../../hooks/rental/query";
 
 type EditRentalTemplateProps = {
@@ -31,11 +31,8 @@ type EditRentalTemplateProps = {
   images: string[];
   isLoadingRental: boolean;
   isLoadingPostRental: boolean;
-  isLoadingPosition: boolean;
-  position: LocationObject | undefined;
   address: LocationGeocodedAddress | undefined;
   pickImageByLibrary: () => Promise<void>;
-  getCurrentPosition: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
   postRental: (
     name: string,
@@ -60,11 +57,8 @@ const EditRentalTemplate = ({
   images,
   isLoadingRental,
   isLoadingPostRental,
-  isLoadingPosition,
-  position,
   address,
   pickImageByLibrary,
-  getCurrentPosition,
   getAddress,
   postRental,
   goBackNavigationHandler,
@@ -81,10 +75,6 @@ const EditRentalTemplate = ({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    getCurrentPosition();
-  }, []);
-
-  useEffect(() => {
     if (rental) {
       rental.name && setValue("name", rental.name);
       rental.fee && setValue("fee", rental.fee);
@@ -95,16 +85,16 @@ const EditRentalTemplate = ({
   }, [rental]);
 
   useEffect(() => {
-    if (mapRef.current && position) {
+    if (mapRef.current && rental?.latitude && rental.longitude) {
       mapRef.current.animateToRegion({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
+        latitude: rental.latitude,
+        longitude: rental.longitude,
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       });
-      getAddress(position.coords.latitude, position.coords.longitude);
+      getAddress(rental.latitude, rental.longitude);
     }
-  }, [position, mapRef.current]);
+  }, [rental, mapRef.current]);
 
   if (isLoadingRental) {
     return (
@@ -441,38 +431,18 @@ const EditRentalTemplate = ({
             </FormControl>
             <VStack space="1">
               <Text bold color="muted.600" fontSize="md">
-                {t("setPosition")}
+                {t("location")}
               </Text>
-              {isLoadingPosition ? (
-                <Center h="40" bg="muted.200" rounded="xl">
-                  <Spinner color="muted.400" />
-                </Center>
-              ) : (
+              
                 <MapView
                   ref={mapRef}
                   style={{
                     width: "100%",
                     height: 160,
                     borderRadius: 12,
-                    opacity: isLoadingPosition ? 0.5 : 1,
                   }}
                   showsCompass={false}
                 >
-                  {position && (
-                    <Marker coordinate={position.coords}>
-                      <VStack alignItems="center">
-                        <Text bold color="blueGray.600" fontSize="2xs">
-                          {t("current")}
-                        </Text>
-                        <Icon
-                          as={<MaterialIcons />}
-                          name="location-pin"
-                          size="xl"
-                          color="red.500"
-                        />
-                      </VStack>
-                    </Marker>
-                  )}
                   {rental?.latitude && rental?.longitude && (
                     <Marker
                       coordinate={{
@@ -482,7 +452,7 @@ const EditRentalTemplate = ({
                     >
                       <VStack alignItems="center">
                         <Text bold color="blueGray.600" fontSize="2xs">
-                          {t("previous")}
+                          {rental.name}
                         </Text>
                         <Icon
                           as={<MaterialIcons />}
@@ -494,8 +464,7 @@ const EditRentalTemplate = ({
                     </Marker>
                   )}
                 </MapView>
-              )}
-              {!isLoadingPosition && address && (
+              {address && (
                 <Text color="muted.600">{`${t("address")}: ${address.city}${
                   address.name
                 }`}</Text>
@@ -508,7 +477,6 @@ const EditRentalTemplate = ({
             size="lg"
             rounded="xl"
             colorScheme="brand"
-            isDisabled={isLoadingPosition}
             isLoading={isLoadingPostRental}
             onPress={handleSubmit(async (data) => {
               await postRental(

@@ -8,7 +8,7 @@ import { usePostFarm } from "../hooks/farm/mutate";
 import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
-import { useQueryUserFarms } from "../hooks/farm/query";
+import { useQueryFarms } from "../hooks/farm/query";
 import useLocation from "../hooks/sdk/useLocation";
 
 const PostFarmScreen = () => {
@@ -16,7 +16,7 @@ const PostFarmScreen = () => {
   const { t } = useTranslation("farm");
   const navigation = useNavigation();
   const { session } = useAuth();
-  const { refetch } = useQueryUserFarms(session?.user.id);
+  const { refetch } = useQueryFarms();
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
 
   const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =

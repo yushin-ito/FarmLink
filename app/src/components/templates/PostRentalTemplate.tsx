@@ -413,7 +413,7 @@ const PostRentalTemplate = ({
             </FormControl>
             <VStack space="1">
               <Text bold color="muted.600" fontSize="md">
-                {t("setPosition")}
+                {t("setLocation")}
               </Text>
               {isLoadingPosition ? (
                 <Center h="40" bg="muted.200" rounded="xl">
@@ -442,8 +442,14 @@ const PostRentalTemplate = ({
                   )}
                 </MapView>
               )}
+              <HStack alignItems="center" space="1">
+                <Icon as={<Feather />} name="alert-circle" color="error.600" />
+                <Text fontSize="xs" color="error.600">
+                  {t("alertLocation")}
+                </Text>
+              </HStack>
               {!isLoadingPosition && address && (
-                <Text color="muted.600">{`${t("address")}: ${address.city}${
+                <Text mt="1" color="muted.600">{`${t("address")}: ${address.city}${
                   address.name
                 }`}</Text>
               )}

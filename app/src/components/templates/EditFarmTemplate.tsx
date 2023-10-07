@@ -21,15 +21,13 @@ import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SearchDeviceResponse } from "../../hooks/device/mutate";
-import { LocationGeocodedAddress, LocationObject } from "expo-location";
+import { LocationGeocodedAddress } from "expo-location";
 import { GetFarmResponse } from "../../hooks/farm/query";
 
 type EditFarmTemplateProps = {
   farm: GetFarmResponse | null | undefined;
   searchResult: SearchDeviceResponse[0] | undefined;
-  position: LocationObject | undefined;
   address: LocationGeocodedAddress | undefined;
-  getCurrentPosition: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
   postFarm: (
     name: string,
@@ -40,7 +38,6 @@ type EditFarmTemplateProps = {
   searchDevice: (query: string) => Promise<void>;
   isLoadingFarm: boolean;
   isLoadingPostFarm: boolean;
-  isLoadingPosition: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -52,16 +49,13 @@ type FormValues = {
 
 const EditFarmTemplate = ({
   farm,
-  position,
   address,
-  getCurrentPosition,
   getAddress,
   searchResult,
   postFarm,
   searchDevice,
   isLoadingFarm,
   isLoadingPostFarm,
-  isLoadingPosition,
   goBackNavigationHandler,
 }: EditFarmTemplateProps) => {
   const { t } = useTranslation("farm");
@@ -75,10 +69,6 @@ const EditFarmTemplate = ({
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
-    getCurrentPosition();
-  }, []);
-
-  useEffect(() => {
     if (farm) {
       farm.name && setValue("name", farm.name);
       farm.deviceId && setValue("deviceId", farm.deviceId);
@@ -89,16 +79,16 @@ const EditFarmTemplate = ({
   }, [farm]);
 
   useEffect(() => {
-    if (mapRef.current && position) {
+    if (mapRef.current && farm?.latitude && farm.longitude) {
       mapRef.current.animateToRegion({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
+        latitude: farm.latitude,
+        longitude: farm.longitude,
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       });
-      getAddress(position.coords.latitude, position.coords.longitude);
+      getAddress(farm.latitude, farm.longitude);
     }
-  }, [position, mapRef.current]);
+  }, [mapRef.current, farm]);
 
   if (isLoadingFarm) {
     return (
@@ -233,7 +223,6 @@ const EditFarmTemplate = ({
                 colorScheme="brand"
                 onValueChange={async (value) => {
                   setPrivated(!value);
-                  value && (await getCurrentPosition());
                 }}
               />
             </HStack>
@@ -283,61 +272,39 @@ const EditFarmTemplate = ({
                 </FormControl>
                 <VStack space="1">
                   <Text bold color="muted.600" fontSize="md">
-                    {t("setPosition")}
+                    {t("location")}
                   </Text>
-                  {isLoadingPosition ? (
-                    <Center h="40" bg="muted.200" rounded="xl">
-                      <Spinner color="muted.400" />
-                    </Center>
-                  ) : (
-                    <MapView
-                      ref={mapRef}
-                      showsCompass={false}
-                      style={{
-                        width: "100%",
-                        height: 160,
-                        borderRadius: 12,
-                        opacity: isLoadingPosition ? 0.5 : 1,
-                      }}
-                    >
-                      {position && (
-                        <Marker coordinate={position.coords}>
-                          <VStack alignItems="center">
-                            <Text bold color="blueGray.600" fontSize="2xs">
-                              {t("current")}
-                            </Text>
-                            <Icon
-                              as={<MaterialIcons />}
-                              name="location-pin"
-                              size="xl"
-                              color="red.500"
-                            />
-                          </VStack>
-                        </Marker>
-                      )}
-                      {farm?.latitude && farm?.longitude && (
-                        <Marker
-                          coordinate={{
-                            latitude: farm.latitude,
-                            longitude: farm.longitude,
-                          }}
-                        >
-                          <VStack alignItems="center">
-                            <Text bold color="blueGray.600" fontSize="2xs">
-                              {t("previous")}
-                            </Text>
-                            <Icon
-                              as={<MaterialIcons />}
-                              name="location-pin"
-                              size="xl"
-                              color="brand.600"
-                            />
-                          </VStack>
-                        </Marker>
-                      )}
-                    </MapView>
-                  )}
-                  {!isLoadingPosition && address && (
+                  <MapView
+                    ref={mapRef}
+                    showsCompass={false}
+                    style={{
+                      width: "100%",
+                      height: 160,
+                      borderRadius: 12,
+                    }}
+                  >
+                    {farm?.latitude && farm?.longitude && (
+                      <Marker
+                        coordinate={{
+                          latitude: farm.latitude,
+                          longitude: farm.longitude,
+                        }}
+                      >
+                        <VStack alignItems="center">
+                          <Text bold color="blueGray.600" fontSize="2xs">
+                            {farm.name}
+                          </Text>
+                          <Icon
+                            as={<MaterialIcons />}
+                            name="location-pin"
+                            size="xl"
+                            color="brand.600"
+                          />
+                        </VStack>
+                      </Marker>
+                    )}
+                  </MapView>
+                  {address && (
                     <Text color="muted.600">{`${t("address")}: ${address.city}${
                       address.name
                     }`}</Text>
@@ -352,7 +319,6 @@ const EditFarmTemplate = ({
             size="lg"
             rounded="xl"
             colorScheme="brand"
-            isDisabled={isLoadingPosition}
             isLoading={isLoadingPostFarm}
             onPress={handleSubmit(async (data) => {
               await postFarm(

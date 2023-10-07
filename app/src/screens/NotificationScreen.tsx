@@ -101,6 +101,8 @@ const NotificationScreen = ({
       name: string
     ) => {
       await mutateAsyncPostNotification({ notificationId, clicked: true });
+      navigation.goBack();
+      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "TalkNavigator",
         params: {
