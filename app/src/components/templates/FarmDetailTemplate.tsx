@@ -112,7 +112,6 @@ const FarmDetailTemplate = ({
                 uri: farm?.device?.imageUrl + "?=" + farm?.device?.updatedAt,
               }}
               style={{ flex: 1 }}
-              cachePolicy="memory-disk"
             />
           </Box>
         )}

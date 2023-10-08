@@ -279,6 +279,7 @@ const PostFarmTemplate = ({
                   ) : (
                     <MapView
                       ref={mapRef}
+                      userInterfaceStyle={useColorModeValue("light", "dark")}
                       showsCompass={false}
                       style={{
                         width: "100%",

@@ -449,15 +449,15 @@ const EditRentalTemplate = ({
               <Text bold color={textColor} fontSize="md">
                 {t("location")}
               </Text>
-
               <MapView
                 ref={mapRef}
+                userInterfaceStyle={useColorModeValue("light", "dark")}
+                showsCompass={false}
                 style={{
                   width: "100%",
                   height: 160,
                   borderRadius: 12,
                 }}
-                showsCompass={false}
               >
                 {rental?.latitude && rental?.longitude && (
                   <Marker
@@ -467,7 +467,7 @@ const EditRentalTemplate = ({
                     }}
                   >
                     <VStack alignItems="center">
-                      <Text bold color="blueGray.600" fontSize="2xs">
+                      <Text bold fontSize="2xs">
                         {rental.name}
                       </Text>
                       <Icon

@@ -60,10 +60,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const getLocale = useCallback(async () => {
     const locale = await AsyncStorage.getItem("@locale");
-    if (locale === "en" || locale?.startsWith("en-")) {
+    if (locale === "en") {
       setLocale("en");
       return;
-    } else if (locale === "ja" || locale?.startsWith("ja-")) {
+    } else if (locale === "ja") {
       setLocale("ja");
       return;
     }

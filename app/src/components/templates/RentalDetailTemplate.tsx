@@ -124,7 +124,6 @@ const RentalDetailTemplate = ({
                     source={{ uri: item }}
                     style={{ flex: 1 }}
                     contentFit="contain"
-                    cachePolicy="memory-disk"
                   />
                 </Box>
               )}

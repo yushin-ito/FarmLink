@@ -47,7 +47,7 @@ const LikeListTemplate = ({
   goBackNavigationHandler,
 }: LikeListTemplateProps) => {
   const { t } = useTranslation("setting");
-  const bgColor = useColorModeValue("white", "muted.700");
+  const bgColor = useColorModeValue("muted.200", "muted.700");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 

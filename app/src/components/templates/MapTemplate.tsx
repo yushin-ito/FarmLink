@@ -79,6 +79,7 @@ const MapTemplate = ({
     <Box flex={1}>
       <MapView
         ref={mapRef}
+        userInterfaceStyle={useColorModeValue("light", "dark")}
         showsCompass={false}
         initialRegion={{
           latitude: 35,

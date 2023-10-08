@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { AuthStackParamList } from "../types";
-import { useSignUp } from "../hooks/auth/mutate";
+import { useSignInWithProvider, useSignUp } from "../hooks/auth/mutate";
 import * as Linking from "expo-linking";
 import SignUpTemplate from "../components/templates/SignUpTemplate";
 import { showAlert } from "../functions";
@@ -11,6 +11,7 @@ import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import { usePostUser } from "../hooks/user/mutate";
+import { supabase } from "../supabase";
 
 type SignUpNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -22,7 +23,12 @@ const SignUpScreen = () => {
   const { t } = useTranslation("auth");
   const navigation = useNavigation<SignUpNavigationProp>();
 
-  const { mutateAsync: mutateAsyncSignUp, isLoading: isLoadingSignUp } =
+  const searchUser = useCallback(async (userId: string | undefined) => {
+    const { data } = await supabase.from("user").select().eq("userId", userId);
+    return data;
+  }, []);
+
+  const { mutateAsync: mutateAsyncSignUpWithEmail, isLoading: isLoadingSignUpWithEmail } =
     useSignUp({
       onSuccess: ({ user }) => {
         if (user && user.identities && user.identities?.length > 0) {
@@ -89,10 +95,39 @@ const SignUpScreen = () => {
       },
     });
 
+  const { mutateAsync: mutateAsyncSignInWithProvider } =
+    useSignInWithProvider({
+      onSuccess: async (data) => {
+        if (data?.user && !(await searchUser(data.user.id))?.length) {
+          mutateAsyncPostUser({
+            userId: data.user.id,
+            name: data.user.user_metadata.name,
+            avatarUrl: data.user.user_metadata.avatar_url.replace(
+              "_normal",
+              ""
+            ), // for Twitter
+            color: `hsl(${Math.floor(
+              Math.random() * 360
+            ).toString()}, 60%, 60%)`,
+          });
+        }
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
+
   const signUpWithEmail = useCallback(
     async (email: string, password: string, displayName: string) => {
       const redirectURL = Linking.createURL("verify");
-      await mutateAsyncSignUp({
+      await mutateAsyncSignUpWithEmail({
         email,
         password,
         options: {
@@ -104,6 +139,18 @@ const SignUpScreen = () => {
     []
   );
 
+  const signUpWithGoogle = useCallback(async () => {
+    await mutateAsyncSignInWithProvider("google");
+  }, []);
+
+  const signUpWithTwitter = useCallback(async () => {
+    await mutateAsyncSignInWithProvider("twitter");
+  }, []);
+
+  const signUpWithFacebook = useCallback(async () => {
+    await mutateAsyncSignInWithProvider("facebook");
+  }, []);
+
   const signInNavigationHandler = useCallback(() => {
     navigation.navigate("SignIn");
   }, []);
@@ -114,8 +161,11 @@ const SignUpScreen = () => {
 
   return (
     <SignUpTemplate
-      isLoading={isLoadingSignUp || isLoadingPostUser}
+      isLoading={isLoadingSignUpWithEmail || isLoadingPostUser}
       signUpWithEmail={signUpWithEmail}
+      signUpWithGoogle={signUpWithGoogle}
+      signUpWithTwitter={signUpWithTwitter}
+      signUpWithFacebook={signUpWithFacebook}
       signInNavigationHandler={signInNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

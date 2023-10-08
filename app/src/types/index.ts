@@ -33,7 +33,7 @@ export type RootStackParamList = {
 };
 
 export type AuthStackParamList = {
-  Provider: undefined;
+  Welcome: undefined
   SignIn: undefined;
   SignUp: undefined;
 };

@@ -286,6 +286,7 @@ const EditFarmTemplate = ({
                   </Text>
                   <MapView
                     ref={mapRef}
+                    userInterfaceStyle={useColorModeValue("light", "dark")}
                     showsCompass={false}
                     style={{
                       width: "100%",
@@ -301,7 +302,7 @@ const EditFarmTemplate = ({
                         }}
                       >
                         <VStack alignItems="center">
-                          <Text bold color="blueGray.600" fontSize="2xs">
+                          <Text bold fontSize="2xs">
                             {farm.name}
                           </Text>
                           <Icon

@@ -2,13 +2,17 @@ import React, { memo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Feather } from "@expo/vector-icons";
 import {
+  Box,
   Button,
+  Center,
+  Divider,
   FormControl,
   HStack,
   Heading,
   Icon,
   IconButton,
   Link,
+  Pressable,
   Text,
   VStack,
   useColorModeValue,
@@ -16,10 +20,14 @@ import {
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Image } from "expo-image";
 
-type SignInTemplateProps = {
+type SignInWithEmailTemplateProps = {
   isLoading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  signInWithTwitter: () => Promise<void>;
+  signInWithFacebook: () => Promise<void>;
   signUpNavigationHandler: () => void;
   goBackNavigationHandler: () => void;
 };
@@ -29,16 +37,20 @@ type FormValues = {
   password: string;
 };
 
-const SignInTemplate = memo(
+const SignInWithEmailTemplate = memo(
   ({
     isLoading,
     signInWithEmail,
+    signInWithGoogle,
+    signInWithTwitter,
+    signInWithFacebook,
     signUpNavigationHandler,
     goBackNavigationHandler,
-  }: SignInTemplateProps) => {
+  }: SignInWithEmailTemplateProps) => {
     const { t } = useTranslation("auth");
     const textColor = useColorModeValue("muted.500", "muted.300");
-    const iconColor = useColorModeValue("muted.400", "muted.200");
+    const iconColor = useColorModeValue("black", "white");
+    const pressedColor = useColorModeValue("muted.100", "muted.800");
 
     const [showPassword, setShowPassword] = useState(false);
     const {
@@ -49,26 +61,27 @@ const SignInTemplate = memo(
 
     return (
       <VStack flex={1} safeAreaTop>
-        <IconButton
-          onPress={goBackNavigationHandler}
-          icon={
-            <Icon
-              as={<Feather name="chevron-left" />}
-              size="2xl"
-              color={iconColor}
-            />
-          }
-          alignSelf="flex-start"
-          variant="unstyled"
-        />
+        <HStack px="2" alignItems="center" justifyContent="space-between">
+          <IconButton
+            onPress={goBackNavigationHandler}
+            icon={
+              <Icon
+                as={<Feather name="chevron-left" />}
+                size="2xl"
+                color={iconColor}
+              />
+            }
+            alignSelf="flex-start"
+            variant="unstyled"
+          />
+          <Heading fontSize="3xl">{t("signin")}</Heading>
+          <Box size="12" />
+        </HStack>
         <KeyboardAwareScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
         >
-          <VStack flex={1} pt="24" px="10" space="6">
-            <Heading fontSize="3xl" mb="5" textAlign="center">
-              {t("signin")}
-            </Heading>
+          <VStack flex={1} pt="9" pb="12" px="10" space="3">
             <FormControl isRequired isInvalid={"email" in errors}>
               <FormControl.Label>{t("email")}</FormControl.Label>
               <Controller
@@ -85,7 +98,7 @@ const SignInTemplate = memo(
                         as={<Feather name="mail" />}
                         size="5"
                         mr="2"
-                        color={iconColor}
+                        color="muted.400"
                       />
                     }
                     value={value}
@@ -123,7 +136,7 @@ const SignInTemplate = memo(
                                 name={showPassword ? "eye" : "eye-off"}
                               />
                             }
-                            color={iconColor}
+                            color="muted.400"
                           />
                         }
                         variant="unstyled"
@@ -172,6 +185,69 @@ const SignInTemplate = memo(
                 </Link>
               </HStack>
             </VStack>
+            <HStack
+              mt="4"
+              alignItems="center"
+              justifyContent="center"
+              space="3"
+            >
+              <Divider w="40%" bg="muted.300" />
+              <Text color={textColor}>{t("or")}</Text>
+              <Divider w="40%" bg="muted.300" />
+            </HStack>
+            <VStack mt="4" space="4">
+              <Pressable
+                py="3"
+                rounded="full"
+                borderWidth="1"
+                borderColor="muted.200"
+                alignItems="center"
+                _pressed={{ bg: pressedColor }}
+                onPress={signInWithGoogle}
+              >
+                <Center h="100%" position="absolute" top="3" left="3">
+                  <Image
+                    style={{ width: 32, height: 32 }}
+                    source={require("../../../assets/google.png")}
+                  />
+                </Center>
+                <Text>{t("signInWithGoogle")}</Text>
+              </Pressable>
+              <Pressable
+                py="3"
+                rounded="full"
+                borderWidth="1"
+                borderColor="muted.200"
+                alignItems="center"
+                _pressed={{ bg: pressedColor }}
+                onPress={signInWithTwitter}
+              >
+                <Center h="100%" position="absolute" top="3" left="3">
+                  <Image
+                    style={{ width: 32, height: 32 }}
+                    source={require("../../../assets/twitter.png")}
+                  />
+                </Center>
+                <Text>{t("signInWithTwitter")}</Text>
+              </Pressable>
+              <Pressable
+                py="3"
+                rounded="full"
+                borderWidth="1"
+                borderColor="muted.200"
+                alignItems="center"
+                _pressed={{ bg: pressedColor }}
+                onPress={signInWithFacebook}
+              >
+                <Center h="100%" position="absolute" top="3" left="3">
+                  <Image
+                    style={{ width: 32, height: 32 }}
+                    source={require("../../../assets/facebook.png")}
+                  />
+                </Center>
+                <Text>{t("signInWithFacebook")}</Text>
+              </Pressable>
+            </VStack>
           </VStack>
         </KeyboardAwareScrollView>
       </VStack>
@@ -179,4 +255,4 @@ const SignInTemplate = memo(
   }
 );
 
-export default SignInTemplate;
+export default SignInWithEmailTemplate;

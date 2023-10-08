@@ -433,13 +433,14 @@ const PostRentalTemplate = ({
               ) : (
                 <MapView
                   ref={mapRef}
+                  userInterfaceStyle={useColorModeValue("light", "dark")}
+                  showsCompass={false}
                   style={{
                     width: "100%",
                     height: 160,
                     borderRadius: 12,
                     opacity: isLoadingPosition ? 0.5 : 1,
                   }}
-                  showsCompass={false}
                 >
                   {position && (
                     <Marker coordinate={position.coords}>
