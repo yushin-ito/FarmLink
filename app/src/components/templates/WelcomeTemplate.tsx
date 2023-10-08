@@ -26,7 +26,7 @@ const WelcomeTemplate = memo(
       >
         <StatusBar style="light" />
         <VStack w="100%" space="4">
-          <Heading color="white" fontSize="32">
+          <Heading color="white" fontSize="32" textAlign="center">
             {t("welcome")}
           </Heading>
           <Text bold color="white" fontSize="md" textAlign="center">

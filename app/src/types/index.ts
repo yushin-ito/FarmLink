@@ -33,7 +33,7 @@ export type RootStackParamList = {
 };
 
 export type AuthStackParamList = {
-  Welcome: undefined
+  Welcome: undefined;
   SignIn: undefined;
   SignUp: undefined;
 };
@@ -67,8 +67,9 @@ export type CommunityStackParamList = {
     name: string | null;
     category: Category;
   };
-  PostCommunity: undefined;
+  PostCommunity: { category: Category };
   SearchCommunity: { category: Category };
+  ImagePreview: { imageUrl: string };
 };
 
 export type FarmStackParamList = {
@@ -86,6 +87,7 @@ export type TalkStackParamList = {
   };
   PostTalk: undefined;
   SearchTalk: undefined;
+  ImagePreview: { imageUrl: string };
 };
 
 export type SettingStackParamList = {
@@ -95,7 +97,7 @@ export type SettingStackParamList = {
   PostProfile: undefined;
   LikeList: undefined;
   Notification: undefined;
-  Environment: undefined
+  Environment: undefined;
 };
 
 export type MapStackScreenProps<Screen extends keyof MapStackParamList> =

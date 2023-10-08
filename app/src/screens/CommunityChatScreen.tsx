@@ -242,6 +242,10 @@ const CommunityChatScreen = ({
     });
   }, [params]);
 
+  const imagePreviewNavigationHandler = useCallback((imageUrl: string) => {
+    navigation.navigate("ImagePreview", { imageUrl });
+  }, []);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -265,6 +269,7 @@ const CommunityChatScreen = ({
       isLoadingChats={isLoadingChats}
       isLoadingPostChat={isLoadingPostChat}
       hasMore={hasMore}
+      imagePreviewNavigationHandler={imagePreviewNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

@@ -21,8 +21,9 @@ import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Image } from "expo-image";
+import { StatusBar } from "expo-status-bar";
 
-type SignInWithEmailTemplateProps = {
+type SignInTemplateProps = {
   isLoading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
@@ -37,7 +38,7 @@ type FormValues = {
   password: string;
 };
 
-const SignInWithEmailTemplate = memo(
+const SignInTemplate = memo(
   ({
     isLoading,
     signInWithEmail,
@@ -46,7 +47,7 @@ const SignInWithEmailTemplate = memo(
     signInWithFacebook,
     signUpNavigationHandler,
     goBackNavigationHandler,
-  }: SignInWithEmailTemplateProps) => {
+  }: SignInTemplateProps) => {
     const { t } = useTranslation("auth");
     const textColor = useColorModeValue("muted.500", "muted.300");
     const iconColor = useColorModeValue("black", "white");
@@ -61,6 +62,7 @@ const SignInWithEmailTemplate = memo(
 
     return (
       <VStack flex={1} safeAreaTop>
+        <StatusBar style={useColorModeValue("dark", "light")} />
         <HStack px="2" alignItems="center" justifyContent="space-between">
           <IconButton
             onPress={goBackNavigationHandler}
@@ -255,4 +257,4 @@ const SignInWithEmailTemplate = memo(
   }
 );
 
-export default SignInWithEmailTemplate;
+export default SignInTemplate;

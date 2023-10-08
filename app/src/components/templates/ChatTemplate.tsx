@@ -45,6 +45,7 @@ type ChatTemplateProps = {
   pickChatImageByCamera: () => Promise<void>;
   pickChatImageByLibrary: () => Promise<void>;
   readMore: () => void;
+  imagePreviewNavigationHandler: (imageUrl: string) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -66,11 +67,12 @@ const ChatTemplate = ({
   pickChatImageByCamera,
   pickChatImageByLibrary,
   readMore,
+  imagePreviewNavigationHandler,
   goBackNavigationHandler,
 }: ChatTemplateProps) => {
   const { t } = useTranslation(["chat", "community", "talk"]);
   const bgColor = useColorModeValue("muted.100", "muted.800");
-  const menuColor = useColorModeValue("muted.100", "muted.700");
+  const menuColor = useColorModeValue("white", "muted.700");
   const pressedColor = useColorModeValue("muted.100", "muted.900");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
@@ -216,6 +218,7 @@ const ChatTemplate = ({
                   onChatOpen();
                   setChatId(item.chatId);
                 }}
+                imagePreviewNavigationHandler={imagePreviewNavigationHandler}
               />
             )}
             keyExtractor={(item) => item.chatId.toString()}

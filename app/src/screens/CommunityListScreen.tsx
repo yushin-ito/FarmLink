@@ -83,8 +83,10 @@ const CommunityListScreen = ({
   );
 
   const postCommunityNavigationHandler = useCallback(() => {
-    navigation.navigate("PostCommunity");
-  }, []);
+    navigation.navigate("PostCommunity", {
+      category: categories[categoryIndex],
+    });
+  }, [categoryIndex]);
 
   const settingNavigationHandler = useCallback(() => {
     navigation.navigate("TabNavigator", {

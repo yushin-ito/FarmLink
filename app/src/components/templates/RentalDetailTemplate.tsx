@@ -136,12 +136,12 @@ const RentalDetailTemplate = ({
               }}
             />
           ) : (
-            <Center w={width} h="240" bg="muted.100">
+            <Center w={width} h="240" bg={imageColor}>
               <Icon
                 as={<Ionicons />}
                 name="image-outline"
                 size="6xl"
-                color="muted.600"
+                color={iconColor}
               />
             </Center>
           )}

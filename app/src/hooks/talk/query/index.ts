@@ -1,6 +1,6 @@
 import { supabase } from "../../../supabase";
 import { useQuery } from "react-query";
-import { Talk, User } from "../../../types"
+import { Talk, User } from "../../../types";
 
 export type GetTalksResponse = Awaited<ReturnType<typeof getTalks>>;
 
@@ -8,7 +8,7 @@ const getTalks = async (userId: string | undefined) => {
   const { data, error } = await supabase
     .from("talk")
     .select(`*, to:recieverId(*), from:senderId(*)`)
-    .or(`senderId.eq.${userId},recieverId.eq.${userId}`)
+    .or(`senderId.eq.${userId}, recieverId.eq.${userId}`)
     .order("updatedAt", { ascending: false })
     .returns<(Talk["Row"] & { to: User["Row"]; from: User["Row"] })[]>();
   if (error) {

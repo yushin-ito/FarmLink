@@ -64,7 +64,6 @@ const ChatBar = memo(
         pt="1"
         px="3"
         space="2"
-        shadow="1"
         alignItems="flex-end"
         justifyContent="space-between"
         pb={showKeyboard ? "1" : "9"}

@@ -135,7 +135,12 @@ const PostRentalTemplate = ({
                 ListFooterComponent={
                   <Pressable onPress={pickImageByLibrary}>
                     <Center w={width - 80} h="100%" bg={imageColor}>
-                      <Icon as={<Feather />} name="camera" size="2xl" />
+                      <Icon
+                        as={<Feather />}
+                        name="camera"
+                        size="2xl"
+                        color={iconColor}
+                      />
                     </Center>
                   </Pressable>
                 }

@@ -7,6 +7,7 @@ import CommunityListScreen from "../screens/CommunityListScreen";
 import CommunityChatScreen from "../screens/CommunityChatScreen";
 import PostCommunityScreen from "../screens/PostCommunityScreen";
 import SearchCommunityScreen from "../screens/SearchCommunityScreen";
+import ImagePreviewScreen from "../screens/ImagePreviewScreen";
 
 const CommunityStack = createNativeStackNavigator<CommunityStackParamList>();
 
@@ -33,6 +34,16 @@ const CommunityNavigator = () => {
         <CommunityStack.Screen
           name="SearchCommunity"
           component={SearchCommunityScreen}
+        />
+      </CommunityStack.Group>
+      <CommunityStack.Group
+        screenOptions={{
+          gestureDirection: "vertical",
+        }}
+      >
+        <CommunityStack.Screen
+          name="ImagePreview"
+          component={ImagePreviewScreen}
         />
       </CommunityStack.Group>
     </CommunityStack.Navigator>

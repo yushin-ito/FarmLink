@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useRef } from "react";
 import { Feather } from "@expo/vector-icons";
 import {
   Box,
@@ -32,12 +32,18 @@ const FarmItem = memo(
     const textColor = useColorModeValue("muted.600", "muted.300");
     const iconColor = useColorModeValue("muted.600", "muted.100");
 
+    const swipeableRef = useRef<Swipeable>(null);
+
     return (
       <Swipeable
+        ref={swipeableRef}
         renderRightActions={() => (
           <HStack>
             <Pressable
-              onPress={onPressLeft}
+              onPress={() => {
+                onPressLeft();
+                swipeableRef.current?.close();
+              }}
               _pressed={{
                 opacity: 0.5,
               }}

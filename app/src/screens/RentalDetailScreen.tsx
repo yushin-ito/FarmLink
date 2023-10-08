@@ -14,6 +14,8 @@ import useLocation from "../hooks/sdk/useLocation";
 import { useQueryRentalLikes } from "../hooks/like/query";
 import { useDeleteRentalLike, usePostRentalLike } from "../hooks/like/mutate";
 import { usePostNotification } from "../hooks/notification/mutate";
+import useNotification from "../hooks/sdk/useNotification";
+import { useQueryUser } from "../hooks/user/query";
 
 const RentalDetailScreen = ({
   navigation,
@@ -27,6 +29,9 @@ const RentalDetailScreen = ({
     refetch: refetchRental,
   } = useQueryRental(params.rentalId);
   const { session } = useAuth();
+  const { data: user, isLoading: isLoadingUser } = useQueryUser(
+    session?.user.id
+  );
   const { data: talks, refetch: refetchTalks } = useQueryTalks(
     session?.user.id
   );
@@ -82,6 +87,14 @@ const RentalDetailScreen = ({
             rentalId,
             clicked: false,
           });
+          user &&
+            rental.name &&
+            (await sendNotification({
+              to: rental.ownerId,
+              title: user.name,
+              body: rental.name,
+              data: { screenName: "RentalDetail" },
+            }));
         }
       },
       onError: () => {
@@ -175,6 +188,29 @@ const RentalDetailScreen = ({
       },
     });
 
+  const { sendNotification } = useNotification({
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestNoti")}
+        />
+      );
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
   const postLike = useCallback(async () => {
     if (session) {
       await mutateAsyncPostLike({
@@ -247,7 +283,9 @@ const RentalDetailScreen = ({
       refetch={refetch}
       address={address}
       rental={rental}
-      isLoading={isLoadingRental || isLoadingLikes || isLoadingAddress}
+      isLoading={
+        isLoadingUser || isLoadingRental || isLoadingLikes || isLoadingAddress
+      }
       isLoadingPostTalk={isLoadingPostTalk}
       isLoadingPostLike={isLoadingPostLike || isLoadingPostNotification}
       isRefetching={isRefetchingRental}

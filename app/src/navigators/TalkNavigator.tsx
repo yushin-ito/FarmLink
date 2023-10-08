@@ -7,6 +7,7 @@ import TalkListScreen from "../screens/TalkListScreen";
 import TalkChatScreen from "../screens/TalkChatScreen";
 import PostTalkScreen from "../screens/PostTalkScreen";
 import SearchTalkScreen from "../screens/SearchTalkScreen";
+import ImagePreviewScreen from "../screens/ImagePreviewScreen";
 
 const TalkStack = createNativeStackNavigator<TalkStackParamList>();
 
@@ -22,6 +23,13 @@ const TalkNavigator = () => {
         screenOptions={{ animation: "none", gestureEnabled: false }}
       >
         <TalkStack.Screen name="SearchTalk" component={SearchTalkScreen} />
+      </TalkStack.Group>
+      <TalkStack.Group
+        screenOptions={{
+          gestureDirection: "vertical",
+        }}
+      >
+        <TalkStack.Screen name="ImagePreview" component={ImagePreviewScreen} />
       </TalkStack.Group>
     </TalkStack.Navigator>
   );

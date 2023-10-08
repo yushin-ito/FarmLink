@@ -1,10 +1,11 @@
 {
   "common": {
     "permitRequestNoti": "Please grant notification permission",
-    "fetchError": "Failed to fetch data."
+    "fetchError": "Failed to fetch data.",
+    "preview": "Preview"
   },
   "auth": {
-    "welcome": "Welcome to FarmLink",
+    "welcome": "Welcome!",
     "app": "We will do our best to support your agriculture with the power of IoT.",
     "enter": "Enter",
     "displayName": "User name",
@@ -68,6 +69,8 @@
     "chat": "Chat",
     "createdTalk": "Talk was created.",
     "saved": "Saved in",
+    "liked": "was liked.",
+    "permitRequestNoti": "Please grant notification permission",
     "permitRequestCam": "Please grant camera permission",
     "error": "An error occurred",
     "dev": "This function is currently under development"

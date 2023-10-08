@@ -49,7 +49,7 @@ const Stagger = memo(
           variant="solid"
           colorScheme="brand"
           rounded="full"
-          icon={<Icon as={<Feather />} size="5" name="camera" />}
+          icon={<Icon as={<Feather />} size="5" name="camera" color="white" />}
           onPress={pickImageByCamera}
         />
         <IconButton
@@ -57,7 +57,7 @@ const Stagger = memo(
           variant="solid"
           colorScheme="brand"
           rounded="full"
-          icon={<Icon as={<Feather />} size="5" name="image" />}
+          icon={<Icon as={<Feather />} size="5" name="image" color="white" />}
           onPress={pickImageByLibrary}
         />
       </NativeBaseStagger>

@@ -27,7 +27,7 @@ const getCommunities = async (
     const { data, error } = await supabase
       .from("community")
       .select("*")
-      .contains("memberIds", [userId])
+      .or(`ownerId.eq.${userId}, memberIds.cs.{"${userId}"}`)
       .order("createdAt", { ascending: false })
       .range(from, to);
     if (error) {

@@ -29,9 +29,6 @@ const App = () => {
         900: "#152b08",
       },
     },
-    config: {
-      useSystemColorMode: true,
-    },
   });
 
   const colorScheme = useColorScheme();

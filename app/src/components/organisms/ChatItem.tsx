@@ -21,10 +21,19 @@ type ChatItemProps = {
   authored: boolean;
   locale: "en" | "ja" | null;
   onLongPress: () => void;
+  imagePreviewNavigationHandler: (imageUrl: string) => void;
 };
 
 const ChatItem = memo(
-  ({ item, authored, locale, onLongPress }: ChatItemProps) => {
+  ({
+    item,
+    authored,
+    locale,
+    onLongPress,
+    imagePreviewNavigationHandler,
+  }: ChatItemProps) => {
+    const bgColor = useColorModeValue("white", "muted.600");
+    const imageColor = useColorModeValue("muted.300", "muted.700");
     const textColor = useColorModeValue("muted.600", "muted.200");
     const ASPECT = 0.7;
     const dimension = useWindowDimensions();
@@ -56,7 +65,7 @@ const ChatItem = memo(
               <Box
                 px="2"
                 py="1"
-                bg="white"
+                bg={bgColor}
                 shadow="1"
                 roundedTop="xl"
                 roundedBottomRight={!authored ? "xl" : "0"}
@@ -72,8 +81,13 @@ const ChatItem = memo(
             </VStack>
           </Pressable>
         )}
-        {item?.imageUrl && item.width && item.height && (
-          <Pressable onLongPress={() => authored && onLongPress()}>
+        {item.imageUrl && item.width && item.height && (
+          <Pressable
+            onPress={() =>
+              item.imageUrl && imagePreviewNavigationHandler(item.imageUrl)
+            }
+            onLongPress={() => authored && onLongPress()}
+          >
             <VStack
               space="1"
               alignItems={!authored ? "flex-end" : "flex-start"}
@@ -83,7 +97,7 @@ const ChatItem = memo(
                   w={dimension.width * ASPECT}
                   h={(dimension.width * ASPECT * item.height) / item.width}
                   rounded="16"
-                  bg="muted.300"
+                  bg={imageColor}
                 >
                   <Image
                     style={{

@@ -26,9 +26,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { t } = useTranslation("chat");
   const toast = useToast();
   const { session, locale } = useAuth();
-  const { data: user} = useQueryUser(
-    session?.user.id
-  );
+  const { data: user } = useQueryUser(session?.user.id);
   const { params } = useRoute<RouteProp<TalkStackParamList, "TalkChat">>();
   const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
   const {
@@ -277,6 +275,10 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     await mutateAsyncDeleteTalk(params.talkId);
   }, []);
 
+  const imagePreviewNavigationHandler = useCallback((imageUrl: string) => {
+    navigation.navigate("ImagePreview", { imageUrl });
+  }, []);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -297,6 +299,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
       isLoadingChats={isLoadingChats}
       isLoadingPostChat={isLoadingPostChat || isLoadingPostNotification}
       hasMore={hasMore}
+      imagePreviewNavigationHandler={imagePreviewNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

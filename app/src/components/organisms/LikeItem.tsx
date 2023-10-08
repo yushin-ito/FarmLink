@@ -137,7 +137,14 @@ const LikeItem = memo(
                       />
                     )}
                   </Center>
-                  <VStack w="80%" space="1">
+                  <VStack
+                    w={
+                      item.farm?.privated || item.rental?.privated
+                        ? "70%"
+                        : "80%"
+                    }
+                    space="1"
+                  >
                     <Text bold fontSize="md">
                       {item.rental.name}
                     </Text>

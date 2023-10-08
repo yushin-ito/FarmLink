@@ -103,7 +103,7 @@ const PostFarmTemplate = ({
           }
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("createFarm")}</Heading>
+        <Heading>{t("createFarm")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}

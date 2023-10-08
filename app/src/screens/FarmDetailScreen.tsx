@@ -15,6 +15,8 @@ import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import { useQueryTalks } from "../hooks/talk/query";
 import { usePostNotification } from "../hooks/notification/mutate";
+import useNotification from "../hooks/sdk/useNotification";
+import { useQueryUser } from "../hooks/user/query";
 
 const FarmDetailScreen = ({
   navigation,
@@ -28,6 +30,9 @@ const FarmDetailScreen = ({
     isLoading: isLoadingFarm,
   } = useQueryFarm(params.farmId);
   const { session, locale } = useAuth();
+  const { data: user, isLoading: isLoadingUser } = useQueryUser(
+    session?.user.id
+  );
   const { data: talks, refetch: refetchTalks } = useQueryTalks(
     session?.user.id
   );
@@ -85,6 +90,14 @@ const FarmDetailScreen = ({
             farmId,
             clicked: false,
           });
+          user &&
+            farm.name &&
+            (await sendNotification({
+              to: farm.ownerId,
+              title: user.name,
+              body: farm.name,
+              data: { screenName: "FarmDetail" },
+            }));
         }
       },
       onError: () => {
@@ -178,6 +191,29 @@ const FarmDetailScreen = ({
       },
     });
 
+  const { sendNotification } = useNotification({
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestNoti")}
+        />
+      );
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
   const postLike = useCallback(async () => {
     if (session && farm) {
       await mutateAsyncPostLike({
@@ -251,7 +287,7 @@ const FarmDetailScreen = ({
       postLike={postLike}
       deleteLike={deleteLike}
       refetch={refetch}
-      isLoading={isLoadingFarm || isLoadingLikes || isLoadingAddress}
+      isLoading={isLoadingUser || isLoadingFarm || isLoadingLikes || isLoadingAddress}
       isLoadingPostTalk={isLoadingPostTalk}
       isLoadingPostLike={isLoadingPostLike || isLoadingPostNotification}
       isLoadingDeleteLike={isLoadingDeleteLike}

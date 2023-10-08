@@ -65,6 +65,7 @@ const FarmDetailTemplate = ({
   const { t } = useTranslation("map");
   const bgColor = useColorModeValue("white", "muted.800");
   const borderColor = useColorModeValue("muted.300", "muted.600");
+  const imageColor = useColorModeValue("muted.200", "muted.600");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
   const { width } = useWindowDimensions();
@@ -106,13 +107,17 @@ const FarmDetailTemplate = ({
         {isLoading ? (
           <Skeleton w={width} h="64" />
         ) : (
-          <Box h="64" bg="muted.100">
-            <Image
-              source={{
-                uri: farm?.device?.imageUrl + "?=" + farm?.device?.updatedAt,
-              }}
-              style={{ flex: 1 }}
-            />
+          <Box h="64" bg={imageColor}>
+            {farm?.device.imageUrl ? (
+              <Image
+                source={{
+                  uri: farm.device.imageUrl + "?=" + farm.device.updatedAt,
+                }}
+                style={{ flex: 1 }}
+              />
+            ) : (
+              <Icon as={<Feather />} name="image" size="lg" color={iconColor} />
+            )}
           </Box>
         )}
         {isLoading ? (

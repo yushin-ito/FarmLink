@@ -128,15 +128,19 @@ const CommunityListTemplate = ({
           onEndReached={readMore}
           onEndReachedThreshold={0.3}
           ListFooterComponent={
-            <Center>{hasMore && <Spinner color="muted.400" />}</Center>
+            <Center mt={hasMore ? "0" : "12"}>
+              {hasMore && <Spinner color="muted.400" />}
+            </Center>
           }
           renderItem={({ item }) => (
             <CommunityItem
               item={item}
               joined={
-                item?.memberIds?.some(
+                user?.userId === item.ownerId ||
+                (item?.memberIds?.some(
                   (memeberId) => user?.userId === memeberId
-                ) ?? false
+                ) ??
+                  false)
               }
               joinCommunity={joinCommunity}
               isLoading={isLoadingPostCommunity}
@@ -148,7 +152,6 @@ const CommunityListTemplate = ({
           onRefresh={refetchCommunities}
         />
       )}
-
       <Fab
         position="absolute"
         bottom="24"

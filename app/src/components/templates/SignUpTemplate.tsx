@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Image } from "expo-image";
+import { StatusBar } from "expo-status-bar";
 
 export type SignUpTemplateProps = {
   isLoading: boolean;
@@ -66,6 +67,7 @@ const SignUpTemplate = memo(
 
     return (
       <VStack flex={1} safeAreaTop>
+        <StatusBar style={useColorModeValue("dark", "light")} />
         <HStack px="2" alignItems="center" justifyContent="space-between">
           <IconButton
             onPress={goBackNavigationHandler}

@@ -1,7 +1,8 @@
 {
   "common": {
     "permitRequestNoti": "通知を許可してください",
-    "fetchError": "データの取得に失敗しました。"
+    "fetchError": "データの取得に失敗しました。",
+    "preview": "プレビュー"
   },
   "auth": {
     "welcome": "FarmLinkへようこそ",
@@ -68,6 +69,8 @@
     "chat": "チャットする",
     "createdTalk": "トークが作成されました",
     "saved": "保存しました",
+    "liked": "さんがいいねしました。",
+    "permitRequestNoti": "通知を許可してください",
     "permitRequestCam": "カメラを許可してください",
     "error": "エラーが発生しました",
     "dev": "この機能は現在開発中です"
