@@ -21,14 +21,11 @@ type CommunityItemProps = {
   joined: boolean;
   joinCommunity: (
     communityId: number,
-    name: string | null,
+    name: string,
     memeberIds: string[]
   ) => Promise<void>;
   isLoading: boolean;
-  communityChatNavigationHandler: (
-    communityId: number,
-    name: string | null
-  ) => void;
+  communityChatNavigationHandler: (communityId: number, name: string) => void;
 };
 
 const CommunityItem = memo(
@@ -49,7 +46,8 @@ const CommunityItem = memo(
       <Pressable
         onPress={() =>
           joined
-            ? communityChatNavigationHandler(item.communityId, item.name)
+            ? item.name &&
+              communityChatNavigationHandler(item.communityId, item.name)
             : onOpen()
         }
         _pressed={{ bg: pressedColor }}
@@ -84,11 +82,12 @@ const CommunityItem = memo(
               colorScheme="brand"
               isLoading={isLoading}
               onPress={async () => {
-                await joinCommunity(
-                  item.communityId,
-                  item.name,
-                  item.memberIds ?? []
-                );
+                item.name &&
+                  (await joinCommunity(
+                    item.communityId,
+                    item.name,
+                    item.memberIds ?? []
+                  ));
                 onClose();
               }}
             >

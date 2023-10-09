@@ -276,8 +276,8 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   }, []);
 
   const imagePreviewNavigationHandler = useCallback((imageUrl: string) => {
-    navigation.navigate("ImagePreview", { imageUrl });
-  }, []);
+    navigation.navigate("ImagePreview", { title: params.name, imageUrl });
+  }, [params]);
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

@@ -58,18 +58,19 @@ export type MapStackParamList = {
   EditRental: { rentalId: number };
   FarmDetail: { farmId: number };
   EditFarm: { farmId: number };
+  ImagePreview: { title: string; imageUrl: string };
 };
 
 export type CommunityStackParamList = {
   CommunityList: undefined;
   CommunityChat: {
     communityId: number;
-    name: string | null;
+    name: string;
     category: Category;
   };
   PostCommunity: { category: Category };
   SearchCommunity: { category: Category };
-  ImagePreview: { imageUrl: string };
+  ImagePreview: { title: string; imageUrl: string };
 };
 
 export type FarmStackParamList = {
@@ -87,7 +88,7 @@ export type TalkStackParamList = {
   };
   PostTalk: undefined;
   SearchTalk: undefined;
-  ImagePreview: { imageUrl: string };
+  ImagePreview: { title: string; imageUrl: string };
 };
 
 export type SettingStackParamList = {

@@ -37,13 +37,13 @@ type CommunityListTemplateProps = {
   refetchCommunities: () => Promise<void>;
   joinCommunity: (
     communityId: number,
-    name: string | null,
+    name: string,
     memberIds: string[]
   ) => Promise<void>;
   readMore: () => void;
   communityChatNavigationHandler: (
     communityId: number,
-    name: string | null
+    name: string
   ) => void;
   postCommunityNavigationHandler: () => void;
   settingNavigationHandler: () => void;

@@ -33,7 +33,6 @@ const LikeItem = memo(
 
     return (
       <Swipeable
-        enabled={!(item.farm?.privated || item.rental?.privated)}
         renderRightActions={() => (
           <Pressable
             onPress={onPressRight}

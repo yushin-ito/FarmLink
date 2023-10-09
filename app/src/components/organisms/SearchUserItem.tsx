@@ -57,7 +57,9 @@ const SearchUserItem = memo(
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                {item.introduction ?? t("noProfile")}
+                {item.profile || item.profile !== ""
+                  ? item.profile
+                  : t("noProfile")}
               </Text>
             </VStack>
           </HStack>

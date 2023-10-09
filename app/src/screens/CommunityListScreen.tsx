@@ -54,7 +54,7 @@ const CommunityListScreen = ({
   }, []);
 
   const joinCommunity = useCallback(
-    async (communityId: number, name: string | null, memberIds: string[]) => {
+    async (communityId: number, name: string, memberIds: string[]) => {
       if (session) {
         memberIds.push(session.user.id);
         await mutateAsyncPostCommunity({
@@ -72,7 +72,7 @@ const CommunityListScreen = ({
   );
 
   const communityChatNavigationHandler = useCallback(
-    (communityId: number, name: string | null) => {
+    (communityId: number, name: string) => {
       navigation.navigate("CommunityChat", {
         communityId,
         name,

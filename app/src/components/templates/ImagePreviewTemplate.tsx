@@ -1,6 +1,14 @@
-import { Box, HStack, Heading, Icon, IconButton, Pressable } from "native-base";
-import React, { useState, useRef} from "react";
-import { Animated } from "react-native";
+import {
+  Box,
+  HStack,
+  Heading,
+  Icon,
+  IconButton,
+  PresenceTransition,
+  Pressable,
+} from "native-base";
+import React, { useState, useRef } from "react";
+import { Animated, useWindowDimensions } from "react-native";
 import {
   HandlerStateChangeEvent,
   PanGestureHandler,
@@ -13,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import { StatusBar } from "expo-status-bar";
 
 type ImagePreviewTemplateProps = {
+  title: string;
   imageUrl: string;
   goBackNavigationHandler: () => void;
 };
@@ -22,11 +31,13 @@ const ImagePreviewTemplate = ({
   goBackNavigationHandler,
 }: ImagePreviewTemplateProps) => {
   const { t } = useTranslation("common");
-  const [focused, setFocused] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(true);
   const [enabled, setEnabled] = useState<boolean>(false);
   const scale = useRef(new Animated.Value(1)).current;
   const translateX = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(0)).current;
+
+  const { height } = useWindowDimensions();
 
   const pinchRef = useRef<PinchGestureHandler>();
   const panRef = useRef<PanGestureHandler>();
@@ -82,12 +93,13 @@ const ImagePreviewTemplate = ({
   return (
     <Box flex={1} bg="black">
       <StatusBar style="light" />
-      <Pressable onPress={() => setFocused(!focused)}>
+      <Pressable onPress={() => setVisible(!visible)}>
         <PanGestureHandler
           onGestureEvent={onPanEvent}
           ref={panRef}
           simultaneousHandlers={[pinchRef]}
           enabled={enabled}
+          failOffsetX={[-1000, 1000]}
           shouldCancelWhenOutside
         >
           <Animated.View>
@@ -112,16 +124,27 @@ const ImagePreviewTemplate = ({
           </Animated.View>
         </PanGestureHandler>
       </Pressable>
-      {!focused && (
+      <PresenceTransition
+        visible={visible}
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+          transition: {
+            duration: 200,
+          },
+        }}
+      >
         <HStack
           w="100%"
+          h="24"
           px="4"
-          pt="10"
-          pb="2"
+          pt="9"
           alignItems="center"
           justifyContent="space-between"
           position="absolute"
-          top="0"
+          bottom={height - 96}
           bg="rgba(0, 0, 0, 0.60)"
         >
           <IconButton
@@ -137,13 +160,11 @@ const ImagePreviewTemplate = ({
             variant="unstyled"
           />
         </HStack>
-      )}
-      {!focused && (
         <HStack
           w="100%"
+          h="20"
           px="9"
-          pt="2"
-          pb="8"
+          pb="6"
           alignItems="center"
           justifyContent="space-between"
           position="absolute"
@@ -163,7 +184,7 @@ const ImagePreviewTemplate = ({
             variant="unstyled"
           />
         </HStack>
-      )}
+      </PresenceTransition>
     </Box>
   );
 };

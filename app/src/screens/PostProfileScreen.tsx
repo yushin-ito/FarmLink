@@ -39,12 +39,12 @@ const PostProfileScreen = () => {
   });
 
   const postProfile = useCallback(
-    async (name: string, introduction: string) => {
+    async (name: string, profile: string) => {
       if (session) {
         await mutateAsync({
           userId: session.user.id,
           name,
-          introduction,
+          profile,
         });
       }
     },

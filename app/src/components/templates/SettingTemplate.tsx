@@ -37,7 +37,7 @@ type SettingTemplateProps = {
   postProfileNavigationHandler: () => void;
   rentalListNavigationHandler: () => void;
   likeListNavigationHandler: () => void;
-  environmentNavigationHandler: () => void
+  environmentNavigationHandler: () => void;
 };
 
 const SettingTemplate = ({
@@ -55,7 +55,7 @@ const SettingTemplate = ({
   postProfileNavigationHandler,
   rentalListNavigationHandler,
   likeListNavigationHandler,
-  environmentNavigationHandler
+  environmentNavigationHandler,
 }: SettingTemplateProps) => {
   const { t } = useTranslation("setting");
   const textColor = useColorModeValue("muted.600", "muted.300");
@@ -105,7 +105,9 @@ const SettingTemplate = ({
               {user?.name}
             </Text>
             <Text color={textColor} numberOfLines={2} ellipsizeMode="tail">
-              {user?.introduction ?? t("noProfile")}
+              {user?.profile || user?.profile !== ""
+                ? user?.profile
+                : t("noProfile")}
             </Text>
           </VStack>
         )}

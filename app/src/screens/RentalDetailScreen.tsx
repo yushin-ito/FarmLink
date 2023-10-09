@@ -269,6 +269,13 @@ const RentalDetailScreen = ({
     navigation.navigate("EditRental", { rentalId });
   }, []);
 
+  const imagePreviewNavigationHandler = useCallback(
+    (title: string, imageUrl: string) => {
+      navigation.navigate("ImagePreview", { title, imageUrl });
+    },
+    []
+  );
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -292,6 +299,7 @@ const RentalDetailScreen = ({
       isLoadingDeleteLike={isLoadingDeleteLike}
       talkChatNavigationHandler={talkChatNavigationHandler}
       editRentalNavigationHandler={editRentalNavigationHandler}
+      imagePreviewNavigationHandler={imagePreviewNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

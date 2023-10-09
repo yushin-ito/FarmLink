@@ -9,6 +9,7 @@ import RentalDetailScreen from "../screens/RentalDetailScreen";
 import EditRentalScreen from "../screens/EditRentalScreen";
 import FarmDetailScreen from "../screens/FarmDetailScreen";
 import EditFarmScreen from "../screens/EditFarmScreen";
+import ImagePreviewScreen from "../screens/ImagePreviewScreen";
 
 const MapStack = createNativeStackNavigator<MapStackParamList>();
 
@@ -21,6 +22,13 @@ const MapNavigator = () => {
       <MapStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
         <MapStack.Screen name="EditRental" component={EditRentalScreen} />
         <MapStack.Screen name="EditFarm" component={EditFarmScreen} />
+      </MapStack.Group>
+      <MapStack.Group
+        screenOptions={{
+          gestureDirection: "vertical",
+        }}
+      >
+        <MapStack.Screen name="ImagePreview" component={ImagePreviewScreen} />
       </MapStack.Group>
       <MapStack.Group
         screenOptions={{ animation: "none", gestureEnabled: false }}

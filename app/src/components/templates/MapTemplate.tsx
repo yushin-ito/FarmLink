@@ -187,7 +187,7 @@ const MapTemplate = ({
             )}
       </MapView>
       <VStack w="80%" position="absolute" top="16" alignSelf="center" space="4">
-        <Box shadow="1" rounded="lg" bg="white">
+        <Box shadow="1" rounded="lg">
           <SearchBar
             isReadOnly
             bg={bgColor}

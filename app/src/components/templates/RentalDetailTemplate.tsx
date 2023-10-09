@@ -15,6 +15,7 @@ import {
   Center,
   Skeleton,
   useColorModeValue,
+  Pressable,
 } from "native-base";
 import { Image } from "expo-image";
 import { GetRentalResponse } from "../../hooks/rental/query";
@@ -45,6 +46,7 @@ type RentalDetailTemplateProps = {
   isRefetching: boolean;
   talkChatNavigationHandler: () => void;
   editRentalNavigationHandler: (rentalId: number) => void;
+  imagePreviewNavigationHandler: (name: string, imageUrl: string) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -64,6 +66,7 @@ const RentalDetailTemplate = ({
   isRefetching,
   talkChatNavigationHandler,
   editRentalNavigationHandler,
+  imagePreviewNavigationHandler,
   goBackNavigationHandler,
 }: RentalDetailTemplateProps) => {
   const { t } = useTranslation("map");
@@ -119,13 +122,20 @@ const RentalDetailTemplate = ({
               pagingEnabled
               data={rental.imageUrls}
               renderItem={({ item }) => (
-                <Box w={width} h="64" bg={imageColor}>
-                  <Image
-                    source={{ uri: item }}
-                    style={{ flex: 1 }}
-                    contentFit="contain"
-                  />
-                </Box>
+                <Pressable
+                  onPress={() =>
+                    rental.name &&
+                    imagePreviewNavigationHandler(rental.name, item)
+                  }
+                >
+                  <Box w={width} h="64" bg={imageColor}>
+                    <Image
+                      source={{ uri: item }}
+                      style={{ flex: 1 }}
+                      contentFit="contain"
+                    />
+                  </Box>
+                </Pressable>
               )}
               onMomentumScrollEnd={(event) => {
                 const currentIndex = Math.floor(

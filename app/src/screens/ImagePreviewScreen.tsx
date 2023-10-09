@@ -16,6 +16,7 @@ const ImagePreviewScreen = () => {
 
   return (
     <ImagePreviewTemplate
+      title={params.title}
       imageUrl={params.imageUrl}
       goBackNavigationHandler={goBackNavigationHandler}
     />
