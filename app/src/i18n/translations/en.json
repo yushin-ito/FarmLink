@@ -2,7 +2,7 @@
   "common": {
     "permitRequestNoti": "Please grant notification permission",
     "fetchError": "Failed to fetch data.",
-    "preview": "Preview"
+    "error": "An error occurred"
   },
   "auth": {
     "welcome": "Welcome!",

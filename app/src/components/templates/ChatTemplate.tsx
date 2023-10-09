@@ -45,7 +45,7 @@ type ChatTemplateProps = {
   pickChatImageByCamera: () => Promise<void>;
   pickChatImageByLibrary: () => Promise<void>;
   readMore: () => void;
-  imagePreviewNavigationHandler: (imageUrl: string) => void;
+  imagePreviewNavigationHandler: (imageUrl: string, chatId?: number) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -199,7 +199,6 @@ const ChatTemplate = ({
           </Center>
         ) : (
           <FlatList
-            w="100%"
             px="5"
             bg={bgColor}
             inverted

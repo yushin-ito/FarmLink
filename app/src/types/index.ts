@@ -58,7 +58,11 @@ export type MapStackParamList = {
   EditRental: { rentalId: number };
   FarmDetail: { farmId: number };
   EditFarm: { farmId: number };
-  ImagePreview: { title: string; imageUrl: string };
+  ImagePreview: {
+    title: string;
+    imageUrl: string;
+    chatId?: number;
+  };
 };
 
 export type CommunityStackParamList = {
@@ -70,7 +74,11 @@ export type CommunityStackParamList = {
   };
   PostCommunity: { category: Category };
   SearchCommunity: { category: Category };
-  ImagePreview: { title: string; imageUrl: string };
+  ImagePreview: {
+    title: string;
+    imageUrl: string;
+    chatId?: number;
+  };
 };
 
 export type FarmStackParamList = {
@@ -88,7 +96,11 @@ export type TalkStackParamList = {
   };
   PostTalk: undefined;
   SearchTalk: undefined;
-  ImagePreview: { title: string; imageUrl: string };
+  ImagePreview: {
+    title: string;
+    imageUrl: string;
+    chatId?: number;
+  };
 };
 
 export type SettingStackParamList = {

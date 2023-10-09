@@ -21,7 +21,7 @@ type ChatItemProps = {
   authored: boolean;
   locale: "en" | "ja" | null;
   onLongPress: () => void;
-  imagePreviewNavigationHandler: (imageUrl: string) => void;
+  imagePreviewNavigationHandler: (imageUrl: string, chatId?: number) => void;
 };
 
 const ChatItem = memo(
@@ -36,7 +36,7 @@ const ChatItem = memo(
     const imageColor = useColorModeValue("muted.300", "muted.700");
     const textColor = useColorModeValue("muted.600", "muted.200");
     const ASPECT = 0.7;
-    const dimension = useWindowDimensions();
+    const { width } = useWindowDimensions();
 
     return (
       <HStack
@@ -84,7 +84,11 @@ const ChatItem = memo(
         {item.imageUrl && item.width && item.height && (
           <Pressable
             onPress={() =>
-              item.imageUrl && imagePreviewNavigationHandler(item.imageUrl)
+              item.imageUrl &&
+              imagePreviewNavigationHandler(
+                item.imageUrl,
+                authored ? item.chatId : undefined
+              )
             }
             onLongPress={() => authored && onLongPress()}
           >
@@ -94,8 +98,8 @@ const ChatItem = memo(
             >
               <Box alignItems={!authored ? "flex-start" : "flex-end"}>
                 <Box
-                  w={dimension.width * ASPECT}
-                  h={(dimension.width * ASPECT * item.height) / item.width}
+                  w={width * ASPECT}
+                  h={(width * ASPECT * item.height) / item.width}
                   rounded="16"
                   bg={imageColor}
                 >

@@ -17,20 +17,21 @@ import {
   State,
 } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
-import { useTranslation } from "react-i18next";
 import { StatusBar } from "expo-status-bar";
 
 type ImagePreviewTemplateProps = {
   title: string;
   imageUrl: string;
+  deleteImage?: () => Promise<void>;
   goBackNavigationHandler: () => void;
 };
 
 const ImagePreviewTemplate = ({
+  title,
   imageUrl,
+  deleteImage,
   goBackNavigationHandler,
 }: ImagePreviewTemplateProps) => {
-  const { t } = useTranslation("common");
   const [visible, setVisible] = useState<boolean>(true);
   const [enabled, setEnabled] = useState<boolean>(false);
   const scale = useRef(new Animated.Value(1)).current;
@@ -152,13 +153,20 @@ const ImagePreviewTemplate = ({
             icon={<Icon as={<Feather name="x" />} size="lg" color="white" />}
             variant="unstyled"
           />
-          <Heading color="white">{t("preview")}</Heading>
-          <IconButton
-            icon={
-              <Icon as={<Feather name="share" />} size="lg" color="white" />
-            }
-            variant="unstyled"
-          />
+          <Heading fontSize="xl" color="white">
+            {title}
+          </Heading>
+          {deleteImage ? (
+            <IconButton
+              icon={
+                <Icon as={<Feather name="trash" />} size="lg" color="white" />
+              }
+              onPress={deleteImage}
+              variant="unstyled"
+            />
+          ) : (
+            <Box size="9" />
+          )}
         </HStack>
         <HStack
           w="100%"
@@ -173,7 +181,7 @@ const ImagePreviewTemplate = ({
         >
           <IconButton
             icon={
-              <Icon as={<Feather name="trash" />} size="lg" color="white" />
+              <Icon as={<Feather name="share" />} size="lg" color="white" />
             }
             variant="unstyled"
           />

@@ -2,7 +2,7 @@
   "common": {
     "permitRequestNoti": "通知を許可してください",
     "fetchError": "データの取得に失敗しました。",
-    "preview": "プレビュー"
+    "error":"エラーが発生しました"
   },
   "auth": {
     "welcome": "FarmLinkへようこそ",

@@ -242,9 +242,16 @@ const CommunityChatScreen = ({
     });
   }, [params]);
 
-  const imagePreviewNavigationHandler = useCallback((imageUrl: string) => {
-    navigation.navigate("ImagePreview", { title: params.name, imageUrl });
-  }, [params]);
+  const imagePreviewNavigationHandler = useCallback(
+    (imageUrl: string, chatId?: number) => {
+      navigation.navigate("ImagePreview", {
+        title: params.name,
+        imageUrl,
+        chatId,
+      });
+    },
+    [params]
+  );
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
