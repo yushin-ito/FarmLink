@@ -17,15 +17,16 @@ import { GetCommunitiesResponse } from "../../hooks/community/query";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import SearchCommunityItem from "../organisms/SearchCommunityItem";
 import { useTranslation } from "react-i18next";
+import { GetUserResponse } from "../../hooks/user/query";
 
 type SearchCommunityTemplateProps = {
+  user: GetUserResponse | null | undefined;
   searchResult: GetCommunitiesResponse | undefined;
   searchCommunities: (query: string) => Promise<void>;
   isLoadingSearchCommunities: boolean;
-  communityChatNavigationHandler: (
-    communityId: number,
-    name: string | null
-  ) => void;
+  isLoadingPostCommunity: boolean;
+  joinCommunity: (communityId: number, memberIds: string[]) => Promise<void>;
+  communityChatNavigationHandler: (communityId: number) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -34,9 +35,12 @@ type FormValues = {
 };
 
 const SearchCommunityTemplate = ({
+  user,
   searchResult,
   searchCommunities,
   isLoadingSearchCommunities,
+  isLoadingPostCommunity,
+  joinCommunity,
   communityChatNavigationHandler,
   goBackNavigationHandler,
 }: SearchCommunityTemplateProps) => {
@@ -85,7 +89,9 @@ const SearchCommunityTemplate = ({
             />
             <IconButton
               onPress={goBackNavigationHandler}
-              icon={<Icon as={<Feather name="x" />} size="6" color={iconColor}/>}
+              icon={
+                <Icon as={<Feather name="x" />} size="6" color={iconColor} />
+              }
               variant="unstyled"
               _pressed={{
                 opacity: 0.5,
@@ -101,8 +107,17 @@ const SearchCommunityTemplate = ({
               renderItem={({ item }) => (
                 <SearchCommunityItem
                   item={item}
-                  onPress={() =>
-                    communityChatNavigationHandler(item.communityId, item.name)
+                  joined={
+                    user?.userId === item.ownerId ||
+                    (item?.memberIds?.some(
+                      (memeberId) => user?.userId === memeberId
+                    ) ??
+                      false)
+                  }
+                  joinCommunity={joinCommunity}
+                  isLoading={isLoadingPostCommunity}
+                  communityChatNavigationHandler={
+                    communityChatNavigationHandler
                   }
                 />
               )}

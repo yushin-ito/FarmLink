@@ -17,7 +17,7 @@ import Avatar from "../molecules/Avatar";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import SkeletonFarmList from "../organisms/SkeletonFarmList";
-import { Alert } from "react-native";
+import { Alert, RefreshControl } from "react-native";
 
 type FarmListTemplateProps = {
   user: GetUserResponse | null | undefined;
@@ -51,6 +51,7 @@ const FarmListTemplate = ({
   settingNavigationHandler,
 }: FarmListTemplateProps) => {
   const { t } = useTranslation("farm");
+  const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");
 
   return (
@@ -114,8 +115,13 @@ const FarmListTemplate = ({
               {t("notExistFarm")}
             </Text>
           }
-          refreshing={isRefetchingFarms}
-          onRefresh={refetchFarms}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetchingFarms}
+              onRefresh={refetchFarms}
+              tintColor={spinnerColor}
+            />
+          }
         />
       )}
       <Fab

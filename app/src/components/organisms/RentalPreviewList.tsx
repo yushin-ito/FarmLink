@@ -144,7 +144,7 @@ const RentalPreviewList = memo(
                       {item.description ?? t("noDescription")}
                     </Text>
                     <HStack mt="2" space="6">
-                      <VStack alignItems="center">
+                      <VStack>
                         <Text color="muted.400" bold fontSize="xs">
                           {t("area")}
                         </Text>
@@ -152,20 +152,12 @@ const RentalPreviewList = memo(
                           {item?.area ?? t("unknown")}
                         </Text>
                       </VStack>
-                      <VStack alignItems="center">
+                      <VStack>
                         <Text color="muted.400" bold fontSize="xs">
                           {t("fee")}
                         </Text>
                         <Text color={textColor} bold fontSize="sm">
                           {item?.fee ?? t("unknown")}
-                        </Text>
-                      </VStack>
-                      <VStack alignItems="center">
-                        <Text color="muted.400" bold fontSize="xs">
-                          {t("equipment")}
-                        </Text>
-                        <Text color={textColor} bold fontSize="sm">
-                          {item?.equipment ?? t("unknown")}
                         </Text>
                       </VStack>
                     </HStack>

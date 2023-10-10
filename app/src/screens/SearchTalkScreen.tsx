@@ -25,18 +25,10 @@ const SearchTalkScreen = ({
     );
   }, []);
 
-  const talkChatNavigationHandler = useCallback(
-    (
-      talkId: number,
-      recieverId: string,
-      token: string | null,
-      name: string
-    ) => {
-      navigation.goBack();
-      navigation.navigate("TalkChat", { talkId, token, recieverId, name });
-    },
-    []
-  );
+  const talkChatNavigationHandler = useCallback((talkId: number) => {
+    navigation.goBack();
+    navigation.navigate("TalkChat", { talkId });
+  }, []);
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

@@ -54,7 +54,7 @@ const CommunityListScreen = ({
   }, []);
 
   const joinCommunity = useCallback(
-    async (communityId: number, name: string, memberIds: string[]) => {
+    async (communityId: number, memberIds: string[]) => {
       if (session) {
         memberIds.push(session.user.id);
         await mutateAsyncPostCommunity({
@@ -63,19 +63,17 @@ const CommunityListScreen = ({
         });
         navigation.navigate("CommunityChat", {
           communityId,
-          name,
           category: categories[categoryIndex],
         });
       }
     },
-    [session, user, categoryIndex]
+    [session, categoryIndex]
   );
 
   const communityChatNavigationHandler = useCallback(
-    (communityId: number, name: string) => {
+    (communityId: number) => {
       navigation.navigate("CommunityChat", {
         communityId,
-        name,
         category: categories[categoryIndex],
       });
     },

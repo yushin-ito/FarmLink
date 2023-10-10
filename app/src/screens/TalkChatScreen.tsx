@@ -9,7 +9,7 @@ import { useDeleteTalk, usePostTalk } from "../hooks/talk/mutate";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { TalkStackParamList, TalkStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
-import { useQueryTalks } from "../hooks/talk/query";
+import { useQueryTalk, useQueryTalks } from "../hooks/talk/query";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
 import {
@@ -26,8 +26,14 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { t } = useTranslation("chat");
   const toast = useToast();
   const { session, locale } = useAuth();
-  const { data: user } = useQueryUser(session?.user.id);
+  const { data: user, isLoading: isLoadingUser } = useQueryUser(
+    session?.user.id
+  );
   const { params } = useRoute<RouteProp<TalkStackParamList, "TalkChat">>();
+  const { data: talk, isLoading: isLoadingTalk } = useQueryTalk(
+    params.talkId,
+    session?.user.id
+  );
   const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
   const {
     data: chats,
@@ -78,7 +84,6 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { mutateAsync: mutateAsyncDeleteTalk } = useDeleteTalk({
     onSuccess: async () => {
       await refetchTalks();
-      navigation.goBack();
     },
     onError: () => {
       showAlert(
@@ -111,23 +116,27 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { mutateAsync: mutateAsyncPostChat, isLoading: isLoadingPostChat } =
     usePostChat({
       onSuccess: async ({ chatId, authorId, message, imageUrl }) => {
-        if (params.token && user) {
+        if (talk?.to.token && user) {
           message &&
             (await sendNotification({
-              to: params.token,
+              to: talk.to.token,
               title: user.name,
               body: message,
-              data: { screenName: "TalkChat" },
+              data: {
+                scheme: `TabNavigator/TalkNavigator/TalkChat?talkId=${params.talkId}`,
+              },
             }));
           imageUrl &&
             (await sendNotification({
-              to: params.token,
+              to: talk.to.token,
               title: user.name,
               body: t("sendImage"),
-              data: { screenName: "TalkChat" },
+              data: {
+                scheme: `TabNavigator/TalkNavigator/TalkChat?talkId=${params.talkId}`,
+              },
             }));
           await mutateAsyncPostNotification({
-            recieverId: params.recieverId,
+            recieverId: talk.to.userId,
             senderId: authorId,
             chatId,
             clicked: false,
@@ -273,17 +282,20 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   const deleteTalk = useCallback(async () => {
     await mutateAsyncDeleteTalk(params.talkId);
+    navigation.goBack();
   }, []);
 
   const imagePreviewNavigationHandler = useCallback(
     (imageUrl: string, chatId?: number) => {
-      navigation.navigate("ImagePreview", {
-        title: params.name,
-        imageUrl,
-        chatId,
-      });
+      talk?.to.name &&
+        navigation.navigate("ImagePreview", {
+          title: talk.to.name,
+          imageUrl,
+          chatId,
+          talkId: params.talkId,
+        });
     },
-    [params]
+    [talk, params]
   );
 
   const goBackNavigationHandler = useCallback(() => {
@@ -294,7 +306,8 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     <ChatTemplate
       type="talk"
       locale={locale}
-      title={params.name}
+      title={talk?.to.name}
+      owned
       user={user}
       chats={chats}
       onSend={onSend}
@@ -303,7 +316,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
       pickChatImageByCamera={pickImageByCamera}
       pickChatImageByLibrary={pickImageByLibrary}
       readMore={fetchNextPage}
-      isLoadingChats={isLoadingChats}
+      isLoading={isLoadingUser || isLoadingTalk || isLoadingChats}
       isLoadingPostChat={isLoadingPostChat || isLoadingPostNotification}
       hasMore={hasMore}
       imagePreviewNavigationHandler={imagePreviewNavigationHandler}

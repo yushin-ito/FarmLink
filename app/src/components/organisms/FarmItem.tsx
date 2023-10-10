@@ -101,8 +101,8 @@ const FarmItem = memo(
                   )}
                 </Center>
               </Box>
-              <HStack w="80%" justifyContent="space-between" pr="4">
-                <VStack space="1">
+              <HStack w="80%" pr="4" space="2">
+                <VStack w="40%" space="1">
                   <Text bold fontSize="md">
                     {item.name}
                   </Text>
@@ -116,7 +116,7 @@ const FarmItem = memo(
                   </Text>
                 </VStack>
                 <HStack mt="1" space="6" justifyContent="center">
-                  <VStack alignItems="center">
+                  <VStack>
                     <Text color="muted.400" bold fontSize="xs">
                       {t("temperture")}
                     </Text>
@@ -126,7 +126,7 @@ const FarmItem = memo(
                         : t("unknown")}
                     </Text>
                   </VStack>
-                  <VStack alignItems="center">
+                  <VStack>
                     <Text color="muted.400" bold fontSize="xs">
                       {t("humidity")}
                     </Text>
@@ -136,13 +136,13 @@ const FarmItem = memo(
                         : t("unknown")}
                     </Text>
                   </VStack>
-                  <VStack alignItems="center">
+                  <VStack>
                     <Text color="muted.400" bold fontSize="xs">
                       {t("moisture")}
                     </Text>
                     <Text color={textColor} bold fontSize="sm">
                       {item?.device?.moisture
-                        ? item.device.moisture + "℃"
+                        ? item.device.moisture + "%"
                         : t("unknown")}
                     </Text>
                   </VStack>

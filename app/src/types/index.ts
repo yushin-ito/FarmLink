@@ -62,6 +62,7 @@ export type MapStackParamList = {
     title: string;
     imageUrl: string;
     chatId?: number;
+    talkId?: number;
   };
 };
 
@@ -69,7 +70,6 @@ export type CommunityStackParamList = {
   CommunityList: undefined;
   CommunityChat: {
     communityId: number;
-    name: string;
     category: Category;
   };
   PostCommunity: { category: Category };
@@ -78,6 +78,7 @@ export type CommunityStackParamList = {
     title: string;
     imageUrl: string;
     chatId?: number;
+    talkId?: number;
   };
 };
 
@@ -88,18 +89,14 @@ export type FarmStackParamList = {
 
 export type TalkStackParamList = {
   TalkList: undefined;
-  TalkChat: {
-    talkId: number;
-    recieverId: string;
-    token: string | null;
-    name: string;
-  };
+  TalkChat: { talkId: number };
   PostTalk: undefined;
   SearchTalk: undefined;
   ImagePreview: {
     title: string;
     imageUrl: string;
     chatId?: number;
+    talkId?: number;
   };
 };
 

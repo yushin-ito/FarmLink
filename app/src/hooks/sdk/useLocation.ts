@@ -9,8 +9,17 @@ type UseLocationType = {
 const useLocation = ({ onError, onDisable }: UseLocationType) => {
   const [position, setPosition] = useState<Location.LocationObject>();
   const [address, setAddress] = useState<Location.LocationGeocodedAddress>();
+  const [geocode, setGeocode] = useState<Location.LocationGeocodedLocation>();
+  const [isLoadingGeocode, setIsLoadingGeocode] = useState(false);
   const [isLoadingAddress, setIsLoadingAddress] = useState(false);
   const [isLoadingPosition, setIsLoadingPosition] = useState(false);
+
+  const getGeocode = useCallback(async (address: string) => {
+    setIsLoadingGeocode(true);
+    const geocode = await Location.geocodeAsync(address);
+    setGeocode(geocode[0]);
+    setIsLoadingGeocode(false);
+  }, []);
 
   const getAddress = useCallback(
     async (latitude: number, longitude: number) => {
@@ -50,10 +59,13 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
   return {
     position,
     address,
+    geocode,
     getAddress,
+    getGeocode,
     getCurrentPosition,
     isLoadingPosition,
     isLoadingAddress,
+    isLoadingGeocode,
   };
 };
 

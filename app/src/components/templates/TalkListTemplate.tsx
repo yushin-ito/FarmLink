@@ -13,7 +13,7 @@ import Fab from "../molecules/Fab";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import TalkItem from "../organisms/TalkItem";
-import { Alert } from "react-native";
+import { Alert, RefreshControl } from "react-native";
 import Avatar from "../molecules/Avatar";
 import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
@@ -53,6 +53,7 @@ const TalkListTemplate = ({
   searchTalkNavigationHandler,
 }: TalkListTemplateProps) => {
   const { t } = useTranslation("talk");
+  const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");
 
   return (
@@ -121,8 +122,13 @@ const TalkListTemplate = ({
             />
           )}
           keyExtractor={(item) => item.talkId.toString()}
-          refreshing={isRefetchingTalks}
-          onRefresh={refetchTalks}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetchingTalks}
+              onRefresh={refetchTalks}
+              tintColor={spinnerColor}
+            />
+          }
         />
       )}
       <Fab

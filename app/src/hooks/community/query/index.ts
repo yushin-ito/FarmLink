@@ -1,10 +1,25 @@
 import { supabase } from "../../../supabase";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { useMemo } from "react";
 import { Category } from "../../../functions";
 
+export type GetCommunityResponse = Awaited<ReturnType<typeof getCommunity>>;
 export type GetCommunitiesResponse = Awaited<ReturnType<typeof getCommunities>>;
+
+const getCommunity = async (communityId: number) => {
+  const { data, error } = await supabase
+    .from("community")
+    .select("*")
+    .eq("communityId", communityId)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
 
 const getCommunities = async (
   category: Category,
@@ -49,6 +64,12 @@ const getCommunities = async (
     return data;
   }
 };
+
+export const useQueryCommuntiy = (communtiyId: number) =>
+  useQuery({
+    queryKey: ["communtiy", communtiyId.toString()],
+    queryFn: async () => await getCommunity(communtiyId),
+  });
 
 export const useInfiniteQueryCommunities = (
   category: Category,

@@ -94,8 +94,8 @@ const MapTemplate = ({
             if (item.latitude && item.longitude) {
               return (
                 type === "farm" &&
-                Math.floor(position.coords.latitude * 100000) ===
-                  Math.floor(item.latitude * 100000)
+                Math.floor(position.coords.latitude * 10000) ===
+                  Math.floor(item.latitude * 10000)
               );
             }
             return false;
@@ -104,8 +104,8 @@ const MapTemplate = ({
             if (item.latitude && item.longitude) {
               return (
                 type === "rental" &&
-                Math.floor(position.coords.latitude * 100000) ===
-                  Math.floor(item.latitude * 100000)
+                Math.floor(position.coords.latitude * 10000) ===
+                  Math.floor(item.latitude * 10000)
               );
             }
             return false;

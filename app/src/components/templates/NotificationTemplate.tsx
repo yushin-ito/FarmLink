@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import SkeletonNotification from "../organisms/SkeletonNotification";
 import NotificationItem from "../organisms/NotificationItem";
 import { GetNotificationsResponse } from "../../hooks/notification/query";
+import { RefreshControl } from "react-native";
 
 type NotificationTemplateProps = {
   locale: "en" | "ja" | null;
@@ -29,13 +30,7 @@ type NotificationTemplateProps = {
     longitude: number,
     type: "farm" | "rental"
   ) => void;
-  talkChatNavigationHandler: (
-    notificationId: number,
-    talkId: number,
-    recieverId: string,
-    token: string | null,
-    name: string
-  ) => void;
+  talkChatNavigationHandler: (notificationId: number, talkId: number) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -51,6 +46,7 @@ const NotificationTemplate = ({
   goBackNavigationHandler,
 }: NotificationTemplateProps) => {
   const { t } = useTranslation("setting");
+  const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
@@ -127,10 +123,7 @@ const NotificationTemplate = ({
                     item.chat.talkId &&
                       talkChatNavigationHandler(
                         item.notificationId,
-                        item.chat.talkId,
-                        item.from.userId,
-                        item.from.token,
-                        item.from.name
+                        item.chat.talkId
                       );
                   }
                 }}
@@ -150,6 +143,13 @@ const NotificationTemplate = ({
             }
             refreshing={isRefetchingNotifications}
             onRefresh={refetchNotifications}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetchingNotifications}
+                onRefresh={refetchNotifications}
+                tintColor={spinnerColor}
+              />
+            }
             keyExtractor={(item) => item.notificationId.toString()}
           />
         )}

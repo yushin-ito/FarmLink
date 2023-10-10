@@ -61,6 +61,7 @@ const FarmDetailTemplate = ({
 }: FarmDetailTemplateProps) => {
   const { t } = useTranslation("map");
   const bgColor = useColorModeValue("white", "muted.800");
+  const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const borderColor = useColorModeValue("muted.300", "muted.600");
   const imageColor = useColorModeValue("muted.200", "muted.600");
   const iconColor = useColorModeValue("muted.600", "muted.100");
@@ -98,7 +99,11 @@ const FarmDetailTemplate = ({
       </HStack>
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={refetch}
+            tintColor={spinnerColor}
+          />
         }
       >
         {isLoading ? (
@@ -139,7 +144,7 @@ const FarmDetailTemplate = ({
                   )}
                 </Text>
               </VStack>
-              <HStack alignItems="center" space="1">
+              <HStack alignItems="center" space="2">
                 <Avatar
                   isDisabled
                   size="7"

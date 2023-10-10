@@ -11,7 +11,6 @@ import {
   HStack,
   IconButton,
   Icon,
-  Spinner,
   Center,
   FlatList,
   Pressable,
@@ -30,7 +29,6 @@ import { GetRentalResponse } from "../../hooks/rental/query";
 type EditRentalTemplateProps = {
   rental: GetRentalResponse | null | undefined;
   images: string[];
-  isLoadingRental: boolean;
   isLoadingPostRental: boolean;
   address: LocationGeocodedAddress | undefined;
   pickImageByLibrary: () => Promise<void>;
@@ -56,7 +54,6 @@ type FormValues = {
 const EditRentalTemplate = ({
   rental,
   images,
-  isLoadingRental,
   isLoadingPostRental,
   address,
   pickImageByLibrary,
@@ -100,14 +97,6 @@ const EditRentalTemplate = ({
       getAddress(rental.latitude, rental.longitude);
     }
   }, [rental, mapRef.current]);
-
-  if (isLoadingRental) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
 
   return (
     <Box flex={1} safeAreaTop>

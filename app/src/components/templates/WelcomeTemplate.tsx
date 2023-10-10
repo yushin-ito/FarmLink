@@ -36,7 +36,7 @@ const WelcomeTemplate = memo(
         <VStack w="100%" space="4">
           <Button
             size="lg"
-            rounded="lg"
+            rounded="xl"
             bg="white"
             _pressed={{ bg: "muted.200" }}
             onPress={signUpNavigationHandler}
@@ -48,7 +48,6 @@ const WelcomeTemplate = memo(
           <Button
             variant="unstyled"
             size="lg"
-            rounded="lg"
             _pressed={{ opacity: 0.5 }}
             onPress={signInNavigationHandler}
           >

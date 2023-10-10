@@ -14,13 +14,12 @@ const PostProfileScreen = () => {
   const { t } = useTranslation("setting");
   const navigation = useNavigation();
   const { session } = useAuth();
-  const {
-    data: user,
-    isLoading: isLoadingUser,
-    refetch,
-  } = useQueryUser(session?.user.id);
+  const { data: user, refetch } = useQueryUser(session?.user.id);
 
-  const { mutateAsync, isLoading: isLoadingPostProfile } = usePostUser({
+  const {
+    mutateAsync: mutateAsyncPostProfile,
+    isLoading: isLoadingPostProfile,
+  } = usePostUser({
     onSuccess: async () => {
       await refetch();
       navigation.goBack();
@@ -41,7 +40,7 @@ const PostProfileScreen = () => {
   const postProfile = useCallback(
     async (name: string, profile: string) => {
       if (session) {
-        await mutateAsync({
+        await mutateAsyncPostProfile({
           userId: session.user.id,
           name,
           profile,
@@ -58,7 +57,6 @@ const PostProfileScreen = () => {
   return (
     <PostProfileTemplate
       user={user}
-      isLoadingUser={isLoadingUser}
       isLoadingPostProfile={isLoadingPostProfile}
       postProfile={postProfile}
       goBackNavigationHandler={goBackNavigationHandler}

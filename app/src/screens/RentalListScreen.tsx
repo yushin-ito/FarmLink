@@ -12,7 +12,7 @@ import Alert from "../components/molecules/Alert";
 const RentalListScreen = ({
   navigation,
 }: SettingStackScreenProps<"RentalList">) => {
-  const { t } = useTranslation("farm");
+  const { t } = useTranslation("setting");
   const toast = useToast();
   const { session } = useAuth();
   const { refetch } = useQueryRentals();

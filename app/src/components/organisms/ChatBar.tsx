@@ -72,8 +72,14 @@ const ChatBar = memo(
           <Box position="absolute" bottom="12">
             <Stagger
               isOpen={isOpen}
-              pickImageByCamera={pickImageByCamera}
-              pickImageByLibrary={pickImageByLibrary}
+              pickImageByCamera={async () => {
+                await pickImageByCamera();
+                onToggle();
+              }}
+              pickImageByLibrary={async () => {
+                await pickImageByLibrary();
+                onToggle();
+              }}
             />
           </Box>
           <IconButton
@@ -96,8 +102,10 @@ const ChatBar = memo(
             control={control}
             render={({ field: { value, onChange } }) => (
               <Input
+                keyboardAppearance={useColorModeValue("light", "dark")}
                 mb="2"
                 variant="unstyled"
+                textAlignVertical="top"
                 multiline
                 maxH="40"
                 placeholder={t("enterMessage")}
@@ -115,9 +123,7 @@ const ChatBar = memo(
         <IconButton
           onPress={handleSubmit(async (data) => {
             reset();
-            if (data.message) {
-              await onSend(data.message);
-            }
+            data.message && (await onSend(data.message));
           })}
           icon={
             <Icon

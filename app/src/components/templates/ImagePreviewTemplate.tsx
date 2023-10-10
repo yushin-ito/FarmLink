@@ -1,14 +1,16 @@
 import {
   Box,
+  Center,
   HStack,
   Heading,
   Icon,
   IconButton,
   PresenceTransition,
   Pressable,
+  Spinner,
 } from "native-base";
 import React, { useState, useRef } from "react";
-import { Animated, useWindowDimensions } from "react-native";
+import { Alert, Animated, useWindowDimensions } from "react-native";
 import {
   HandlerStateChangeEvent,
   PanGestureHandler,
@@ -18,10 +20,14 @@ import {
 } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import { useTranslation } from "react-i18next";
 
 type ImagePreviewTemplateProps = {
   title: string;
   imageUrl: string;
+  isLoading: boolean;
+  shareImage: () => Promise<void>;
+  saveImage: () => Promise<void>;
   deleteImage?: () => Promise<void>;
   goBackNavigationHandler: () => void;
 };
@@ -29,9 +35,13 @@ type ImagePreviewTemplateProps = {
 const ImagePreviewTemplate = ({
   title,
   imageUrl,
+  isLoading,
+  saveImage,
+  shareImage,
   deleteImage,
   goBackNavigationHandler,
 }: ImagePreviewTemplateProps) => {
+  const { t } = useTranslation("chat");
   const [visible, setVisible] = useState<boolean>(true);
   const [enabled, setEnabled] = useState<boolean>(false);
   const scale = useRef(new Animated.Value(1)).current;
@@ -159,9 +169,21 @@ const ImagePreviewTemplate = ({
           {deleteImage ? (
             <IconButton
               icon={
-                <Icon as={<Feather name="trash" />} size="lg" color="white" />
+                <Icon as={<Feather name="trash" />} size="md" color="white" />
               }
-              onPress={deleteImage}
+              onPress={() =>
+                Alert.alert(t("deleteChat"), t("askDeleteChat"), [
+                  {
+                    text: t("cancel"),
+                    style: "cancel",
+                  },
+                  {
+                    text: t("delete"),
+                    onPress: () => deleteImage(),
+                    style: "destructive",
+                  },
+                ])
+              }
               variant="unstyled"
             />
           ) : (
@@ -184,15 +206,22 @@ const ImagePreviewTemplate = ({
               <Icon as={<Feather name="share" />} size="lg" color="white" />
             }
             variant="unstyled"
+            onPress={shareImage}
           />
           <IconButton
             icon={
               <Icon as={<Feather name="download" />} size="lg" color="white" />
             }
             variant="unstyled"
+            onPress={saveImage}
           />
         </HStack>
       </PresenceTransition>
+      {isLoading && (
+        <Center w="100%" h="100%" position="absolute" bg="white" opacity="0.3">
+          <Spinner color="muted.600" />
+        </Center>
+      )}
     </Box>
   );
 };

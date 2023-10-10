@@ -81,23 +81,28 @@ const FarmDetailScreen = ({
 
   const { mutateAsync: mutateAsyncPostLike, isLoading: isLoadingPostLike } =
     usePostFarmLike({
-      onSuccess: async ({ farmId }) => {
+      onSuccess: async () => {
         await refetchLikes();
-        if (session && farmId && farm?.ownerId) {
+        if (user && farm) {
           await mutateAsyncPostNotification({
             recieverId: farm.ownerId,
-            senderId: session.user.id,
-            farmId,
+            senderId: user.userId,
+            farmId: params.farmId,
             clicked: false,
           });
-          user &&
-            farm.name &&
-            (await sendNotification({
-              to: farm.ownerId,
-              title: user.name,
-              body: farm.name,
-              data: { screenName: "FarmDetail" },
-            }));
+
+          if (farm.user.token && farm.name) {
+            await sendNotification({
+              to: farm.user.token,
+              title: farm.name,
+              body: farm.name + t("to") + user.name + t("liked"),
+              data: {
+                data: {
+                  scheme: `TabNavigator/MapNavigator/Map?id=${params.farmId}&latitude=${farm.latitude}&longitude=${farm.longitude}&type=farm}`,
+                },
+              },
+            });
+          }
         }
       },
       onError: () => {
@@ -171,9 +176,6 @@ const FarmDetailScreen = ({
               screen: "TalkChat",
               params: {
                 talkId: talk.talkId,
-                recieverId: talk.to.userId,
-                token: talk.to.token,
-                name: talk.to.name,
               },
             },
           });
@@ -243,9 +245,6 @@ const FarmDetailScreen = ({
           screen: "TalkChat",
           params: {
             talkId: talk.talkId,
-            recieverId: talk.to.userId,
-            token: talk.to.token,
-            name: talk.to.name,
           },
         },
       });
@@ -286,7 +285,9 @@ const FarmDetailScreen = ({
       postLike={postLike}
       deleteLike={deleteLike}
       refetch={refetch}
-      isLoading={isLoadingUser || isLoadingFarm || isLoadingLikes || isLoadingAddress}
+      isLoading={
+        isLoadingUser || isLoadingFarm || isLoadingLikes || isLoadingAddress
+      }
       isLoadingPostTalk={isLoadingPostTalk}
       isLoadingPostLike={isLoadingPostLike || isLoadingPostNotification}
       isLoadingDeleteLike={isLoadingDeleteLike}

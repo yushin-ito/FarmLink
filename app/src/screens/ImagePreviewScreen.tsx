@@ -11,6 +11,12 @@ import { useTranslation } from "react-i18next";
 import { showAlert } from "../functions";
 import { useToast } from "native-base";
 import Alert from "../components/molecules/Alert";
+import * as Sharing from "expo-sharing";
+import * as FileSystem from "expo-file-system";
+import useMediaLibrary from "../hooks/sdk/useMediaLibrary";
+import { useQueryTalks } from "../hooks/talk/query";
+import useAuth from "../hooks/auth/useAuth";
+import { usePostTalk } from "../hooks/talk/mutate";
 
 const ImagePreviewScreen = () => {
   const { t } = useTranslation("common");
@@ -21,9 +27,32 @@ const ImagePreviewScreen = () => {
     | RouteProp<TalkStackParamList, "ImagePreview">
     | RouteProp<CommunityStackParamList, "ImagePreview">
   >();
+  const { session } = useAuth();
+  const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
+
+  const { mutateAsync: mutateAsyncPostTalk } = usePostTalk({
+    onSuccess: async () => {
+      await refetchTalks();
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
-    onSuccess: () => {
+    onSuccess: async () => {
+      params.talkId &&
+        mutateAsyncPostTalk({
+          talkId: params.talkId,
+          lastMessage: t("deleteImage"),
+        });
       navigation.goBack();
     },
     onError: () => {
@@ -38,6 +67,67 @@ const ImagePreviewScreen = () => {
     },
   });
 
+  const { saveToLibrary, isLoading } = useMediaLibrary({
+    onSuccess: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="success"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("saved")}
+        />
+      );
+    },
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestSave")}
+        />
+      );
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
+  const shareImage = useCallback(async () => {
+    const downloadPath = `${FileSystem.cacheDirectory}${Math.floor(
+      Math.random() * 100000
+    )}.png`;
+    const { uri: localUri } = await FileSystem.downloadAsync(
+      params.imageUrl,
+      downloadPath
+    );
+    if (!(await Sharing.isAvailableAsync())) {
+      return;
+    }
+    await Sharing.shareAsync(localUri);
+    navigation.goBack();
+  }, [params]);
+
+  const saveImage = useCallback(async () => {
+    const downloadPath = `${FileSystem.cacheDirectory}${Math.floor(
+      Math.random() * 100000
+    )}.png`;
+    const { uri: localUri } = await FileSystem.downloadAsync(
+      params.imageUrl,
+      downloadPath
+    );
+
+    await saveToLibrary(localUri);
+    navigation.goBack();
+  }, [params]);
+
   const deleteImage = useCallback(async () => {
     params.chatId && (await mutateAsyncDeleteChat(params.chatId));
   }, [params]);
@@ -50,6 +140,9 @@ const ImagePreviewScreen = () => {
     <ImagePreviewTemplate
       title={params.title}
       imageUrl={params.imageUrl}
+      isLoading={isLoading}
+      shareImage={shareImage}
+      saveImage={saveImage}
       deleteImage={params.chatId ? deleteImage : undefined}
       goBackNavigationHandler={goBackNavigationHandler}
     />

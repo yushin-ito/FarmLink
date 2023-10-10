@@ -19,7 +19,7 @@ const EditRentalScreen = ({
   const toast = useToast();
   const { t } = useTranslation("map");
   const { params } = useRoute<RouteProp<MapStackParamList, "EditRental">>();
-  const { data: rental, isLoading: isLoadingRental } = useQueryRental(
+  const { data: rental } = useQueryRental(
     params.rentalId
   );
   const { session } = useAuth();
@@ -184,7 +184,6 @@ const EditRentalScreen = ({
     <EditRentalTemplate
       rental={rental}
       images={images}
-      isLoadingRental={isLoadingRental}
       isLoadingPostRental={isLoadingPostRental || isLoadingPostRentalImage}
       address={address}
       pickImageByLibrary={pickImageByLibrary}

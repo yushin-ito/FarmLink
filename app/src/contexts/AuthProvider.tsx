@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>();
 
-  const getSessionFromDB = useCallback(async () => {
+  const getCurrentSession = useCallback(async () => {
     try {
       const { data, error } = await supabase.auth.getSession();
       if (error) {
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
-  const setSessionToDB = useCallback(async (session: CurrentSession) => {
+  const setCurrentSession = useCallback(async (session: CurrentSession) => {
     try {
       const { error } = await supabase.auth.setSession(session);
       if (error) {
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     getLocale();
-    getSessionFromDB();
+    getCurrentSession();
 
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => {
       data.subscription.unsubscribe();
     };
-  }, [getSessionFromDB]);
+  }, [getCurrentSession]);
 
   useEffect(() => {
     (async () => {
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const session = getSessionFromLink(url);
 
         if (session?.access_token && session?.refresh_token) {
-          setSessionToDB({
+          setCurrentSession({
             access_token: session.access_token,
             refresh_token: session.refresh_token,
           });
@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const session = getSessionFromLink(res.url);
 
       if (session?.access_token && session?.refresh_token) {
-        setSessionToDB({
+        setCurrentSession({
           access_token: session.access_token,
           refresh_token: session.refresh_token,
         });
@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => {
       subscription.remove();
     };
-  }, [setSessionToDB]);
+  }, [setCurrentSession]);
 
   return (
     <AuthContext.Provider value={{ session, locale, error, isLoading }}>

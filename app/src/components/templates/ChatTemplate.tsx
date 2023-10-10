@@ -31,12 +31,14 @@ type ChatTemplateProps = {
   type: "community" | "talk";
   locale: "en" | "ja" | null;
   title: string | null | undefined;
+  owned?: boolean;
   user: GetUserResponse | null | undefined;
   chats: GetCommunityChatsResponse | GetTalkChatsResponse | undefined;
-  isLoadingChats: boolean;
+  isLoading: boolean;
   isLoadingPostChat: boolean;
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;
+  leaveRoom?: () => Promise<void>;
   deleteRoom: () => Promise<void>;
   deleteChat: (chatId: number | null) => Promise<void>;
   deleteImage?: () => Promise<void>;
@@ -53,17 +55,19 @@ const ChatTemplate = ({
   type,
   locale,
   title,
+  owned,
   user,
   chats,
-  isLoadingChats,
+  isLoading,
   isLoadingPostChat,
   hasMore,
   onSend,
+  leaveRoom,
   deleteRoom,
   deleteChat,
-  deleteImage = async () => {},
-  pickIconImageByCamera = async () => {},
-  pickIconImageByLibrary = async () => {},
+  deleteImage,
+  pickIconImageByCamera,
+  pickIconImageByLibrary,
   pickChatImageByCamera,
   pickChatImageByLibrary,
   readMore,
@@ -77,14 +81,14 @@ const ChatTemplate = ({
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
   const {
-    isOpen: isChatOpen,
-    onOpen: onChatOpen,
-    onClose: onChatClose,
+    isOpen: isChatActionSheetOpen,
+    onOpen: onChatActionSheetOpen,
+    onClose: onChatActionSheetClose,
   } = useDisclose();
   const {
-    isOpen: isImageOpen,
-    onOpen: onImageOpen,
-    onClose: onImageClose,
+    isOpen: isImageActionSheetOpen,
+    onOpen: onImageActionSheetOpen,
+    onClose: onImageActionSheetClose,
   } = useDisclose();
   const [chatId, setChatId] = useState<number | null>(null);
 
@@ -94,17 +98,31 @@ const ChatTemplate = ({
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Box flex={1} safeAreaTop>
-        <ImageActionSheet
-          isOpen={isImageOpen}
-          onClose={onImageClose}
-          onDelete={deleteImage}
-          pickImageByCamera={pickIconImageByCamera}
-          pickImageByLibrary={pickIconImageByLibrary}
-        />
+        {deleteImage && pickIconImageByCamera && pickIconImageByLibrary && (
+          <ImageActionSheet
+            isOpen={isImageActionSheetOpen}
+            onClose={onImageActionSheetClose}
+            onDelete={deleteImage}
+            pickImageByCamera={pickIconImageByCamera}
+            pickImageByLibrary={pickIconImageByLibrary}
+          />
+        )}
         <ChatActionSheet
-          isOpen={isChatOpen}
-          onClose={onChatClose}
-          deleteChat={() => deleteChat(chatId)}
+          isOpen={isChatActionSheetOpen}
+          onClose={onChatActionSheetClose}
+          deleteChat={async () =>
+            Alert.alert(t("chat:deleteChat"), t("chat:askDeleteChat"), [
+              {
+                text: t("cancel"),
+                style: "cancel",
+              },
+              {
+                text: t("chat:delete"),
+                onPress: () => deleteChat(chatId),
+                style: "destructive",
+              },
+            ])
+          }
         />
         <HStack
           pt="1"
@@ -154,7 +172,7 @@ const ChatTemplate = ({
             {type === "community" && (
               <Menu.Item
                 pl="1"
-                onPress={onImageOpen}
+                onPress={onImageActionSheetOpen}
                 _pressed={{ bg: pressedColor }}
               >
                 <Text fontSize="md">{t("community:changeIcon")}</Text>
@@ -165,19 +183,28 @@ const ChatTemplate = ({
               onPress={() =>
                 Alert.alert(
                   type === "community"
-                    ? t("community:deleteCommunity")
+                    ? owned
+                      ? t("community:deleteCommunity")
+                      : t("community:leaveCommunity")
                     : t("talk:deleteTalk"),
                   type === "community"
-                    ? t("community:askDeleteCommunity")
+                    ? owned
+                      ? t("community:askDeleteCommunity")
+                      : t("community:askLeaveCommunity")
                     : t("talk:askDeleteTalk"),
                   [
                     {
-                      text: t("chat:cancel"),
+                      text: t("community:cancel"),
                       style: "cancel",
                     },
                     {
-                      text: t("chat:delete"),
-                      onPress: async () => await deleteRoom(),
+                      text: owned
+                        ? t("community:delete")
+                        : t("community:leave"),
+                      onPress: async () =>
+                        owned
+                          ? await deleteRoom()
+                          : leaveRoom && (await leaveRoom()),
                       style: "destructive",
                     },
                   ]
@@ -187,13 +214,15 @@ const ChatTemplate = ({
             >
               <Text fontSize="md">
                 {type === "community"
-                  ? t("community:deleteCommunity")
+                  ? owned
+                    ? t("community:deleteCommunity")
+                    : t("community:leaveCommunity")
                   : t("talk:deleteTalk")}
               </Text>
             </Menu.Item>
           </Menu>
         </HStack>
-        {isLoadingChats ? (
+        {isLoading ? (
           <Center flex={1} bg={bgColor}>
             <Spinner color="muted.400" />
           </Center>
@@ -214,7 +243,7 @@ const ChatTemplate = ({
                 authored={item.authorId === user?.userId}
                 locale={locale}
                 onLongPress={() => {
-                  onChatOpen();
+                  onChatActionSheetOpen();
                   setChatId(item.chatId);
                 }}
                 imagePreviewNavigationHandler={imagePreviewNavigationHandler}

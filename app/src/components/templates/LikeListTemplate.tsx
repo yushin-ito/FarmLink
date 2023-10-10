@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
 import LikeItem from "../organisms/LikeItem";
 import SkeletonLikeList from "../organisms/SkeletonLikeList";
+import { RefreshControl } from "react-native";
 
 type LikeListTemplateProps = {
   type: "farm" | "rental";
@@ -48,6 +49,7 @@ const LikeListTemplate = ({
 }: LikeListTemplateProps) => {
   const { t } = useTranslation("setting");
   const bgColor = useColorModeValue("muted.200", "muted.700");
+  const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
@@ -148,6 +150,13 @@ const LikeListTemplate = ({
             }
             refreshing={isRefetchingLikes}
             onRefresh={refetchLikes}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetchingLikes}
+                onRefresh={refetchLikes}
+                tintColor={spinnerColor}
+              />
+            }
             keyExtractor={(item) => item.likeId.toString()}
           />
         ) : (
@@ -183,8 +192,13 @@ const LikeListTemplate = ({
                 {t("notExistRentalLike")}
               </Text>
             }
-            refreshing={isRefetchingLikes}
-            onRefresh={refetchLikes}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetchingLikes}
+                onRefresh={refetchLikes}
+                tintColor={spinnerColor}
+              />
+            }
             keyExtractor={(item) => item.likeId.toString()}
           />
         )}

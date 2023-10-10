@@ -146,6 +146,7 @@ const PostCommunityTemplate = ({
                       <Input
                         h="48"
                         multiline
+                        textAlignVertical="top"
                         value={value}
                         onChangeText={onChange}
                       />

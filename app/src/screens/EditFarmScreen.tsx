@@ -19,7 +19,7 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   const toast = useToast();
   const { t } = useTranslation("farm");
   const { params } = useRoute<RouteProp<MapStackParamList, "EditFarm">>();
-  const { data: farm, isLoading: isLoadingFarm } = useQueryFarm(params.farmId);
+  const { data: farm } = useQueryFarm(params.farmId);
   const { session } = useAuth();
   const { refetch } = useQueryFarms();
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
@@ -134,7 +134,6 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       searchResult={searchResult}
       postFarm={postFarm}
       searchDevice={searchDevice}
-      isLoadingFarm={isLoadingFarm}
       isLoadingPostFarm={isLoadingPostFarm}
       goBackNavigationHandler={goBackNavigationHandler}
     />

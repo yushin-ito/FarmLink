@@ -12,8 +12,6 @@ import {
   IconButton,
   Icon,
   Switch,
-  Spinner,
-  Center,
   useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
@@ -37,7 +35,6 @@ type EditFarmTemplateProps = {
     privated: boolean
   ) => Promise<void>;
   searchDevice: (query: string) => Promise<void>;
-  isLoadingFarm: boolean;
   isLoadingPostFarm: boolean;
   goBackNavigationHandler: () => void;
 };
@@ -55,7 +52,6 @@ const EditFarmTemplate = ({
   searchResult,
   postFarm,
   searchDevice,
-  isLoadingFarm,
   isLoadingPostFarm,
   goBackNavigationHandler,
 }: EditFarmTemplateProps) => {
@@ -93,14 +89,6 @@ const EditFarmTemplate = ({
       getAddress(farm.latitude, farm.longitude);
     }
   }, [mapRef.current, farm]);
-
-  if (isLoadingFarm) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
 
   return (
     <Box flex={1} safeAreaTop>
@@ -249,6 +237,7 @@ const EditFarmTemplate = ({
                           <Input
                             h="48"
                             multiline
+                            textAlignVertical="top"
                             value={value}
                             onChangeText={onChange}
                           />

@@ -13,7 +13,7 @@ export const showAlert = (toast: IToastService, Alert: ReactNode) => {
     toast.show({
       id: 1,
       placement: "top",
-      duration: 10000,
+      duration: 3000,
       render: () => Alert,
     });
   }
@@ -30,7 +30,7 @@ export const getSessionFromLink = (link: string) => {
   return null;
 };
 
-const getTimeDistanceForJa = (date: string) => {
+const getTimeDistanceJa = (date: string) => {
   const distance = formatDistance(new Date(), new Date(date), {
     locale: ja,
   });
@@ -45,20 +45,25 @@ const getTimeDistanceForJa = (date: string) => {
   }
 };
 
-const getTimeDistanceForEn = (date: string) => {
+const getTimeDistanceEn = (date: string) => {
   const distance = formatDistance(new Date(), new Date(date), {
     locale: enUS,
   });
+  if (distance.indexOf("less") !== -1) {
+    return "now";
+  } else if (distance.indexOf("about") !== -1) {
+    return distance.replace("about", "");
+  }
   return distance;
 };
 
 export const getTimeDistance = (date: string, locale: "en" | "ja" | null) => {
   if (locale === "en") {
-    return getTimeDistanceForEn(date);
+    return getTimeDistanceEn(date);
   } else if (locale === "ja") {
-    return getTimeDistanceForJa(date);
+    return getTimeDistanceJa(date);
   } else {
-    return getTimeDistanceForEn(date);
+    return getTimeDistanceEn(date);
   }
 };
 
@@ -72,6 +77,12 @@ export type Category =
   | "disease";
 
 export const getCategories = () => {
-  const categories = ["none", "vegetable", "fruit", "fertilizer", "disease"] as Category[];
+  const categories = [
+    "none",
+    "vegetable",
+    "fruit",
+    "fertilizer",
+    "disease",
+  ] as Category[];
   return categories;
 };

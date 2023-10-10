@@ -13,8 +13,6 @@ import {
   HStack,
   IconButton,
   Icon,
-  Center,
-  Spinner,
   useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
@@ -24,7 +22,6 @@ import { GetUserResponse } from "../../hooks/user/query";
 
 type PostProfileTemplateProps = {
   user: GetUserResponse | null | undefined;
-  isLoadingUser: boolean;
   isLoadingPostProfile: boolean;
   postProfile: (name: string, profile: string) => Promise<void>;
   goBackNavigationHandler: () => void;
@@ -37,7 +34,6 @@ type FormValues = {
 
 const PostProfileTemplate = ({
   user,
-  isLoadingUser,
   isLoadingPostProfile,
   postProfile,
   goBackNavigationHandler,
@@ -57,14 +53,6 @@ const PostProfileTemplate = ({
     user?.name && setValue("name", user.name);
     user?.profile && setValue("profile", user.profile);
   }, [user]);
-
-  if (isLoadingUser) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
 
   return (
     <KeyboardAvoidingView

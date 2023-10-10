@@ -4,8 +4,8 @@ import React, { memo } from "react";
 
 type StaggerProps = {
   isOpen: boolean;
-  pickImageByCamera: () => void;
-  pickImageByLibrary: () => void;
+  pickImageByCamera: () => Promise<void>;
+  pickImageByLibrary: () => Promise<void>;
 };
 
 const Stagger = memo(

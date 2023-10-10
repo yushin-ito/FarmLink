@@ -93,13 +93,7 @@ const NotificationScreen = ({
   );
 
   const talkChatNavigationHandler = useCallback(
-    async (
-      notificationId: number,
-      talkId: number,
-      recieverId: string,
-      token: string | null,
-      name: string
-    ) => {
+    async (notificationId: number, talkId: number) => {
       await mutateAsyncPostNotification({ notificationId, clicked: true });
       navigation.goBack();
       await wait(0.1);
@@ -116,9 +110,6 @@ const NotificationScreen = ({
           screen: "TalkChat",
           params: {
             talkId,
-            recieverId,
-            token,
-            name,
           },
         },
       });

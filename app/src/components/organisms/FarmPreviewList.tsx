@@ -139,7 +139,7 @@ const FarmPreviewList = memo(
                       {item.description ?? t("noDescription")}
                     </Text>
                     <HStack mt="2" space="6">
-                      <VStack alignItems="center">
+                      <VStack>
                         <Text color="muted.400" bold fontSize="xs">
                           {t("temperture")}
                         </Text>
@@ -149,7 +149,7 @@ const FarmPreviewList = memo(
                             : t("unknown")}
                         </Text>
                       </VStack>
-                      <VStack alignItems="center">
+                      <VStack>
                         <Text color="muted.400" bold fontSize="xs">
                           {t("humidity")}
                         </Text>
@@ -159,13 +159,13 @@ const FarmPreviewList = memo(
                             : t("unknown")}
                         </Text>
                       </VStack>
-                      <VStack alignItems="center">
+                      <VStack>
                         <Text color="muted.400" bold fontSize="xs">
                           {t("moisture")}
                         </Text>
                         <Text color={textColor} bold fontSize="sm">
                           {item?.device?.moisture
-                            ? item.device.moisture + "℃"
+                            ? item.device.moisture + "%"
                             : t("unknown")}
                         </Text>
                       </VStack>

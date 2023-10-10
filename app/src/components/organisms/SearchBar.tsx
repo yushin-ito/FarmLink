@@ -9,6 +9,7 @@ const SearchBar = memo(({ ...props }: IInputProps) => {
 
   return (
     <Input
+      keyboardAppearance={useColorModeValue("light", "dark")}
       variant="unstyled"
       placeholderTextColor={textColor}
       fontSize="md"

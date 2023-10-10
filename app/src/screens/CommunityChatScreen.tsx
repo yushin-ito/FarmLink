@@ -12,7 +12,10 @@ import {
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
-import { useInfiniteQueryCommunities } from "../hooks/community/query";
+import {
+  useInfiniteQueryCommunities,
+  useQueryCommuntiy,
+} from "../hooks/community/query";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryUser } from "../hooks/user/query";
 import {
@@ -29,9 +32,14 @@ const CommunityChatScreen = ({
   const { t } = useTranslation("chat");
   const toast = useToast();
   const { session, locale } = useAuth();
-  const { data: user } = useQueryUser(session?.user.id);
+  const { data: user, isLoading: isLoadingUser } = useQueryUser(
+    session?.user.id
+  );
   const { params } =
     useRoute<RouteProp<CommunityStackParamList, "CommunityChat">>();
+  const { data: community, isLoading: isLoadingCommunity } = useQueryCommuntiy(
+    params.communityId
+  );
   const { refetch: refetchCommunities } = useInfiniteQueryCommunities(
     params.category,
     session?.user.id
@@ -112,7 +120,6 @@ const CommunityChatScreen = ({
   const { mutateAsync: mutateAsyncDeleteCommunity } = useDeleteCommunity({
     onSuccess: async () => {
       await refetchCommunities();
-      navigation.goBack();
     },
     onError: () => {
       showAlert(
@@ -231,8 +238,21 @@ const CommunityChatScreen = ({
     await mutateAsyncDeleteChat(chatId);
   }, []);
 
+  const leaveCommunity = useCallback(async () => {
+    if (session && community) {
+      await mutateAsyncPostCommunity({
+        communityId: params.communityId,
+        memberIds: community.memberIds?.filter(
+          (memberId) => memberId !== session.user.id
+        ),
+      });
+      navigation.goBack();
+    }
+  }, [session, community, params]);
+
   const deleteCommunity = useCallback(async () => {
     await mutateAsyncDeleteCommunity(params.communityId);
+    navigation.goBack();
   }, [params]);
 
   const deleteImage = useCallback(async () => {
@@ -244,13 +264,14 @@ const CommunityChatScreen = ({
 
   const imagePreviewNavigationHandler = useCallback(
     (imageUrl: string, chatId?: number) => {
-      navigation.navigate("ImagePreview", {
-        title: params.name,
-        imageUrl,
-        chatId,
-      });
+      community?.name &&
+        navigation.navigate("ImagePreview", {
+          title: community.name,
+          imageUrl,
+          chatId,
+        });
     },
-    [params]
+    [community, params]
   );
 
   const goBackNavigationHandler = useCallback(() => {
@@ -261,9 +282,11 @@ const CommunityChatScreen = ({
     <ChatTemplate
       type="community"
       locale={locale}
-      title={params.name}
+      title={community?.name}
+      owned={session?.user.id === community?.ownerId}
       user={user}
       chats={chats}
+      leaveRoom={leaveCommunity}
       deleteRoom={deleteCommunity}
       deleteChat={deleteChat}
       deleteImage={deleteImage}
@@ -273,7 +296,7 @@ const CommunityChatScreen = ({
       pickIconImageByLibrary={pickIconImageByLibrary}
       onSend={onSend}
       readMore={fetchNextPage}
-      isLoadingChats={isLoadingChats}
+      isLoading={isLoadingUser || isLoadingCommunity || isLoadingChats}
       isLoadingPostChat={isLoadingPostChat}
       hasMore={hasMore}
       imagePreviewNavigationHandler={imagePreviewNavigationHandler}

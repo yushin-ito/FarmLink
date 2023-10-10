@@ -25,7 +25,7 @@ const deleteNotification = async (notificationId: number) => {
   const { data, error } = await supabase
     .from("notification")
     .delete()
-    .eq("notificationId", notificationId)
+    .eq("notificationId", notificationId);
   if (error) {
     throw error;
   }

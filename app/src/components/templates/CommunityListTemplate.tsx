@@ -24,6 +24,7 @@ import { GetCommunitiesResponse } from "../../hooks/community/query";
 import CategoryActionSheet from "../organisms/CategoryActionSheet";
 import { Category, getCategories } from "../../functions";
 import SkeletonCommunityList from "../organisms/SkeletonCommunityList";
+import { RefreshControl } from "react-native";
 
 type CommunityListTemplateProps = {
   categoryIndex: number;
@@ -35,16 +36,9 @@ type CommunityListTemplateProps = {
   isRefetchingCommunities: boolean;
   hasMore: boolean | undefined;
   refetchCommunities: () => Promise<void>;
-  joinCommunity: (
-    communityId: number,
-    name: string,
-    memberIds: string[]
-  ) => Promise<void>;
+  joinCommunity: (communityId: number, memberIds: string[]) => Promise<void>;
   readMore: () => void;
-  communityChatNavigationHandler: (
-    communityId: number,
-    name: string
-  ) => void;
+  communityChatNavigationHandler: (communityId: number) => void;
   postCommunityNavigationHandler: () => void;
   settingNavigationHandler: () => void;
   searchCommunityNavigationHandler: () => void;
@@ -69,6 +63,8 @@ const CommunityListTemplate = ({
 }: CommunityListTemplateProps) => {
   const { t } = useTranslation("community");
   const bgColor = useColorModeValue("muted.200", "muted.700");
+  const textColor = useColorModeValue("muted.600", "muted.300");
+  const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
   const { isOpen, onOpen, onClose } = useDisclose();
@@ -127,6 +123,17 @@ const CommunityListTemplate = ({
           data={communities}
           onEndReached={readMore}
           onEndReachedThreshold={0.3}
+          ListEmptyComponent={
+            <Text
+              bold
+              lineHeight="2xl"
+              fontSize="md"
+              textAlign="center"
+              color={textColor}
+            >
+              {t("notExistCommunity")}
+            </Text>
+          }
           ListFooterComponent={
             <Center mt={hasMore ? "0" : "12"}>
               {hasMore && <Spinner color="muted.400" />}
@@ -148,8 +155,13 @@ const CommunityListTemplate = ({
             />
           )}
           keyExtractor={(item) => item.communityId.toString()}
-          refreshing={isRefetchingCommunities}
-          onRefresh={refetchCommunities}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefetchingCommunities}
+              onRefresh={refetchCommunities}
+              tintColor={spinnerColor}
+            />
+          }
         />
       )}
       <Fab

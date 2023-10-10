@@ -14,7 +14,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import RentalItem from "../organisms/RentalItem";
-import { Alert } from "react-native";
+import { Alert, RefreshControl } from "react-native";
 import SkeletonRentalList from "../organisms/SkeletonRentalList";
 import Fab from "../molecules/Fab";
 
@@ -48,6 +48,7 @@ const RentalListTemplate = ({
   goBackNavigationHandler,
 }: RentalListTemplateProps) => {
   const { t } = useTranslation("setting");
+  const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
@@ -121,8 +122,13 @@ const RentalListTemplate = ({
                 {t("notExistRental")}
               </Text>
             }
-            refreshing={isRefetchingRentals}
-            onRefresh={refetchRentals}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetchingRentals}
+                onRefresh={refetchRentals}
+                tintColor={spinnerColor}
+              />
+            }
             keyExtractor={(item) => item.rentalId.toString()}
           />
         )}

@@ -11,6 +11,7 @@ const Input = memo(({ ref, ...props }: IInputProps) => {
   return (
     <NativeBaseInput
       ref={ref}
+      keyboardAppearance={useColorModeValue("light", "dark")}
       py="3"
       fontSize="15"
       variant="outline"

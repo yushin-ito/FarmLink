@@ -3,6 +3,7 @@ import SearchCommunityTemplate from "../components/templates/SearchCommunityTemp
 import { RouteProp, useRoute } from "@react-navigation/native";
 import {
   SearchCommunitiesResponse,
+  usePostCommunity,
   useSearchCommunities,
 } from "../hooks/community/mutate";
 import { showAlert } from "../functions";
@@ -10,6 +11,8 @@ import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
+import useAuth from "../hooks/auth/useAuth";
+import { useQueryUser } from "../hooks/user/query";
 
 const SearchCommunitieScreen = ({
   navigation,
@@ -18,7 +21,25 @@ const SearchCommunitieScreen = ({
   const toast = useToast();
   const { params } =
     useRoute<RouteProp<CommunityStackParamList, "SearchCommunity">>();
+  const { session } = useAuth();
+  const { data: user } = useQueryUser(session?.user.id);
   const [searchResult, setSearchResult] = useState<SearchCommunitiesResponse>();
+
+  const {
+    mutateAsync: mutateAsyncPostCommunity,
+    isLoading: isLoadingPostCommunity,
+  } = usePostCommunity({
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   const {
     mutateAsync: mutateAsyncSearchCommunities,
@@ -40,6 +61,23 @@ const SearchCommunitieScreen = ({
     },
   });
 
+  const joinCommunity = useCallback(
+    async (communityId: number, memberIds: string[]) => {
+      if (session) {
+        memberIds.push(session.user.id);
+        await mutateAsyncPostCommunity({
+          communityId,
+          memberIds,
+        });
+        navigation.navigate("CommunityChat", {
+          communityId,
+          category: params.category,
+        });
+      }
+    },
+    [session, params]
+  );
+
   const searchCommunities = useCallback(async (query: string) => {
     if (query === "") {
       setSearchResult([]);
@@ -49,15 +87,14 @@ const SearchCommunitieScreen = ({
   }, []);
 
   const communityChatNavigationHandler = useCallback(
-    (communityId: number, name: string | null) => {
+    (communityId: number) => {
       navigation.goBack();
       navigation.navigate("CommunityChat", {
         communityId,
-        name,
         category: params.category,
       });
     },
-    []
+    [params]
   );
 
   const goBackNavigationHandler = useCallback(() => {
@@ -66,8 +103,11 @@ const SearchCommunitieScreen = ({
 
   return (
     <SearchCommunityTemplate
+      user={user}
       searchResult={searchResult}
       searchCommunities={searchCommunities}
+      joinCommunity={joinCommunity}
+      isLoadingPostCommunity={isLoadingPostCommunity}
       isLoadingSearchCommunities={isLoadingSearchCommunities}
       communityChatNavigationHandler={communityChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}

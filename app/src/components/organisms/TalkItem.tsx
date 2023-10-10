@@ -27,7 +27,7 @@ const TalkItem = memo(
     const { t } = useTranslation("talk");
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
-    const textColor = useColorModeValue("muted.600", "muted.300")
+    const textColor = useColorModeValue("muted.600", "muted.300");
 
     return (
       <Swipeable

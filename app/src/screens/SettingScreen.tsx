@@ -135,9 +135,9 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     navigation.navigate("LikeList");
   }, []);
 
-    const environmentNavigationHandler = useCallback(() => {
-      navigation.navigate("Environment");
-    }, []);
+  const environmentNavigationHandler = useCallback(() => {
+    navigation.navigate("Environment");
+  }, []);
 
   return (
     <SettingTemplate

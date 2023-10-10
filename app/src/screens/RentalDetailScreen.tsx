@@ -78,23 +78,28 @@ const RentalDetailScreen = ({
 
   const { mutateAsync: mutateAsyncPostLike, isLoading: isLoadingPostLike } =
     usePostRentalLike({
-      onSuccess: async ({ rentalId }) => {
+      onSuccess: async () => {
         await refetchLikes();
-        if (session && rentalId && rental?.ownerId) {
+        if (user && rental) {
           await mutateAsyncPostNotification({
             recieverId: rental.ownerId,
-            senderId: session.user.id,
-            rentalId,
+            senderId: user.userId,
+            rentalId: params.rentalId,
             clicked: false,
           });
-          user &&
-            rental.name &&
-            (await sendNotification({
-              to: rental.ownerId,
-              title: user.name,
-              body: rental.name,
-              data: { screenName: "RentalDetail" },
-            }));
+
+          if (rental.user.token && rental.name) {
+            await sendNotification({
+              to: rental.user.token,
+              title: rental.name,
+              body: rental.name + t("to") + user.name + t("liked"),
+              data: {
+                data: {
+                  scheme: `TabNavigator/MapNavigator/Map?id=${params.rentalId}&latitude=${rental.latitude}&longitude=${rental.longitude}&type=rental`,
+                },
+              },
+            });
+          }
         }
       },
       onError: () => {
@@ -168,9 +173,6 @@ const RentalDetailScreen = ({
               screen: "TalkChat",
               params: {
                 talkId: talk.talkId,
-                recieverId: talk.to.userId,
-                token: talk.to.token,
-                name: talk.to.name,
               },
             },
           });
@@ -240,9 +242,6 @@ const RentalDetailScreen = ({
           screen: "TalkChat",
           params: {
             talkId: talk.talkId,
-            recieverId: talk.to.userId,
-            token: talk.to.token,
-            name: talk.to.name,
           },
         },
       });
