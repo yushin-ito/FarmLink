@@ -28,14 +28,14 @@ type EditFarmTemplateProps = {
   searchResult: SearchDeviceResponse[0] | undefined;
   address: LocationGeocodedAddress | undefined;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
-  postFarm: (
+  updateFarm: (
     name: string,
     deviceId: string,
     description: string,
     privated: boolean
   ) => Promise<void>;
   searchDevice: (query: string) => Promise<void>;
-  isLoadingPostFarm: boolean;
+  isLoadingUpdateFarm: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -50,9 +50,9 @@ const EditFarmTemplate = ({
   address,
   getAddress,
   searchResult,
-  postFarm,
+  updateFarm,
   searchDevice,
-  isLoadingPostFarm,
+  isLoadingUpdateFarm,
   goBackNavigationHandler,
 }: EditFarmTemplateProps) => {
   const { t } = useTranslation("farm");
@@ -319,9 +319,9 @@ const EditFarmTemplate = ({
             size="lg"
             rounded="xl"
             colorScheme="brand"
-            isLoading={isLoadingPostFarm}
+            isLoading={isLoadingUpdateFarm}
             onPress={handleSubmit(async (data) => {
-              await postFarm(
+              await updateFarm(
                 data.name,
                 data.deviceId,
                 data.description,

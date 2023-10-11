@@ -4,7 +4,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
-import { usePostFarm } from "../hooks/farm/mutate";
+import { useUpdateFarm } from "../hooks/farm/mutate";
 import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
@@ -24,8 +24,8 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   const { refetch } = useQueryFarms();
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
 
-  const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
-    usePostFarm({
+  const { mutateAsync: mutateAsyncUpdateFarm, isLoading: isLoadingUpdateFarm } =
+    useUpdateFarm({
       onSuccess: async () => {
         await refetch();
         navigation.goBack();
@@ -101,7 +101,7 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
     await mutateAsyncSearchDevice(query);
   }, []);
 
-  const postFarm = useCallback(
+  const updateFarm = useCallback(
     async (
       name: string,
       deviceId: string,
@@ -109,7 +109,7 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       privated: boolean
     ) => {
       if (session && farm) {
-        await mutateAsyncPostFarm({
+        await mutateAsyncUpdateFarm({
           farmId: farm.farmId,
           name,
           deviceId,
@@ -132,9 +132,9 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       address={address}
       getAddress={getAddress}
       searchResult={searchResult}
-      postFarm={postFarm}
+      updateFarm={updateFarm}
       searchDevice={searchDevice}
-      isLoadingPostFarm={isLoadingPostFarm}
+      isLoadingUpdateFarm={isLoadingUpdateFarm}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

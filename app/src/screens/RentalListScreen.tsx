@@ -4,7 +4,7 @@ import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
 import { useQueryRentals, useQueryUserRentals } from "../hooks/rental/query";
 import { showAlert, wait } from "../functions";
-import { useDeleteRental, usePostRental } from "../hooks/rental/mutate";
+import { useDeleteRental, useUpdateRental } from "../hooks/rental/mutate";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
@@ -23,7 +23,7 @@ const RentalListScreen = ({
   } = useQueryUserRentals(session?.user.id);
   const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
 
-  const { mutateAsync: mutateAsyncPostRental } = usePostRental({
+  const { mutateAsync: mutateAsyncUpdateRental } = useUpdateRental({
     onSuccess: async () => {
       await refetch();
       await refetchUserRentals();
@@ -70,11 +70,11 @@ const RentalListScreen = ({
   }, []);
 
   const privateRental = useCallback(async (rentalId: number) => {
-    await mutateAsyncPostRental({ rentalId, privated: true });
+    await mutateAsyncUpdateRental({ rentalId, privated: true });
   }, []);
 
   const publicRental = useCallback(async (rentalId: number) => {
-    await mutateAsyncPostRental({ rentalId, privated: false });
+    await mutateAsyncUpdateRental({ rentalId, privated: false });
   }, []);
 
   const mapNavigationHandler = useCallback(

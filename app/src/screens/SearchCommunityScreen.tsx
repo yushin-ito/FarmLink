@@ -3,8 +3,8 @@ import SearchCommunityTemplate from "../components/templates/SearchCommunityTemp
 import { RouteProp, useRoute } from "@react-navigation/native";
 import {
   SearchCommunitiesResponse,
-  usePostCommunity,
   useSearchCommunities,
+  useUpdateCommunity,
 } from "../hooks/community/mutate";
 import { showAlert } from "../functions";
 import { useToast } from "native-base";
@@ -26,9 +26,9 @@ const SearchCommunitieScreen = ({
   const [searchResult, setSearchResult] = useState<SearchCommunitiesResponse>();
 
   const {
-    mutateAsync: mutateAsyncPostCommunity,
-    isLoading: isLoadingPostCommunity,
-  } = usePostCommunity({
+    mutateAsync: mutateAsyncUpdateCommunity,
+    isLoading: isLoadingUpdateCommunity,
+  } = useUpdateCommunity({
     onError: () => {
       showAlert(
         toast,
@@ -65,7 +65,7 @@ const SearchCommunitieScreen = ({
     async (communityId: number, memberIds: string[]) => {
       if (session) {
         memberIds.push(session.user.id);
-        await mutateAsyncPostCommunity({
+        await mutateAsyncUpdateCommunity({
           communityId,
           memberIds,
         });
@@ -107,7 +107,7 @@ const SearchCommunitieScreen = ({
       searchResult={searchResult}
       searchCommunities={searchCommunities}
       joinCommunity={joinCommunity}
-      isLoadingPostCommunity={isLoadingPostCommunity}
+      isLoadingUpdateCommunity={isLoadingUpdateCommunity}
       isLoadingSearchCommunities={isLoadingSearchCommunities}
       communityChatNavigationHandler={communityChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}

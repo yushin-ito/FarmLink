@@ -8,7 +8,7 @@ import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
 import { CommunityStackScreenProps } from "../types";
 import CommunityListTemplate from "../components/templates/CommunityListTemplate";
-import { usePostCommunity } from "../hooks/community/mutate";
+import {  useUpdateCommunity } from "../hooks/community/mutate";
 
 const CommunityListScreen = ({
   navigation,
@@ -32,9 +32,9 @@ const CommunityListScreen = ({
   const [isRefetchingCommunities, setIsRefetchingCommunitys] = useState(false);
 
   const {
-    mutateAsync: mutateAsyncPostCommunity,
-    isLoading: isLoadingPostCommunity,
-  } = usePostCommunity({
+    mutateAsync: mutateAsyncUpdateCommunity,
+    isLoading: isLoadingUpdateCommunity,
+  } = useUpdateCommunity({
     onError: () => {
       showAlert(
         toast,
@@ -57,7 +57,7 @@ const CommunityListScreen = ({
     async (communityId: number, memberIds: string[]) => {
       if (session) {
         memberIds.push(session.user.id);
-        await mutateAsyncPostCommunity({
+        await mutateAsyncUpdateCommunity({
           communityId,
           memberIds,
         });
@@ -108,7 +108,7 @@ const CommunityListScreen = ({
       communities={communities}
       user={user}
       isLoading={isLoadingUser || isLoadingCommunities}
-      isLoadingPostCommunity={isLoadingPostCommunity}
+      isLoadingUpdateCommunity={isLoadingUpdateCommunity}
       isRefetchingCommunities={isRefetchingCommunities}
       hasMore={hasNextPage}
       readMore={fetchNextPage}

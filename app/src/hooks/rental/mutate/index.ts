@@ -4,6 +4,7 @@ import { Rental, UseMutationResult } from "../../../types";
 import { decode } from "base64-arraybuffer";
 
 export type PostRentalResponse = Awaited<ReturnType<typeof postRental>>;
+export type UpdateRentalResponse = Awaited<ReturnType<typeof updateRental>>;
 export type PostRentalImageResponse = Awaited<
   ReturnType<typeof postRentalImage>
 >;
@@ -11,7 +12,19 @@ export type DeleteRentalResponse = Awaited<ReturnType<typeof deleteRental>>;
 export type SearchRentalsResponse = Awaited<ReturnType<typeof searchRentals>>;
 
 const postRental = async (rental: Rental["Insert"]) => {
-  const { data, error } = await supabase.from("rental").upsert(rental).select();
+  const { data, error } = await supabase.from("rental").insert(rental).select();
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const updateRental = async (rental: Rental["Update"]) => {
+  const { data, error } = await supabase
+    .from("rental")
+    .update(rental)
+    .eq("rentalId", rental.rentalId)
+    .select();
   if (error) {
     throw error;
   }
@@ -65,6 +78,16 @@ export const usePostRental = ({
 }: UseMutationResult<PostRentalResponse, Error>) =>
   useMutation({
     mutationFn: postRental,
+    onSuccess,
+    onError,
+  });
+
+export const useUpdateRental = ({
+  onSuccess,
+  onError,
+}: UseMutationResult<UpdateRentalResponse, Error>) =>
+  useMutation({
+    mutationFn: updateRental,
     onSuccess,
     onError,
   });

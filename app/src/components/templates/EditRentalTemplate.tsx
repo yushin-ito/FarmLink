@@ -29,11 +29,11 @@ import { GetRentalResponse } from "../../hooks/rental/query";
 type EditRentalTemplateProps = {
   rental: GetRentalResponse | null | undefined;
   images: string[];
-  isLoadingPostRental: boolean;
+  isLoadingUpdateRental: boolean;
   address: LocationGeocodedAddress | undefined;
   pickImageByLibrary: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
-  postRental: (
+  updateRental: (
     name: string,
     description: string,
     fee: string,
@@ -54,11 +54,11 @@ type FormValues = {
 const EditRentalTemplate = ({
   rental,
   images,
-  isLoadingPostRental,
+  isLoadingUpdateRental,
   address,
   pickImageByLibrary,
   getAddress,
-  postRental,
+  updateRental,
   goBackNavigationHandler,
 }: EditRentalTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -325,6 +325,7 @@ const EditRentalTemplate = ({
                   );
                 }}
                 rules={{
+                  required: t("feeRequired"),
                   maxLength: {
                     value: 20,
                     message: t("feeMaxLength"),
@@ -482,9 +483,9 @@ const EditRentalTemplate = ({
             size="lg"
             rounded="xl"
             colorScheme="brand"
-            isLoading={isLoadingPostRental}
+            isLoading={isLoadingUpdateRental}
             onPress={handleSubmit(async (data) => {
-              await postRental(
+              await updateRental(
                 data.name,
                 data.description,
                 data.fee,

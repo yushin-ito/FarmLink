@@ -240,6 +240,7 @@
     "rentalNameRequired": "Rental name is required",
     "rentalNameMaxLength": "Rental name must be 20 or less",
     "fee": "Fee",
+    "feeRequired": "Fee is required",
     "feeMaxLength": "Fee must be 20 or less",
     "area": "Area",
     "areaMaxLength": "Area must be 20 or less",

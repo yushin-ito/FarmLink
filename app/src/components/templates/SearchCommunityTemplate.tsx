@@ -24,7 +24,7 @@ type SearchCommunityTemplateProps = {
   searchResult: GetCommunitiesResponse | undefined;
   searchCommunities: (query: string) => Promise<void>;
   isLoadingSearchCommunities: boolean;
-  isLoadingPostCommunity: boolean;
+  isLoadingUpdateCommunity: boolean;
   joinCommunity: (communityId: number, memberIds: string[]) => Promise<void>;
   communityChatNavigationHandler: (communityId: number) => void;
   goBackNavigationHandler: () => void;
@@ -39,7 +39,7 @@ const SearchCommunityTemplate = ({
   searchResult,
   searchCommunities,
   isLoadingSearchCommunities,
-  isLoadingPostCommunity,
+  isLoadingUpdateCommunity,
   joinCommunity,
   communityChatNavigationHandler,
   goBackNavigationHandler,
@@ -115,7 +115,7 @@ const SearchCommunityTemplate = ({
                       false)
                   }
                   joinCommunity={joinCommunity}
-                  isLoading={isLoadingPostCommunity}
+                  isLoading={isLoadingUpdateCommunity}
                   communityChatNavigationHandler={
                     communityChatNavigationHandler
                   }

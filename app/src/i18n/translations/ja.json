@@ -239,6 +239,7 @@
     "rentalNameRequired": "レンタル名を入力してください",
     "rentalNameMaxLength": "レンタル名は20文字以内で入力してください",
     "fee": "料金",
+    "feeRequired": "料金を入力してください",
     "feeMaxLength": "料金は20文字以内で入力してください",
     "area": "面積",
     "areaMaxLength": "面積は20文字以内で入力してください",

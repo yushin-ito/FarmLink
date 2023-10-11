@@ -3,7 +3,7 @@ import EditRentalTemplate from "../components/templates/EditRentalTemplate";
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
-import { usePostRental, usePostRentalImage } from "../hooks/rental/mutate";
+import { useUpdateRental, usePostRentalImage } from "../hooks/rental/mutate";
 import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
@@ -30,8 +30,8 @@ const EditRentalScreen = ({
     rental?.imageUrls && setImages(rental.imageUrls);
   }, [rental]);
 
-  const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
-    usePostRental({
+  const { mutateAsync: mutateAsyncUpdateRental, isLoading: isLoadingUpdateRental } =
+    useUpdateRental({
       onSuccess: async () => {
         await refetch();
         navigation.goBack();
@@ -138,7 +138,7 @@ const EditRentalScreen = ({
     },
   });
 
-  const postRental = useCallback(
+  const updateRental = useCallback(
     async (
       name: string,
       description: string,
@@ -160,7 +160,7 @@ const EditRentalScreen = ({
             }
           })
         );
-        await mutateAsyncPostRental({
+        await mutateAsyncUpdateRental({
           rentalId: rental.rentalId,
           name,
           description,
@@ -184,11 +184,11 @@ const EditRentalScreen = ({
     <EditRentalTemplate
       rental={rental}
       images={images}
-      isLoadingPostRental={isLoadingPostRental || isLoadingPostRentalImage}
+      isLoadingUpdateRental={isLoadingUpdateRental || isLoadingPostRentalImage}
       address={address}
       pickImageByLibrary={pickImageByLibrary}
       getAddress={getAddress}
-      postRental={postRental}
+      updateRental={updateRental}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

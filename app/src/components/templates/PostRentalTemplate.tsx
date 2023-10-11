@@ -319,6 +319,7 @@ const PostRentalTemplate = ({
                   );
                 }}
                 rules={{
+                  required: t("feeRequired"),
                   maxLength: {
                     value: 20,
                     message: t("feeMaxLength"),

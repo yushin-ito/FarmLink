@@ -5,7 +5,7 @@ import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import ChatTemplate from "../components/templates/ChatTemplate";
-import { useDeleteTalk, usePostTalk } from "../hooks/talk/mutate";
+import { useDeleteTalk, useUpdateTalk } from "../hooks/talk/mutate";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { TalkStackParamList, TalkStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
@@ -65,7 +65,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     };
   }, [params]);
 
-  const { mutateAsync: mutateAsyncPostTalk } = usePostTalk({
+  const { mutateAsync: mutateAsyncUpdateTalk } = useUpdateTalk({
     onSuccess: async () => {
       await refetchTalks();
     },
@@ -141,7 +141,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
             talkId: params.talkId,
             clicked: false,
           });
-          await mutateAsyncPostTalk({
+          await mutateAsyncUpdateTalk({
             talkId: params.talkId,
             chatId,
           });

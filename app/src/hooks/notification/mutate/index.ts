@@ -5,6 +5,9 @@ import { Notification, UseMutationResult } from "../../../types";
 export type PostNotificationResponse = Awaited<
   ReturnType<typeof postNotification>
 >;
+export type UpdateNotificationResponse = Awaited<
+  ReturnType<typeof updateNotification>
+>;
 export type DeleteNotificationResponse = Awaited<
   ReturnType<typeof deleteNotification>
 >;
@@ -12,7 +15,19 @@ export type DeleteNotificationResponse = Awaited<
 const postNotification = async (notification: Notification["Insert"]) => {
   const { data, error } = await supabase
     .from("notification")
-    .upsert(notification)
+    .insert(notification)
+    .select();
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const updateNotification = async (notification: Notification["Update"]) => {
+  const { data, error } = await supabase
+    .from("notification")
+    .update(notification)
+    .eq("notificationId", notification.notificationId)
     .select();
   if (error) {
     throw error;
@@ -38,6 +53,16 @@ export const usePostNotification = ({
 }: UseMutationResult<PostNotificationResponse, Error>) =>
   useMutation({
     mutationFn: postNotification,
+    onSuccess,
+    onError,
+  });
+
+export const useUpdateNotification = ({
+  onSuccess,
+  onError,
+}: UseMutationResult<UpdateNotificationResponse, Error>) =>
+  useMutation({
+    mutationFn: updateNotification,
     onSuccess,
     onError,
   });

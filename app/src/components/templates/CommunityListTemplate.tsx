@@ -32,7 +32,7 @@ type CommunityListTemplateProps = {
   user: GetUserResponse | null | undefined;
   communities: GetCommunitiesResponse | null | undefined;
   isLoading: boolean;
-  isLoadingPostCommunity: boolean;
+  isLoadingUpdateCommunity: boolean;
   isRefetchingCommunities: boolean;
   hasMore: boolean | undefined;
   refetchCommunities: () => Promise<void>;
@@ -50,7 +50,7 @@ const CommunityListTemplate = ({
   user,
   communities,
   isLoading,
-  isLoadingPostCommunity,
+  isLoadingUpdateCommunity,
   isRefetchingCommunities,
   hasMore,
   refetchCommunities,
@@ -150,7 +150,7 @@ const CommunityListTemplate = ({
                   false)
               }
               joinCommunity={joinCommunity}
-              isLoading={isLoadingPostCommunity}
+              isLoading={isLoadingUpdateCommunity}
               communityChatNavigationHandler={communityChatNavigationHandler}
             />
           )}

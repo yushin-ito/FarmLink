@@ -8,7 +8,7 @@ import { useQueryUser } from "../hooks/user/query";
 import { FarmStackScreenProps } from "../types";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
-import { useDeleteFarm, usePostFarm } from "../hooks/farm/mutate";
+import { useDeleteFarm, useUpdateFarm } from "../hooks/farm/mutate";
 
 const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   const toast = useToast();
@@ -25,7 +25,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   } = useQueryUserFarms(session?.user.id);
   const [isRefetchingFarms, setIsRefetchingFarms] = useState(false);
 
-  const { mutateAsync: mutateAsyncPostFarm } = usePostFarm({
+  const { mutateAsync: mutateAsyncUpdateFarm } = useUpdateFarm({
     onSuccess: async () => {
       await refetch();
       await refetchUserFarms();
@@ -70,11 +70,11 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   }, []);
 
   const privateFarm = useCallback(async (farmId: number) => {
-    await mutateAsyncPostFarm({ farmId, privated: true });
+    await mutateAsyncUpdateFarm({ farmId, privated: true });
   }, []);
 
   const publicFarm = useCallback(async (farmId: number) => {
-    await mutateAsyncPostFarm({ farmId, privated: false });
+    await mutateAsyncUpdateFarm({ farmId, privated: false });
   }, []);
 
   const mapNavigationHandler = useCallback(

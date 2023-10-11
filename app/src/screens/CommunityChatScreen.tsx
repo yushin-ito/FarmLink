@@ -7,7 +7,7 @@ import Alert from "../components/molecules/Alert";
 import ChatTemplate from "../components/templates/ChatTemplate";
 import {
   useDeleteCommunity,
-  usePostCommunity,
+  useUpdateCommunity,
 } from "../hooks/community/mutate";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
@@ -101,7 +101,7 @@ const CommunityChatScreen = ({
     },
   });
 
-  const { mutateAsync: mutateAsyncPostCommunity } = usePostCommunity({
+  const { mutateAsync: mutateAsyncUpdateCommunity } = useUpdateCommunity({
     onSuccess: async () => {
       await refetchCommunities();
     },
@@ -193,7 +193,7 @@ const CommunityChatScreen = ({
       if (session && base64) {
         const { path } = await mutateAsyncPostChatImage(base64);
         const { data } = supabase.storage.from("image").getPublicUrl(path);
-        await mutateAsyncPostCommunity({
+        await mutateAsyncUpdateCommunity({
           communityId: params.communityId,
           imageUrl: data.publicUrl,
         });
@@ -240,7 +240,7 @@ const CommunityChatScreen = ({
 
   const leaveCommunity = useCallback(async () => {
     if (session && community) {
-      await mutateAsyncPostCommunity({
+      await mutateAsyncUpdateCommunity({
         communityId: params.communityId,
         memberIds: community.memberIds?.filter(
           (memberId) => memberId !== session.user.id
@@ -256,7 +256,7 @@ const CommunityChatScreen = ({
   }, [params]);
 
   const deleteImage = useCallback(async () => {
-    await mutateAsyncPostCommunity({
+    await mutateAsyncUpdateCommunity({
       communityId: params.communityId,
       imageUrl: null,
     });

@@ -9,7 +9,7 @@ import Alert from "../components/molecules/Alert";
 import { useQueryNotifications } from "../hooks/notification/query";
 import {
   useDeleteNotification,
-  usePostNotification,
+  useUpdateNotification,
 } from "../hooks/notification/mutate";
 
 const NotificationScreen = ({
@@ -26,7 +26,7 @@ const NotificationScreen = ({
   const [isRefetchingNotifications, setIsRefetchingNotifications] =
     useState(false);
 
-  const { mutateAsync: mutateAsyncPostNotification } = usePostNotification({
+  const { mutateAsync: mutateAsyncUpdateNotification } = useUpdateNotification({
     onSuccess: async () => {
       await refetch();
     },
@@ -78,7 +78,7 @@ const NotificationScreen = ({
       longitude: number,
       type: "farm" | "rental"
     ) => {
-      await mutateAsyncPostNotification({ notificationId, clicked: true });
+      await mutateAsyncUpdateNotification({ notificationId, clicked: true });
       navigation.goBack();
       await wait(0.1);
       navigation.navigate("TabNavigator", {
@@ -94,7 +94,7 @@ const NotificationScreen = ({
 
   const talkChatNavigationHandler = useCallback(
     async (notificationId: number, talkId: number) => {
-      await mutateAsyncPostNotification({ notificationId, clicked: true });
+      await mutateAsyncUpdateNotification({ notificationId, clicked: true });
       navigation.goBack();
       await wait(0.1);
       navigation.navigate("TabNavigator", {

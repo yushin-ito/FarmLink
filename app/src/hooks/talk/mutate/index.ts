@@ -3,10 +3,23 @@ import { supabase } from "../../../supabase";
 import { Talk, UseMutationResult } from "../../../types";
 
 export type PostTalkResponse = Awaited<ReturnType<typeof postTalk>>;
+export type UpdateTalkResponse = Awaited<ReturnType<typeof updateTalk>>;
 export type DeleteTalkResponse = Awaited<ReturnType<typeof deleteTalk>>;
 
 const postTalk = async (talk: Talk["Insert"]) => {
-  const { data, error } = await supabase.from("talk").upsert(talk).select();
+  const { data, error } = await supabase.from("talk").insert(talk).select();
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const updateTalk = async (talk: Talk["Update"]) => {
+  const { data, error } = await supabase
+    .from("talk")
+    .update(talk)
+    .eq("talkId", talk.talkId)
+    .select();
   if (error) {
     throw error;
   }
@@ -32,6 +45,16 @@ export const usePostTalk = ({
 }: UseMutationResult<PostTalkResponse, Error>) =>
   useMutation({
     mutationFn: postTalk,
+    onSuccess,
+    onError,
+  });
+
+export const useUpdateTalk = ({
+  onSuccess,
+  onError,
+}: UseMutationResult<UpdateTalkResponse, Error>) =>
+  useMutation({
+    mutationFn: updateTalk,
     onSuccess,
     onError,
   });

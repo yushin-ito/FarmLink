@@ -16,7 +16,7 @@ import * as FileSystem from "expo-file-system";
 import useMediaLibrary from "../hooks/sdk/useMediaLibrary";
 import { useQueryTalks } from "../hooks/talk/query";
 import useAuth from "../hooks/auth/useAuth";
-import { usePostTalk } from "../hooks/talk/mutate";
+import { useUpdateTalk } from "../hooks/talk/mutate";
 
 const ImagePreviewScreen = () => {
   const { t } = useTranslation("common");
@@ -30,7 +30,7 @@ const ImagePreviewScreen = () => {
   const { session } = useAuth();
   const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
 
-  const { mutateAsync: mutateAsyncPostTalk } = usePostTalk({
+  const { mutateAsync: mutateAsyncUpdateTalk } = useUpdateTalk({
     onSuccess: async () => {
       await refetchTalks();
     },
@@ -49,7 +49,7 @@ const ImagePreviewScreen = () => {
   const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
     onSuccess: async ({ chatId }) => {
       params.talkId &&
-        mutateAsyncPostTalk({
+        mutateAsyncUpdateTalk({
           talkId: params.talkId,
           chatId,
         });
@@ -109,6 +109,14 @@ const ImagePreviewScreen = () => {
       downloadPath
     );
     if (!(await Sharing.isAvailableAsync())) {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
       return;
     }
     await Sharing.shareAsync(localUri);

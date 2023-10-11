@@ -3,6 +3,9 @@ import { supabase } from "../../../supabase";
 import { Community, UseMutationResult } from "../../../types";
 
 export type PostCommunityResponse = Awaited<ReturnType<typeof postCommunity>>;
+export type UpdateCommunityResponse = Awaited<
+  ReturnType<typeof updateCommunity>
+>;
 export type DeleteCommunityResponse = Awaited<
   ReturnType<typeof deleteCommunity>
 >;
@@ -12,8 +15,20 @@ export type SearchCommunitiesResponse = Awaited<
 
 const postCommunity = async (community: Community["Insert"]) => {
   const { data, error } = await supabase
+    .from("insert")
+    .insert(community)
+    .select();
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const updateCommunity = async (community: Community["Update"]) => {
+  const { data, error } = await supabase
     .from("community")
-    .upsert(community)
+    .update(community)
+    .eq("communityId", community.communityId)
     .select();
   if (error) {
     throw error;
@@ -51,6 +66,16 @@ export const usePostCommunity = ({
 }: UseMutationResult<PostCommunityResponse, Error>) =>
   useMutation({
     mutationFn: postCommunity,
+    onSuccess,
+    onError,
+  });
+
+export const useUpdateCommunity = ({
+  onSuccess,
+  onError,
+}: UseMutationResult<UpdateCommunityResponse, Error>) =>
+  useMutation({
+    mutationFn: updateCommunity,
     onSuccess,
     onError,
   });

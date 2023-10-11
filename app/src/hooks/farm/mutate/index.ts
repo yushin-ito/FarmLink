@@ -3,11 +3,24 @@ import { supabase } from "../../../supabase";
 import { Farm, UseMutationResult } from "../../../types";
 
 export type PostFarmResponse = Awaited<ReturnType<typeof postFarm>>;
+export type UpdateFarmResponse = Awaited<ReturnType<typeof updateFarm>>;
 export type DeleteFarmResponse = Awaited<ReturnType<typeof deleteFarm>>;
 export type SearchFarmsResponse = Awaited<ReturnType<typeof searchFarms>>;
 
 const postFarm = async (farm: Farm["Insert"]) => {
-  const { data, error } = await supabase.from("farm").upsert(farm).select();
+  const { data, error } = await supabase.from("farm").insert(farm).select();
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const updateFarm = async (farm: Farm["Update"]) => {
+  const { data, error } = await supabase
+    .from("farm")
+    .update(farm)
+    .eq("farmId", farm.farmId)
+    .select();
   if (error) {
     throw error;
   }
@@ -15,7 +28,6 @@ const postFarm = async (farm: Farm["Insert"]) => {
 };
 
 const deleteFarm = async (farmId: number) => {
-  await supabase.from("notification").delete().eq("farmId", farmId);
   await supabase.from("like").delete().eq("farmId", farmId);
   const { data, error } = await supabase
     .from("farm")
@@ -48,6 +60,16 @@ export const usePostFarm = ({
 }: UseMutationResult<PostFarmResponse, Error>) =>
   useMutation({
     mutationFn: postFarm,
+    onSuccess,
+    onError,
+  });
+
+export const useUpdateFarm = ({
+  onSuccess,
+  onError,
+}: UseMutationResult<UpdateFarmResponse, Error>) =>
+  useMutation({
+    mutationFn: updateFarm,
     onSuccess,
     onError,
   });
