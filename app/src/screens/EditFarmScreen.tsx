@@ -21,7 +21,7 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   const { params } = useRoute<RouteProp<MapStackParamList, "EditFarm">>();
   const { data: farm } = useQueryFarm(params.farmId);
   const { session } = useAuth();
-  const { refetch } = useQueryFarms();
+  const { refetch } = useQueryFarms(session?.user.id);
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
 
   const { mutateAsync: mutateAsyncUpdateFarm, isLoading: isLoadingUpdateFarm } =

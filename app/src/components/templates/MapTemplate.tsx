@@ -44,7 +44,6 @@ const MapTemplate = ({
   region,
   setRegion,
   position,
-  user,
   farms,
   rentals,
   isLoading,
@@ -127,7 +126,6 @@ const MapTemplate = ({
         {type === "farm"
           ? farms?.map(
               (item) =>
-                (!item.privated || user?.userId === item.ownerId) &&
                 item.latitude &&
                 item.longitude && (
                   <Marker
@@ -156,8 +154,7 @@ const MapTemplate = ({
                 )
             )
           : rentals?.map(
-              (item) => //プライベートかつオーナーでないなら非表示
-                (!item.privated || user?.userId === item.ownerId) &&
+              (item) =>
                 item.latitude &&
                 item.longitude && (
                   <Marker
@@ -262,25 +259,21 @@ const MapTemplate = ({
           </Pressable>
         </HStack>
       </VStack>
-      {type === "farm"
-        ? user && (
-            <FarmPreviewList
-              farms={farms}
-              userId={user.userId}
-              farmId={type === "farm" ? id : null}
-              setRegion={setRegion}
-              farmDetailNavigationHandler={farmDetailNavigationHandler}
-            />
-          )
-        : user && (
-            <RentalPreviewList
-              rentals={rentals}
-              userId={user.userId}
-              rentalId={type === "rental" ? id : null}
-              setRegion={setRegion}
-              rentalDetailNavigationHandler={rentalDetailNavigationHandler}
-            />
-          )}
+      {type === "farm" ? (
+        <FarmPreviewList
+          farms={farms}
+          farmId={type === "farm" ? id : null}
+          setRegion={setRegion}
+          farmDetailNavigationHandler={farmDetailNavigationHandler}
+        />
+      ) : (
+        <RentalPreviewList
+          rentals={rentals}
+          rentalId={type === "rental" ? id : null}
+          setRegion={setRegion}
+          rentalDetailNavigationHandler={rentalDetailNavigationHandler}
+        />
+      )}
     </Box>
   );
 };

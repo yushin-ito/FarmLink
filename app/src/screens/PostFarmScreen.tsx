@@ -16,7 +16,7 @@ const PostFarmScreen = () => {
   const { t } = useTranslation("farm");
   const navigation = useNavigation();
   const { session } = useAuth();
-  const { refetch } = useQueryFarms();
+  const { refetch } = useQueryFarms(session?.user.id);
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
 
   const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =

@@ -23,7 +23,7 @@ const EditRentalScreen = ({
     params.rentalId
   );
   const { session } = useAuth();
-  const { refetch } = useQueryRentals();
+  const { refetch } = useQueryRentals(session?.user.id);
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {

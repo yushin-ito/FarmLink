@@ -24,12 +24,12 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     data: farms,
     refetch: refetchFarms,
     isLoading: isLoadingFarms,
-  } = useQueryFarms();
+  } = useQueryFarms(session?.user.id);
   const {
     data: rentals,
     refetch: refetchRentals,
     isLoading: isLoadingRentals,
-  } = useQueryRentals();
+  } = useQueryRentals(session?.user.id);
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
   const [id, setId] = useState<number | null>(null);
   const [type, setType] = useState<"farm" | "rental">("farm");

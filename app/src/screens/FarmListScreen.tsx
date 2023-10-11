@@ -17,7 +17,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   const { data: user, isLoading: isLoadingUser } = useQueryUser(
     session?.user.id
   );
-  const { refetch } = useQueryFarms();
+  const { refetch } = useQueryFarms(session?.user.id);
   const {
     data: farms,
     refetch: refetchUserFarms,

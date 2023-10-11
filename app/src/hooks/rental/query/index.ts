@@ -18,10 +18,12 @@ const getRental = async (rentalId: number) => {
   return data[0];
 };
 
-const getRentals = async () => {
+const getRentals = async (userId: string | undefined) => {
   const { data, error } = await supabase
     .from("rental")
     .select("*")
+    .or(`privated.eq.false, ownerId.eq.${userId}`);
+
   if (error) {
     throw error;
   }
@@ -48,10 +50,10 @@ export const useQueryRental = (rentalId: number) =>
     queryFn: async () => await getRental(rentalId),
   });
 
-export const useQueryRentals = () =>
+export const useQueryRentals = (userId: string | undefined) =>
   useQuery({
     queryKey: "rental",
-    queryFn: async () => await getRentals(),
+    queryFn: async () => await getRentals(userId),
   });
 
 export const useQueryUserRentals = (ownerId: string | undefined) =>

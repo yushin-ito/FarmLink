@@ -19,10 +19,11 @@ const getFarm = async (farmId: number) => {
   return data[0];
 };
 
-const getFarms = async () => {
+const getFarms = async (userId: string | undefined) => {
   const { data, error } = await supabase
     .from("farm")
     .select("*, device(*)")
+    .or(`privated.eq.false, ownerId.eq.${userId}`)
     .returns<(Farm["Row"] & { device: Device["Row"] })[]>();
   if (error) {
     throw error;
@@ -49,10 +50,10 @@ export const useQueryFarm = (farmId: number) =>
     queryFn: async () => await getFarm(farmId),
   });
 
-export const useQueryFarms = () =>
+export const useQueryFarms = (userId: string | undefined) =>
   useQuery({
     queryKey: "farm",
-    queryFn: async () => await getFarms(),
+    queryFn: async () => await getFarms(userId),
   });
 
 export const useQueryUserFarms = (ownerId: string | undefined) =>

@@ -15,7 +15,7 @@ const RentalListScreen = ({
   const { t } = useTranslation("setting");
   const toast = useToast();
   const { session } = useAuth();
-  const { refetch } = useQueryRentals();
+  const { refetch } = useQueryRentals(session?.user.id);
   const {
     data: rentals,
     refetch: refetchUserRentals,

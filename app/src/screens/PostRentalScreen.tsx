@@ -18,7 +18,7 @@ const PostRentalScreen = ({
   const toast = useToast();
   const { t } = useTranslation("setting");
   const { session } = useAuth();
-  const { refetch } = useQueryRentals();
+  const { refetch } = useQueryRentals(session?.user.id);
   const [base64, setBase64] = useState<string[]>([]);
 
   const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
