@@ -111,7 +111,7 @@ const SettingTemplate = ({
         )}
       </HStack>
       {isLoading ? (
-        <SkeletonSetting rows={6} />
+        <SkeletonSetting rows={7} />
       ) : (
         <VStack space="3">
           <Pressable
