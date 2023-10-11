@@ -249,7 +249,6 @@ const RentalDetailScreen = ({
       await mutateAsyncPostTalk({
         senderId: session.user.id,
         recieverId: rental.ownerId,
-        lastMessage: t("createdTalk"),
       });
     } else {
       showAlert(

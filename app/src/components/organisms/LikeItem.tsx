@@ -52,12 +52,14 @@ const LikeItem = memo(
           onPress={onPress}
           style={{
             backgroundColor: bgColor,
-            opacity: item.farm?.privated || item.rental?.privated ? 0.6 : 1,
           }}
           underlayColor={pressedColor}
           disabled={item.farm?.privated || item.rental?.privated}
         >
-          <VStack alignItems="center">
+          <VStack
+            alignItems="center"
+            opacity={item.farm?.privated || item.rental?.privated ? 0.6 : 1}
+          >
             <HStack
               w="100%"
               px="6"

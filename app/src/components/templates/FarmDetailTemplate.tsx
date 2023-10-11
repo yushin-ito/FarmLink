@@ -123,13 +123,13 @@ const FarmDetailTemplate = ({
           </Box>
         )}
         {isLoading ? (
-          <VStack mt="2" px="6">
+          <VStack mt="6" px="6">
             <HStack alignItems="center" justifyContent="space-between">
-              <Skeleton w="40" h="7" rounded="16" />
+              <Skeleton w="40" h="5" rounded="16" />
               <Skeleton size="7" rounded="full" />
             </HStack>
-            <Skeleton.Text mt="12" lines={4} />
-            <Skeleton.Text mt="12" lines={4} />
+            <Skeleton.Text mt="9" lines={4} />
+            <Skeleton.Text mt="9" lines={4} />
           </VStack>
         ) : (
           <VStack mt="6" px="6">

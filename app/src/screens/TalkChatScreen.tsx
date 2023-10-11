@@ -117,15 +117,15 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     usePostChat({
       onSuccess: async ({ chatId, authorId, message, imageUrl }) => {
         if (talk?.to.token && user) {
-          message &&
-            (await sendNotification({
+          if (message)
+            await sendNotification({
               to: talk.to.token,
               title: user.name,
               body: message,
               data: {
                 scheme: `TabNavigator/TalkNavigator/TalkChat?talkId=${params.talkId}`,
               },
-            }));
+            });
           imageUrl &&
             (await sendNotification({
               to: talk.to.token,
@@ -138,8 +138,12 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
           await mutateAsyncPostNotification({
             recieverId: talk.to.userId,
             senderId: authorId,
-            chatId,
+            talkId: params.talkId,
             clicked: false,
+          });
+          await mutateAsyncPostTalk({
+            talkId: params.talkId,
+            chatId,
           });
         }
       },
@@ -156,17 +160,8 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     });
 
   const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
-    onSuccess: async ({ message, imageUrl }) => {
-      message &&
-        mutateAsyncPostTalk({
-          talkId: params.talkId,
-          lastMessage: t("deleteMessage"),
-        });
-      imageUrl &&
-        mutateAsyncPostTalk({
-          talkId: params.talkId,
-          lastMessage: t("deleteImage"),
-        });
+    onSuccess: async () => {
+      await refetchTalks();
     },
     onError: () => {
       showAlert(
@@ -201,10 +196,6 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
       if (session && user && base64) {
         const { path } = await mutateAsyncPostChatImage(base64);
         const { data } = supabase.storage.from("image").getPublicUrl(path);
-        await mutateAsyncPostTalk({
-          talkId: params.talkId,
-          lastMessage: t("sendImage"),
-        });
         await mutateAsyncPostChat({
           talkId: params.talkId,
           authorId: session.user.id,
@@ -262,10 +253,6 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const onSend = useCallback(
     async (message: string) => {
       if (session) {
-        await mutateAsyncPostTalk({
-          talkId: params.talkId,
-          lastMessage: message,
-        });
         await mutateAsyncPostChat({
           message,
           talkId: params.talkId,

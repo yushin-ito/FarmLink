@@ -41,7 +41,7 @@ const getTimeDistanceJa = (date: string) => {
       locale: ja,
     });
   } else {
-    return distance + "前";
+    return distance.replace("約", "") + "前";
   }
 };
 

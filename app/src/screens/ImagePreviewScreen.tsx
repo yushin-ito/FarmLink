@@ -47,11 +47,11 @@ const ImagePreviewScreen = () => {
   });
 
   const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
-    onSuccess: async () => {
+    onSuccess: async ({ chatId }) => {
       params.talkId &&
         mutateAsyncPostTalk({
           talkId: params.talkId,
-          lastMessage: t("deleteImage"),
+          chatId,
         });
       navigation.goBack();
     },

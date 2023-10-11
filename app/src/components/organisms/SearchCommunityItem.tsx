@@ -15,6 +15,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import Avatar from "../molecules/Avatar";
 import { useTranslation } from "react-i18next";
+import { Keyboard } from "react-native";
 
 type SearchCommunityItemProps = {
   item: SearchCommunitiesResponse[number];
@@ -41,9 +42,10 @@ const SearchCommunityItem = memo(
 
     return (
       <Pressable
-        onPress={() =>
-          joined ? communityChatNavigationHandler(item.communityId) : onOpen()
-        }
+        onPress={() => {
+          Keyboard.dismiss();
+          joined ? communityChatNavigationHandler(item.communityId) : onOpen();
+        }}
         alignItems="center"
         _pressed={{ bg: pressedColor }}
       >

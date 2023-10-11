@@ -11,6 +11,7 @@ import {
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import Avatar from "../molecules/Avatar";
+import { useTranslation } from "react-i18next";
 
 type SearchTalkItemProps = {
   item: GetTalksResponse[number];
@@ -18,6 +19,7 @@ type SearchTalkItemProps = {
 };
 
 const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
+  const { t } = useTranslation("talk");
   const pressedColor = useColorModeValue("muted.100", "muted.800");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
@@ -47,14 +49,36 @@ const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
             <Text bold fontSize="md">
               {item.to.name}
             </Text>
-            <Text
-              color={textColor}
-              fontSize="xs"
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {item.lastMessage}
-            </Text>
+            {item.chat?.message && (
+              <Text
+                color={textColor}
+                fontSize="xs"
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {item.chat.message}
+              </Text>
+            )}
+            {item.chat?.imageUrl && (
+              <Text
+                color={textColor}
+                fontSize="xs"
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {t("sendImage")}
+              </Text>
+            )}
+            {!item.chatId && (
+              <Text
+                color={textColor}
+                fontSize="xs"
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {item.createdAt === item.updatedAt ? t("created") : t("unsent")}
+              </Text>
+            )}
           </VStack>
         </HStack>
         <Icon

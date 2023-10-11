@@ -156,7 +156,7 @@ const MapTemplate = ({
                 )
             )
           : rentals?.map(
-              (item) =>
+              (item) => //プライベートかつオーナーでないなら非表示
                 (!item.privated || user?.userId === item.ownerId) &&
                 item.latitude &&
                 item.longitude && (

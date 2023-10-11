@@ -1,6 +1,6 @@
 import { supabase } from "../../../supabase";
 import { useQuery } from "react-query";
-import { Talk, User } from "../../../types";
+import {  Talk, User } from "../../../types";
 
 export type GetTalkResponse = Awaited<ReturnType<typeof getTalk>>;
 export type GetTalksResponse = Awaited<ReturnType<typeof getTalks>>;
@@ -10,7 +10,12 @@ const getTalk = async (talkId: number, userId: string | undefined) => {
     .from("talk")
     .select("*, to:recieverId(*), from:senderId(*)")
     .eq("talkId", talkId)
-    .returns<(Talk["Row"] & { to: User["Row"]; from: User["Row"] })[]>();
+    .returns<
+      (Talk["Row"] & {
+        to: User["Row"];
+        from: User["Row"];
+      })[]
+    >();
 
   if (error) {
     throw error;
@@ -24,17 +29,23 @@ const getTalk = async (talkId: number, userId: string | undefined) => {
 const getTalks = async (userId: string | undefined) => {
   const { data, error } = await supabase
     .from("talk")
-    .select(`*, to:recieverId(*), from:senderId(*)`)
+    .select(`*, to:recieverId(*), from:senderId(*), chat(imageUrl, message)`)
     .or(`senderId.eq.${userId}, recieverId.eq.${userId}`)
     .order("updatedAt", { ascending: false })
-    .returns<(Talk["Row"] & { to: User["Row"]; from: User["Row"] })[]>();
+    .returns<
+      (Talk["Row"] & {
+        to: User["Row"];
+        from: User["Row"];
+        chat: { imageUrl: string | null; message: string | null } | null;
+      })[]
+    >();
   if (error) {
     throw error;
   }
 
   return data.map((item) => {
     if (item.recieverId === userId) {
-      return { ...item, to: item.from, from: item.from };
+      return { ...item, to: item.from, from: item.to };
     }
     return item;
   });

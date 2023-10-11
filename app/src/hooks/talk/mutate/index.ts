@@ -13,24 +13,9 @@ const postTalk = async (talk: Talk["Insert"]) => {
   return data;
 };
 
-const deleteChat = async (talkId: number) => {
-  const { data } = await supabase
-    .from("chat")
-    .select("chatId")
-    .eq("talkId", talkId);
-
-  if (data) {
-    await Promise.all(
-      data.map(
-        async (item) =>
-          await supabase.from("notification").delete().eq("chatId", item.chatId)
-      )
-    );
-    await supabase.from("chat").delete().eq("talkId", talkId);
-  }
-};
 const deleteTalk = async (talkId: number) => {
-  await deleteChat(talkId);
+  await supabase.from("notification").delete().eq("talkId", talkId);
+  await supabase.from("chat").delete().eq("talkId", talkId);
   const { data, error } = await supabase
     .from("talk")
     .delete()

@@ -50,17 +50,9 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
     await mutateAsyncDeleteTalk(talkId);
   }, []);
 
-  const talkChatNavigationHandler = useCallback(
-    (
-      talkId: number,
-      recieverId: string,
-      token: string | null,
-      name: string
-    ) => {
-      navigation.navigate("TalkChat", { talkId, recieverId, name, token });
-    },
-    []
-  );
+  const talkChatNavigationHandler = useCallback((talkId: number) => {
+    navigation.navigate("TalkChat", { talkId });
+  }, []);
 
   const postTalkNavigationHandler = useCallback(() => {
     navigation.navigate("PostTalk");

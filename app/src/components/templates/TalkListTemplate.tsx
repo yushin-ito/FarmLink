@@ -28,12 +28,7 @@ type TalkListTemplateProps = {
   isRefetchingTalks: boolean;
   refetchTalks: () => Promise<void>;
   deleteTalk: (talkId: number) => Promise<void>;
-  talkChatNavigationHandler: (
-    talkId: number,
-    recieverId: string,
-    token: string | null,
-    name: string
-  ) => void;
+  talkChatNavigationHandler: (talkId: number) => void;
   postTalkNavigationHandler: () => void;
   settingNavigationHandler: () => void;
   searchTalkNavigationHandler: () => void;
@@ -98,14 +93,7 @@ const TalkListTemplate = ({
             <TalkItem
               item={item}
               locale={locale}
-              onPress={() =>
-                talkChatNavigationHandler(
-                  item.talkId,
-                  item.to.userId,
-                  item.to.token,
-                  item.to.name
-                )
-              }
+              onPress={() => talkChatNavigationHandler(item.talkId)}
               onPressRight={() =>
                 Alert.alert(t("deleteTalk"), t("askDeleteTalk"), [
                   {

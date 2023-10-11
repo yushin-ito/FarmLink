@@ -80,7 +80,6 @@ const PostTalkScreen = () => {
         await mutateAsyncPostTalk({
           senderId: session?.user.id,
           recieverId,
-          lastMessage: t("createdTalk")
         });
       }
     },

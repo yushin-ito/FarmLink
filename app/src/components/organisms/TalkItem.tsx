@@ -73,14 +73,38 @@ const TalkItem = memo(
                     {getTimeDistance(item.updatedAt, locale)}
                   </Text>
                 </HStack>
-                <Text
-                  color={textColor}
-                  fontSize="xs"
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {item.lastMessage}
-                </Text>
+                {item.chat?.message && (
+                  <Text
+                    color={textColor}
+                    fontSize="xs"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {item.chat.message}
+                  </Text>
+                )}
+                {item.chat?.imageUrl && (
+                  <Text
+                    color={textColor}
+                    fontSize="xs"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {t("sendImage")}
+                  </Text>
+                )}
+                {!item.chatId && (
+                  <Text
+                    color={textColor}
+                    fontSize="xs"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {item.createdAt === item.updatedAt
+                      ? t("created")
+                      : t("unsent")}
+                  </Text>
+                )}
               </VStack>
             </HStack>
             <Divider w="80%" alignSelf="center" bg="muted.200" />

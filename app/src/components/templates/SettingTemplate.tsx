@@ -105,9 +105,7 @@ const SettingTemplate = ({
               {user?.name}
             </Text>
             <Text color={textColor} numberOfLines={2} ellipsizeMode="tail">
-              {user?.profile || user?.profile !== ""
-                ? user?.profile
-                : t("noProfile")}
+              {!user?.profile ?   t("noProfile") :user?.profile}
             </Text>
           </VStack>
         )}

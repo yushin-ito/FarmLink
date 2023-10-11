@@ -52,14 +52,15 @@ const NotificationTemplate = ({
 
   const getNotificationType = useCallback(
     (notification: GetNotificationsResponse[number]) => {
-      if (notification.farmId && notification.farm) {
+      if (notification.farmId) {
         return "farm";
-      } else if (notification.rentalId && notification.rental) {
+      } else if (notification.rentalId) {
         return "rental";
-      } else if (notification.chatId && notification.chat) {
+      } else if (notification.talkId) {
         return "chat";
+      } else {
+        return "unknown"
       }
-      return "unknown";
     },
     []
   );
@@ -120,10 +121,10 @@ const NotificationTemplate = ({
                         "rental"
                       );
                   } else if (getNotificationType(item) === "chat") {
-                    item.chat.talkId &&
+                    item.talkId &&
                       talkChatNavigationHandler(
                         item.notificationId,
-                        item.chat.talkId
+                        item.talkId
                       );
                   }
                 }}
