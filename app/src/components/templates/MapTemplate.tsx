@@ -67,7 +67,7 @@ const MapTemplate = ({
 
   const animateToRegion = useCallback(
     ({ latitude, longitude }: LatLng) => {
-      if (mapRef.current && !isLoading) {
+      if (mapRef.current) {
         mapRef.current.animateToRegion({
           latitude,
           longitude,
@@ -76,24 +76,8 @@ const MapTemplate = ({
         });
       }
     },
-    [mapRef.current, isLoading]
+    [mapRef.current]
   );
-
-  useEffect(() => {
-    type === "farm"
-      ? farms?.length &&
-        setRegion({
-          regionId: farms[0].farmId,
-          latitude: farms[0].latitude,
-          longitude: farms[0].longitude,
-        })
-      : rentals?.length &&
-        setRegion({
-          regionId: rentals[0].rentalId,
-          latitude: rentals[0].latitude,
-          longitude: rentals[0].longitude,
-        });
-  }, [type, farms, rentals]);
 
   useEffect(() => {
     if (region) {
@@ -101,8 +85,22 @@ const MapTemplate = ({
         latitude: region.latitude,
         longitude: region.longitude,
       });
+    } else {
+      type === "farm"
+        ? farms?.length &&
+          setRegion({
+            regionId: farms[0].farmId,
+            latitude: farms[0].latitude,
+            longitude: farms[0].longitude,
+          })
+        : rentals?.length &&
+          setRegion({
+            regionId: rentals[0].rentalId,
+            latitude: rentals[0].latitude,
+            longitude: rentals[0].longitude,
+          });
     }
-  }, [mapRef.current, region]);
+  }, [mapRef.current, region, type, farms, rentals]);
 
   if (isLoading) {
     return (
@@ -173,7 +171,9 @@ const MapTemplate = ({
                       longitude,
                     }}
                     onPress={() =>
-                      setRegion({ regionId: farmId, latitude, longitude })
+                      region?.regionId === farmId
+                        ? farmDetailNavigationHandler(farmId)
+                        : setRegion({ regionId: farmId, latitude, longitude })
                     }
                   >
                     <VStack alignItems="center">
@@ -204,7 +204,9 @@ const MapTemplate = ({
                       longitude,
                     }}
                     onPress={() =>
-                      setRegion({ regionId: rentalId, latitude, longitude })
+                      region?.regionId === rentalId
+                        ? rentalDetailNavigationHandler(rentalId)
+                        : setRegion({ regionId: rentalId, latitude, longitude })
                     }
                   >
                     <VStack alignItems="center">

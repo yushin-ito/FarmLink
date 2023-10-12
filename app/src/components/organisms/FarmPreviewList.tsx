@@ -24,6 +24,7 @@ import { Image } from "expo-image";
 import { useWindowDimensions } from "react-native";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { useTranslation } from "react-i18next";
+import { wait } from "../../functions";
 
 type Region = {
   regionId: number;
@@ -54,11 +55,12 @@ const FarmPreviewList = memo(
 
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
-    const [touch, setTouch] = useState<boolean>(false);
+    const [touch, setTouch] = useState<boolean>(true);
 
     const scrollToOffset = useCallback(
       async (index: number) => {
         if (previewRef.current) {
+          await wait(0.1);
           previewRef.current.scrollToOffset({
             animated: true,
             offset: width * index,
@@ -69,10 +71,12 @@ const FarmPreviewList = memo(
     );
 
     useEffect(() => {
-      const index = farms?.findIndex(
-        ({ farmId }) => farmId === region?.regionId
-      );
-      (index || index === -1) && scrollToOffset(index);
+      if (region && farms) {
+        const index = farms.findIndex(
+          ({ farmId }) => farmId === region.regionId
+        );
+        index != -1 && scrollToOffset(index);
+      }
     }, [farms, region, previewRef.current]);
 
     return (
@@ -189,9 +193,9 @@ const FarmPreviewList = memo(
             currentIndex < farms?.length &&
             touch
           ) {
+            setTouch(false);
             const { farmId, latitude, longitude } = farms[currentIndex];
             setRegion({ regionId: farmId, latitude, longitude });
-            setTouch(false);
           }
         }}
       />

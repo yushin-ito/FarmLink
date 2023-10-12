@@ -24,6 +24,7 @@ import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { useWindowDimensions } from "react-native";
 import { GetRentalsResponse } from "../../hooks/rental/query";
+import { wait } from "../../functions";
 
 type Region = {
   regionId: number;
@@ -54,11 +55,12 @@ const RentalPreviewList = memo(
 
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
-    const [touch, setTouch] = useState<boolean>(false);
+    const [touch, setTouch] = useState<boolean>(true);
 
     const scrollToOffset = useCallback(
       async (index: number) => {
         if (previewRef.current) {
+          await wait(0.1);
           previewRef.current.scrollToOffset({
             animated: true,
             offset: width * index,
@@ -69,11 +71,13 @@ const RentalPreviewList = memo(
     );
 
     useEffect(() => {
-      const index = rentals?.findIndex(
-        ({ rentalId }) => rentalId === region?.regionId
-      );
-      (index || index === -1) && scrollToOffset(index);
-    }, [rentals, region, previewRef.current]);
+      if (region && rentals) {
+        const index = rentals?.findIndex(
+          ({ rentalId }) => rentalId === region.regionId
+        );
+        index !== -1 && scrollToOffset(index);
+      }
+    }, [previewRef.current, rentals, region]);
 
     return (
       <FlatList
@@ -178,9 +182,9 @@ const RentalPreviewList = memo(
             currentIndex < rentals?.length &&
             touch
           ) {
+            setTouch(false);
             const { rentalId, latitude, longitude } = rentals[currentIndex];
             setRegion({ regionId: rentalId, latitude, longitude });
-            setTouch(false);
           }
         }}
       />
