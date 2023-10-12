@@ -138,7 +138,7 @@ const FarmPreviewList = memo(
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
                         {item?.device?.temperture
-                          ? item.device.temperture + "℃"
+                          ? Math.floor(item.device.temperture) + "℃"
                           : t("unknown")}
                       </Text>
                     </VStack>
@@ -148,7 +148,7 @@ const FarmPreviewList = memo(
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
                         {item?.device?.humidity
-                          ? item.device.humidity + "%"
+                          ? Math.floor(item.device.humidity) + "%"
                           : t("unknown")}
                       </Text>
                     </VStack>
@@ -158,7 +158,7 @@ const FarmPreviewList = memo(
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
                         {item?.device?.moisture
-                          ? item.device.moisture + "%"
+                          ? item.device.moisture
                           : t("unknown")}
                       </Text>
                     </VStack>

@@ -11,8 +11,6 @@ import {
   Icon,
   useColorModeValue,
   Radio,
-  Center,
-  Spinner,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { ColorSchemeName } from "react-native";
@@ -24,7 +22,6 @@ type EnvironmentTemplateProps = {
   theme: ColorSchemeName;
   changeLanguage: (language: Locale) => Promise<void>;
   changeTheme: (theme: ColorSchemeName) => Promise<void>;
-  isLoading: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -33,19 +30,10 @@ const EnvironmentTemplate = ({
   theme,
   changeLanguage,
   changeTheme,
-  isLoading,
   goBackNavigationHandler,
 }: EnvironmentTemplateProps) => {
   const { t } = useTranslation("setting");
   const iconColor = useColorModeValue("muted.600", "muted.100");
-
-  if (isLoading) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
 
   return (
     <Box flex={1} safeAreaTop>

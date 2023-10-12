@@ -14,19 +14,17 @@ const EnvironmentScreen = () => {
   const { setColorMode } = useColorMode();
   const [theme, setTheme] = useState<ColorSchemeName>(null);
   const [locale, setLocale] = useState<Locale>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getEnvironment = useCallback(async () => {
     const locale = await AsyncStorage.getItem("@locale");
     setLocale(locale as Locale);
     const theme = await AsyncStorage.getItem("@theme");
+    console.log(theme);
     setTheme(theme as ColorSchemeName);
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
     getEnvironment();
-    setIsLoading(false);
   }, []);
 
   const changeLanguage = useCallback(async (language: Locale) => {
@@ -68,7 +66,6 @@ const EnvironmentScreen = () => {
       theme={theme}
       changeLanguage={changeLanguage}
       changeTheme={changeTheme}
-      isLoading={isLoading}
     />
   );
 };

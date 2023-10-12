@@ -3,7 +3,7 @@ import PostCommunityTemplate from "../components/templates/PostCommunityTemplate
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useInfiniteQueryCommunities } from "../hooks/community/query";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
+import { Category, showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
 import { usePostCommunity } from "../hooks/community/mutate";
 import { useTranslation } from "react-i18next";
@@ -41,7 +41,7 @@ const PostCommunityScreen = () => {
   });
 
   const postCommunity = useCallback(
-    async (name: string, description: string, category: string) => {
+    async (name: string, description: string, category: Category) => {
       if (session) {
         await mutateAsync({
           name,

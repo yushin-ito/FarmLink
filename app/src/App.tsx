@@ -1,15 +1,46 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ColorMode, NativeBaseProvider, StorageManager } from "native-base";
 import { AuthProvider } from "./contexts/AuthProvider";
 import { QueryCache, QueryClient, QueryClientProvider } from "react-query";
 import "./i18n";
-import { Alert, LogBox, useColorScheme } from "react-native";
+import { Alert, Appearance, LogBox } from "react-native";
 import RootComponent from "./components/RootComponent";
 import { extendTheme } from "native-base";
 import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 LogBox.ignoreAllLogs();
+
+const useColorScheme = (delay = 250) => {
+  const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme());
+
+  let timeout = useRef<NodeJS.Timeout | null>(null).current;
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(onColorSchemeChange);
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      subscription.remove();
+    };
+  }, []);
+
+  const onColorSchemeChange = (
+    preferences: Appearance.AppearancePreferences
+  ) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(() => {
+      setColorScheme(preferences.colorScheme);
+    }, delay);
+  };
+
+  return colorScheme;
+};
 
 const App = () => {
   const { t } = useTranslation("common");
@@ -56,13 +87,13 @@ const App = () => {
   });
 
   return (
-    <NativeBaseProvider theme={theme} colorModeManager={colorModeManager}>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <NativeBaseProvider theme={theme} colorModeManager={colorModeManager}>
+        <AuthProvider>
           <RootComponent />
-        </QueryClientProvider>
-      </AuthProvider>
-    </NativeBaseProvider>
+        </AuthProvider>
+      </NativeBaseProvider>
+    </QueryClientProvider>
   );
 };
 

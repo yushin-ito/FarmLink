@@ -165,7 +165,7 @@ const FarmDetailTemplate = ({
                 </Text>
                 <Text bold textAlign="center">
                   {farm?.device?.temperture
-                    ? farm.device.temperture + "℃"
+                    ? Math.floor(farm.device.temperture) + "℃"
                     : t("unknown")}
                 </Text>
               </VStack>
@@ -175,7 +175,7 @@ const FarmDetailTemplate = ({
                 </Text>
                 <Text bold textAlign="center">
                   {farm?.device?.humidity
-                    ? farm.device.humidity + "%"
+                    ? Math.floor(farm.device.humidity) + "%"
                     : t("unknown")}
                 </Text>
               </VStack>
@@ -185,7 +185,7 @@ const FarmDetailTemplate = ({
                 </Text>
                 <Text bold textAlign="center">
                   {farm?.device?.moisture
-                    ? farm.device.moisture + "%"
+                    ? farm.device.moisture
                     : t("unknown")}
                 </Text>
               </VStack>

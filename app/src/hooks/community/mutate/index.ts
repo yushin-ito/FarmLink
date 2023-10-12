@@ -15,7 +15,7 @@ export type SearchCommunitiesResponse = Awaited<
 
 const postCommunity = async (community: Community["Insert"]) => {
   const { data, error } = await supabase
-    .from("insert")
+    .from("community")
     .insert(community)
     .select();
   if (error) {

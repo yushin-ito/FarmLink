@@ -24,7 +24,7 @@ type PostCommunityTemplateProps = {
   postCommunity: (
     name: string,
     description: string,
-    category: string
+    category: Category
   ) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
@@ -32,7 +32,7 @@ type PostCommunityTemplateProps = {
 type FormValues = {
   name: string;
   description: string;
-  category: string;
+  category: Category;
 };
 
 const PostCommunityTemplate = ({
