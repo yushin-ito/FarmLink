@@ -73,7 +73,7 @@ const NotificationScreen = ({
   const mapNavigationHandler = useCallback(
     async (
       notificationId: number,
-      id: number,
+      regionId: number,
       latitude: number,
       longitude: number,
       type: "farm" | "rental"
@@ -85,7 +85,7 @@ const NotificationScreen = ({
         screen: "MapNavigator",
         params: {
           screen: "Map",
-          params: { id, latitude, longitude, type },
+          params: { regionId, latitude, longitude, type },
         },
       });
     },

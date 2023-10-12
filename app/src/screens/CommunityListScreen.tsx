@@ -8,7 +8,7 @@ import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
 import { CommunityStackScreenProps } from "../types";
 import CommunityListTemplate from "../components/templates/CommunityListTemplate";
-import {  useUpdateCommunity } from "../hooks/community/mutate";
+import { useUpdateCommunity } from "../hooks/community/mutate";
 
 const CommunityListScreen = ({
   navigation,
@@ -55,7 +55,7 @@ const CommunityListScreen = ({
 
   const joinCommunity = useCallback(
     async (communityId: number, memberIds: string[]) => {
-      if (session) {
+      if (session && !memberIds.includes(session.user.id)) {
         memberIds.push(session.user.id);
         await mutateAsyncUpdateCommunity({
           communityId,

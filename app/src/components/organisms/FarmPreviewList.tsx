@@ -16,26 +16,32 @@ import React, {
   useCallback,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import { FlatList as ReactNativeFlatList } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useWindowDimensions } from "react-native";
 import { GetFarmsResponse } from "../../hooks/farm/query";
-import { LatLng } from "react-native-maps";
 import { useTranslation } from "react-i18next";
+
+type Region = {
+  regionId: number;
+  latitude: number;
+  longitude: number;
+};
 
 type FarmPreviewListProps = {
   farms: GetFarmsResponse | undefined;
-  farmId: number | null;
-  setRegion: Dispatch<SetStateAction<LatLng | null>>;
+  region: Region | null;
+  setRegion: Dispatch<SetStateAction<Region | null>>;
   farmDetailNavigationHandler: (rentalId: number) => void;
 };
 
 const FarmPreviewList = memo(
   ({
     farms,
-    farmId,
+    region,
     setRegion,
     farmDetailNavigationHandler,
   }: FarmPreviewListProps) => {
@@ -48,6 +54,7 @@ const FarmPreviewList = memo(
 
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
+    const [touch, setTouch] = useState<boolean>(false);
 
     const scrollToOffset = useCallback(
       async (index: number) => {
@@ -62,9 +69,11 @@ const FarmPreviewList = memo(
     );
 
     useEffect(() => {
-      const index = farms?.findIndex((item) => item.farmId === farmId);
-      index && scrollToOffset(index);
-    }, [farms, farmId, previewRef.current]);
+      const index = farms?.findIndex(
+        ({ farmId }) => farmId === region?.regionId
+      );
+      (index || index === -1) && scrollToOffset(index);
+    }, [farms, region, previewRef.current]);
 
     return (
       <FlatList
@@ -168,6 +177,7 @@ const FarmPreviewList = memo(
             )}
           </Pressable>
         )}
+        onTouchEnd={() => setTouch(true)}
         onMomentumScrollEnd={(event) => {
           const currentIndex = Math.floor(
             event.nativeEvent.contentOffset.x /
@@ -176,10 +186,12 @@ const FarmPreviewList = memo(
           if (
             farms?.length &&
             currentIndex >= 0 &&
-            currentIndex < farms?.length
+            currentIndex < farms?.length &&
+            touch
           ) {
-            const { latitude, longitude } = farms[currentIndex];
-            latitude && longitude && setRegion({ latitude, longitude });
+            const { farmId, latitude, longitude } = farms[currentIndex];
+            setRegion({ regionId: farmId, latitude, longitude });
+            setTouch(false);
           }
         }}
       />

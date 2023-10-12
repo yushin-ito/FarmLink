@@ -212,7 +212,89 @@ const EditFarmTemplate = ({
                 {errors.deviceId && <Text>{errors.deviceId.message}</Text>}
               </FormControl.ErrorMessage>
             </FormControl>
-            <HStack mt="4" alignItems="center" justifyContent="space-between">
+            <FormControl isRequired isInvalid={"description" in errors}>
+              <FormControl.Label>{t("description")}</FormControl.Label>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  return (
+                    <VStack>
+                      <Input
+                        h="48"
+                        multiline
+                        textAlignVertical="top"
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                      <HStack mt="1" justifyContent="space-between">
+                        <FormControl.ErrorMessage
+                          leftIcon={
+                            <Icon as={<Feather name="alert-circle" />} />
+                          }
+                        >
+                          {errors.description && (
+                            <Text>{errors.description.message}</Text>
+                          )}
+                        </FormControl.ErrorMessage>
+                        <Text color={textColor}>
+                          {value?.length ?? 0} / 100
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  );
+                }}
+                rules={{
+                  required: t("descriptionRequired"),
+                  maxLength: {
+                    value: 100,
+                    message: t("descriptionMaxLength"),
+                  },
+                }}
+              />
+            </FormControl>
+            <VStack space="1">
+              <Text bold color={textColor} fontSize="md">
+                {t("location")}
+              </Text>
+              <MapView
+                ref={mapRef}
+                userInterfaceStyle={useColorModeValue("light", "dark")}
+                showsCompass={false}
+                style={{
+                  width: "100%",
+                  height: 160,
+                  borderRadius: 12,
+                }}
+              >
+                {farm?.latitude && farm?.longitude && (
+                  <Marker
+                    coordinate={{
+                      latitude: farm.latitude,
+                      longitude: farm.longitude,
+                    }}
+                  >
+                    <VStack alignItems="center">
+                      <Text bold fontSize="2xs">
+                        {farm.name}
+                      </Text>
+                      <Icon
+                        as={<MaterialIcons />}
+                        name="location-pin"
+                        size="xl"
+                        color="brand.600"
+                      />
+                    </VStack>
+                  </Marker>
+                )}
+              </MapView>
+              {address && (
+                <Text color={textColor}>{`${t("address")}: ${address.city}${
+                  address.name
+                }`}</Text>
+              )}
+            </VStack>
+            <HStack mt="12" alignItems="center" justifyContent="space-between">
               <Text fontSize="md" bold color={textColor}>
                 {t("doPublic")}
               </Text>
@@ -224,94 +306,6 @@ const EditFarmTemplate = ({
                 }}
               />
             </HStack>
-            {!privated && (
-              <VStack mt="6" space="6">
-                <FormControl isRequired isInvalid={"description" in errors}>
-                  <FormControl.Label>{t("description")}</FormControl.Label>
-                  <Controller
-                    name="description"
-                    control={control}
-                    render={({ field: { value, onChange } }) => {
-                      return (
-                        <VStack>
-                          <Input
-                            h="48"
-                            multiline
-                            textAlignVertical="top"
-                            value={value}
-                            onChangeText={onChange}
-                          />
-                          <HStack mt="1" justifyContent="space-between">
-                            <FormControl.ErrorMessage
-                              leftIcon={
-                                <Icon as={<Feather name="alert-circle" />} />
-                              }
-                            >
-                              {errors.description && (
-                                <Text>{errors.description.message}</Text>
-                              )}
-                            </FormControl.ErrorMessage>
-                            <Text color={textColor}>
-                              {value?.length ?? 0} / 100
-                            </Text>
-                          </HStack>
-                        </VStack>
-                      );
-                    }}
-                    rules={{
-                      required: !privated
-                        ? t("descriptionRequired")
-                        : undefined,
-                      maxLength: {
-                        value: 100,
-                        message: t("descriptionMaxLength"),
-                      },
-                    }}
-                  />
-                </FormControl>
-                <VStack space="1">
-                  <Text bold color={textColor} fontSize="md">
-                    {t("location")}
-                  </Text>
-                  <MapView
-                    ref={mapRef}
-                    userInterfaceStyle={useColorModeValue("light", "dark")}
-                    showsCompass={false}
-                    style={{
-                      width: "100%",
-                      height: 160,
-                      borderRadius: 12,
-                    }}
-                  >
-                    {farm?.latitude && farm?.longitude && (
-                      <Marker
-                        coordinate={{
-                          latitude: farm.latitude,
-                          longitude: farm.longitude,
-                        }}
-                      >
-                        <VStack alignItems="center">
-                          <Text bold fontSize="2xs">
-                            {farm.name}
-                          </Text>
-                          <Icon
-                            as={<MaterialIcons />}
-                            name="location-pin"
-                            size="xl"
-                            color="brand.600"
-                          />
-                        </VStack>
-                      </Marker>
-                    )}
-                  </MapView>
-                  {address && (
-                    <Text color={textColor}>{`${t("address")}: ${address.city}${
-                      address.name
-                    }`}</Text>
-                  )}
-                </VStack>
-              </VStack>
-            )}
           </VStack>
           <Button
             mt="16"

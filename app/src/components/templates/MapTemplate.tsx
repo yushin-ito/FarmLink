@@ -10,8 +10,14 @@ import {
   useColorModeValue,
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
-import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
-import MapView, { Marker, LatLng } from "react-native-maps";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
+import MapView, { LatLng, Marker } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { GetRentalsResponse } from "../../hooks/rental/query";
@@ -21,12 +27,17 @@ import FarmPreviewList from "../organisms/FarmPreviewList";
 import RentalPreviewList from "../organisms/RentalPreviewList";
 import { GetUserResponse } from "../../hooks/user/query";
 
+type Region = {
+  regionId: number;
+  latitude: number;
+  longitude: number;
+};
+
 type MapTemplateProps = {
   type: "farm" | "rental";
   setType: Dispatch<SetStateAction<"farm" | "rental">>;
-  id: number | null;
-  region: LatLng | null;
-  setRegion: Dispatch<SetStateAction<LatLng | null>>;
+  region: Region | null;
+  setRegion: Dispatch<SetStateAction<Region | null>>;
   position: LocationObject | undefined;
   user: GetUserResponse | null | undefined;
   farms: GetFarmsResponse | undefined;
@@ -40,7 +51,6 @@ type MapTemplateProps = {
 const MapTemplate = ({
   type,
   setType,
-  id,
   region,
   setRegion,
   position,
@@ -55,16 +65,44 @@ const MapTemplate = ({
   const mapRef = useRef<MapView>(null);
   const bgColor = useColorModeValue("white", "muted.800");
 
+  const animateToRegion = useCallback(
+    ({ latitude, longitude }: LatLng) => {
+      if (mapRef.current && !isLoading) {
+        mapRef.current.animateToRegion({
+          latitude,
+          longitude,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
+        });
+      }
+    },
+    [mapRef.current, isLoading]
+  );
+
   useEffect(() => {
-    if (mapRef.current && region && !isLoading) {
-      mapRef.current.animateToRegion({
+    type === "farm"
+      ? farms?.length &&
+        setRegion({
+          regionId: farms[0].farmId,
+          latitude: farms[0].latitude,
+          longitude: farms[0].longitude,
+        })
+      : rentals?.length &&
+        setRegion({
+          regionId: rentals[0].rentalId,
+          latitude: rentals[0].latitude,
+          longitude: rentals[0].longitude,
+        });
+  }, [type, farms, rentals]);
+
+  useEffect(() => {
+    if (region) {
+      animateToRegion({
         latitude: region.latitude,
         longitude: region.longitude,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.001,
       });
     }
-  }, [mapRef.current, region, isLoading]);
+  }, [mapRef.current, region]);
 
   if (isLoading) {
     return (
@@ -125,22 +163,24 @@ const MapTemplate = ({
           )}
         {type === "farm"
           ? farms?.map(
-              (item) =>
-                item.latitude &&
-                item.longitude && (
+              ({ farmId, latitude, longitude, name }) =>
+                latitude &&
+                longitude && (
                   <Marker
-                    key={item.farmId}
+                    key={farmId}
                     coordinate={{
-                      latitude: item.latitude,
-                      longitude: item.longitude,
+                      latitude,
+                      longitude,
                     }}
-                    onPress={() => farmDetailNavigationHandler(item.farmId)}
+                    onPress={() =>
+                      setRegion({ regionId: farmId, latitude, longitude })
+                    }
                   >
                     <VStack alignItems="center">
-                      {item.latitude === region?.latitude &&
-                        item.longitude === region?.longitude && (
+                      {latitude === region?.latitude &&
+                        longitude === region?.longitude && (
                           <Text bold fontSize="xs">
-                            {item.name}
+                            {name}
                           </Text>
                         )}
                       <Icon
@@ -154,22 +194,24 @@ const MapTemplate = ({
                 )
             )
           : rentals?.map(
-              (item) =>
-                item.latitude &&
-                item.longitude && (
+              ({ rentalId, latitude, longitude, name }) =>
+                latitude &&
+                longitude && (
                   <Marker
-                    key={item.rentalId}
+                    key={rentalId}
                     coordinate={{
-                      latitude: item.latitude,
-                      longitude: item.longitude,
+                      latitude,
+                      longitude,
                     }}
-                    onPress={() => rentalDetailNavigationHandler(item.rentalId)}
+                    onPress={() =>
+                      setRegion({ regionId: rentalId, latitude, longitude })
+                    }
                   >
                     <VStack alignItems="center">
-                      {item.latitude === region?.latitude &&
-                        item.longitude === region?.longitude && (
+                      {latitude === region?.latitude &&
+                        longitude === region?.longitude && (
                           <Text bold fontSize="xs">
-                            {item.name}
+                            {name}
                           </Text>
                         )}
                       <Icon
@@ -199,6 +241,7 @@ const MapTemplate = ({
                 farms[0].latitude &&
                   farms[0].longitude &&
                   setRegion({
+                    regionId: farms[0].farmId,
                     latitude: farms[0].latitude,
                     longitude: farms[0].longitude,
                   });
@@ -231,6 +274,7 @@ const MapTemplate = ({
                 rentals[0].latitude &&
                   rentals[0].longitude &&
                   setRegion({
+                    regionId: rentals[0].rentalId,
                     latitude: rentals[0].latitude,
                     longitude: rentals[0].longitude,
                   });
@@ -262,14 +306,14 @@ const MapTemplate = ({
       {type === "farm" ? (
         <FarmPreviewList
           farms={farms}
-          farmId={type === "farm" ? id : null}
+          region={region}
           setRegion={setRegion}
           farmDetailNavigationHandler={farmDetailNavigationHandler}
         />
       ) : (
         <RentalPreviewList
           rentals={rentals}
-          rentalId={type === "rental" ? id : null}
+          region={region}
           setRegion={setRegion}
           rentalDetailNavigationHandler={rentalDetailNavigationHandler}
         />

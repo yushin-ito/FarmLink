@@ -48,7 +48,7 @@ export type TabParamList = {
 
 export type MapStackParamList = {
   Map: {
-    id: number;
+    regionId: number;
     latitude: number;
     longitude: number;
     type: "farm" | "rental";

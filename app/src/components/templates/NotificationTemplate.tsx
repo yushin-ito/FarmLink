@@ -25,7 +25,7 @@ type NotificationTemplateProps = {
   isLoadingNotifications: boolean;
   mapNavigationHandler: (
     notificationId: number,
-    id: number,
+    regionId: number,
     latitude: number,
     longitude: number,
     type: "farm" | "rental"

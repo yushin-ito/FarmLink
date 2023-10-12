@@ -28,7 +28,7 @@ type SearchMapTemplateProps = {
   isLoadingSearchFarms: boolean;
   isLoadingSearchRentals: boolean;
   mapNavigationHandler: (
-    id: number,
+    regionId: number,
     latitude: number,
     longitude: number
   ) => void;

@@ -63,7 +63,7 @@ const SearchCommunitieScreen = ({
 
   const joinCommunity = useCallback(
     async (communityId: number, memberIds: string[]) => {
-      if (session) {
+      if (session && !memberIds.includes(session.user.id)) {
         memberIds.push(session.user.id);
         await mutateAsyncUpdateCommunity({
           communityId,

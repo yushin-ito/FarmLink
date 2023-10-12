@@ -9,9 +9,14 @@ import { MapStackParamList, MapStackScreenProps } from "../types";
 import { useQueryFarms } from "../hooks/farm/query";
 import { useQueryRentals } from "../hooks/rental/query";
 import { useRoute, RouteProp } from "@react-navigation/native";
-import { LatLng } from "react-native-maps";
 import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
+
+type Region = {
+  regionId: number;
+  latitude: number;
+  longitude: number;
+};
 
 const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { t } = useTranslation("map");
@@ -31,20 +36,22 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     isLoading: isLoadingRentals,
   } = useQueryRentals(session?.user.id);
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
-  const [id, setId] = useState<number | null>(null);
   const [type, setType] = useState<"farm" | "rental">("farm");
-  const [region, setRegion] = useState<LatLng | null>(null);
+  const [region, setRegion] = useState<Region | null>(null);
 
   useEffect(() => {
-    if (params?.latitude && params?.longitude) {
-      setRegion({ latitude: params.latitude, longitude: params.longitude });
+    if (params?.regionId && params?.latitude && params?.longitude) {
+      setRegion({
+        regionId: params.regionId,
+        latitude: params.latitude,
+        longitude: params.longitude,
+      });
     } else {
       getCurrentPosition();
     }
     params?.type === "farm" && refetchFarms();
     params?.type === "rental" && refetchRentals();
     params?.type && setType(params.type);
-    params?.id && setId(params.id);
   }, [params]);
 
   const { position, getCurrentPosition, isLoadingPosition } = useLocation({
@@ -69,15 +76,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       );
     },
   });
-
-  useEffect(() => {
-    if (position) {
-      setRegion({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-    }
-  }, [position]);
 
   const getDistance = useCallback(
     (latitude: number | null, longitude: number | null) => {
@@ -108,7 +106,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     <MapTemplate
       type={type}
       setType={setType}
-      id={id}
       region={region}
       setRegion={setRegion}
       position={position}

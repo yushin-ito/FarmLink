@@ -14,14 +14,14 @@ LogBox.ignoreAllLogs();
 const useColorScheme = (delay = 250) => {
   const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme());
 
-  let timeout = useRef<NodeJS.Timeout | null>(null).current;
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const subscription = Appearance.addChangeListener(onColorSchemeChange);
 
     return () => {
-      if (timeout) {
-        clearTimeout(timeout);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
       }
       subscription.remove();
     };
@@ -30,11 +30,11 @@ const useColorScheme = (delay = 250) => {
   const onColorSchemeChange = (
     preferences: Appearance.AppearancePreferences
   ) => {
-    if (timeout) {
-      clearTimeout(timeout);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
     }
 
-    timeout = setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       setColorScheme(preferences.colorScheme);
     }, delay);
   };

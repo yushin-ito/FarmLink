@@ -78,9 +78,9 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
   }, []);
 
   const mapNavigationHandler = useCallback(
-    async (id: number, latitude: number, longitude: number) => {
+    async (regionId: number, latitude: number, longitude: number) => {
       navigation.navigate("Map", {
-        id,
+        regionId,
         latitude,
         longitude,
         type: params.type,

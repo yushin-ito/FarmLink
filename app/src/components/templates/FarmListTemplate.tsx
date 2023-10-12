@@ -29,7 +29,7 @@ type FarmListTemplateProps = {
   privateFarm: (farmId: number) => Promise<void>;
   publicFarm: (farmId: number) => Promise<void>;
   mapNavigationHandler: (
-    id: number,
+    regionId: number,
     latitude: number,
     longitude: number
   ) => void;

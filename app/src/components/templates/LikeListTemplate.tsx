@@ -26,7 +26,7 @@ type LikeListTemplateProps = {
   deleteRentalLike: (likeId: number) => Promise<void>;
   refetchLikes: () => Promise<void>;
   mapNavigationHandler: (
-    id: number,
+    regionId: number,
     latitude: number,
     longitude: number
   ) => Promise<void>;

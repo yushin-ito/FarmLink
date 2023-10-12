@@ -16,6 +16,7 @@ import React, {
   useCallback,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import { FlatList as ReactNativeFlatList } from "react-native";
 import { Feather } from "@expo/vector-icons";
@@ -23,20 +24,24 @@ import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { useWindowDimensions } from "react-native";
 import { GetRentalsResponse } from "../../hooks/rental/query";
-import { LatLng } from "react-native-maps";
-import { wait } from "../../functions";
+
+type Region = {
+  regionId: number;
+  latitude: number;
+  longitude: number;
+};
 
 type RentalPreviewListProps = {
   rentals: GetRentalsResponse | undefined;
-  rentalId: number | null;
-  setRegion: Dispatch<SetStateAction<LatLng | null>>;
+  region: Region | null;
+  setRegion: Dispatch<SetStateAction<Region | null>>;
   rentalDetailNavigationHandler: (rentalId: number) => void;
 };
 
 const RentalPreviewList = memo(
   ({
     rentals,
-    rentalId,
+    region,
     setRegion,
     rentalDetailNavigationHandler,
   }: RentalPreviewListProps) => {
@@ -49,11 +54,11 @@ const RentalPreviewList = memo(
 
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
+    const [touch, setTouch] = useState<boolean>(false);
 
     const scrollToOffset = useCallback(
       async (index: number) => {
         if (previewRef.current) {
-          await wait(0.2);
           previewRef.current.scrollToOffset({
             animated: true,
             offset: width * index,
@@ -64,9 +69,11 @@ const RentalPreviewList = memo(
     );
 
     useEffect(() => {
-      const index = rentals?.findIndex((item) => item.rentalId === rentalId);
-      index && scrollToOffset(index);
-    }, [rentals, rentalId, previewRef.current]);
+      const index = rentals?.findIndex(
+        ({ rentalId }) => rentalId === region?.regionId
+      );
+      (index || index === -1) && scrollToOffset(index);
+    }, [rentals, region, previewRef.current]);
 
     return (
       <FlatList
@@ -159,6 +166,7 @@ const RentalPreviewList = memo(
             )}
           </Pressable>
         )}
+        onTouchEnd={() => setTouch(true)}
         onMomentumScrollEnd={(event) => {
           const currentIndex = Math.floor(
             event.nativeEvent.contentOffset.x /
@@ -167,10 +175,12 @@ const RentalPreviewList = memo(
           if (
             rentals?.length &&
             currentIndex >= 0 &&
-            currentIndex < rentals?.length
+            currentIndex < rentals?.length &&
+            touch
           ) {
-            const { latitude, longitude } = rentals[currentIndex];
-            latitude && longitude && setRegion({ latitude, longitude });
+            const { rentalId, latitude, longitude } = rentals[currentIndex];
+            setRegion({ regionId: rentalId, latitude, longitude });
+            setTouch(false);
           }
         }}
       />

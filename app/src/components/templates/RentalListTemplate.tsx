@@ -27,7 +27,7 @@ type RentalListTemplateProps = {
   isLoadingRentals: boolean;
   isRefetchingRentals: boolean;
   mapNavigationHandler: (
-    id: number,
+    regionId: number,
     latitude: number,
     longitude: number
   ) => Promise<void>;
