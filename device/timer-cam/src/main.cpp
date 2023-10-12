@@ -9,7 +9,7 @@
 
 #include "env.h"
 
-#define SLEEP_TIME 20 * 60 // X分
+#define SLEEP_TIME 10 * 60 // X分
 
 const char* bucket = "image";
 const char* directory = "device";
@@ -70,6 +70,7 @@ void setup() {
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
+  // 初期化
   init_camera();
   bat_init();
   bmm8563_init(); // https://esp32.com/viewtopic.php?t=21030
@@ -135,7 +136,7 @@ void setup() {
 
   esp_camera_fb_return(fb);
 
-  // bmm8563_setTimerIRQ(SLEEP_TIME);
+  bmm8563_setTimerIRQ(SLEEP_TIME);
 
   esp_sleep_enable_timer_wakeup(SLEEP_TIME * 1000000UL);
   esp_deep_sleep_start();
