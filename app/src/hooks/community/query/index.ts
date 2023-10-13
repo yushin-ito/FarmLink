@@ -2,7 +2,7 @@ import { supabase } from "../../../supabase";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { PostgrestError } from "@supabase/supabase-js";
 import { useMemo } from "react";
-import { Category } from "../../../functions";
+import { Category } from "../../../types";
 
 export type GetCommunityResponse = Awaited<ReturnType<typeof getCommunity>>;
 export type GetCommunitiesResponse = Awaited<ReturnType<typeof getCommunities>>;

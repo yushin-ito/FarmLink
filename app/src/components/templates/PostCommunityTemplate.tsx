@@ -12,12 +12,13 @@ import {
   IconButton,
   Icon,
   useColorModeValue,
+  FlatList,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Category, getCategories } from "../../functions";
+import { Category } from "../../types";
 
 type PostCommunityTemplateProps = {
   isLoading: boolean;
@@ -44,6 +45,13 @@ const PostCommunityTemplate = ({
   const bgColor = useColorModeValue("muted.300", "muted.700");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
+  const categories = [
+    "none",
+    "vegetable",
+    "fruit",
+    "fertilizer",
+    "disease",
+  ] as Category[];
 
   const {
     control,
@@ -54,7 +62,7 @@ const PostCommunityTemplate = ({
   const [categoryIndex, setCategoryIndex] = useState(0);
 
   useEffect(() => {
-    setValue("category", getCategories()[categoryIndex]);
+    setValue("category", categories[categoryIndex]);
   }, [categoryIndex]);
 
   return (
@@ -178,9 +186,13 @@ const PostCommunityTemplate = ({
             </FormControl>
             <VStack>
               <FormControl.Label>{t("category")}</FormControl.Label>
-              <HStack pt="1" space="2">
-                {getCategories().map((category, index) => (
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={categories}
+                renderItem={({ item, index }) => (
                   <Button
+                    mr="3"
                     key={index}
                     colorScheme={index === categoryIndex ? "brand" : undefined}
                     variant={index === categoryIndex ? undefined : "unstyled"}
@@ -188,12 +200,13 @@ const PostCommunityTemplate = ({
                     _text={
                       index === categoryIndex ? undefined : { color: textColor }
                     }
+                    rounded="md"
                     onPress={() => setCategoryIndex(index)}
                   >
-                    {t(category as Category)}
+                    {t(item as Category)}
                   </Button>
-                ))}
-              </HStack>
+                )}
+              />
             </VStack>
           </VStack>
           <Button

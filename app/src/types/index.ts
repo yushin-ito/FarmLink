@@ -5,7 +5,17 @@ import {
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Database } from "./schema";
-import { Category } from "../functions";
+
+export type Rate = "year" | "month" | "week" | "day" | "once";
+
+export type Category =
+  | "all"
+  | "joined"
+  | "none"
+  | "vegetable"
+  | "fruit"
+  | "fertilizer"
+  | "disease";
 
 export type UseQueryResult<T1, T2> = {
   onSuccess?: (response: T1) => void;

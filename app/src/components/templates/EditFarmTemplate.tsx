@@ -70,10 +70,10 @@ const EditFarmTemplate = ({
 
   useEffect(() => {
     if (farm) {
-      farm.name && setValue("name", farm.name);
-      farm.deviceId && setValue("deviceId", farm.deviceId);
-      farm.deviceId && searchDevice(farm.deviceId);
-      farm.description && setValue("description", farm.description);
+      setValue("name", farm.name);
+      setValue("deviceId", farm.deviceId);
+      searchDevice(farm.deviceId);
+      setValue("description", farm.description);
       setPrivated(farm.privated);
     }
   }, [farm]);

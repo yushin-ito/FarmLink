@@ -3,12 +3,12 @@ import PostCommunityTemplate from "../components/templates/PostCommunityTemplate
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useInfiniteQueryCommunities } from "../hooks/community/query";
 import { useToast } from "native-base";
-import { Category, showAlert } from "../functions";
+import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
 import { usePostCommunity } from "../hooks/community/mutate";
 import { useTranslation } from "react-i18next";
 import useAuth from "../hooks/auth/useAuth";
-import { CommunityStackParamList } from "../types";
+import { Category, CommunityStackParamList } from "../types";
 
 const PostCommunityScreen = () => {
   const toast = useToast();

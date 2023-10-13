@@ -14,7 +14,7 @@ import {
 import { GetCommunitiesResponse } from "../../hooks/community/query";
 import Avatar from "../molecules/Avatar";
 import { useTranslation } from "react-i18next";
-import { Category } from "../../functions";
+import { Category } from "../../types";
 
 type CommunityItemProps = {
   item: GetCommunitiesResponse[number];

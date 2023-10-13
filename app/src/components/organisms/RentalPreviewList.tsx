@@ -16,7 +16,6 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useState,
 } from "react";
 import { FlatList as ReactNativeFlatList } from "react-native";
 import { Feather } from "@expo/vector-icons";
@@ -25,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useWindowDimensions } from "react-native";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import { wait } from "../../functions";
+import { Rate } from "../../types";
 
 type Region = {
   regionId: number;
@@ -34,6 +34,8 @@ type Region = {
 
 type RentalPreviewListProps = {
   rentals: GetRentalsResponse | undefined;
+  touch: boolean;
+  setTouch: Dispatch<SetStateAction<boolean>>;
   region: Region | null;
   setRegion: Dispatch<SetStateAction<Region | null>>;
   rentalDetailNavigationHandler: (rentalId: number) => void;
@@ -42,6 +44,8 @@ type RentalPreviewListProps = {
 const RentalPreviewList = memo(
   ({
     rentals,
+    touch,
+    setTouch,
     region,
     setRegion,
     rentalDetailNavigationHandler,
@@ -55,7 +59,6 @@ const RentalPreviewList = memo(
 
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
-    const [touch, setTouch] = useState<boolean>(true);
 
     const scrollToOffset = useCallback(
       async (index: number) => {
@@ -71,13 +74,13 @@ const RentalPreviewList = memo(
     );
 
     useEffect(() => {
-      if (region && rentals) {
+      if (region && rentals && !touch) {
         const index = rentals?.findIndex(
           ({ rentalId }) => rentalId === region.regionId
         );
         index !== -1 && scrollToOffset(index);
       }
-    }, [previewRef.current, rentals, region]);
+    }, [previewRef.current, rentals, region, touch]);
 
     return (
       <FlatList
@@ -153,7 +156,7 @@ const RentalPreviewList = memo(
                         {t("area")}
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
-                        {item?.area ?? t("unknown")}
+                        {item?.area + "㎡" ?? t("unknown")}
                       </Text>
                     </VStack>
                     <VStack>
@@ -161,7 +164,7 @@ const RentalPreviewList = memo(
                         {t("fee")}
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
-                        {item?.fee ?? t("unknown")}
+                        {item.fee + t(item.rate as Rate)}
                       </Text>
                     </VStack>
                   </HStack>
@@ -182,7 +185,6 @@ const RentalPreviewList = memo(
             currentIndex < rentals?.length &&
             touch
           ) {
-            setTouch(false);
             const { rentalId, latitude, longitude } = rentals[currentIndex];
             setRegion({ regionId: rentalId, latitude, longitude });
           }

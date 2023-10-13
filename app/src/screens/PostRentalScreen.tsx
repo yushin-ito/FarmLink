@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryRentals } from "../hooks/rental/query";
-import { SettingStackScreenProps } from "../types";
+import { Rate, SettingStackScreenProps } from "../types";
 import { supabase } from "../supabase";
 
 const PostRentalScreen = ({
@@ -33,7 +33,7 @@ const PostRentalScreen = ({
             params: {
               screen: "Map",
               params: {
-                id: data[0].rentalId,
+                regionId: data[0].rentalId,
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 type: "rental",
@@ -155,9 +155,10 @@ const PostRentalScreen = ({
     async (
       name: string,
       description: string,
-      fee: string,
-      area: string,
-      equipment: string
+      fee: number,
+      area: number,
+      equipment: string,
+      rate: Rate
     ) => {
       if (session && position) {
         const publicUrls = await Promise.all(
@@ -178,6 +179,7 @@ const PostRentalScreen = ({
           equipment,
           imageUrls: publicUrls,
           privated: false,
+          rate,
         });
       }
     },

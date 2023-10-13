@@ -16,7 +16,6 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useState,
 } from "react";
 import { FlatList as ReactNativeFlatList } from "react-native";
 import { Feather } from "@expo/vector-icons";
@@ -34,6 +33,8 @@ type Region = {
 
 type FarmPreviewListProps = {
   farms: GetFarmsResponse | undefined;
+  touch: boolean;
+  setTouch: Dispatch<SetStateAction<boolean>>;
   region: Region | null;
   setRegion: Dispatch<SetStateAction<Region | null>>;
   farmDetailNavigationHandler: (rentalId: number) => void;
@@ -42,6 +43,8 @@ type FarmPreviewListProps = {
 const FarmPreviewList = memo(
   ({
     farms,
+    touch,
+    setTouch,
     region,
     setRegion,
     farmDetailNavigationHandler,
@@ -55,7 +58,6 @@ const FarmPreviewList = memo(
 
     const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
-    const [touch, setTouch] = useState<boolean>(true);
 
     const scrollToOffset = useCallback(
       async (index: number) => {
@@ -71,13 +73,13 @@ const FarmPreviewList = memo(
     );
 
     useEffect(() => {
-      if (region && farms) {
+      if (region && farms && !touch) {
         const index = farms.findIndex(
           ({ farmId }) => farmId === region.regionId
         );
-        index != -1 && scrollToOffset(index);
+        index !== -1 && scrollToOffset(index);
       }
-    }, [farms, region, previewRef.current]);
+    }, [previewRef.current, farms, region, touch]);
 
     return (
       <FlatList
@@ -193,7 +195,6 @@ const FarmPreviewList = memo(
             currentIndex < farms?.length &&
             touch
           ) {
-            setTouch(false);
             const { farmId, latitude, longitude } = farms[currentIndex];
             setRegion({ regionId: farmId, latitude, longitude });
           }

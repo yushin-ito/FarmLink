@@ -37,10 +37,12 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   } = useQueryRentals(session?.user.id);
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
   const [type, setType] = useState<"farm" | "rental">("farm");
+  const [touch, setTouch] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
 
   useEffect(() => {
     if (params?.regionId && params?.latitude && params?.longitude) {
+      setTouch(false);
       setRegion({
         regionId: params.regionId,
         latitude: params.latitude,
@@ -106,6 +108,8 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     <MapTemplate
       type={type}
       setType={setType}
+      touch={touch}
+      setTouch={setTouch}
       region={region}
       setRegion={setRegion}
       position={position}

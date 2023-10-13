@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryRental, useQueryRentals } from "../hooks/rental/query";
-import { MapStackScreenProps, MapStackParamList } from "../types";
+import { MapStackScreenProps, MapStackParamList, Rate } from "../types";
 import { supabase } from "../supabase";
 import { useRoute, RouteProp } from "@react-navigation/native";
 
@@ -19,9 +19,7 @@ const EditRentalScreen = ({
   const toast = useToast();
   const { t } = useTranslation("map");
   const { params } = useRoute<RouteProp<MapStackParamList, "EditRental">>();
-  const { data: rental } = useQueryRental(
-    params.rentalId
-  );
+  const { data: rental } = useQueryRental(params.rentalId);
   const { session } = useAuth();
   const { refetch } = useQueryRentals(session?.user.id);
   const [images, setImages] = useState<string[]>([]);
@@ -30,32 +28,34 @@ const EditRentalScreen = ({
     rental?.imageUrls && setImages(rental.imageUrls);
   }, [rental]);
 
-  const { mutateAsync: mutateAsyncUpdateRental, isLoading: isLoadingUpdateRental } =
-    useUpdateRental({
-      onSuccess: async () => {
-        await refetch();
-        navigation.goBack();
-        showAlert(
-          toast,
-          <Alert
-            status="success"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("saved")}
-          />
-        );
-      },
-      onError: () => {
-        navigation.goBack();
-        showAlert(
-          toast,
-          <Alert
-            status="error"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("error")}
-          />
-        );
-      },
-    });
+  const {
+    mutateAsync: mutateAsyncUpdateRental,
+    isLoading: isLoadingUpdateRental,
+  } = useUpdateRental({
+    onSuccess: async () => {
+      await refetch();
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="success"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("saved")}
+        />
+      );
+    },
+    onError: () => {
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   const {
     mutateAsync: mutateAsyncPostRentalImage,
@@ -142,9 +142,10 @@ const EditRentalScreen = ({
     async (
       name: string,
       description: string,
-      fee: string,
-      area: string,
-      equipment: string
+      fee: number,
+      area: number,
+      equipment: string,
+      rate: Rate
     ) => {
       if (session && rental) {
         const publicUrls = await Promise.all(
@@ -169,7 +170,7 @@ const EditRentalScreen = ({
           area,
           equipment,
           imageUrls: publicUrls,
-          privated: false,
+          rate,
         });
       }
     },

@@ -66,23 +66,3 @@ export const getTimeDistance = (date: string, locale: "en" | "ja" | null) => {
     return getTimeDistanceEn(date);
   }
 };
-
-export type Category =
-  | "all"
-  | "joined"
-  | "none"
-  | "vegetable"
-  | "fruit"
-  | "fertilizer"
-  | "disease";
-
-export const getCategories = () => {
-  const categories = [
-    "none",
-    "vegetable",
-    "fruit",
-    "fertilizer",
-    "disease",
-  ] as Category[];
-  return categories;
-};

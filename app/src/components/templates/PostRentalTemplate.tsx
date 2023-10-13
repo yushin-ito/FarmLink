@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
-
+import { Feather, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import {
   Button,
   Box,
@@ -16,6 +15,7 @@ import {
   FlatList,
   Pressable,
   useColorModeValue,
+  useDisclose,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import MapView, { Marker } from "react-native-maps";
@@ -25,6 +25,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import { LocationObject, LocationGeocodedAddress } from "expo-location";
+import { Rate } from "../../types";
+import RateActionSheet from "../organisms/RateActionSheet";
 
 type PostRentalTemplateProps = {
   base64: string[];
@@ -38,9 +40,10 @@ type PostRentalTemplateProps = {
   postRental: (
     name: string,
     description: string,
-    fee: string,
-    area: string,
-    equipment: string
+    fee: number,
+    area: number,
+    equipment: string,
+    rate: Rate
   ) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
@@ -78,7 +81,9 @@ const PostRentalTemplate = ({
   } = useForm<FormValues>();
   const mapRef = useRef<MapView>(null);
   const { width } = useWindowDimensions();
+  const { isOpen, onOpen, onClose } = useDisclose();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [rate, setRate] = useState<Rate>("year");
 
   useEffect(() => {
     getCurrentPosition();
@@ -98,6 +103,12 @@ const PostRentalTemplate = ({
 
   return (
     <Box flex={1} safeAreaTop>
+      <RateActionSheet
+        isOpen={isOpen}
+        onClose={onClose}
+        rate={rate}
+        setRate={setRate}
+      />
       <HStack mb="4" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
@@ -276,36 +287,37 @@ const PostRentalTemplate = ({
                 }}
               />
             </FormControl>
-            <FormControl isInvalid={"fee" in errors}>
-              <FormControl.Label>{t("fee")}</FormControl.Label>
-              <Controller
-                name="fee"
-                control={control}
-                render={({ field: { value, onChange } }) => {
-                  return (
-                    <VStack>
-                      <Input
-                        returnKeyType="done"
-                        InputRightElement={
-                          <IconButton
-                            onPress={() => setValue("fee", "")}
-                            icon={
-                              <Icon
-                                as={<Feather name="x" />}
-                                size="4"
-                                color="muted.400"
-                              />
-                            }
-                            variant="unstyled"
-                            _pressed={{
-                              opacity: 0.5,
-                            }}
-                          />
-                        }
-                        value={value}
-                        onChangeText={onChange}
-                      />
-                      <HStack mt="1" justifyContent="space-between">
+            <HStack my="4" justifyContent="space-between">
+              <FormControl w="55%" isRequired isInvalid={"fee" in errors}>
+                <FormControl.Label>{t("fee") + "(円)"}</FormControl.Label>
+                <Controller
+                  name="fee"
+                  control={control}
+                  render={({ field: { value, onChange } }) => {
+                    return (
+                      <VStack>
+                        <Input
+                          inputMode="numeric"
+                          returnKeyType="done"
+                          InputRightElement={
+                            <IconButton
+                              onPress={() => setValue("fee", "")}
+                              icon={
+                                <Icon
+                                  as={<Feather name="x" />}
+                                  size="4"
+                                  color="muted.400"
+                                />
+                              }
+                              variant="unstyled"
+                              _pressed={{
+                                opacity: 0.5,
+                              }}
+                            />
+                          }
+                          value={value}
+                          onChangeText={onChange}
+                        />
                         <FormControl.ErrorMessage
                           leftIcon={
                             <Icon as={<Feather name="alert-circle" />} />
@@ -313,22 +325,38 @@ const PostRentalTemplate = ({
                         >
                           {errors.fee && <Text>{errors.fee.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
-                      </HStack>
-                    </VStack>
-                  );
-                }}
-                rules={{
-                  required: t("feeRequired"),
-                  maxLength: {
-                    value: 20,
-                    message: t("feeMaxLength"),
-                  },
-                }}
-              />
-            </FormControl>
+                      </VStack>
+                    );
+                  }}
+                  rules={{
+                    required: t("feeRequired"),
+                    maxLength: {
+                      value: 6,
+                      message: t("feeMaxLength"),
+                    },
+                  }}
+                />
+              </FormControl>
+              <VStack w="40%">
+                <FormControl.Label>{t("rate")}</FormControl.Label>
+                <Input
+                  isReadOnly
+                  value={t(rate)}
+                  InputRightElement={
+                    <Icon
+                      as={<AntDesign name="caretdown" />}
+                      size="3"
+                      mr="3"
+                      color="muted.400"
+                    />
+                  }
+                  borderColor={isOpen ? "brand.600" : "white"}
+                  onPressIn={onOpen}
+                />
+              </VStack>
+            </HStack>
             <FormControl isInvalid={"area" in errors}>
-              <FormControl.Label>{t("area")}</FormControl.Label>
+              <FormControl.Label>{t("area") + "(㎡)"}</FormControl.Label>
               <Controller
                 name="area"
                 control={control}
@@ -336,6 +364,7 @@ const PostRentalTemplate = ({
                   return (
                     <VStack>
                       <Input
+                        inputMode="numeric"
                         returnKeyType="done"
                         InputRightElement={
                           <IconButton
@@ -364,14 +393,14 @@ const PostRentalTemplate = ({
                         >
                           {errors.area && <Text>{errors.area.message}</Text>}
                         </FormControl.ErrorMessage>
-                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 6</Text>
                       </HStack>
                     </VStack>
                   );
                 }}
                 rules={{
                   maxLength: {
-                    value: 20,
+                    value: 6,
                     message: t("areaMaxLength"),
                   },
                 }}
@@ -416,14 +445,14 @@ const PostRentalTemplate = ({
                             <Text>{errors.equipment.message}</Text>
                           )}
                         </FormControl.ErrorMessage>
-                        <Text color={textColor}>{value?.length ?? 0} / 20</Text>
+                        <Text color={textColor}>{value?.length ?? 0} / 6</Text>
                       </HStack>
                     </VStack>
                   );
                 }}
                 rules={{
                   maxLength: {
-                    value: 20,
+                    value: 6,
                     message: t("equipmentMaxLength"),
                   },
                 }}
@@ -486,9 +515,10 @@ const PostRentalTemplate = ({
               await postRental(
                 data.name,
                 data.description,
-                data.fee,
-                data.area,
-                data.equipment
+                Number(data.fee),
+                Number(data.area),
+                data.equipment,
+                rate
               );
             })}
           >

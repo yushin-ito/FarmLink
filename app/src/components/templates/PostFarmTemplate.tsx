@@ -310,7 +310,6 @@ const PostFarmTemplate = ({
               />
             </HStack>
           </VStack>
-
           <Button
             mt="16"
             mx="10"

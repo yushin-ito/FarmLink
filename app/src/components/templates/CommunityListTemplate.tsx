@@ -22,9 +22,9 @@ import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
 import { GetCommunitiesResponse } from "../../hooks/community/query";
 import CategoryActionSheet from "../organisms/CategoryActionSheet";
-import { Category, getCategories } from "../../functions";
 import SkeletonCommunityList from "../organisms/SkeletonCommunityList";
 import { RefreshControl } from "react-native";
+import { Category } from "../../types";
 
 type CommunityListTemplateProps = {
   categoryIndex: number;
@@ -68,8 +68,14 @@ const CommunityListTemplate = ({
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
   const { isOpen, onOpen, onClose } = useDisclose();
-  const categories = getCategories();
-  categories.splice(0, 1, "all", "joined");
+  const categories = [
+    "all",
+    "joined",
+    "vegetable",
+    "fruit",
+    "fertilizer",
+    "disease",
+  ] as Category[];
 
   return (
     <Box flex={1} safeAreaTop>
@@ -106,7 +112,7 @@ const CommunityListTemplate = ({
           rounded="full"
           bg={bgColor}
         >
-          <Text>{t(categories[categoryIndex] as Category)}</Text>
+          <Text>{t(categories[categoryIndex])}</Text>
           <Icon
             as={<AntDesign name="caretdown" />}
             size="2"

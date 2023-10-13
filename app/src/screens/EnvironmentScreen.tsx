@@ -19,7 +19,6 @@ const EnvironmentScreen = () => {
     const locale = await AsyncStorage.getItem("@locale");
     setLocale(locale as Locale);
     const theme = await AsyncStorage.getItem("@theme");
-    console.log(theme);
     setTheme(theme as ColorSchemeName);
   }, []);
 

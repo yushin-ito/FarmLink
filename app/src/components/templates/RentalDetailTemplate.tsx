@@ -29,6 +29,7 @@ import { useTranslation } from "react-i18next";
 import { LocationGeocodedAddress } from "expo-location";
 import { GetRentalLikesResponse } from "../../hooks/like/query";
 import Avatar from "../molecules/Avatar";
+import { Rate } from "../../types";
 
 type RentalDetailTemplateProps = {
   owned: boolean;
@@ -222,7 +223,7 @@ const RentalDetailTemplate = ({
                   {t("area")}
                 </Text>
                 <Text bold fontSize="md">
-                  {rental?.area ? rental.area : t("unknown")}
+                  {rental?.area ? rental.area + "㎡" : t("unknown")}
                 </Text>
               </VStack>
               <VStack>
@@ -238,7 +239,9 @@ const RentalDetailTemplate = ({
                   {t("fee")}
                 </Text>
                 <Text bold fontSize="md">
-                  {rental?.fee ? rental.fee : t("unknown")}
+                  {rental?.fee
+                    ? rental.fee + t(rental.rate as Rate)
+                    : t("unknown")}
                 </Text>
               </VStack>
               <VStack>

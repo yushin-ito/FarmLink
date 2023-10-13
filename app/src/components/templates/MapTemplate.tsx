@@ -36,6 +36,8 @@ type Region = {
 type MapTemplateProps = {
   type: "farm" | "rental";
   setType: Dispatch<SetStateAction<"farm" | "rental">>;
+  touch: boolean;
+  setTouch: Dispatch<SetStateAction<boolean>>;
   region: Region | null;
   setRegion: Dispatch<SetStateAction<Region | null>>;
   position: LocationObject | undefined;
@@ -51,6 +53,8 @@ type MapTemplateProps = {
 const MapTemplate = ({
   type,
   setType,
+  touch,
+  setTouch,
   region,
   setRegion,
   position,
@@ -170,11 +174,12 @@ const MapTemplate = ({
                       latitude,
                       longitude,
                     }}
-                    onPress={() =>
+                    onPress={() => {
+                      setTouch(false);
                       region?.regionId === farmId
                         ? farmDetailNavigationHandler(farmId)
-                        : setRegion({ regionId: farmId, latitude, longitude })
-                    }
+                        : setRegion({ regionId: farmId, latitude, longitude });
+                    }}
                   >
                     <VStack alignItems="center">
                       {latitude === region?.latitude &&
@@ -203,11 +208,16 @@ const MapTemplate = ({
                       latitude,
                       longitude,
                     }}
-                    onPress={() =>
+                    onPress={() => {
+                      setTouch(false);
                       region?.regionId === rentalId
                         ? rentalDetailNavigationHandler(rentalId)
-                        : setRegion({ regionId: rentalId, latitude, longitude })
-                    }
+                        : setRegion({
+                            regionId: rentalId,
+                            latitude,
+                            longitude,
+                          });
+                    }}
                   >
                     <VStack alignItems="center">
                       {latitude === region?.latitude &&
@@ -308,6 +318,8 @@ const MapTemplate = ({
       {type === "farm" ? (
         <FarmPreviewList
           farms={farms}
+          touch={touch}
+          setTouch={setTouch}
           region={region}
           setRegion={setRegion}
           farmDetailNavigationHandler={farmDetailNavigationHandler}
@@ -315,6 +327,8 @@ const MapTemplate = ({
       ) : (
         <RentalPreviewList
           rentals={rentals}
+          touch={touch}
+          setTouch={setTouch}
           region={region}
           setRegion={setRegion}
           rentalDetailNavigationHandler={rentalDetailNavigationHandler}

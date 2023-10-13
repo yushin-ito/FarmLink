@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => {
       data.subscription.unsubscribe();
     };
-  }, [getCurrentSession]);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => {
       subscription.remove();
     };
-  }, [setCurrentSession]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ session, locale, error, isLoading }}>

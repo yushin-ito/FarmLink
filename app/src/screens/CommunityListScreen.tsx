@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { useToast } from "native-base";
-import { getCategories, showAlert } from "../functions";
+import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import { useInfiniteQueryCommunities } from "../hooks/community/query";
 import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
-import { CommunityStackScreenProps } from "../types";
+import { Category, CommunityStackScreenProps } from "../types";
 import CommunityListTemplate from "../components/templates/CommunityListTemplate";
 import { useUpdateCommunity } from "../hooks/community/mutate";
 
@@ -19,8 +19,14 @@ const CommunityListScreen = ({
   const { data: user, isLoading: isLoadingUser } = useQueryUser(
     session?.user.id
   );
-  const categories = getCategories();
-  categories.splice(0, 1, "all", "joined");
+  const categories = [
+    "all",
+    "joined",
+    "vegetable",
+    "fruit",
+    "fertilizer",
+    "disease",
+  ] as Category[];
   const [categoryIndex, setCategoryIndex] = useState(1);
   const {
     data: communities,
