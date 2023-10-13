@@ -102,7 +102,7 @@ const RentalItem = memo(
                     />
                   )}
                 </Center>
-                <VStack w="80%" space="1">
+                <VStack w={item.privated ? "70%" : "80%"} space="1">
                   <Text bold fontSize="md">
                     {item.name}
                   </Text>
@@ -116,12 +116,16 @@ const RentalItem = memo(
                   </Text>
                 </VStack>
               </HStack>
-              <Icon
-                as={<Feather />}
-                name="chevron-right"
-                size="md"
-                color={iconColor}
-              />
+              {item.privated ? (
+                <Text bold>{t("private")}</Text>
+              ) : (
+                <Icon
+                  as={<Feather />}
+                  name="chevron-right"
+                  size="md"
+                  color={iconColor}
+                />
+              )}
             </HStack>
             <Divider w="90%" bg="muted.200" />
           </VStack>

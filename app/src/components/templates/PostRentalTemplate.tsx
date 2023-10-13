@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Feather, MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import {
   Button,
   Box,
@@ -72,6 +72,7 @@ const PostRentalTemplate = ({
   const imageColor = useColorModeValue("muted.200", "muted.600");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
+  const borderColor = useColorModeValue("muted.400", "muted.200");
 
   const {
     control,
@@ -350,7 +351,7 @@ const PostRentalTemplate = ({
                       color="muted.400"
                     />
                   }
-                  borderColor={isOpen ? "brand.600" : "white"}
+                  borderColor={isOpen ? "brand.600" : borderColor}
                   onPressIn={onOpen}
                 />
               </VStack>
@@ -480,11 +481,10 @@ const PostRentalTemplate = ({
                 >
                   {position && (
                     <Marker coordinate={position.coords}>
-                      <Icon
-                        as={<MaterialIcons />}
-                        name="location-pin"
-                        size="xl"
-                        color="red.500"
+                      <Image
+                        source={require("../../../assets/pin-brand.png")}
+                        style={{ width: 16, height: 16 }}
+                        contentFit="contain"
                       />
                     </Marker>
                   )}

@@ -90,8 +90,6 @@ const PostTalkTemplate = ({
                 render={({ field: { value, onChange } }) => (
                   <SearchBar
                     mx="10"
-                    py="3"
-                    rounded="xl"
                     autoFocus
                     returnKeyType="search"
                     placeholder={t("searchUser")}

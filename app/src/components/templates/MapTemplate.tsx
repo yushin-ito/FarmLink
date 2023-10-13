@@ -1,7 +1,6 @@
 import {
   Box,
   HStack,
-  Icon,
   Pressable,
   Spinner,
   VStack,
@@ -9,7 +8,6 @@ import {
   Center,
   useColorModeValue,
 } from "native-base";
-import { MaterialIcons } from "@expo/vector-icons";
 import React, {
   Dispatch,
   SetStateAction,
@@ -26,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import FarmPreviewList from "../organisms/FarmPreviewList";
 import RentalPreviewList from "../organisms/RentalPreviewList";
 import { GetUserResponse } from "../../hooks/user/query";
+import { Image } from "expo-image";
 
 type Region = {
   regionId: number;
@@ -154,88 +153,75 @@ const MapTemplate = ({
                 <Text bold fontSize="xs">
                   {t("current")}
                 </Text>
-                <Icon
-                  as={<MaterialIcons />}
-                  name="location-pin"
-                  size="lg"
-                  color="red.500"
+                <Image
+                  source={require("../../../assets/pin-red.png")}
+                  style={{ width: 20, height: 20 }}
+                  contentFit="contain"
                 />
               </VStack>
             </Marker>
           )}
         {type === "farm"
-          ? farms?.map(
-              ({ farmId, latitude, longitude, name }) =>
-                latitude &&
-                longitude && (
-                  <Marker
-                    key={farmId}
-                    coordinate={{
-                      latitude,
-                      longitude,
-                    }}
-                    onPress={() => {
-                      setTouch(false);
-                      region?.regionId === farmId
-                        ? farmDetailNavigationHandler(farmId)
-                        : setRegion({ regionId: farmId, latitude, longitude });
-                    }}
-                  >
-                    <VStack alignItems="center">
-                      {latitude === region?.latitude &&
-                        longitude === region?.longitude && (
-                          <Text bold fontSize="xs">
-                            {name}
-                          </Text>
-                        )}
-                      <Icon
-                        as={<MaterialIcons />}
-                        name="location-pin"
-                        size="lg"
-                        color="brand.600"
-                      />
-                    </VStack>
-                  </Marker>
-                )
-            )
-          : rentals?.map(
-              ({ rentalId, latitude, longitude, name }) =>
-                latitude &&
-                longitude && (
-                  <Marker
-                    key={rentalId}
-                    coordinate={{
-                      latitude,
-                      longitude,
-                    }}
-                    onPress={() => {
-                      setTouch(false);
-                      region?.regionId === rentalId
-                        ? rentalDetailNavigationHandler(rentalId)
-                        : setRegion({
-                            regionId: rentalId,
-                            latitude,
-                            longitude,
-                          });
-                    }}
-                  >
-                    <VStack alignItems="center">
-                      {latitude === region?.latitude &&
-                        longitude === region?.longitude && (
-                          <Text bold fontSize="xs">
-                            {name}
-                          </Text>
-                        )}
-                      <Icon
-                        as={<MaterialIcons />}
-                        name="location-pin"
-                        size="lg"
-                        color="brand.600"
-                      />
-                    </VStack>
-                  </Marker>
-                )
-            )}
+          ? farms?.map(({ farmId, latitude, longitude, name }) => (
+              <Marker
+                key={farmId}
+                coordinate={{
+                  latitude,
+                  longitude,
+                }}
+                onPress={() => {
+                  setTouch(false);
+                  region?.regionId === farmId
+                    ? farmDetailNavigationHandler(farmId)
+                    : setRegion({ regionId: farmId, latitude, longitude });
+                }}
+              >
+                <VStack alignItems="center">
+                  {farmId === region?.regionId && (
+                    <Text bold fontSize="xs">
+                      {name}
+                    </Text>
+                  )}
+                  <Image
+                    source={require("../../../assets/pin-brand.png")}
+                    style={{ width: 20, height: 20 }}
+                    contentFit="contain"
+                  />
+                </VStack>
+              </Marker>
+            ))
+          : rentals?.map(({ rentalId, latitude, longitude, name }) => (
+              <Marker
+                key={rentalId}
+                coordinate={{
+                  latitude,
+                  longitude,
+                }}
+                onPress={() => {
+                  setTouch(false);
+                  region?.regionId === rentalId
+                    ? rentalDetailNavigationHandler(rentalId)
+                    : setRegion({
+                        regionId: rentalId,
+                        latitude,
+                        longitude,
+                      });
+                }}
+              >
+                <VStack alignItems="center">
+                  {rentalId === region?.regionId && (
+                    <Text bold fontSize="xs">
+                      {name}
+                    </Text>
+                  )}
+                  <Image
+                    source={require("../../../assets/pin-brand.png")}
+                    style={{ width: 20, height: 20 }}
+                    contentFit="contain"
+                  />
+                </VStack>
+              </Marker>
+            ))}
       </MapView>
       <VStack w="80%" position="absolute" top="16" alignSelf="center" space="4">
         <Box shadow="1" rounded="lg">

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Feather, MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import {
   Button,
   Box,
@@ -68,6 +68,7 @@ const EditRentalTemplate = ({
   const imageColor = useColorModeValue("muted.200", "muted.600");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
+  const borderColor = useColorModeValue("muted.400", "muted.200");
 
   const {
     control,
@@ -344,7 +345,6 @@ const EditRentalTemplate = ({
                   }}
                 />
               </FormControl>
-
               <VStack w="40%">
                 <FormControl.Label>{t("rate")}</FormControl.Label>
                 <Input
@@ -358,7 +358,7 @@ const EditRentalTemplate = ({
                       color="muted.400"
                     />
                   }
-                  borderColor={isOpen ? "brand.600" : "white"}
+                  borderColor={isOpen ? "brand.600" : borderColor}
                   onPressIn={onOpen}
                 />
               </VStack>
@@ -491,11 +491,10 @@ const EditRentalTemplate = ({
                       <Text bold fontSize="2xs">
                         {rental.name}
                       </Text>
-                      <Icon
-                        as={<MaterialIcons />}
-                        name="location-pin"
-                        size="xl"
-                        color="brand.600"
+                      <Image
+                        source={require("../../../assets/pin-brand.png")}
+                        style={{ width: 16, height: 16 }}
+                        contentFit="contain"
                       />
                     </VStack>
                   </Marker>

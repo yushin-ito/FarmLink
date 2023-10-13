@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
-
+import { Feather } from "@expo/vector-icons";
 import {
   Button,
   Box,
@@ -23,6 +22,7 @@ import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SearchDeviceResponse } from "../../hooks/device/mutate";
 import { LocationGeocodedAddress, LocationObject } from "expo-location";
+import { Image } from "expo-image";
 
 type PostFarmTemplateProps = {
   isLoadingPostFarm: boolean;
@@ -274,11 +274,10 @@ const PostFarmTemplate = ({
                 >
                   {position && (
                     <Marker coordinate={position.coords}>
-                      <Icon
-                        as={<MaterialIcons />}
-                        name="location-pin"
-                        size="xl"
-                        color="red.500"
+                      <Image
+                        source={require("../../../assets/pin-brand.png")}
+                        style={{ width: 16, height: 16 }}
+                        contentFit="contain"
                       />
                     </Marker>
                   )}

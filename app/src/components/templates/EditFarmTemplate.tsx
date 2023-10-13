@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 import {
   Button,
@@ -22,6 +22,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { SearchDeviceResponse } from "../../hooks/device/mutate";
 import { LocationGeocodedAddress } from "expo-location";
 import { GetFarmResponse } from "../../hooks/farm/query";
+import { Image } from "expo-image";
 
 type EditFarmTemplateProps = {
   farm: GetFarmResponse | null | undefined;
@@ -278,11 +279,10 @@ const EditFarmTemplate = ({
                       <Text bold fontSize="2xs">
                         {farm.name}
                       </Text>
-                      <Icon
-                        as={<MaterialIcons />}
-                        name="location-pin"
-                        size="xl"
-                        color="brand.600"
+                      <Image
+                        source={require("../../../assets/pin-brand.png")}
+                        style={{ width: 16, height: 16 }}
+                        contentFit="contain"
                       />
                     </VStack>
                   </Marker>
