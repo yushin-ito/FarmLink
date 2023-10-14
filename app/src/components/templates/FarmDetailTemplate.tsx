@@ -123,7 +123,7 @@ const FarmDetailTemplate = ({
           </Box>
         )}
         {isLoading ? (
-          <VStack mt="6" px="6">
+          <VStack mt="8" px="6">
             <HStack alignItems="center" justifyContent="space-between">
               <Skeleton w="40" h="5" rounded="16" />
               <Skeleton size="7" rounded="full" />
@@ -132,7 +132,7 @@ const FarmDetailTemplate = ({
             <Skeleton.Text mt="9" lines={4} />
           </VStack>
         ) : (
-          <VStack mt="6" px="6">
+          <VStack mt="8" px="6">
             <HStack alignItems="center" justifyContent="space-between">
               <VStack w="70%">
                 <Heading numberOfLines={1} ellipsizeMode="tail">
@@ -153,7 +153,7 @@ const FarmDetailTemplate = ({
                   color={farm?.user?.color}
                   updatedAt={farm?.user?.updatedAt}
                 />
-                <Text w="20" numberOfLines={1} ellipsizeMode="tail">
+                <Text maxW="20" numberOfLines={1} ellipsizeMode="tail">
                   {farm?.user?.name}
                 </Text>
               </HStack>
@@ -184,9 +184,7 @@ const FarmDetailTemplate = ({
                   {t("moisture")}
                 </Text>
                 <Text bold textAlign="center">
-                  {farm?.device?.moisture
-                    ? farm.device.moisture
-                    : t("unknown")}
+                  {farm?.device?.moisture ? farm.device.moisture : t("unknown")}
                 </Text>
               </VStack>
               <VStack>

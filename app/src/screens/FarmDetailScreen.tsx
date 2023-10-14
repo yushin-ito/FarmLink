@@ -266,7 +266,6 @@ const FarmDetailScreen = ({
   }, [talks, session, farm]);
 
   const editFarmNavigationHandler = useCallback(async (farmId: number) => {
-    navigation.goBack();
     navigation.navigate("EditFarm", { farmId });
   }, []);
 

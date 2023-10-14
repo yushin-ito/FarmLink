@@ -263,7 +263,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     [session, params, user]
   );
 
-  const deleteChat = useCallback(async (chatId: number | null) => {
+  const deleteChat = useCallback(async (chatId: number) => {
     await mutateAsyncDeleteChat(chatId);
   }, []);
 

@@ -8,8 +8,7 @@ import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
-import { useInfiniteQueryRentals } from "../hooks/rental/query";
-import { Rate,  SettingStackScreenProps } from "../types";
+import { Rate, SettingStackScreenProps } from "../types";
 import { supabase } from "../supabase";
 
 const PostRentalScreen = ({
@@ -19,6 +18,7 @@ const PostRentalScreen = ({
   const { t } = useTranslation("setting");
   const { session } = useAuth();
   const [base64, setBase64] = useState<string[]>([]);
+
   const {
     position,
     address,
@@ -49,16 +49,10 @@ const PostRentalScreen = ({
       );
     },
   });
-  const { refetch } = useInfiniteQueryRentals(
-    "near",
-    session?.user.id,
-    position?.coords
-  );
 
   const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
     usePostRental({
       onSuccess: async (data) => {
-        await refetch();
         navigation.goBack();
         if (position) {
           await wait(0.1); // 800ms

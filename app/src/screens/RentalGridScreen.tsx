@@ -8,6 +8,7 @@ import { showAlert } from "../functions";
 import { useInfiniteQueryRentals } from "../hooks/rental/query";
 import useLocation from "../hooks/sdk/useLocation";
 import Alert from "../components/molecules/Alert";
+import { supabase } from "../supabase";
 
 const RentalGridScreen = ({
   navigation,
@@ -52,6 +53,27 @@ const RentalGridScreen = ({
   );
 
   useEffect(() => {
+    const channel = supabase
+      .channel("rental")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "rental",
+        },
+        () => {
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  useEffect(() => {
     getCurrentPosition();
   }, []);
 
@@ -62,7 +84,7 @@ const RentalGridScreen = ({
   }, []);
 
   const postRentalNavigationHandler = useCallback(async () => {
-     navigation.navigate("PostRental");
+    navigation.navigate("PostRental");
   }, []);
 
   const searchMapNavigationHandler = useCallback(() => {

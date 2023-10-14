@@ -8,7 +8,6 @@ import { usePostFarm } from "../hooks/farm/mutate";
 import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
-import { useInfiniteQueryFarms } from "../hooks/farm/query";
 import useLocation from "../hooks/sdk/useLocation";
 
 const PostFarmScreen = () => {
@@ -18,43 +17,9 @@ const PostFarmScreen = () => {
   const { session } = useAuth();
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
 
-    const {
-      position,
-      address,
-      getCurrentPosition,
-      getAddress,
-      isLoadingPosition,
-    } = useLocation({
-      onDisable: () => {
-        showAlert(
-          toast,
-          <Alert
-            status="error"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("permitRequestGPS")}
-          />
-        );
-      },
-      onError: () => {
-        showAlert(
-          toast,
-          <Alert
-            status="error"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("error")}
-          />
-        );
-      },
-    });
-    const { refetch } = useInfiniteQueryFarms(
-      session?.user.id,
-      position?.coords
-    );
-
   const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
     usePostFarm({
       onSuccess: async () => {
-        await refetch();
         navigation.goBack();
       },
       onError: () => {
@@ -69,6 +34,35 @@ const PostFarmScreen = () => {
         );
       },
     });
+
+  const {
+    position,
+    address,
+    getCurrentPosition,
+    getAddress,
+    isLoadingPosition,
+  } = useLocation({
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestGPS")}
+        />
+      );
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   const { mutateAsync: mutateAsyncSearchDevice } = useSearchDevice({
     onSuccess: (data) => {

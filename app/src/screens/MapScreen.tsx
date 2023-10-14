@@ -11,6 +11,7 @@ import { useInfiniteQueryRentals } from "../hooks/rental/query";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
+import { supabase } from "../supabase";
 
 const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { t } = useTranslation("map");
@@ -46,18 +47,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       );
     },
   });
-  const {
-    data: rentals,
-    refetch: refetchRentals,
-    fetchNextPage: fetchNextPageRentals,
-    isLoading: isLoadingRentals,
-  } = useInfiniteQueryRentals("near", session?.user.id, position?.coords);
-  const {
-    data: farms,
-    refetch: refetchFarms,
-    fetchNextPage: fetchNextPageFams,
-    isLoading: isLoadingFarms,
-  } = useInfiniteQueryFarms(session?.user.id, position?.coords);
 
   useEffect(() => {
     if (params?.regionId && params?.latitude && params?.longitude) {
@@ -74,6 +63,62 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     params?.type === "rental" && refetchRentals();
     params?.type && setType(params.type);
   }, [params]);
+
+  const {
+    data: rentals,
+    refetch: refetchRentals,
+    fetchNextPage: fetchNextPageRentals,
+    isLoading: isLoadingRentals,
+  } = useInfiniteQueryRentals("near", session?.user.id, position?.coords);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("rental")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "rental",
+        },
+        () => {
+          refetchRentals();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const {
+    data: farms,
+    refetch: refetchFarms,
+    fetchNextPage: fetchNextPageFams,
+    isLoading: isLoadingFarms,
+  } = useInfiniteQueryFarms(session?.user.id, position?.coords);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("farm")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "farm",
+        },
+        () => {
+          refetchFarms();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const farmDetailNavigationHandler = useCallback((farmId: number) => {
     navigation.navigate("FarmDetail", { farmId });

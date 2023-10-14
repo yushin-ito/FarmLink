@@ -263,7 +263,6 @@ const RentalDetailScreen = ({
   }, [talks, session, rental]);
 
   const editRentalNavigationHandler = useCallback(async (rentalId: number) => {
-    navigation.goBack();
     navigation.navigate("EditRental", { rentalId });
   }, []);
 

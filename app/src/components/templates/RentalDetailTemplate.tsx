@@ -191,7 +191,7 @@ const RentalDetailTemplate = ({
             <Skeleton.Text mt="9" lines={4} />
           </VStack>
         ) : (
-          <VStack mt="2" px="6">
+          <VStack mt="6" px="6">
             <HStack alignItems="center" justifyContent="space-between">
               <VStack w="70%">
                 <Heading numberOfLines={1} ellipsizeMode="tail">
@@ -203,7 +203,7 @@ const RentalDetailTemplate = ({
                   )}
                 </Text>
               </VStack>
-              <HStack alignItems="center" space="2">
+              <HStack alignItems="center" justifyContent="flex-end" space="2">
                 <Avatar
                   isDisabled
                   size="7"
@@ -212,7 +212,7 @@ const RentalDetailTemplate = ({
                   color={rental?.user?.color}
                   updatedAt={rental?.user?.updatedAt}
                 />
-                <Text w="20" numberOfLines={1} ellipsizeMode="tail">
+                <Text maxW="20" numberOfLines={1} ellipsizeMode="tail">
                   {rental?.user?.name}
                 </Text>
               </HStack>

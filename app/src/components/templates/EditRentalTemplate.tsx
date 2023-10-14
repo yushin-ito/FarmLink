@@ -487,8 +487,13 @@ const EditRentalTemplate = ({
                       longitude: rental.longitude,
                     }}
                   >
-                    <VStack alignItems="center">
-                      <Text bold fontSize="2xs">
+                    <VStack alignItems="center" maxW="24">
+                      <Text
+                        bold
+                        fontSize="2xs"
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
                         {rental.name}
                       </Text>
                       <Image

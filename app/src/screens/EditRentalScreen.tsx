@@ -4,11 +4,10 @@ import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
 import { useUpdateRental, usePostRentalImage } from "../hooks/rental/mutate";
-import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
-import { useQueryRental, useInfiniteQueryRentals } from "../hooks/rental/query";
+import { useQueryRental } from "../hooks/rental/query";
 import { MapStackScreenProps, MapStackParamList, Rate } from "../types";
 import { supabase } from "../supabase";
 import { useRoute, RouteProp } from "@react-navigation/native";
@@ -19,19 +18,28 @@ const EditRentalScreen = ({
   const toast = useToast();
   const { t } = useTranslation("map");
   const { params } = useRoute<RouteProp<MapStackParamList, "EditRental">>();
-  const { data: rental } = useQueryRental(params.rentalId);
-  const { session } = useAuth();
+  const { data: rental, refetch: refetchRental } = useQueryRental(
+    params.rentalId
+  );
   const [images, setImages] = useState<string[]>([]);
 
-  const { position, getCurrentPosition, address, getAddress } = useLocation({
-    onDisable: () => {
+  useEffect(() => {
+    rental?.imageUrls && setImages(rental.imageUrls);
+  }, [rental]);
+
+  const {
+    mutateAsync: mutateAsyncUpdateRental,
+    isLoading: isLoadingUpdateRental,
+  } = useUpdateRental({
+    onSuccess: async () => {
       navigation.goBack();
+      await refetchRental();
       showAlert(
         toast,
         <Alert
-          status="error"
+          status="success"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequestGPS")}
+          text={t("saved")}
         />
       );
     },
@@ -47,30 +55,16 @@ const EditRentalScreen = ({
       );
     },
   });
-  const { refetch } = useInfiniteQueryRentals(
-    "near",
-    session?.user.id,
-    position?.coords
-  );
 
-  useEffect(() => {
-    rental?.imageUrls && setImages(rental.imageUrls);
-    getCurrentPosition();
-  }, [rental]);
-
-  const {
-    mutateAsync: mutateAsyncUpdateRental,
-    isLoading: isLoadingUpdateRental,
-  } = useUpdateRental({
-    onSuccess: async () => {
+  const { address, getAddress } = useLocation({
+    onDisable: () => {
       navigation.goBack();
-      await refetch();
       showAlert(
         toast,
         <Alert
-          status="success"
+          status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("saved")}
+          text={t("permitRequestGPS")}
         />
       );
     },

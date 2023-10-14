@@ -148,8 +148,8 @@ const MapTemplate = ({
             return false;
           }) && (
             <Marker coordinate={position.coords}>
-              <VStack alignItems="center">
-                <Text bold fontSize="xs">
+              <VStack alignItems="center" maxW="24">
+                <Text bold fontSize="xs" numberOfLines={1} ellipsizeMode="tail">
                   {t("current")}
                 </Text>
                 <Image
@@ -175,9 +175,14 @@ const MapTemplate = ({
                     : setRegion({ regionId: farmId, latitude, longitude });
                 }}
               >
-                <VStack alignItems="center">
+                <VStack alignItems="center" maxW="24">
                   {farmId === region?.regionId && (
-                    <Text bold fontSize="xs">
+                    <Text
+                      bold
+                      fontSize="xs"
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
                       {name}
                     </Text>
                   )}
@@ -207,9 +212,14 @@ const MapTemplate = ({
                       });
                 }}
               >
-                <VStack alignItems="center">
+                <VStack alignItems="center" maxW="24">
                   {rentalId === region?.regionId && (
-                    <Text bold fontSize="xs">
+                    <Text
+                      bold
+                      fontSize="xs"
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
                       {name}
                     </Text>
                   )}

@@ -41,7 +41,7 @@ const RentalListScreen = ({
 
   const { mutateAsync: mutateAsyncDeleteRental } = useDeleteRental({
     onSuccess: async () => {
-      await refetchRentals();
+      await refetch();
     },
     onError: () => {
       navigation.goBack();

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import NotificationTemplate from "../components/templates/NotificationTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
@@ -11,6 +11,7 @@ import {
   useDeleteNotification,
   useUpdateNotification,
 } from "../hooks/notification/mutate";
+import { supabase } from "../supabase";
 
 const NotificationScreen = ({
   navigation,
@@ -25,6 +26,28 @@ const NotificationScreen = ({
   } = useQueryNotifications(session?.user.id);
   const [isRefetchingNotifications, setIsRefetchingNotifications] =
     useState(false);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("notification")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notification",
+          filter: `recieverId=eq.${session?.user.id}`,
+        },
+        () => {
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session]);
 
   const { mutateAsync: mutateAsyncUpdateNotification } = useUpdateNotification({
     onSuccess: async () => {

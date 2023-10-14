@@ -152,7 +152,7 @@ const RentalPreviewList = memo(
                         {t("area")}
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
-                        {item?.area + "㎡" ?? t("unknown")}
+                        {item?.area ? item.area + "㎡" : t("unknown")}
                       </Text>
                     </VStack>
                     <VStack>
