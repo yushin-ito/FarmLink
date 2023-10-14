@@ -240,7 +240,7 @@ const RentalDetailTemplate = ({
                 </Text>
                 <Text bold fontSize="md">
                   {rental?.fee
-                    ? rental.fee + t(rental.rate as Rate)
+                    ? "￥" + rental.fee + t(rental.rate as Rate)
                     : t("unknown")}
                 </Text>
               </VStack>

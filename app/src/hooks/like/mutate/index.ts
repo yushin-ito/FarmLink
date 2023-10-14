@@ -10,6 +10,10 @@ export type DeleteRentalLikeResponse = Awaited<
 >;
 
 const postFarmLike = async (like: Like["Insert"]) => {
+  if (!like.farmId) {
+    return;
+  }
+
   const { data, error } = await supabase
     .from("like")
     .upsert(like)
@@ -23,6 +27,10 @@ const postFarmLike = async (like: Like["Insert"]) => {
 };
 
 const postRentalLike = async (like: Like["Insert"]) => {
+  if (!like.rentalId) {
+    return;
+  }
+
   const { data, error } = await supabase
     .from("like")
     .upsert(like)

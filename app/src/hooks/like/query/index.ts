@@ -7,6 +7,10 @@ export type GetFarmLikesResponse = Awaited<ReturnType<typeof getFarmLikes>>;
 export type GetRentalLikesResponse = Awaited<ReturnType<typeof getRentalLikes>>;
 
 const getUserLikes = async (userId: string | undefined) => {
+  if (!userId) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("like")
     .select("*, farm(*, device(*)), rental(*)")

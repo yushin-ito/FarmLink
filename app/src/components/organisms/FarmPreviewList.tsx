@@ -24,12 +24,7 @@ import { useWindowDimensions } from "react-native";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { useTranslation } from "react-i18next";
 import { wait } from "../../functions";
-
-type Region = {
-  regionId: number;
-  latitude: number;
-  longitude: number;
-};
+import { Region } from "../../types";
 
 type FarmPreviewListProps = {
   farms: GetFarmsResponse | undefined;
@@ -122,7 +117,7 @@ const FarmPreviewList = memo(
                 >
                   {item.device.imageUrl ? (
                     <Image
-                      source={{ uri: item.device?.imageUrl }}
+                      source={{ uri: item.device.imageUrl }}
                       style={{ width: 96, height: 96 }}
                     />
                   ) : (

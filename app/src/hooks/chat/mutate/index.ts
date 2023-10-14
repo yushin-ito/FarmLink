@@ -19,7 +19,7 @@ const postChat = async (chat: Chat["Insert"]) => {
   return data;
 };
 
-const deleteChat = async (chatId: number | null) => {
+const deleteChat = async (chatId: number) => {
   await supabase.from("notification").delete().eq("chatId", chatId);
   const { data, error } = await supabase
     .from("chat")

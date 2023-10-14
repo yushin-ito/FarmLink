@@ -14,7 +14,7 @@ import {
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
-import LikeItem from "../organisms/LikeItem";
+import LikeListItem from "../organisms/LikeListItem";
 import SkeletonLikeList from "../organisms/SkeletonLikeList";
 import { RefreshControl } from "react-native";
 
@@ -121,7 +121,7 @@ const LikeListTemplate = ({
           <FlatList
             data={likes?.filter((item) => item.farmId)}
             renderItem={({ item }) => (
-              <LikeItem
+              <LikeListItem
                 item={item}
                 onPress={() =>
                   item.farm.farmId &&
@@ -163,7 +163,7 @@ const LikeListTemplate = ({
           <FlatList
             data={likes?.filter((item) => item.rentalId)}
             renderItem={({ item }) => (
-              <LikeItem
+              <LikeListItem
                 item={item}
                 onPress={() =>
                   item.rental &&

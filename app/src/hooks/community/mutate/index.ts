@@ -25,6 +25,10 @@ const postCommunity = async (community: Community["Insert"]) => {
 };
 
 const updateCommunity = async (community: Community["Update"]) => {
+  if (!community.communityId) {
+    return;
+  }
+
   const { data, error } = await supabase
     .from("community")
     .update(community)

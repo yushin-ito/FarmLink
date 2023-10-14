@@ -15,15 +15,15 @@ import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
 
-type LikeItemProps = {
+type LikeListItemProps = {
   type: "farm" | "rental";
   item: GetUserLikesResponse[number];
   onPress: () => void;
   onPressRight: () => void;
 };
 
-const LikeItem = memo(
-  ({ type, item, onPressRight, onPress }: LikeItemProps) => {
+const LikeListItem = memo(
+  ({ type, item, onPressRight, onPress }: LikeListItemProps) => {
     const { t } = useTranslation("setting");
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
@@ -179,4 +179,4 @@ const LikeItem = memo(
   }
 );
 
-export default LikeItem;
+export default LikeListItem;

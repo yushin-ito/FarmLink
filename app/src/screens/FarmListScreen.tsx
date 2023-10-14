@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import FarmListTemplate from "../components/templates/FarmListTemplate";
-import { useQueryFarms, useQueryUserFarms } from "../hooks/farm/query";
+import { useQueryUserFarms } from "../hooks/farm/query";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import useAuth from "../hooks/auth/useAuth";
@@ -17,10 +17,9 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   const { data: user, isLoading: isLoadingUser } = useQueryUser(
     session?.user.id
   );
-  const { refetch } = useQueryFarms(session?.user.id);
   const {
     data: farms,
-    refetch: refetchUserFarms,
+    refetch,
     isLoading: isLoadingFarms,
   } = useQueryUserFarms(session?.user.id);
   const [isRefetchingFarms, setIsRefetchingFarms] = useState(false);
@@ -28,7 +27,6 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   const { mutateAsync: mutateAsyncUpdateFarm } = useUpdateFarm({
     onSuccess: async () => {
       await refetch();
-      await refetchUserFarms();
     },
     onError: () => {
       showAlert(
@@ -45,7 +43,6 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   const { mutateAsync: mutateAsyncDeleteFarm } = useDeleteFarm({
     onSuccess: async () => {
       await refetch();
-      await refetchUserFarms();
     },
     onError: () => {
       showAlert(
@@ -61,7 +58,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
 
   const refetchFarms = useCallback(async () => {
     setIsRefetchingFarms(true);
-    await refetchUserFarms();
+    await refetch();
     setIsRefetchingFarms(false);
   }, []);
 

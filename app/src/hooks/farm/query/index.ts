@@ -1,6 +1,9 @@
-import { useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import { supabase } from "../../../supabase";
 import { Device, Farm, User } from "../../../types";
+import { PostgrestError } from "@supabase/supabase-js";
+import { useMemo } from "react";
+import { LatLng } from "react-native-maps";
 
 export type GetFarmResponse = Awaited<ReturnType<typeof getFarm>>;
 export type GetFarmsResponse = Awaited<ReturnType<typeof getFarms>>;
@@ -19,19 +22,37 @@ const getFarm = async (farmId: number) => {
   return data[0];
 };
 
-const getFarms = async (userId: string | undefined) => {
+const getFarms = async (
+  userId: string | undefined,
+  position: LatLng | undefined,
+  from: number,
+  to: number
+) => {
+  if (!position) {
+    return [];
+  }
+
   const { data, error } = await supabase
-    .from("farm")
-    .select("*, device(*)")
-    .or(`privated.eq.false, ownerId.eq.${userId}`)
+    .rpc("sort_by_location_farm", {
+      lat: position.latitude,
+      long: position.longitude,
+    })
+    .range(from, to)
     .returns<(Farm["Row"] & { device: Device["Row"] })[]>();
   if (error) {
     throw error;
   }
-  return data;
+
+  return data.filter(
+    (item) => item.privated === false || item.ownerId === userId
+  );
 };
 
 const getUserFarms = async (ownerId: string | undefined) => {
+  if (!ownerId) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("farm")
     .select("*, device(*)")
@@ -50,11 +71,32 @@ export const useQueryFarm = (farmId: number) =>
     queryFn: async () => await getFarm(farmId),
   });
 
-export const useQueryFarms = (userId: string | undefined) =>
-  useQuery({
-    queryKey: "farm",
-    queryFn: async () => await getFarms(userId),
+export const useInfiniteQueryFarms = (
+  userId: string | undefined,
+  position: LatLng | undefined
+) => {
+  const PAGE_COUNT = 30;
+  const query = useInfiniteQuery<GetFarmsResponse, PostgrestError>({
+    queryKey: ["farm", position],
+    queryFn: async ({ pageParam = 0 }) =>
+      await getFarms(userId, position, pageParam, pageParam + PAGE_COUNT - 1),
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage && lastPage.length === PAGE_COUNT) {
+        return pages.map((page) => page).flat().length;
+      }
+    },
   });
+
+  const data = useMemo(
+    () =>
+      query.data?.pages
+        .flatMap((page) => page)
+        .filter((page): page is NonNullable<typeof page> => page !== null),
+    [query.data]
+  );
+
+  return { ...query, data };
+};
 
 export const useQueryUserFarms = (ownerId: string | undefined) =>
   useQuery({

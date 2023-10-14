@@ -35,7 +35,7 @@ const CommunityListScreen = ({
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQueryCommunities(categories[categoryIndex], session?.user.id);
-  const [isRefetchingCommunities, setIsRefetchingCommunitys] = useState(false);
+  const [isRefetchingCommunities, setIsRefetchingCommunities] = useState(false);
 
   const {
     mutateAsync: mutateAsyncUpdateCommunity,
@@ -54,9 +54,9 @@ const CommunityListScreen = ({
   });
 
   const refetchCommunities = useCallback(async () => {
-    setIsRefetchingCommunitys(true);
+    setIsRefetchingCommunities(true);
     await refetch();
-    setIsRefetchingCommunitys(false);
+    setIsRefetchingCommunities(false);
   }, []);
 
   const joinCommunity = useCallback(

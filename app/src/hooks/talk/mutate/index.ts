@@ -15,6 +15,10 @@ const postTalk = async (talk: Talk["Insert"]) => {
 };
 
 const updateTalk = async (talk: Talk["Update"]) => {
+  if (!talk.talkId) {
+    return;
+  }
+
   const { data, error } = await supabase
     .from("talk")
     .update(talk)

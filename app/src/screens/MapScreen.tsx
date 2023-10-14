@@ -5,18 +5,12 @@ import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
-import { MapStackParamList, MapStackScreenProps } from "../types";
-import { useQueryFarms } from "../hooks/farm/query";
-import { useQueryRentals } from "../hooks/rental/query";
+import { MapStackParamList, MapStackScreenProps, Region } from "../types";
+import { useInfiniteQueryFarms } from "../hooks/farm/query";
+import { useInfiniteQueryRentals } from "../hooks/rental/query";
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
-
-type Region = {
-  regionId: number;
-  latitude: number;
-  longitude: number;
-};
 
 const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { t } = useTranslation("map");
@@ -25,36 +19,10 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { data: user, isLoading: isLoadingUser } = useQueryUser(
     session?.user.id
   );
-  const {
-    data: farms,
-    refetch: refetchFarms,
-    isLoading: isLoadingFarms,
-  } = useQueryFarms(session?.user.id);
-  const {
-    data: rentals,
-    refetch: refetchRentals,
-    isLoading: isLoadingRentals,
-  } = useQueryRentals(session?.user.id);
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
   const [type, setType] = useState<"farm" | "rental">("farm");
   const [touch, setTouch] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
-
-  useEffect(() => {
-    if (params?.regionId && params?.latitude && params?.longitude) {
-      setTouch(false);
-      setRegion({
-        regionId: params.regionId,
-        latitude: params.latitude,
-        longitude: params.longitude,
-      });
-    } else {
-      getCurrentPosition();
-    }
-    params?.type === "farm" && refetchFarms();
-    params?.type === "rental" && refetchRentals();
-    params?.type && setType(params.type);
-  }, [params]);
 
   const { position, getCurrentPosition, isLoadingPosition } = useLocation({
     onDisable: () => {
@@ -78,19 +46,34 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       );
     },
   });
+  const {
+    data: rentals,
+    refetch: refetchRentals,
+    fetchNextPage: fetchNextPageRentals,
+    isLoading: isLoadingRentals,
+  } = useInfiniteQueryRentals("near", session?.user.id, position?.coords);
+  const {
+    data: farms,
+    refetch: refetchFarms,
+    fetchNextPage: fetchNextPageFams,
+    isLoading: isLoadingFarms,
+  } = useInfiniteQueryFarms(session?.user.id, position?.coords);
 
-  const getDistance = useCallback(
-    (latitude: number | null, longitude: number | null) => {
-      if (position && latitude && longitude) {
-        return (
-          (position.coords.latitude - latitude) ** 2 +
-          (position.coords.longitude - longitude) ** 2
-        );
-      }
-      return 0;
-    },
-    [position]
-  );
+  useEffect(() => {
+    if (params?.regionId && params?.latitude && params?.longitude) {
+      setTouch(false);
+      setRegion({
+        regionId: params.regionId,
+        latitude: params.latitude,
+        longitude: params.longitude,
+      });
+    } else {
+      getCurrentPosition();
+    }
+    params?.type === "farm" && refetchFarms();
+    params?.type === "rental" && refetchRentals();
+    params?.type && setType(params.type);
+  }, [params]);
 
   const farmDetailNavigationHandler = useCallback((farmId: number) => {
     navigation.navigate("FarmDetail", { farmId });
@@ -104,6 +87,10 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     navigation.navigate("SearchMap", { type });
   }, [type]);
 
+  const rentalGridNavigationHandler = useCallback(() => {
+    navigation.navigate("RentalGrid");
+  }, []);
+
   return (
     <MapTemplate
       type={type}
@@ -114,22 +101,16 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       setRegion={setRegion}
       position={position}
       user={user}
-      farms={farms?.sort(
-        (a, b) =>
-          getDistance(a.latitude, a.longitude) -
-          getDistance(b.latitude, b.longitude)
-      )}
-      rentals={rentals?.sort(
-        (a, b) =>
-          getDistance(a.latitude, a.longitude) -
-          getDistance(b.latitude, b.longitude)
-      )}
+      farms={farms}
+      rentals={rentals}
+      readMore={type === "farm" ? fetchNextPageFams : fetchNextPageRentals}
       isLoading={
         isLoadingPosition || isLoadingUser || isLoadingRentals || isLoadingFarms
       }
       farmDetailNavigationHandler={farmDetailNavigationHandler}
       rentalDetailNavigationHandler={rentalDetailNavigationHandler}
       searchMapNavigationHandler={searchMapNavigationHandler}
+      rentalGridNavigationHandler={rentalGridNavigationHandler}
     />
   );
 };

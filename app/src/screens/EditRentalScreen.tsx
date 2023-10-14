@@ -8,7 +8,7 @@ import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
-import { useQueryRental, useQueryRentals } from "../hooks/rental/query";
+import { useQueryRental, useInfiniteQueryRentals } from "../hooks/rental/query";
 import { MapStackScreenProps, MapStackParamList, Rate } from "../types";
 import { supabase } from "../supabase";
 import { useRoute, RouteProp } from "@react-navigation/native";
@@ -21,11 +21,41 @@ const EditRentalScreen = ({
   const { params } = useRoute<RouteProp<MapStackParamList, "EditRental">>();
   const { data: rental } = useQueryRental(params.rentalId);
   const { session } = useAuth();
-  const { refetch } = useQueryRentals(session?.user.id);
   const [images, setImages] = useState<string[]>([]);
+
+  const { position, getCurrentPosition, address, getAddress } = useLocation({
+    onDisable: () => {
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestGPS")}
+        />
+      );
+    },
+    onError: () => {
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+  const { refetch } = useInfiniteQueryRentals(
+    "near",
+    session?.user.id,
+    position?.coords
+  );
 
   useEffect(() => {
     rental?.imageUrls && setImages(rental.imageUrls);
+    getCurrentPosition();
   }, [rental]);
 
   const {
@@ -33,8 +63,8 @@ const EditRentalScreen = ({
     isLoading: isLoadingUpdateRental,
   } = useUpdateRental({
     onSuccess: async () => {
-      await refetch();
       navigation.goBack();
+      await refetch();
       showAlert(
         toast,
         <Alert
@@ -113,31 +143,6 @@ const EditRentalScreen = ({
     },
   });
 
-  const { address, getAddress } = useLocation({
-    onDisable: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequestGPS")}
-        />
-      );
-    },
-    onError: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
-
   const updateRental = useCallback(
     async (
       name: string,
@@ -147,7 +152,7 @@ const EditRentalScreen = ({
       equipment: string,
       rate: Rate
     ) => {
-      if (session && rental) {
+      if (rental) {
         const publicUrls = await Promise.all(
           images.map(async (item) => {
             if (item.indexOf("http") == -1) {
@@ -161,20 +166,21 @@ const EditRentalScreen = ({
             }
           })
         );
+
         await mutateAsyncUpdateRental({
           rentalId: rental.rentalId,
           name,
           description,
-          ownerId: session.user.id,
           fee,
           area,
           equipment,
           imageUrls: publicUrls,
           rate,
+          location: `POINT(${rental.longitude} ${rental.latitude})`,
         });
       }
     },
-    [session, images]
+    [images]
   );
 
   const goBackNavigationHandler = useCallback(() => {

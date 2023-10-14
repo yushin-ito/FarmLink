@@ -1,6 +1,9 @@
-import { useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import { supabase } from "../../../supabase";
-import { Rental, User } from "../../../types";
+import { Rental, Scene, User } from "../../../types";
+import { LatLng } from "react-native-maps";
+import { PostgrestError } from "@supabase/supabase-js";
+import { useMemo } from "react";
 
 export type GetRentalResponse = Awaited<ReturnType<typeof getRental>>;
 export type GetRentalsResponse = Awaited<ReturnType<typeof getRentals>>;
@@ -18,20 +21,62 @@ const getRental = async (rentalId: number) => {
   return data[0];
 };
 
-const getRentals = async (userId: string | undefined) => {
-  const { data, error } = await supabase
-    .from("rental")
-    .select("*")
-    .or(`privated.eq.false, ownerId.eq.${userId}`);
+const getRentals = async (
+  scene: Scene,
+  from: number,
+  to: number,
+  userId: string | undefined,
+  position?: LatLng
+) => {
+  if (scene === "near" && position) {
+    const { data, error } = await supabase
+      .rpc("sort_by_location_rental", {
+        lat: position.latitude,
+        long: position.longitude,
+      })
+      .range(from, to)
+      .returns<Rental["Row"][]>();
+    if (error) {
+      throw error;
+    }
 
-  if (error) {
-    throw error;
+    return data.filter(
+      (item) => item.privated === false || item.ownerId === userId
+    );
+  } else if (scene === "newest") {
+    const { data, error } = await supabase
+      .from("rental")
+      .select("*")
+      .or(`privated.eq.false, ownerId.eq.${userId}`)
+      .order("updatedAt", { ascending: false })
+      .range(from, to);
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } else if (scene === "popular") {
+    const { data, error } = await supabase
+      .from("rental")
+      .select("*")
+      .or(`privated.eq.false, ownerId.eq.${userId}`)
+      .order("like_count", { ascending: false })
+      .range(from, to);
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } else {
+    return [];
   }
-
-  return data;
 };
 
 const getUserRentals = async (ownerId: string | undefined) => {
+  if (!ownerId) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("rental")
     .select("*")
@@ -50,11 +95,39 @@ export const useQueryRental = (rentalId: number) =>
     queryFn: async () => await getRental(rentalId),
   });
 
-export const useQueryRentals = (userId: string | undefined) =>
-  useQuery({
-    queryKey: "rental",
-    queryFn: async () => await getRentals(userId),
+export const useInfiniteQueryRentals = (
+  scene: Scene,
+  userId: string | undefined,
+  position?: LatLng
+) => {
+  const PAGE_COUNT = 30;
+  const query = useInfiniteQuery<GetRentalsResponse, PostgrestError>({
+    queryKey: ["rental", position, scene],
+    queryFn: async ({ pageParam = 0 }) =>
+      await getRentals(
+        scene,
+        pageParam,
+        pageParam + PAGE_COUNT - 1,
+        userId,
+        position
+      ),
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage && lastPage.length === PAGE_COUNT) {
+        return pages.map((page) => page).flat().length;
+      }
+    },
   });
+
+  const data = useMemo(
+    () =>
+      query.data?.pages
+        .flatMap((page) => page)
+        .filter((page): page is NonNullable<typeof page> => page !== null),
+    [query.data]
+  );
+
+  return { ...query, data };
+};
 
 export const useQueryUserRentals = (ownerId: string | undefined) =>
   useQuery({

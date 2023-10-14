@@ -16,7 +16,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import Fab from "../molecules/Fab";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import CommunityItem from "../organisms/CommunityItem";
+import CommunityListItem from "../organisms/CommunityListItem";
 import Avatar from "../molecules/Avatar";
 import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
@@ -124,7 +124,6 @@ const CommunityListTemplate = ({
         <SkeletonCommunityList rows={4} />
       ) : (
         <FlatList
-          w="100%"
           mb="20"
           data={communities}
           onEndReached={readMore}
@@ -146,7 +145,7 @@ const CommunityListTemplate = ({
             </Center>
           }
           renderItem={({ item }) => (
-            <CommunityItem
+            <CommunityListItem
               item={item}
               joined={
                 user?.userId === item.ownerId ||

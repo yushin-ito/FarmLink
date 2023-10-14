@@ -16,6 +16,10 @@ const postFarm = async (farm: Farm["Insert"]) => {
 };
 
 const updateFarm = async (farm: Farm["Update"]) => {
+  if (!farm.farmId) {
+    return;
+  }
+
   const { data, error } = await supabase
     .from("farm")
     .update(farm)

@@ -1,10 +1,10 @@
 import React, { memo } from "react";
 import { Box, Divider, HStack, Skeleton, VStack, useColorModeValue } from "native-base";
 
-type SkeltonTalkListProps = {
+type SkeletonTalkListProps = {
   rows: number;
 };
-const SkeltonTalkList = memo(({ rows }: SkeltonTalkListProps) => {
+const SkeletonTalkList = memo(({ rows }: SkeletonTalkListProps) => {
   const borderColor = useColorModeValue("muted.200", "muted.600");
 
   return (
@@ -32,4 +32,4 @@ const SkeltonTalkList = memo(({ rows }: SkeltonTalkListProps) => {
   );
 });
 
-export default SkeltonTalkList;
+export default SkeletonTalkList;

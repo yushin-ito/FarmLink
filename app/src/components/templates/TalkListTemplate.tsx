@@ -12,13 +12,13 @@ import React from "react";
 import Fab from "../molecules/Fab";
 import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import TalkItem from "../organisms/TalkItem";
+import TalkListItem from "../organisms/TalkListItem";
 import { Alert, RefreshControl } from "react-native";
 import Avatar from "../molecules/Avatar";
 import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
 import { GetTalksResponse } from "../../hooks/talk/query";
-import SkeltonTalkList from "../organisms/SkeltonTalkList";
+import SkeletonTalkList from "../organisms/SkeletonTalkList";
 
 type TalkListTemplateProps = {
   locale: "en" | "ja" | null;
@@ -72,7 +72,7 @@ const TalkListTemplate = ({
         />
       </VStack>
       {isLoading ? (
-        <SkeltonTalkList rows={6} />
+        <SkeletonTalkList rows={6} />
       ) : (
         <FlatList
           w="100%"
@@ -90,7 +90,7 @@ const TalkListTemplate = ({
             </Text>
           }
           renderItem={({ item }) => (
-            <TalkItem
+            <TalkListItem
               item={item}
               locale={locale}
               onPress={() => talkChatNavigationHandler(item.talkId)}

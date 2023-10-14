@@ -10,7 +10,7 @@ import {
 } from "native-base";
 import React from "react";
 import Fab from "../molecules/Fab";
-import FarmItem from "../organisms/FarmItem";
+import FarmListItem from "../organisms/FarmListItem";
 import { GetUserFarmsResponse } from "../../hooks/farm/query";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
@@ -77,7 +77,7 @@ const FarmListTemplate = ({
           mb="20"
           data={farms}
           renderItem={({ item }) => (
-            <FarmItem
+            <FarmListItem
               item={item}
               onPress={() =>
                 item.latitude &&

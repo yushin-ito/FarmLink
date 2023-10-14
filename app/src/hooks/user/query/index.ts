@@ -4,6 +4,10 @@ import { supabase } from "../../../supabase";
 export type GetUserResponse = Awaited<ReturnType<typeof getUser>>;
 
 const getUser = async (userId: string | undefined) => {
+  if (!userId) {
+    return null;
+  }
+
   const { data, error } = await supabase
     .from("user")
     .select("*")

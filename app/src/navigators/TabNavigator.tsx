@@ -101,7 +101,7 @@ const TabNavigator = () => {
           display: getTabStyle(route) ? "flex" : "none",
           backgroundColor: bgColor,
           borderColor: borderColor,
-          borderTopWidth: 1,
+          borderTopWidth: 0.5,
           height: Platform.OS === "android" ? 70 : 90,
           paddingTop: 6,
           paddingBottom: Platform.OS === "android" ? 16 : 32,

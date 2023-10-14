@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import RentalListTemplate from "../components/templates/RentalListTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
-import { useQueryRentals, useQueryUserRentals } from "../hooks/rental/query";
+import { useQueryUserRentals } from "../hooks/rental/query";
 import { showAlert, wait } from "../functions";
 import { useDeleteRental, useUpdateRental } from "../hooks/rental/mutate";
 import { useToast } from "native-base";
@@ -15,10 +15,9 @@ const RentalListScreen = ({
   const { t } = useTranslation("setting");
   const toast = useToast();
   const { session } = useAuth();
-  const { refetch } = useQueryRentals(session?.user.id);
   const {
     data: rentals,
-    refetch: refetchUserRentals,
+    refetch,
     isLoading: isLoadingRentals,
   } = useQueryUserRentals(session?.user.id);
   const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
@@ -26,7 +25,6 @@ const RentalListScreen = ({
   const { mutateAsync: mutateAsyncUpdateRental } = useUpdateRental({
     onSuccess: async () => {
       await refetch();
-      await refetchUserRentals();
     },
     onError: () => {
       navigation.goBack();
@@ -43,8 +41,7 @@ const RentalListScreen = ({
 
   const { mutateAsync: mutateAsyncDeleteRental } = useDeleteRental({
     onSuccess: async () => {
-      await refetch();
-      await refetchUserRentals();
+      await refetchRentals();
     },
     onError: () => {
       navigation.goBack();

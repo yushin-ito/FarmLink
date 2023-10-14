@@ -24,13 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useWindowDimensions } from "react-native";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import { wait } from "../../functions";
-import { Rate } from "../../types";
-
-type Region = {
-  regionId: number;
-  latitude: number;
-  longitude: number;
-};
+import { Rate, Region } from "../../types";
 
 type RentalPreviewListProps = {
   rentals: GetRentalsResponse | undefined;
@@ -38,6 +32,7 @@ type RentalPreviewListProps = {
   setTouch: Dispatch<SetStateAction<boolean>>;
   region: Region | null;
   setRegion: Dispatch<SetStateAction<Region | null>>;
+  readMore: () => void;
   rentalDetailNavigationHandler: (rentalId: number) => void;
 };
 
@@ -48,6 +43,7 @@ const RentalPreviewList = memo(
     setTouch,
     region,
     setRegion,
+    readMore,
     rentalDetailNavigationHandler,
   }: RentalPreviewListProps) => {
     const { t } = useTranslation("map");
@@ -164,7 +160,7 @@ const RentalPreviewList = memo(
                         {t("fee")}
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
-                        {item.fee + t(item.rate as Rate)}
+                        {"￥" + item.fee + t(item.rate as Rate)}
                       </Text>
                     </VStack>
                   </HStack>
@@ -173,6 +169,8 @@ const RentalPreviewList = memo(
             )}
           </Pressable>
         )}
+        onEndReached={readMore}
+        onEndReachedThreshold={0.3}
         onTouchEnd={() => setTouch(true)}
         onMomentumScrollEnd={(event) => {
           const currentIndex = Math.floor(

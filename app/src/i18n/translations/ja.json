@@ -43,13 +43,14 @@
     "enterMessage": "メッセージを入力",
     "back": "戻る",
     "error": "エラーが発生しました",
-    "dev": "この機能は現在開発中です"
+    "dev": "この機能は開発中です。\n実装までお待ちください。"
   },
   "map": {
     "farm": "農園",
+    "rental": "レンタル",
+    "list": "一覧",
     "current": "現在地",
     "search": "探す",
-    "rental": "レンタル",
     "searchFarm": "農園を探す",
     "searchRental": "レンタルを探す",
     "noDescription": "詳細がありません",
@@ -62,10 +63,10 @@
     "Insert": "更新",
     "battery": "充電",
     "fee": "料金",
-    "year": "円/年",
-    "month": "円/月",
-    "week": "円/週",
-    "day": "円/日",
+    "year": " / 年",
+    "month": " / 月",
+    "week": " / 週",
+    "day": " / 日",
     "once": "(一括)",
     "equipment": "設備",
     "area": "面積",
@@ -78,11 +79,14 @@
     "chat": "チャットする",
     "createdTalk": "トークが作成されました",
     "saved": "保存しました",
+    "near": "近い順",
+    "popular": "人気順",
+    "newest": "新着順",
     "permitRequestGPS": "位置情報を許可してください",
     "permitRequestNoti": "通知を許可してください",
     "permitRequestCam": "カメラを許可してください",
     "error": "エラーが発生しました",
-    "dev": "この機能は現在開発中です"
+    "dev": "この機能は開発中です。\n実装までお待ちください。"
   },
   "chat": {
     "enterMessage": "メッセージを入力",
@@ -98,7 +102,7 @@
     "delete": "送信取消",
     "cancel": "キャンセル",
     "error": "エラーが発生しました",
-    "dev": "この機能は現在開発中です"
+    "dev": "この機能は開発中です。\n実装までお待ちください。"
   },
   "community": {
     "community": "コミュニティ",
@@ -132,7 +136,7 @@
     "people": "参加人数",
     "join": "参加する",
     "error": "エラーが発生しました",
-    "dev": "この機能は現在開発中です"
+    "dev": "この機能は開発中です。\n実装までお待ちください。"
   },
   "farm": {
     "farm": "農園",
@@ -161,9 +165,7 @@
     "current": "現在地",
     "previous": "前の場所",
     "permitRequestGPS": "位置情報を許可してください",
-    "deviceId": "デバイスID",
-    "invalidDeviceId": "デバイスIDが無効です",
-    "description": "詳細",
+    "devicこの機能は開発中です。\n実装までお待ちください。tion": "詳細",
     "descriptionRequired": "詳細を入力してください",
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
     "create": "作成",
@@ -172,7 +174,7 @@
     "saved": "保存しました",
     "chat": "チャットする",
     "error": "エラーが発生しました",
-    "dev": "この機能は現在開発中です"
+    "dev": "この機能は開発中です。\n実装までお待ちください。"
   },
   "talk": {
     "talk": "トーク",
@@ -191,7 +193,7 @@
     "search": "検索",
     "create": "作成",
     "error": "エラーが発生しました",
-    "dev": "この機能は現在開発中です"
+    "dev": "この機能は開発中です。\n実装までお待ちください。"
   },
   "setting": {
     "setting": "設定",
@@ -270,6 +272,6 @@
     "create": "作成",
     "editRental": "レンタルを編集",
     "error": "エラーが発生しました",
-    "dev": "この機能は現在開発中です"
+    "dev": "この機能は開発中です。\n実装までお待ちください。"
   }
 }

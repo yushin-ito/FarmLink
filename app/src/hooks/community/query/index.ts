@@ -51,17 +51,7 @@ const getCommunities = async (
 
     return data;
   } else {
-    const { data, error } = await supabase
-      .from("community")
-      .select("*")
-      .eq("category", category)
-      .order("createdAt", { ascending: false })
-      .range(from, to);
-    if (error) {
-      throw error;
-    }
-
-    return data;
+    return [];
   }
 };
 
@@ -78,14 +68,13 @@ export const useInfiniteQueryCommunities = (
   const PAGE_COUNT = 15;
   const query = useInfiniteQuery<GetCommunitiesResponse, PostgrestError>({
     queryKey: ["community", category],
-    queryFn: async ({ pageParam = 0 }) => {
-      return await getCommunities(
+    queryFn: async ({ pageParam = 0 }) =>
+      await getCommunities(
         category,
         pageParam,
         pageParam + PAGE_COUNT - 1,
         userId
-      );
-    },
+      ),
     getNextPageParam: (lastPage, pages) => {
       if (lastPage && lastPage.length === PAGE_COUNT) {
         return pages.map((page) => page).flat().length;

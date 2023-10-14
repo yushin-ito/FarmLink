@@ -25,12 +25,7 @@ import FarmPreviewList from "../organisms/FarmPreviewList";
 import RentalPreviewList from "../organisms/RentalPreviewList";
 import { GetUserResponse } from "../../hooks/user/query";
 import { Image } from "expo-image";
-
-type Region = {
-  regionId: number;
-  latitude: number;
-  longitude: number;
-};
+import { Region } from "../../types";
 
 type MapTemplateProps = {
   type: "farm" | "rental";
@@ -43,10 +38,12 @@ type MapTemplateProps = {
   user: GetUserResponse | null | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
+  readMore: () => void;
   isLoading: boolean;
   farmDetailNavigationHandler: (farmId: number) => void;
   rentalDetailNavigationHandler: (rentalId: number) => void;
   searchMapNavigationHandler: () => void;
+  rentalGridNavigationHandler: () => void;
 };
 
 const MapTemplate = ({
@@ -59,10 +56,12 @@ const MapTemplate = ({
   position,
   farms,
   rentals,
+  readMore,
   isLoading,
   farmDetailNavigationHandler,
   rentalDetailNavigationHandler,
   searchMapNavigationHandler,
+  rentalGridNavigationHandler,
 }: MapTemplateProps) => {
   const { t } = useTranslation("map");
   const mapRef = useRef<MapView>(null);
@@ -223,7 +222,7 @@ const MapTemplate = ({
               </Marker>
             ))}
       </MapView>
-      <VStack w="80%" position="absolute" top="16" alignSelf="center" space="4">
+      <VStack w="80%" position="absolute" top="16" alignSelf="center" space="3">
         <Box shadow="1" rounded="lg">
           <SearchBar
             isReadOnly
@@ -232,73 +231,87 @@ const MapTemplate = ({
             onPressIn={searchMapNavigationHandler}
           />
         </Box>
-        <HStack space="2">
-          <Pressable
-            onPress={() => {
-              if (farms?.length) {
-                farms[0].latitude &&
-                  farms[0].longitude &&
-                  setRegion({
-                    regionId: farms[0].farmId,
-                    latitude: farms[0].latitude,
-                    longitude: farms[0].longitude,
-                  });
-              }
-              setType("farm");
-            }}
-          >
-            <Box
+        <HStack alignItems="center" justifyContent="space-between">
+          <HStack space="2">
+            <Pressable
+              onPress={() => {
+                if (farms?.length) {
+                  farms[0].latitude &&
+                    farms[0].longitude &&
+                    setRegion({
+                      regionId: farms[0].farmId,
+                      latitude: farms[0].latitude,
+                      longitude: farms[0].longitude,
+                    });
+                }
+                setType("farm");
+              }}
+            >
+              <Box
+                px="3"
+                py="1"
+                rounded="full"
+                bg={type === "farm" ? "brand.600" : bgColor}
+                shadow="1"
+                alignItems="center"
+              >
+                <Text
+                  color={
+                    type === "farm"
+                      ? "white"
+                      : useColorModeValue("black", "white")
+                  }
+                >
+                  {t("farm")}
+                </Text>
+              </Box>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                if (rentals?.length) {
+                  rentals[0].latitude &&
+                    rentals[0].longitude &&
+                    setRegion({
+                      regionId: rentals[0].rentalId,
+                      latitude: rentals[0].latitude,
+                      longitude: rentals[0].longitude,
+                    });
+                }
+                setType("rental");
+              }}
+            >
+              <Box
+                px="3"
+                py="1"
+                rounded="full"
+                bg={type === "rental" ? "brand.600" : bgColor}
+                shadow="1"
+                alignItems="center"
+              >
+                <Text
+                  color={
+                    type === "rental"
+                      ? "white"
+                      : useColorModeValue("black", "white")
+                  }
+                >
+                  {t("rental")}
+                </Text>
+              </Box>
+            </Pressable>
+          </HStack>
+          {type === "rental" && (
+            <Pressable
               px="3"
               py="1"
               rounded="full"
-              bg={type === "farm" ? "brand.600" : bgColor}
+              bg={bgColor}
               shadow="1"
-              alignItems="center"
+              onPress={rentalGridNavigationHandler}
             >
-              <Text
-                color={
-                  type === "farm"
-                    ? "white"
-                    : useColorModeValue("black", "white")
-                }
-              >
-                {t("farm")}
-              </Text>
-            </Box>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              if (rentals?.length) {
-                rentals[0].latitude &&
-                  rentals[0].longitude &&
-                  setRegion({
-                    regionId: rentals[0].rentalId,
-                    latitude: rentals[0].latitude,
-                    longitude: rentals[0].longitude,
-                  });
-              }
-              setType("rental");
-            }}
-          >
-            <Box
-              px="3"
-              py="1"
-              rounded="full"
-              bg={type === "rental" ? "brand.600" : bgColor}
-              shadow="1"
-              alignItems="center"
-            >
-              <Text
-                color={
-                  type === "rental"
-                    ? "white"
-                    : useColorModeValue("black", "white")
-                }
-              >
-                {t("rental")}
-              </Text>
-            </Box>
-          </Pressable>
+              <Text>{t("list")}</Text>
+            </Pressable>
+          )}
         </HStack>
       </VStack>
       {type === "farm" ? (
@@ -317,6 +330,7 @@ const MapTemplate = ({
           setTouch={setTouch}
           region={region}
           setRegion={setRegion}
+          readMore={readMore}
           rentalDetailNavigationHandler={rentalDetailNavigationHandler}
         />
       )}

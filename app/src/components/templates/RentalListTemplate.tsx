@@ -13,7 +13,7 @@ import {
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { GetRentalsResponse } from "../../hooks/rental/query";
-import RentalItem from "../organisms/RentalItem";
+import RentalListItem from "../organisms/RentalListItem";
 import { Alert, RefreshControl } from "react-native";
 import SkeletonRentalList from "../organisms/SkeletonRentalList";
 import Fab from "../molecules/Fab";
@@ -80,7 +80,7 @@ const RentalListTemplate = ({
           <FlatList
             data={rentals}
             renderItem={({ item }) => (
-              <RentalItem
+              <RentalListItem
                 item={item}
                 onPress={() =>
                   item.latitude &&

@@ -8,7 +8,7 @@ import { usePostFarm } from "../hooks/farm/mutate";
 import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
-import { useQueryFarms } from "../hooks/farm/query";
+import { useInfiniteQueryFarms } from "../hooks/farm/query";
 import useLocation from "../hooks/sdk/useLocation";
 
 const PostFarmScreen = () => {
@@ -16,8 +16,40 @@ const PostFarmScreen = () => {
   const { t } = useTranslation("farm");
   const navigation = useNavigation();
   const { session } = useAuth();
-  const { refetch } = useQueryFarms(session?.user.id);
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
+
+    const {
+      position,
+      address,
+      getCurrentPosition,
+      getAddress,
+      isLoadingPosition,
+    } = useLocation({
+      onDisable: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("permitRequestGPS")}
+          />
+        );
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
+    const { refetch } = useInfiniteQueryFarms(
+      session?.user.id,
+      position?.coords
+    );
 
   const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
     usePostFarm({
@@ -41,35 +73,6 @@ const PostFarmScreen = () => {
   const { mutateAsync: mutateAsyncSearchDevice } = useSearchDevice({
     onSuccess: (data) => {
       setSearchResult(data[0]);
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
-
-  const {
-    position,
-    address,
-    getCurrentPosition,
-    getAddress,
-    isLoadingPosition,
-  } = useLocation({
-    onDisable: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequestGPS")}
-        />
-      );
     },
     onError: () => {
       showAlert(
@@ -107,6 +110,7 @@ const PostFarmScreen = () => {
           privated,
           longitude: position.coords.longitude,
           latitude: position.coords.latitude,
+          location: `POINT(${position.coords.longitude} ${position.coords.latitude})`,
         });
       }
     },

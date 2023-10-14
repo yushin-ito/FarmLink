@@ -8,8 +8,8 @@ import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
-import { useQueryRentals } from "../hooks/rental/query";
-import { Rate, SettingStackScreenProps } from "../types";
+import { useInfiniteQueryRentals } from "../hooks/rental/query";
+import { Rate,  SettingStackScreenProps } from "../types";
 import { supabase } from "../supabase";
 
 const PostRentalScreen = ({
@@ -18,8 +18,42 @@ const PostRentalScreen = ({
   const toast = useToast();
   const { t } = useTranslation("setting");
   const { session } = useAuth();
-  const { refetch } = useQueryRentals(session?.user.id);
   const [base64, setBase64] = useState<string[]>([]);
+  const {
+    position,
+    address,
+    getCurrentPosition,
+    getAddress,
+    isLoadingPosition,
+  } = useLocation({
+    onDisable: () => {
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestGPS")}
+        />
+      );
+    },
+    onError: () => {
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+  const { refetch } = useInfiniteQueryRentals(
+    "near",
+    session?.user.id,
+    position?.coords
+  );
 
   const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
     usePostRental({
@@ -120,37 +154,6 @@ const PostRentalScreen = ({
     },
   });
 
-  const {
-    position,
-    address,
-    getCurrentPosition,
-    getAddress,
-    isLoadingPosition,
-  } = useLocation({
-    onDisable: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequestGPS")}
-        />
-      );
-    },
-    onError: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
-
   const postRental = useCallback(
     async (
       name: string,
@@ -180,6 +183,7 @@ const PostRentalScreen = ({
           imageUrls: publicUrls,
           privated: false,
           rate,
+          location: `POINT(${position.coords.longitude} ${position.coords.latitude})`,
         });
       }
     },

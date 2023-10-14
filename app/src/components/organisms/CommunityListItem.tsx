@@ -16,7 +16,7 @@ import Avatar from "../molecules/Avatar";
 import { useTranslation } from "react-i18next";
 import { Category } from "../../types";
 
-type CommunityItemProps = {
+type CommunityListItemProps = {
   item: GetCommunitiesResponse[number];
   joined: boolean;
   joinCommunity: (communityId: number, memeberIds: string[]) => Promise<void>;
@@ -24,14 +24,14 @@ type CommunityItemProps = {
   communityChatNavigationHandler: (communityId: number) => void;
 };
 
-const CommunityItem = memo(
+const CommunityListItem = memo(
   ({
     item,
     joined,
     joinCommunity,
     isLoading,
     communityChatNavigationHandler,
-  }: CommunityItemProps) => {
+  }: CommunityListItemProps) => {
     const { t } = useTranslation("community");
     const bgColor = useColorModeValue("white", "muted.800");
     const pressedColor = useColorModeValue("muted.100", "muted.800");
@@ -132,4 +132,4 @@ const CommunityItem = memo(
   }
 );
 
-export default CommunityItem;
+export default CommunityListItem;

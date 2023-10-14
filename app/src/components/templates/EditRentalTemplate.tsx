@@ -526,7 +526,7 @@ const EditRentalTemplate = ({
             })}
           >
             <Text bold color="white" fontSize="md">
-              {t("create")}
+              {t("save")}
             </Text>
           </Button>
         </Box>

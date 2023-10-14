@@ -24,6 +24,10 @@ const postNotification = async (notification: Notification["Insert"]) => {
 };
 
 const updateNotification = async (notification: Notification["Update"]) => {
+  if (!notification.notificationId) {
+    return;
+  }
+  
   const { data, error } = await supabase
     .from("notification")
     .update(notification)

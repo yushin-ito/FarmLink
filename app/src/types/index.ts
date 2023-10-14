@@ -6,6 +6,8 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Database } from "./schema";
 
+export type Scene = "near" | "newest" | "popular";
+
 export type Rate = "year" | "month" | "week" | "day" | "once";
 
 export type Category =
@@ -16,6 +18,12 @@ export type Category =
   | "fruit"
   | "fertilizer"
   | "disease";
+
+export type Region = {
+  regionId: number;
+  latitude: number;
+  longitude: number;
+};
 
 export type UseQueryResult<T1, T2> = {
   onSuccess?: (response: T1) => void;
@@ -64,10 +72,12 @@ export type MapStackParamList = {
     type: "farm" | "rental";
   };
   SearchMap: { type: "farm" | "rental" };
+  RentalGrid: undefined;
   RentalDetail: { rentalId: number };
   EditRental: { rentalId: number };
   FarmDetail: { farmId: number };
   EditFarm: { farmId: number };
+  PostRental: undefined;
   ImagePreview: {
     title: string;
     imageUrl: string;

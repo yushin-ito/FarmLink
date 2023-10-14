@@ -3,7 +3,10 @@ import { supabase } from "../../../supabase";
 
 export type GetDeviceResponse = Awaited<ReturnType<typeof getDevice>>;
 
-const getDevice = async (deviceId: string | null | undefined) => {
+const getDevice = async (deviceId: string | undefined) => {
+  if (!deviceId) {
+    return null;
+  }
   const { data, error } = await supabase
     .from("device")
     .select("*")
@@ -16,7 +19,7 @@ const getDevice = async (deviceId: string | null | undefined) => {
   return data;
 };
 
-export const useQueryDevice = (deviceId: string | null | undefined) =>
+export const useQueryDevice = (deviceId: string | undefined) =>
   useQuery({
     queryKey: ["device", deviceId?.toString()],
     queryFn: async () => await getDevice(deviceId),

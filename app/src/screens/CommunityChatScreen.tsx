@@ -234,7 +234,7 @@ const CommunityChatScreen = ({
     [session]
   );
 
-  const deleteChat = useCallback(async (chatId: number | null) => {
+  const deleteChat = useCallback(async (chatId: number) => {
     await mutateAsyncDeleteChat(chatId);
   }, []);
 

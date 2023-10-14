@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import EditFarmTemplate from "../components/templates/EditFarmTemplate";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
@@ -8,10 +8,7 @@ import { useUpdateFarm } from "../hooks/farm/mutate";
 import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
-import {
-  useQueryFarm,
-  useQueryFarms,
-} from "../hooks/farm/query";
+import { useQueryFarm, useInfiniteQueryFarms } from "../hooks/farm/query";
 import useLocation from "../hooks/sdk/useLocation";
 import { MapStackParamList, MapStackScreenProps } from "../types";
 
@@ -21,8 +18,35 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   const { params } = useRoute<RouteProp<MapStackParamList, "EditFarm">>();
   const { data: farm } = useQueryFarm(params.farmId);
   const { session } = useAuth();
-  const { refetch } = useQueryFarms(session?.user.id);
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
+
+  const { position, getCurrentPosition, address, getAddress } = useLocation({
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestGPS")}
+        />
+      );
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+  const { refetch } = useInfiniteQueryFarms(session?.user.id, position?.coords);
+
+  useEffect(() => {
+    getCurrentPosition();
+  }, []);
 
   const { mutateAsync: mutateAsyncUpdateFarm, isLoading: isLoadingUpdateFarm } =
     useUpdateFarm({
@@ -67,32 +91,6 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
     },
   });
 
-  const {
-    address,
-    getAddress,
-  } = useLocation({
-    onDisable: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequestGPS")}
-        />
-      );
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
-
   const searchDevice = useCallback(async (query: string) => {
     if (query === "") {
       setSearchResult(undefined);
@@ -108,18 +106,17 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       description: string,
       privated: boolean
     ) => {
-      if (session && farm) {
+      if (farm) {
         await mutateAsyncUpdateFarm({
           farmId: farm.farmId,
           name,
           deviceId,
           description,
-          ownerId: session.user.id,
           privated,
         });
       }
     },
-    [session, farm]
+    [farm]
   );
 
   const goBackNavigationHandler = useCallback(() => {

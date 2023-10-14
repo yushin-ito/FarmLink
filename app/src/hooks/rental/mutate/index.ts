@@ -20,6 +20,9 @@ const postRental = async (rental: Rental["Insert"]) => {
 };
 
 const updateRental = async (rental: Rental["Update"]) => {
+  if (!rental.rentalId) {
+    return;
+  }
   const { data, error } = await supabase
     .from("rental")
     .update(rental)

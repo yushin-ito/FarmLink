@@ -25,7 +25,7 @@ const SignInScreen = () => {
   const { t } = useTranslation("auth");
   const navigation = useNavigation<SignInNavigationProp>();
 
-  const searchUser = useCallback(async (userId: string | undefined) => {
+  const searchUser = useCallback(async (userId: string) => {
     const { data } = await supabase.from("user").select().eq("userId", userId);
     return data;
   }, []);

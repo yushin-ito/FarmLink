@@ -40,7 +40,7 @@ type ChatTemplateProps = {
   onSend: (message: string) => Promise<void>;
   leaveRoom?: () => Promise<void>;
   deleteRoom: () => Promise<void>;
-  deleteChat: (chatId: number | null) => Promise<void>;
+  deleteChat: (chatId: number) => Promise<void>;
   deleteImage?: () => Promise<void>;
   pickIconImageByCamera?: () => Promise<void>;
   pickIconImageByLibrary?: () => Promise<void>;
@@ -118,7 +118,7 @@ const ChatTemplate = ({
               },
               {
                 text: t("chat:delete"),
-                onPress: () => deleteChat(chatId),
+                onPress: () => chatId && deleteChat(chatId),
                 style: "destructive",
               },
             ])

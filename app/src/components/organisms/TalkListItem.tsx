@@ -15,15 +15,15 @@ import Avatar from "../molecules/Avatar";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { getTimeDistance } from "../../functions";
 
-type TalkItemProps = {
+type TalkListItemProps = {
   item: GetTalksResponse[number];
   locale: "en" | "ja" | null;
   onPress: () => void;
   onPressRight: () => void;
 };
 
-const TalkItem = memo(
-  ({ item, locale, onPressRight, onPress }: TalkItemProps) => {
+const TalkListItem = memo(
+  ({ item, locale, onPressRight, onPress }: TalkListItemProps) => {
     const { t } = useTranslation("talk");
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
@@ -115,4 +115,4 @@ const TalkItem = memo(
   }
 );
 
-export default TalkItem;
+export default TalkListItem;
