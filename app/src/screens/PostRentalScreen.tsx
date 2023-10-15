@@ -166,19 +166,21 @@ const PostRentalScreen = ({
             return data.publicUrl;
           })
         );
+        const longitude = 136.580984474311 + Math.random() * 0.001;
+        const latitude = 34.8413610099798 + Math.random() * 0.001;
         await mutateAsyncPostRental({
           name,
           description,
           ownerId: session.user.id,
-          longitude: position.longitude,
-          latitude: position.latitude,
+          longitude: longitude,
+          latitude: latitude,
           fee,
           area,
           equipment,
           imageUrls: publicUrls,
           privated: false,
           rate,
-          location: `POINT(${position.longitude} ${position.latitude})`,
+          location: `POINT(${longitude} ${latitude})`,
         });
       }
     },

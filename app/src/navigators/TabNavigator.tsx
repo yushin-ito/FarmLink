@@ -93,7 +93,6 @@ const TabNavigator = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="FarmNavigator"
       screenOptions={({ route }) => ({
         tabHideOnKeyboard: true,
         tabBarStyle: {
