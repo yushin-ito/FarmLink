@@ -5,7 +5,17 @@
     "error": "エラーが発生しました",
     "permitRequestSave": "画像の保存を許可してください",
     "saved": "保存しました",
-    "deleteImage": "画像の送信を取り消しました"
+    "deleteImage": "画像の送信を取り消しました",
+    "rental": "農地の貸し借りをサポート",
+    "rentalText": "農業を始めるための土地を見つけよう",
+    "community": "情報共有できるコミュニティ",
+    "communityText": "仲間と会話して農業の不安を解消しよう",
+    "farm": "自分の農園を仲間に共有",
+    "farmText": "どんな農業しているのか知ってみよう",
+    "monitor": "IoTカメラでモニタリング",
+    "monitorText": "いつでも農園を状態が一目でわかる",
+    "start": "始める",
+    "alertVerify": "確認メールから認証を完了してください"
   },
   "auth": {
     "welcome": "FarmLinkへようこそ",

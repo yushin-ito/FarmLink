@@ -31,7 +31,7 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
     supportsTablet: true,
     bundleIdentifier: "com.farmlink.app",
     config: {
-      googleMapsApiKey: "AIzaSyAvbReJisG7M5OYNBLQiGAa0qqn9tvJLYc",
+      googleMapsApiKey: process.env.GOOGLE_MAP_API_KEY_IOS,
     },
     splash: {
       backgroundColor: "#ffffff",
@@ -55,7 +55,7 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
     ],
     config: {
       googleMaps: {
-        apiKey: "AIzaSyCbKIpAyEEBdWryYfhtBC9rV-q3p3G0aFw",
+        apiKey: process.env.GOOGLE_MAP_API_KEY_ANDROID,
       },
     },
     splash: {

@@ -103,7 +103,7 @@ const SignUpTemplate = memo(
                       <Icon
                         as={<Feather />}
                         name="user"
-                        size="4"
+                        size="5"
                         mr="2"
                         color="muted.400"
                       />
@@ -137,7 +137,7 @@ const SignUpTemplate = memo(
                       <Icon
                         as={<Feather />}
                         name="mail"
-                        size="4"
+                        size="5"
                         mr="2"
                         color="muted.400"
                       />
@@ -178,7 +178,7 @@ const SignUpTemplate = memo(
                           <Icon
                             as={<Feather />}
                             name={showPassword ? "eye" : "eye-off"}
-                            size="4"
+                            size="5"
                             color="muted.400"
                           />
                         }
@@ -259,7 +259,7 @@ const SignUpTemplate = memo(
                 <Center h="100%" position="absolute" top="3" left="3">
                   <Image
                     style={{ width: 32, height: 32 }}
-                    source={require("../../../assets/google.png")}
+                    source={require("../../../assets/provider/google.png")}
                   />
                 </Center>
                 <Text>{t("signUpWithGoogle")}</Text>
@@ -276,7 +276,7 @@ const SignUpTemplate = memo(
                 <Center h="100%" position="absolute" top="3" left="3">
                   <Image
                     style={{ width: 32, height: 32 }}
-                    source={require("../../../assets/twitter.png")}
+                    source={require("../../../assets/provider/twitter.png")}
                   />
                 </Center>
                 <Text>{t("signUpWithTwitter")}</Text>
@@ -293,7 +293,7 @@ const SignUpTemplate = memo(
                 <Center h="100%" position="absolute" top="3" left="3">
                   <Image
                     style={{ width: 32, height: 32 }}
-                    source={require("../../../assets/facebook.png")}
+                    source={require("../../../assets/provider/facebook.png")}
                   />
                 </Center>
                 <Text>{t("signUpWithFacebook")}</Text>

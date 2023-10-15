@@ -5,7 +5,17 @@
     "error": "An error occurred",
     "permitRequestSave": "Please grant save permission",
     "saved": "Saved in.",
-    "deleteImage": "Image has been canceled."
+    "deleteImage": "Image has been canceled.",
+    "rental": "Support for lease and rental",
+    "rentalText": "Let's find land to start farming.",
+    "community": "Community to share information",
+    "communityText": "Let's talk with friend to relieve concern.",
+    "farm": "Share farm with friends",
+    "farmText": "Let's find what kind of farm.",
+    "monitor": "Monitor farm by IoT camera",
+    "monitorText": "See state of farm at glance.",
+    "start": "Start",
+    "alertVerify": "Authentication is not completed."
   },
   "auth": {
     "welcome": "Welcome!",

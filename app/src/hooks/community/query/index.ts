@@ -67,7 +67,7 @@ export const useInfiniteQueryCommunities = (
 ) => {
   const PAGE_COUNT = 15;
   const query = useInfiniteQuery<GetCommunitiesResponse, PostgrestError>({
-    queryKey: ["community", category],
+    queryKey: ["community", category, userId],
     queryFn: async ({ pageParam = 0 }) =>
       await getCommunities(
         category,

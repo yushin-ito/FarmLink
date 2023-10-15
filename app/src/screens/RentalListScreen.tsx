@@ -78,11 +78,11 @@ const RentalListScreen = ({
   const deleteRental = useCallback(async (rentalId: number) => {
     await mutateAsyncDeleteRental(rentalId);
   }, []);
-  
+
   const mapNavigationHandler = useCallback(
     async (regionId: number, latitude: number, longitude: number) => {
       navigation.goBack();
-      await wait(0.1); // 800ms
+      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "MapNavigator",
         params: {

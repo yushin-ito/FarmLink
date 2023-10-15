@@ -290,7 +290,7 @@ const EditFarmTemplate = ({
                         {farm.name}
                       </Text>
                       <Image
-                        source={require("../../../assets/pin-brand.png")}
+                        source={require("../../../assets/app/pin-brand.png")}
                         style={{ width: 16, height: 16 }}
                         contentFit="contain"
                       />

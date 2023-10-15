@@ -1,13 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ColorMode, NativeBaseProvider, StorageManager } from "native-base";
+import {
+  ColorMode,
+  NativeBaseProvider,
+  StorageManager,
+  useToast,
+} from "native-base";
 import { AuthProvider } from "./contexts/AuthProvider";
 import { QueryCache, QueryClient, QueryClientProvider } from "react-query";
 import "./i18n";
-import { Alert, Appearance, LogBox } from "react-native";
+import { Appearance, LogBox } from "react-native";
 import RootComponent from "./components/RootComponent";
 import { extendTheme } from "native-base";
 import { useTranslation } from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { showAlert } from "./functions";
+import Alert from "./components/molecules/Alert";
 
 LogBox.ignoreAllLogs();
 
@@ -44,6 +51,7 @@ const useColorScheme = (delay = 250) => {
 
 const App = () => {
   const { t } = useTranslation("common");
+  const toast = useToast();
 
   const theme = extendTheme({
     colors: {
@@ -80,20 +88,27 @@ const App = () => {
     queryCache: new QueryCache({
       onError: (_error, query) => {
         if (query.state.data !== undefined) {
-          Alert.alert(t("fetchError"));
+          showAlert(
+            toast,
+            <Alert
+              status="error"
+              onPressCloseButton={() => toast.closeAll()}
+              text={t("fetchError")}
+            />
+          );
         }
       },
     }),
   });
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <NativeBaseProvider theme={theme} colorModeManager={colorModeManager}>
+    <NativeBaseProvider theme={theme} colorModeManager={colorModeManager}>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <RootComponent />
         </AuthProvider>
-      </NativeBaseProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </NativeBaseProvider>
   );
 };
 

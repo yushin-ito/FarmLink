@@ -1,34 +1,33 @@
 import React, { useCallback } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
-import { AuthStackParamList } from "../types";
 import {
   useSignInWithEmail,
   useSignInWithProvider,
 } from "../hooks/auth/mutate";
 import SignIn from "../components/templates/SignInTemplate";
-import { showAlert } from "../functions";
+import { showAlert, wait } from "../functions";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
-import { usePostUser } from "../hooks/user/mutate";
-import { supabase } from "../supabase";
+import { usePostUser, useSearchUser } from "../hooks/user/mutate";
+import { AuthStackScreenProps } from "../types";
 
-type SignInNavigationProp = NativeStackNavigationProp<
-  AuthStackParamList,
-  "SignIn"
->;
-
-const SignInScreen = () => {
+const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
   const toast = useToast();
   const { t } = useTranslation("auth");
-  const navigation = useNavigation<SignInNavigationProp>();
 
-  const searchUser = useCallback(async (userId: string) => {
-    const { data } = await supabase.from("user").select().eq("userId", userId);
-    return data;
-  }, []);
+  const { mutateAsync: mutateAsyncSearchUser, isLoading: isLoadingSearchUser } =
+    useSearchUser({
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const {
     mutateAsync: mutateAsyncSignInWithEmail,
@@ -57,22 +56,26 @@ const SignInScreen = () => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostUser } = usePostUser({
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncPostUser, isLoading: isLoadingPostUser } =
+    usePostUser({
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const { mutateAsync: mutateAsyncSignInWithProvider } = useSignInWithProvider({
     onSuccess: async (data) => {
-      if (data?.user && !(await searchUser(data.user.id))?.length) {
+      const user = await mutateAsyncSearchUser(data?.user?.id);
+      if (data?.user && !user) {
+        navigation.navigate("Walkthrough");
+        await wait(0.1);
         mutateAsyncPostUser({
           userId: data.user.id,
           name: data.user.user_metadata.name,
@@ -122,7 +125,9 @@ const SignInScreen = () => {
 
   return (
     <SignIn
-      isLoading={isLoadingSignInWithEmail}
+      isLoading={
+        isLoadingSignInWithEmail || isLoadingPostUser || isLoadingSearchUser
+      }
       signInWithEmail={signInWithEmail}
       signInWithGoogle={signInWithGoogle}
       signInWithTwitter={signInWithTwitter}

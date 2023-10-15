@@ -32,6 +32,6 @@ const getNotifications = async (userId: string | undefined) => {
 
 export const useQueryNotifications = (userId: string | undefined) =>
   useQuery({
-    queryKey: "notification",
+    queryKey: ["notification", userId],
     queryFn: async () => await getNotifications(userId),
   });

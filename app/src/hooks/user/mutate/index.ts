@@ -6,6 +6,7 @@ import { decode } from "base64-arraybuffer";
 
 export type PostUserResponse = Awaited<ReturnType<typeof postUser>>;
 export type PostAvatarResponse = Awaited<ReturnType<typeof postAvatar>>;
+export type SearchUserResponse = Awaited<ReturnType<typeof searchUser>>;
 export type SearchUsersResponse = Awaited<ReturnType<typeof searchUsers>>;
 
 const postUser = async (user: User["Insert"]) => {
@@ -24,6 +25,22 @@ const postAvatar = async (base64: string) => {
       contentType: "image",
       upsert: true,
     });
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const searchUser = async (userId: string | undefined) => {
+  if (!userId) {
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("user")
+    .select()
+    .eq("userId", userId)
+    .single();
   if (error) {
     throw error;
   }
@@ -57,6 +74,16 @@ export const usePostAvatar = ({
 }: UseMutationResult<PostAvatarResponse, Error>) =>
   useMutation({
     mutationFn: postAvatar,
+    onSuccess,
+    onError,
+  });
+
+export const useSearchUser = ({
+  onSuccess,
+  onError,
+}: UseMutationResult<SearchUserResponse, PostgrestError>) =>
+  useMutation({
+    mutationFn: searchUser,
     onSuccess,
     onError,
   });

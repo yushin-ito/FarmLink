@@ -163,7 +163,7 @@ const TabNavigator = () => {
           tabBarButton: ({ onPress }) => (
             <Fab top="-30" onPress={onPress}>
               <Image
-                source={require("../../assets/seedling.png")}
+                source={require("../../assets/app/seedling.png")}
                 style={{ width: 40, height: 40 }}
               />
             </Fab>

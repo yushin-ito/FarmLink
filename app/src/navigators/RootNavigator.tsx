@@ -8,6 +8,7 @@ import AuthNavigator from "./AuthNavigator";
 import { Center, Spinner } from "native-base";
 
 import { RootStackParamList } from "../types";
+import WalkthroughScreen from "../screens/WalkthroughScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,12 +24,15 @@ const RootNavigator = () => {
   }
 
   return (
-    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+    <RootStack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    >
       {session && session?.user.id ? (
         <RootStack.Screen name="TabNavigator" component={TabNavigator} />
       ) : (
         <RootStack.Screen name="AuthNavigator" component={AuthNavigator} />
       )}
+      <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
     </RootStack.Navigator>
   );
 };

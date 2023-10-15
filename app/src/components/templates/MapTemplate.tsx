@@ -158,7 +158,7 @@ const MapTemplate = ({
                   {t("current")}
                 </Text>
                 <Image
-                  source={require("../../../assets/pin-red.png")}
+                  source={require("../../../assets/app/pin-red.png")}
                   style={{ width: 20, height: 20 }}
                   contentFit="contain"
                 />
@@ -199,7 +199,7 @@ const MapTemplate = ({
                         </Text>
                       )}
                       <Image
-                        source={require("../../../assets/pin-brand.png")}
+                        source={require("../../../assets/app/pin-brand.png")}
                         style={{ width: 20, height: 20 }}
                         contentFit="contain"
                       />
@@ -244,7 +244,7 @@ const MapTemplate = ({
                         </Text>
                       )}
                       <Image
-                        source={require("../../../assets/pin-brand.png")}
+                        source={require("../../../assets/app/pin-brand.png")}
                         style={{ width: 20, height: 20 }}
                         contentFit="contain"
                       />

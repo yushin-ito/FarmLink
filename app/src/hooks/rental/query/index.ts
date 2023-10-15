@@ -102,7 +102,7 @@ export const useInfiniteQueryRentals = (
 ) => {
   const PAGE_COUNT = 30;
   const query = useInfiniteQuery<GetRentalsResponse, PostgrestError>({
-    queryKey: ["rental", position, scene],
+    queryKey: ["rental", scene, userId, position],
     queryFn: async ({ pageParam = 0 }) =>
       await getRentals(
         scene,

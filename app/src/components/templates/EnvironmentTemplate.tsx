@@ -1,5 +1,6 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
+import { Locale } from "../../types";
 
 import {
   Box,
@@ -15,12 +16,10 @@ import {
 import { useTranslation } from "react-i18next";
 import { ColorSchemeName } from "react-native";
 
-type Locale = "ja" | "en" | null;
-
 type EnvironmentTemplateProps = {
-  locale: Locale;
+  locale: Locale | null;
   theme: ColorSchemeName;
-  changeLanguage: (language: Locale) => Promise<void>;
+  changeLanguage: (language: Locale | null) => Promise<void>;
   changeTheme: (theme: ColorSchemeName) => Promise<void>;
   goBackNavigationHandler: () => void;
 };

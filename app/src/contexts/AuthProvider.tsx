@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { supabase } from "../supabase";
-
+import { Locale } from "../types";
 import { Session } from "@supabase/supabase-js";
 import * as Linking from "expo-linking";
 import { getSessionFromLink } from "../functions";
@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type AuthContextProps = {
   session: Session | null;
-  locale: "en" | "ja" | null;
+  locale: Locale | null;
   error: Error | undefined;
   isLoading: boolean;
 };
@@ -27,7 +27,7 @@ export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(null);
-  const [locale, setLocale] = useState<"en" | "ja" | null>(null);
+  const [locale, setLocale] = useState<Locale | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>();
 

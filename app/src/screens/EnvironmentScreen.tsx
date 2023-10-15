@@ -5,15 +5,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTranslation } from "react-i18next";
 import { ColorSchemeName, NativeModules, Platform } from "react-native";
 import { useColorMode } from "native-base";
-
-type Locale = "ja" | "en" | null;
+import { Locale } from "../types";
 
 const EnvironmentScreen = () => {
   const { i18n } = useTranslation("common");
   const navigation = useNavigation();
   const { setColorMode } = useColorMode();
   const [theme, setTheme] = useState<ColorSchemeName>(null);
-  const [locale, setLocale] = useState<Locale>(null);
+  const [locale, setLocale] = useState<Locale | null>(null);
 
   const getEnvironment = useCallback(async () => {
     const locale = await AsyncStorage.getItem("@locale");
@@ -26,7 +25,7 @@ const EnvironmentScreen = () => {
     getEnvironment();
   }, []);
 
-  const changeLanguage = useCallback(async (language: Locale) => {
+  const changeLanguage = useCallback(async (language: Locale | null) => {
     if (language) {
       await AsyncStorage.setItem("@locale", language);
       i18n.changeLanguage(language);

@@ -138,6 +138,7 @@ const SignInTemplate = memo(
                                 name={showPassword ? "eye" : "eye-off"}
                               />
                             }
+                            size="5"
                             color="muted.400"
                           />
                         }
@@ -210,7 +211,7 @@ const SignInTemplate = memo(
                 <Center h="100%" position="absolute" top="3" left="3">
                   <Image
                     style={{ width: 32, height: 32 }}
-                    source={require("../../../assets/google.png")}
+                    source={require("../../../assets/provider/google.png")}
                   />
                 </Center>
                 <Text>{t("signInWithGoogle")}</Text>
@@ -227,7 +228,7 @@ const SignInTemplate = memo(
                 <Center h="100%" position="absolute" top="3" left="3">
                   <Image
                     style={{ width: 32, height: 32 }}
-                    source={require("../../../assets/twitter.png")}
+                    source={require("../../../assets/provider/twitter.png")}
                   />
                 </Center>
                 <Text>{t("signInWithTwitter")}</Text>
@@ -244,7 +245,7 @@ const SignInTemplate = memo(
                 <Center h="100%" position="absolute" top="3" left="3">
                   <Image
                     style={{ width: 32, height: 32 }}
-                    source={require("../../../assets/facebook.png")}
+                    source={require("../../../assets/provider/facebook.png")}
                   />
                 </Center>
                 <Text>{t("signInWithFacebook")}</Text>

@@ -77,7 +77,7 @@ export const useInfiniteQueryFarms = (
 ) => {
   const PAGE_COUNT = 30;
   const query = useInfiniteQuery<GetFarmsResponse, PostgrestError>({
-    queryKey: ["farm", position],
+    queryKey: ["farm", userId, position],
     queryFn: async ({ pageParam = 0 }) =>
       await getFarms(userId, position, pageParam, pageParam + PAGE_COUNT - 1),
     getNextPageParam: (lastPage, pages) => {

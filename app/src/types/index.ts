@@ -6,6 +6,8 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Database } from "./schema";
 
+export type Locale = "en" | "ja";
+
 export type Scene = "near" | "newest" | "popular";
 
 export type Rate = "year" | "month" | "week" | "day" | "once";
@@ -48,6 +50,7 @@ export type Notification = Database["public"]["Tables"]["notification"];
 export type RootStackParamList = {
   AuthNavigator: NavigatorScreenParams<AuthStackParamList> | undefined;
   TabNavigator: NavigatorScreenParams<TabParamList> | undefined;
+  Walkthrough: undefined;
 };
 
 export type AuthStackParamList = {
@@ -129,6 +132,11 @@ export type SettingStackParamList = {
   Notification: undefined;
   Environment: undefined;
 };
+
+export type AuthStackScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<AuthStackParamList>,
+  NativeStackScreenProps<RootStackParamList>
+>;
 
 export type MapStackScreenProps<Screen extends keyof MapStackParamList> =
   CompositeScreenProps<

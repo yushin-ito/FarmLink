@@ -55,9 +55,8 @@ const signInWithProvider = async (provider: string) => {
   } else if (authResponse.type === "error") {
     throw authResponse.error;
   } else {
-    console.error(authResponse);
+    return null;
   }
-  return null;
 };
 
 const signOut = async () => {

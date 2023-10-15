@@ -54,7 +54,7 @@ const PostRentalScreen = ({
       onSuccess: async (data) => {
         navigation.goBack();
         if (position) {
-          await wait(0.1); // 800ms
+          await wait(0.1);
           navigation.navigate("TabNavigator", {
             screen: "MapNavigator",
             params: {
