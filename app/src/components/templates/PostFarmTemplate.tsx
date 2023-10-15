@@ -74,7 +74,6 @@ const PostFarmTemplate = ({
 
   useEffect(() => {
     if (mapRef.current && position && ready) {
-      console.log("did");
       mapRef.current.animateToRegion({
         latitude: position.latitude,
         longitude: position.longitude,

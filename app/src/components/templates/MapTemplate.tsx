@@ -63,8 +63,11 @@ const MapTemplate = ({
   rentalGridNavigationHandler,
 }: MapTemplateProps) => {
   const { t } = useTranslation("map");
-  const mapRef = useRef<MapView>(null);
+  const mapColor = useColorModeValue("light", "dark");
   const bgColor = useColorModeValue("white", "muted.800");
+  const textColor = useColorModeValue("black", "white");
+
+  const mapRef = useRef<MapView>(null);
 
   const getOverlap = useCallback(
     (a: LatLng, b: LatLng) =>
@@ -122,7 +125,7 @@ const MapTemplate = ({
     <Box flex={1}>
       <MapView
         ref={mapRef}
-        userInterfaceStyle={useColorModeValue("light", "dark")}
+        userInterfaceStyle={mapColor}
         showsCompass={false}
         initialRegion={{
           latitude: 35,
@@ -251,7 +254,7 @@ const MapTemplate = ({
             )}
       </MapView>
       <VStack w="80%" position="absolute" top="16" alignSelf="center" space="3">
-        <Box shadow="1" rounded="lg">
+        <Box shadow="1" bg={bgColor} rounded="lg">
           <SearchBar
             isReadOnly
             bg={bgColor}
@@ -281,13 +284,7 @@ const MapTemplate = ({
                 shadow="1"
                 alignItems="center"
               >
-                <Text
-                  color={
-                    type === "farm"
-                      ? "white"
-                      : useColorModeValue("black", "white")
-                  }
-                >
+                <Text color={type === "farm" ? "white" : textColor}>
                   {t("farm")}
                 </Text>
               </Box>
@@ -312,13 +309,7 @@ const MapTemplate = ({
                 shadow="1"
                 alignItems="center"
               >
-                <Text
-                  color={
-                    type === "rental"
-                      ? "white"
-                      : useColorModeValue("black", "white")
-                  }
-                >
+                <Text color={type === "rental" ? "white" : textColor}>
                   {t("rental")}
                 </Text>
               </Box>

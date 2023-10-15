@@ -1,7 +1,5 @@
 {
-  "name": "farmlink",
-  "version": "1.0.0",
-  "main": "index.js",
+  "license": "MIT",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -9,6 +7,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/config": "~8.0.0",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.6",
@@ -16,6 +15,7 @@
     "@supabase/supabase-js": "^2.22.0",
     "base64-arraybuffer": "^1.0.2",
     "date-fns": "^2.30.0",
+    "dotenv": "^16.3.1",
     "expo": "~48.0.15",
     "expo-auth-session": "~4.0.3",
     "expo-constants": "~14.2.1",
@@ -32,6 +32,7 @@
     "expo-secure-store": "~12.1.1",
     "expo-sharing": "~11.2.2",
     "expo-status-bar": "~1.4.4",
+    "expo-updates": "~0.16.4",
     "i18next": "^22.4.15",
     "native-base": "^3.4.28",
     "react": "18.2.0",
@@ -48,8 +49,7 @@
     "react-native-svg": "13.4.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-url-polyfill": "^1.3.0",
-    "react-query": "^3.39.3",
-    "expo-updates": "~0.16.4"
+    "react-query": "^3.39.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

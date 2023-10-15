@@ -3,14 +3,20 @@
     "version": ">= 5.4.0"
   },
   "build": {
+    "production": {},
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
+      }
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal"
-    },
-    "preview": {
-      "distribution": "internal"
-    },
-    "production": {}
+    }
   },
   "submit": {
     "production": {}
