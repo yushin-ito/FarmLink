@@ -62,16 +62,20 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     setIsRefetchingFarms(false);
   }, []);
 
-  const deleteFarm = useCallback(async (farmId: number) => {
-    await mutateAsyncDeleteFarm(farmId);
-  }, []);
-
   const privateFarm = useCallback(async (farmId: number) => {
     await mutateAsyncUpdateFarm({ farmId, privated: true });
   }, []);
 
   const publicFarm = useCallback(async (farmId: number) => {
     await mutateAsyncUpdateFarm({ farmId, privated: false });
+  }, []);
+
+  const postFarmNavigationHandler = useCallback(() => {
+    navigation.navigate("PostFarm");
+  }, []);
+
+  const deleteFarm = useCallback(async (farmId: number) => {
+    await mutateAsyncDeleteFarm(farmId);
   }, []);
 
   const mapNavigationHandler = useCallback(
@@ -86,10 +90,6 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     },
     []
   );
-
-  const postFarmNavigationHandler = useCallback(() => {
-    navigation.navigate("PostFarm");
-  }, []);
 
   const settingNavigationHandler = useCallback(() => {
     navigation.navigate("TabNavigator", {

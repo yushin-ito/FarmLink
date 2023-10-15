@@ -69,7 +69,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     refetch: refetchRentals,
     fetchNextPage: fetchNextPageRentals,
     isLoading: isLoadingRentals,
-  } = useInfiniteQueryRentals("near", session?.user.id, position?.coords);
+  } = useInfiniteQueryRentals("near", session?.user.id, position);
 
   useEffect(() => {
     const channel = supabase
@@ -97,7 +97,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     refetch: refetchFarms,
     fetchNextPage: fetchNextPageFams,
     isLoading: isLoadingFarms,
-  } = useInfiniteQueryFarms(session?.user.id, position?.coords);
+  } = useInfiniteQueryFarms(session?.user.id, position);
 
   useEffect(() => {
     const channel = supabase

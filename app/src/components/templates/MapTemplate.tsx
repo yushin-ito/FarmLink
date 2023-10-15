@@ -19,7 +19,6 @@ import MapView, { LatLng, Marker } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { GetRentalsResponse } from "../../hooks/rental/query";
-import { LocationObject } from "expo-location";
 import { useTranslation } from "react-i18next";
 import FarmPreviewList from "../organisms/FarmPreviewList";
 import RentalPreviewList from "../organisms/RentalPreviewList";
@@ -34,7 +33,7 @@ type MapTemplateProps = {
   setTouch: Dispatch<SetStateAction<boolean>>;
   region: Region | null;
   setRegion: Dispatch<SetStateAction<Region | null>>;
-  position: LocationObject | undefined;
+  position: LatLng | undefined;
   user: GetUserResponse | null | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
@@ -66,6 +65,13 @@ const MapTemplate = ({
   const { t } = useTranslation("map");
   const mapRef = useRef<MapView>(null);
   const bgColor = useColorModeValue("white", "muted.800");
+
+  const getOverlap = useCallback(
+    (a: LatLng, b: LatLng) =>
+      Math.floor(a.latitude * 1000000) === Math.floor(b.latitude * 1000000) ||
+      Math.floor(a.longitude * 1000000) === Math.floor(b.longitude * 1000000),
+    []
+  );
 
   const animateToRegion = useCallback(
     ({ latitude, longitude }: LatLng) => {
@@ -128,18 +134,22 @@ const MapTemplate = ({
       >
         {position &&
           !farms?.some(
-            (item) =>
+            ({ latitude, longitude }) =>
               type === "farm" &&
-              Math.floor(position.coords.latitude * 10000) ===
-                Math.floor(item.latitude * 10000)
+              getOverlap(position, {
+                latitude,
+                longitude,
+              })
           ) &&
           !rentals?.some(
-            (item) =>
+            ({ latitude, longitude }) =>
               type === "rental" &&
-              Math.floor(position.coords.latitude * 10000) ===
-                Math.floor(item.latitude * 10000)
+              getOverlap(position, {
+                latitude,
+                longitude,
+              })
           ) && (
-            <Marker coordinate={position.coords}>
+            <Marker coordinate={position}>
               <VStack alignItems="center" maxW="24">
                 <Text bold fontSize="xs" numberOfLines={1} ellipsizeMode="tail">
                   {t("current")}
@@ -153,76 +163,92 @@ const MapTemplate = ({
             </Marker>
           )}
         {type === "farm"
-          ? farms?.map(({ farmId, latitude, longitude, name }) => (
-              <Marker
-                key={farmId}
-                coordinate={{
-                  latitude,
-                  longitude,
-                }}
-                onPress={() => {
-                  setTouch(false);
-                  region?.regionId === farmId
-                    ? farmDetailNavigationHandler(farmId)
-                    : setRegion({ regionId: farmId, latitude, longitude });
-                }}
-              >
-                <VStack alignItems="center" maxW="24">
-                  {farmId === region?.regionId && (
-                    <Text
-                      bold
-                      fontSize="xs"
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                    >
-                      {name}
-                    </Text>
-                  )}
-                  <Image
-                    source={require("../../../assets/pin-brand.png")}
-                    style={{ width: 20, height: 20 }}
-                    contentFit="contain"
-                  />
-                </VStack>
-              </Marker>
-            ))
-          : rentals?.map(({ rentalId, latitude, longitude, name }) => (
-              <Marker
-                key={rentalId}
-                coordinate={{
-                  latitude,
-                  longitude,
-                }}
-                onPress={() => {
-                  setTouch(false);
-                  region?.regionId === rentalId
-                    ? rentalDetailNavigationHandler(rentalId)
-                    : setRegion({
-                        regionId: rentalId,
-                        latitude,
-                        longitude,
-                      });
-                }}
-              >
-                <VStack alignItems="center" maxW="24">
-                  {rentalId === region?.regionId && (
-                    <Text
-                      bold
-                      fontSize="xs"
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                    >
-                      {name}
-                    </Text>
-                  )}
-                  <Image
-                    source={require("../../../assets/pin-brand.png")}
-                    style={{ width: 20, height: 20 }}
-                    contentFit="contain"
-                  />
-                </VStack>
-              </Marker>
-            ))}
+          ? farms?.map(
+              ({ farmId, latitude, longitude, name }) =>
+                region &&
+                (region.regionId === farmId ||
+                  !getOverlap(
+                    { latitude: region.latitude, longitude: region.longitude },
+                    { latitude, longitude }
+                  )) && (
+                  <Marker
+                    key={farmId}
+                    coordinate={{
+                      latitude,
+                      longitude,
+                    }}
+                    onPress={() => {
+                      setTouch(false);
+                      region?.regionId === farmId
+                        ? farmDetailNavigationHandler(farmId)
+                        : setRegion({ regionId: farmId, latitude, longitude });
+                    }}
+                  >
+                    <VStack alignItems="center" maxW="24">
+                      {farmId === region?.regionId && (
+                        <Text
+                          bold
+                          fontSize="xs"
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {name}
+                        </Text>
+                      )}
+                      <Image
+                        source={require("../../../assets/pin-brand.png")}
+                        style={{ width: 20, height: 20 }}
+                        contentFit="contain"
+                      />
+                    </VStack>
+                  </Marker>
+                )
+            )
+          : rentals?.map(
+              ({ rentalId, latitude, longitude, name }) =>
+                region &&
+                (region.regionId === rentalId ||
+                  !getOverlap(
+                    { latitude: region.latitude, longitude: region.longitude },
+                    { latitude, longitude }
+                  )) && (
+                  <Marker
+                    key={rentalId}
+                    coordinate={{
+                      latitude,
+                      longitude,
+                    }}
+                    onPress={() => {
+                      setTouch(false);
+                      region.regionId === rentalId
+                        ? rentalDetailNavigationHandler(rentalId)
+                        : setRegion({
+                            regionId: rentalId,
+                            latitude,
+                            longitude,
+                          });
+                    }}
+                  >
+                    <VStack alignItems="center" maxW="24">
+                      {rentalId === region.regionId && (
+                        <Text
+                          bold
+                          fontSize="xs"
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {name}
+                        </Text>
+                      )}
+                      <Image
+                        source={require("../../../assets/pin-brand.png")}
+                        style={{ width: 20, height: 20 }}
+                        contentFit="contain"
+                      />
+                    </VStack>
+                  </Marker>
+                )
+            )}
       </MapView>
       <VStack w="80%" position="absolute" top="16" alignSelf="center" space="3">
         <Box shadow="1" rounded="lg">

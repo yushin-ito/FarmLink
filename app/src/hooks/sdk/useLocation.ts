@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import * as Location from "expo-location";
+import { LatLng } from "react-native-maps";
 
 type UseLocationType = {
   onError?: (error: Error) => void;
@@ -7,7 +8,7 @@ type UseLocationType = {
 };
 
 const useLocation = ({ onError, onDisable }: UseLocationType) => {
-  const [position, setPosition] = useState<Location.LocationObject>();
+  const [position, setPosition] = useState<LatLng>();
   const [address, setAddress] = useState<Location.LocationGeocodedAddress>();
   const [geocode, setGeocode] = useState<Location.LocationGeocodedLocation>();
   const [isLoadingGeocode, setIsLoadingGeocode] = useState(false);
@@ -42,11 +43,11 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
         onDisable && onDisable();
         return;
       }
-      const position = await Location.getCurrentPositionAsync({
+      const { coords } = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Lowest,
       });
 
-      setPosition(position);
+      setPosition({ latitude: coords.latitude, longitude: coords.longitude });
     } catch (error) {
       if (error instanceof Error) {
         onError && onError(error);

@@ -3,7 +3,11 @@ import EditRentalTemplate from "../components/templates/EditRentalTemplate";
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
-import { useUpdateRental, usePostRentalImage } from "../hooks/rental/mutate";
+import {
+  useUpdateRental,
+  usePostRentalImage,
+  useDeleteRental,
+} from "../hooks/rental/mutate";
 import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
@@ -56,6 +60,28 @@ const EditRentalScreen = ({
     },
   });
 
+  const {
+    mutateAsync: mutateAsyncDeleteRental,
+    isLoading: isLoadingDeleteRental,
+  } = useDeleteRental({
+    onSuccess: async () => {
+      navigation.goBack();
+      navigation.goBack();
+      await refetchRental();
+    },
+    onError: () => {
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
   const { address, getAddress } = useLocation({
     onDisable: () => {
       navigation.goBack();
@@ -86,6 +112,7 @@ const EditRentalScreen = ({
     isLoading: isLoadingPostRentalImage,
   } = usePostRentalImage({
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -177,6 +204,10 @@ const EditRentalScreen = ({
     [images]
   );
 
+  const deleteRental = useCallback(async () => {
+    await mutateAsyncDeleteRental(params.rentalId);
+  }, [params]);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -185,11 +216,13 @@ const EditRentalScreen = ({
     <EditRentalTemplate
       rental={rental}
       images={images}
-      isLoadingUpdateRental={isLoadingUpdateRental || isLoadingPostRentalImage}
       address={address}
       pickImageByLibrary={pickImageByLibrary}
       getAddress={getAddress}
       updateRental={updateRental}
+      deleteRental={deleteRental}
+      isLoadingUpdateRental={isLoadingUpdateRental || isLoadingPostRentalImage}
+      isLoadingDeleteRental={isLoadingDeleteRental}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

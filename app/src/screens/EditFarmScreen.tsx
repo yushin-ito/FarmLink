@@ -4,7 +4,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
-import { useUpdateFarm } from "../hooks/farm/mutate";
+import { useDeleteFarm, useUpdateFarm } from "../hooks/farm/mutate";
 import { useTranslation } from "react-i18next";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
 import { useQueryFarm } from "../hooks/farm/query";
@@ -45,8 +45,29 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       },
     });
 
+  const { mutateAsync: mutateAsyncDeleteFarm, isLoading: isLoadingDeleteFarm } =
+    useDeleteFarm({
+      onSuccess: async () => {
+        navigation.goBack();
+        navigation.goBack();
+        await refetchFarm();
+      },
+      onError: () => {
+        navigation.goBack();
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
+
   const { address, getAddress } = useLocation({
     onDisable: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -57,6 +78,7 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       );
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -73,6 +95,7 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       setSearchResult(data[0]);
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -112,6 +135,10 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
     [farm]
   );
 
+  const deleteFarm = useCallback(async () => {
+    await mutateAsyncDeleteFarm(params.farmId);
+  }, [params]);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -123,8 +150,10 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       getAddress={getAddress}
       searchResult={searchResult}
       updateFarm={updateFarm}
+      deleteFarm={deleteFarm}
       searchDevice={searchDevice}
       isLoadingUpdateFarm={isLoadingUpdateFarm}
+      isLoadingDeleteFarm={isLoadingDeleteFarm}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

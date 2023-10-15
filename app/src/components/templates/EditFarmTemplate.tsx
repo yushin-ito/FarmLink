@@ -23,6 +23,7 @@ import { SearchDeviceResponse } from "../../hooks/device/mutate";
 import { LocationGeocodedAddress } from "expo-location";
 import { GetFarmResponse } from "../../hooks/farm/query";
 import { Image } from "expo-image";
+import { Alert } from "react-native";
 
 type EditFarmTemplateProps = {
   farm: GetFarmResponse | null | undefined;
@@ -35,8 +36,10 @@ type EditFarmTemplateProps = {
     description: string,
     privated: boolean
   ) => Promise<void>;
+  deleteFarm: () => Promise<void>;
   searchDevice: (query: string) => Promise<void>;
   isLoadingUpdateFarm: boolean;
+  isLoadingDeleteFarm: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -52,8 +55,10 @@ const EditFarmTemplate = ({
   getAddress,
   searchResult,
   updateFarm,
+  deleteFarm,
   searchDevice,
   isLoadingUpdateFarm,
+  isLoadingDeleteFarm,
   goBackNavigationHandler,
 }: EditFarmTemplateProps) => {
   const { t } = useTranslation("farm");
@@ -312,26 +317,51 @@ const EditFarmTemplate = ({
               />
             </HStack>
           </VStack>
-          <Button
-            mt="16"
-            mx="10"
-            size="lg"
-            rounded="xl"
-            colorScheme="brand"
-            isLoading={isLoadingUpdateFarm}
-            onPress={handleSubmit(async (data) => {
-              await updateFarm(
-                data.name,
-                data.deviceId,
-                data.description,
-                privated
-              );
-            })}
-          >
-            <Text bold fontSize="md" color="white">
-              {t("save")}
-            </Text>
-          </Button>
+          <VStack mt="16" mx="10" space="6">
+            <Button
+              size="lg"
+              rounded="xl"
+              colorScheme="brand"
+              isLoading={isLoadingUpdateFarm}
+              onPress={handleSubmit(async (data) => {
+                await updateFarm(
+                  data.name,
+                  data.deviceId,
+                  data.description,
+                  privated
+                );
+              })}
+            >
+              <Text bold fontSize="md" color="white">
+                {t("save")}
+              </Text>
+            </Button>
+            <Button
+              size="lg"
+              rounded="xl"
+              colorScheme="brand"
+              variant="outline"
+              borderColor="brand.600"
+              isLoading={isLoadingDeleteFarm}
+              onPress={() =>
+                Alert.alert(t("deleteFarm"), t("askDeleteFarm"), [
+                  {
+                    text: t("cancel"),
+                    style: "cancel",
+                  },
+                  {
+                    text: t("delete"),
+                    onPress: async () => await deleteFarm(),
+                    style: "destructive",
+                  },
+                ])
+              }
+            >
+              <Text bold color="brand.600" fontSize="md">
+                {t("delete")}
+              </Text>
+            </Button>
+          </VStack>
         </Box>
       </KeyboardAwareScrollView>
     </Box>

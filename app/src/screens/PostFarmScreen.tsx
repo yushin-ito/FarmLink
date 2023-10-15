@@ -42,6 +42,7 @@ const PostFarmScreen = () => {
   const { position, address, getPosition, getAddress, isLoadingPosition } =
     useLocation({
       onDisable: () => {
+        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -52,6 +53,7 @@ const PostFarmScreen = () => {
         );
       },
       onError: () => {
+        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -68,6 +70,7 @@ const PostFarmScreen = () => {
       setSearchResult(data[0]);
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -101,9 +104,9 @@ const PostFarmScreen = () => {
           description,
           ownerId: session.user.id,
           privated,
-          longitude: position.coords.longitude,
-          latitude: position.coords.latitude,
-          location: `POINT(${position.coords.longitude} ${position.coords.latitude})`,
+          longitude: position.longitude,
+          latitude: position.latitude,
+          location: `POINT(${position.longitude} ${position.latitude})`,
         });
       }
     },
@@ -116,14 +119,14 @@ const PostFarmScreen = () => {
 
   return (
     <PostFarmTemplate
-      isLoadingPostFarm={isLoadingPostFarm}
-      isLoadingPosition={isLoadingPosition}
       position={position}
       address={address}
       getAddress={getAddress}
       searchResult={searchResult}
       postFarm={postFarm}
       searchDevice={searchDevice}
+      isLoadingPostFarm={isLoadingPostFarm}
+      isLoadingPosition={isLoadingPosition}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

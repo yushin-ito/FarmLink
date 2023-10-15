@@ -56,10 +56,6 @@ const RentalListScreen = ({
     },
   });
 
-  const deleteRental = useCallback(async (rentalId: number) => {
-    await mutateAsyncDeleteRental(rentalId);
-  }, []);
-
   const refetchRentals = useCallback(async () => {
     setIsRefetchingRentals(true);
     await refetch();
@@ -74,6 +70,15 @@ const RentalListScreen = ({
     await mutateAsyncUpdateRental({ rentalId, privated: false });
   }, []);
 
+  const postRentalNavigationHandler = useCallback(() => {
+    navigation.goBack();
+    navigation.navigate("PostRental");
+  }, []);
+
+  const deleteRental = useCallback(async (rentalId: number) => {
+    await mutateAsyncDeleteRental(rentalId);
+  }, []);
+  
   const mapNavigationHandler = useCallback(
     async (regionId: number, latitude: number, longitude: number) => {
       navigation.goBack();
@@ -88,11 +93,6 @@ const RentalListScreen = ({
     },
     []
   );
-
-  const postRentalNavigationHandler = useCallback(() => {
-    navigation.goBack();
-    navigation.navigate("PostRental");
-  }, []);
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

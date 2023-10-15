@@ -18,21 +18,19 @@ import {
   useDisclose,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { LatLng, Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
-import { LocationObject, LocationGeocodedAddress } from "expo-location";
+import { LocationGeocodedAddress } from "expo-location";
 import { Rate } from "../../types";
 import RateActionSheet from "../organisms/RateActionSheet";
 
 type PostRentalTemplateProps = {
   base64: string[];
-  isLoadingPostRental: boolean;
-  isLoadingPosition: boolean;
-  position: LocationObject | undefined;
+  position: LatLng | undefined;
   address: LocationGeocodedAddress | undefined;
   pickImageByLibrary: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
@@ -44,6 +42,8 @@ type PostRentalTemplateProps = {
     equipment: string,
     rate: Rate
   ) => Promise<void>;
+  isLoadingPostRental: boolean;
+  isLoadingPosition: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -57,13 +57,13 @@ type FormValues = {
 
 const PostRentalTemplate = ({
   base64,
-  isLoadingPostRental,
-  isLoadingPosition,
   position,
   address,
   pickImageByLibrary,
   getAddress,
   postRental,
+  isLoadingPostRental,
+  isLoadingPosition,
   goBackNavigationHandler,
 }: PostRentalTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -88,12 +88,12 @@ const PostRentalTemplate = ({
   useEffect(() => {
     if (mapRef.current && position && ready) {
       mapRef.current.animateToRegion({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
+        latitude: position.latitude,
+        longitude: position.longitude,
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       });
-      getAddress(position.coords.latitude, position.coords.longitude);
+      getAddress(position.latitude, position.longitude);
     }
   }, [mapRef.current, position, ready]);
 
@@ -475,7 +475,7 @@ const PostRentalTemplate = ({
                   }}
                 >
                   {position && (
-                    <Marker coordinate={position.coords}>
+                    <Marker coordinate={position}>
                       <Image
                         source={require("../../../assets/pin-brand.png")}
                         style={{ width: 16, height: 16 }}

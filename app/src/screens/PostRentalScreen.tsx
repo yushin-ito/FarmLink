@@ -61,13 +61,14 @@ const PostRentalScreen = ({
               screen: "Map",
               params: {
                 regionId: data[0].rentalId,
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
+                latitude: position.latitude,
+                longitude: position.longitude,
                 type: "rental",
               },
             },
           });
         } else {
+          navigation.goBack();
           showAlert(
             toast,
             <Alert
@@ -96,6 +97,7 @@ const PostRentalScreen = ({
     isLoading: isLoadingPostRentalImage,
   } = usePostRentalImage({
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -168,15 +170,15 @@ const PostRentalScreen = ({
           name,
           description,
           ownerId: session.user.id,
-          longitude: position.coords.longitude,
-          latitude: position.coords.latitude,
+          longitude: position.longitude,
+          latitude: position.latitude,
           fee,
           area,
           equipment,
           imageUrls: publicUrls,
           privated: false,
           rate,
-          location: `POINT(${position.coords.longitude} ${position.coords.latitude})`,
+          location: `POINT(${position.longitude} ${position.latitude})`,
         });
       }
     },
@@ -190,13 +192,13 @@ const PostRentalScreen = ({
   return (
     <PostRentalTemplate
       base64={base64}
-      isLoadingPostRental={isLoadingPostRental || isLoadingPostRentalImage}
-      isLoadingPosition={isLoadingPosition}
       position={position}
       address={address}
       pickImageByLibrary={pickImageByLibrary}
       getAddress={getAddress}
       postRental={postRental}
+      isLoadingPostRental={isLoadingPostRental || isLoadingPostRentalImage}
+      isLoadingPosition={isLoadingPosition}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

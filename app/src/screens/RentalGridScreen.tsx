@@ -49,7 +49,7 @@ const RentalGridScreen = ({
   } = useInfiniteQueryRentals(
     scenes[sceneIndex],
     session?.user.id,
-    position?.coords
+    position
   );
 
   useEffect(() => {

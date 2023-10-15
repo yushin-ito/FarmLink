@@ -1,6 +1,6 @@
 {
   "common": {
-    "permitRequestNoti": "Please grant notification permission",
+    "permitRequestNoti": "Please grant notification permission.",
     "fetchError": "Failed to fetch data.",
     "error": "An error occurred",
     "permitRequestSave": "Please grant save permission",
@@ -43,7 +43,7 @@
     "enterMessage": "Enter message",
     "back": "Back",
     "error": "An error occurred",
-    "dev": "This function is currently under development"
+    "dev": "This function is currently under development."
   },
   "map": {
     "farm": "farm",
@@ -82,18 +82,18 @@
     "near": "near",
     "popular": "popular",
     "newest": "newest",
-    "permitRequestGPS": "Please grant GPS permission",
-    "permitRequestNoti": "Please grant notification permission",
-    "permitRequestCam": "Please grant camera permission",
+    "permitRequestGPS": "Please grant GPS permission.",
+    "permitRequestNoti": "Please grant notification permission.",
+    "permitRequestCam": "Please grant camera permission.",
     "error": "An error occurred",
-    "dev": "This function is currently under development"
+    "dev": "This function is currently under development."
   },
   "chat": {
     "enterMessage": "Enter message",
     "camera": "Pick by camera",
     "image": "Pick by library",
-    "permitRequestCam": "Please grant camera permission",
-    "permitRequestNoti": "Please grant notification permission",
+    "permitRequestCam": "Please grant camera permission.",
+    "permitRequestNoti": "Please grant notification permission.",
     "sendImage": "Image sent",
     "deleteMessage": "Message has been canceled.",
     "deleteImage": "Image has been canceled.",
@@ -102,7 +102,7 @@
     "delete": "unsend",
     "cancel": "Cancel",
     "error": "An error occurred",
-    "dev": "This function is currently under development"
+    "dev": "This function is currently under development."
   },
   "community": {
     "community": "Community",
@@ -136,7 +136,7 @@
     "people": "People",
     "join": "Join",
     "error": "An error occurred",
-    "dev": "This function is currently under development"
+    "dev": "This function is currently under development."
   },
   "farm": {
     "farm": "farm",
@@ -164,7 +164,7 @@
     "address": "Address",
     "current": "Current",
     "previous": "Previous",
-    "permitRequestGPS": "Please grant GPS permission",
+    "permitRequestGPS": "Please grant GPS permission.",
     "deviceId": "Device ID",
     "invalidDeviceId": "Device ID is invalid",
     "description": "Description",
@@ -177,7 +177,7 @@
     "saved": "Saved in.",
     "chat": "Chat",
     "error": "An error occurred",
-    "dev": "This function is currently under development"
+    "dev": "This function is currently under development."
   },
   "talk": {
     "talk": "Talk",
@@ -189,14 +189,14 @@
     "unsent": "unsent.",
     "sendImage": "Image sent",
     "deleteTalk": "Delete talk",
-    "permitRequestCam": "Please grant camera permission",
+    "permitRequestCam": "Please grant camera permission.",
     "askDeleteTalk": "Are you sure want to delete talk?",
     "cancel": "Cancel",
     "delete": "Delete",
     "search": "Search",
     "create": "Create",
     "error": "An error occurred",
-    "dev": "This function is currently under development"
+    "dev": "This function is currently under development."
   },
   "setting": {
     "setting": "Settings",
@@ -228,7 +228,7 @@
     "displayNameMaxLength": "User name must be 20 or less",
     "profileRequired": "Profile is required",
     "profileMaxLength": "Profile must be 30 or less",
-    "permitRequestCam": "Please grant camera permission",
+    "permitRequestCam": "Please grant camera permission.",
     "signoutError": "Sign out failed",
     "save": "Save",
     "likeList": "Like list",
@@ -266,7 +266,7 @@
     "alertLocation": "Cannot be changed later.",
     "refetch": "Refetch",
     "address": "Address",
-    "permitRequestGPS": "Please grant GPS permission",
+    "permitRequestGPS": "Please grant GPS permission.",
     "current": "Current",
     "previous": "Previous",
     "description": "Description",
@@ -275,6 +275,6 @@
     "create": "Create",
     "editRental": "Edit rental",
     "error": "An error occurred",
-    "dev": "This function is currently under development"
+    "dev": "This function is currently under development."
   }
 }

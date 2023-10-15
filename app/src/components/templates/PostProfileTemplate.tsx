@@ -200,7 +200,7 @@ const PostProfileTemplate = ({
           <Button
             mx="10"
             size="lg"
-            rounded="lg"
+            rounded="xl"
             colorScheme="brand"
             isLoading={isLoadingPostProfile}
             onPress={handleSubmit(async (data) => {

@@ -35,6 +35,7 @@ const ImagePreviewScreen = () => {
       await refetchTalks();
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -56,6 +57,7 @@ const ImagePreviewScreen = () => {
       navigation.goBack();
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -79,6 +81,7 @@ const ImagePreviewScreen = () => {
       );
     },
     onDisable: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -89,6 +92,7 @@ const ImagePreviewScreen = () => {
       );
     },
     onError: () => {
+      navigation.goBack();
       showAlert(
         toast,
         <Alert

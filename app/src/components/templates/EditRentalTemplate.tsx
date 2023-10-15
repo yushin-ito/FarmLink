@@ -21,7 +21,7 @@ import MapView, { Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useWindowDimensions } from "react-native";
+import { Alert, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import { LocationGeocodedAddress } from "expo-location";
 import { GetRentalResponse } from "../../hooks/rental/query";
@@ -31,7 +31,6 @@ import RateActionSheet from "../organisms/RateActionSheet";
 type EditRentalTemplateProps = {
   rental: GetRentalResponse | null | undefined;
   images: string[];
-  isLoadingUpdateRental: boolean;
   address: LocationGeocodedAddress | undefined;
   pickImageByLibrary: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
@@ -43,6 +42,9 @@ type EditRentalTemplateProps = {
     equipment: string,
     rate: Rate
   ) => Promise<void>;
+  deleteRental: () => Promise<void>;
+  isLoadingUpdateRental: boolean;
+  isLoadingDeleteRental: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -57,11 +59,13 @@ type FormValues = {
 const EditRentalTemplate = ({
   rental,
   images,
-  isLoadingUpdateRental,
   address,
   pickImageByLibrary,
   getAddress,
   updateRental,
+  deleteRental,
+  isLoadingUpdateRental,
+  isLoadingDeleteRental,
   goBackNavigationHandler,
 }: EditRentalTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -512,28 +516,53 @@ const EditRentalTemplate = ({
               )}
             </VStack>
           </VStack>
-          <Button
-            mt="16"
-            mx="10"
-            size="lg"
-            rounded="xl"
-            colorScheme="brand"
-            isLoading={isLoadingUpdateRental}
-            onPress={handleSubmit(async (data) => {
-              await updateRental(
-                data.name,
-                data.description,
-                Number(data.fee),
-                Number(data.area),
-                data.equipment,
-                rate
-              );
-            })}
-          >
-            <Text bold color="white" fontSize="md">
-              {t("save")}
-            </Text>
-          </Button>
+          <VStack mt="16" mx="10" space="6">
+            <Button
+              size="lg"
+              rounded="xl"
+              colorScheme="brand"
+              isLoading={isLoadingUpdateRental}
+              onPress={handleSubmit(async (data) => {
+                await updateRental(
+                  data.name,
+                  data.description,
+                  Number(data.fee),
+                  Number(data.area),
+                  data.equipment,
+                  rate
+                );
+              })}
+            >
+              <Text bold color="white" fontSize="md">
+                {t("save")}
+              </Text>
+            </Button>
+            <Button
+              size="lg"
+              rounded="xl"
+              colorScheme="brand"
+              variant="outline"
+              borderColor="brand.600"
+              isLoading={isLoadingDeleteRental}
+              onPress={() =>
+                Alert.alert(t("deleteRental"), t("askDeleteRental"), [
+                  {
+                    text: t("cancel"),
+                    style: "cancel",
+                  },
+                  {
+                    text: t("delete"),
+                    onPress: async () => await deleteRental(),
+                    style: "destructive",
+                  },
+                ])
+              }
+            >
+              <Text bold color="brand.600" fontSize="md">
+                {t("delete")}
+              </Text>
+            </Button>
+          </VStack>
         </Box>
       </KeyboardAwareScrollView>
     </Box>

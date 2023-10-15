@@ -16,19 +16,17 @@ import {
   useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { LatLng, Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SearchDeviceResponse } from "../../hooks/device/mutate";
-import { LocationGeocodedAddress, LocationObject } from "expo-location";
+import { LocationGeocodedAddress } from "expo-location";
 import { Image } from "expo-image";
 
 type PostFarmTemplateProps = {
-  isLoadingPostFarm: boolean;
-  isLoadingPosition: boolean;
   searchResult: SearchDeviceResponse[0] | undefined;
-  position: LocationObject | undefined;
+  position: LatLng | undefined;
   address: LocationGeocodedAddress | undefined;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
   postFarm: (
@@ -38,6 +36,8 @@ type PostFarmTemplateProps = {
     privated: boolean
   ) => Promise<void>;
   searchDevice: (query: string) => Promise<void>;
+  isLoadingPostFarm: boolean;
+  isLoadingPosition: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -76,12 +76,12 @@ const PostFarmTemplate = ({
     if (mapRef.current && position && ready) {
       console.log("did");
       mapRef.current.animateToRegion({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
+        latitude: position.latitude,
+        longitude: position.longitude,
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       });
-      getAddress(position.coords.latitude, position.coords.longitude);
+      getAddress(position.latitude, position.longitude);
     }
   }, [mapRef.current, position, ready]);
 
@@ -269,7 +269,7 @@ const PostFarmTemplate = ({
                   }}
                 >
                   {position && (
-                    <Marker coordinate={position.coords}>
+                    <Marker coordinate={position}>
                       <Image
                         source={require("../../../assets/pin-brand.png")}
                         style={{ width: 16, height: 16 }}
