@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PostFarmTemplate from "../components/templates/PostFarmTemplate";
 import { useNavigation } from "@react-navigation/native";
 import { useToast } from "native-base";
@@ -16,6 +16,10 @@ const PostFarmScreen = () => {
   const navigation = useNavigation();
   const { session } = useAuth();
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
+
+  useEffect(() => {
+    getPosition();
+  }, []);
 
   const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
     usePostFarm({
@@ -35,34 +39,29 @@ const PostFarmScreen = () => {
       },
     });
 
-  const {
-    position,
-    address,
-    getCurrentPosition,
-    getAddress,
-    isLoadingPosition,
-  } = useLocation({
-    onDisable: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequestGPS")}
-        />
-      );
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { position, address, getPosition, getAddress, isLoadingPosition } =
+    useLocation({
+      onDisable: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("permitRequestGPS")}
+          />
+        );
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const { mutateAsync: mutateAsyncSearchDevice } = useSearchDevice({
     onSuccess: (data) => {
@@ -122,7 +121,6 @@ const PostFarmScreen = () => {
       position={position}
       address={address}
       getAddress={getAddress}
-      getCurrentPosition={getCurrentPosition}
       searchResult={searchResult}
       postFarm={postFarm}
       searchDevice={searchDevice}

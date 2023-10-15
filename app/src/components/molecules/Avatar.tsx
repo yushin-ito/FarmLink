@@ -44,13 +44,13 @@ const Avatar = memo(
         {uri ? (
           <NativeBaseAvatar
             size={size}
+            bg={bgColor}
             source={{
               uri: uri.match(supabaseUrl) ? uri + `?=${updatedAt}` : uri,
             }}
-            bg={bgColor}
           />
         ) : (
-          <NativeBaseAvatar size={size} source={{ uri: undefined }} bg={color}>
+          <NativeBaseAvatar size={size} bg={color}>
             <Text color="white" fontSize={fontSize}>
               {text}
             </Text>

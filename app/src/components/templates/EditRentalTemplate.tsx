@@ -94,7 +94,7 @@ const EditRentalTemplate = ({
   }, [rental]);
 
   useEffect(() => {
-    if (mapRef.current && rental?.latitude && rental.longitude) {
+    if (mapRef.current && rental) {
       mapRef.current.animateToRegion({
         latitude: rental.latitude,
         longitude: rental.longitude,
@@ -480,7 +480,7 @@ const EditRentalTemplate = ({
                   borderRadius: 12,
                 }}
               >
-                {rental?.latitude && rental?.longitude && (
+                {rental && (
                   <Marker
                     coordinate={{
                       latitude: rental.latitude,

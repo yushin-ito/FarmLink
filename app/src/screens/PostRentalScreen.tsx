@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PostRentalTemplate from "../components/templates/PostRentalTemplate";
 import { useToast } from "native-base";
 import { showAlert, wait } from "../functions";
@@ -19,36 +19,35 @@ const PostRentalScreen = ({
   const { session } = useAuth();
   const [base64, setBase64] = useState<string[]>([]);
 
-  const {
-    position,
-    address,
-    getCurrentPosition,
-    getAddress,
-    isLoadingPosition,
-  } = useLocation({
-    onDisable: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequestGPS")}
-        />
-      );
-    },
-    onError: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  useEffect(() => {
+    getPosition();
+  }, []);
+
+  const { position, address, getPosition, getAddress, isLoadingPosition } =
+    useLocation({
+      onDisable: () => {
+        navigation.goBack();
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("permitRequestGPS")}
+          />
+        );
+      },
+      onError: () => {
+        navigation.goBack();
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
     usePostRental({
@@ -196,7 +195,6 @@ const PostRentalScreen = ({
       position={position}
       address={address}
       pickImageByLibrary={pickImageByLibrary}
-      getCurrentPosition={getCurrentPosition}
       getAddress={getAddress}
       postRental={postRental}
       goBackNavigationHandler={goBackNavigationHandler}

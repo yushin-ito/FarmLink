@@ -35,7 +35,6 @@ type PostRentalTemplateProps = {
   position: LocationObject | undefined;
   address: LocationGeocodedAddress | undefined;
   pickImageByLibrary: () => Promise<void>;
-  getCurrentPosition: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
   postRental: (
     name: string,
@@ -63,7 +62,6 @@ const PostRentalTemplate = ({
   position,
   address,
   pickImageByLibrary,
-  getCurrentPosition,
   getAddress,
   postRental,
   goBackNavigationHandler,
@@ -83,15 +81,12 @@ const PostRentalTemplate = ({
   const mapRef = useRef<MapView>(null);
   const { width } = useWindowDimensions();
   const { isOpen, onOpen, onClose } = useDisclose();
+  const [ready, setReady] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rate, setRate] = useState<Rate>("year");
 
   useEffect(() => {
-    getCurrentPosition();
-  }, []);
-
-  useEffect(() => {
-    if (mapRef.current && position) {
+    if (mapRef.current && position && ready) {
       mapRef.current.animateToRegion({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -100,7 +95,7 @@ const PostRentalTemplate = ({
       });
       getAddress(position.coords.latitude, position.coords.longitude);
     }
-  }, [position, mapRef.current]);
+  }, [mapRef.current, position, ready]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -472,11 +467,11 @@ const PostRentalTemplate = ({
                   ref={mapRef}
                   userInterfaceStyle={useColorModeValue("light", "dark")}
                   showsCompass={false}
+                  onMapReady={() => setReady(true)}
                   style={{
                     width: "100%",
                     height: 160,
                     borderRadius: 12,
-                    opacity: isLoadingPosition ? 0.5 : 1,
                   }}
                 >
                   {position && (

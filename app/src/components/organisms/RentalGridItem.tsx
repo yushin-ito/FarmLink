@@ -21,10 +21,11 @@ type RentalGridItemProps = {
 const RentalGridItem = memo(({ item, onPress }: RentalGridItemProps) => {
   const { t } = useTranslation("map");
   const iconColor = useColorModeValue("muted.600", "muted.100");
+  const imageColor = useColorModeValue("muted.200", "muted.600");
 
   return (
     <Pressable flex={1 / 3} mt="2" onPress={onPress}>
-      <Center size="110" rounded="sm" bg="muted.200" overflow="hidden">
+      <Center size="110" rounded="sm" bg={imageColor} overflow="hidden">
         {item.imageUrls?.length ? (
           <Image
             style={{ width: 110, height: 110 }}
@@ -33,7 +34,7 @@ const RentalGridItem = memo(({ item, onPress }: RentalGridItemProps) => {
             }}
           />
         ) : (
-          <Icon as={<Feather />} name="image" size="lg" color={iconColor} />
+          <Icon as={<Feather />} name="image" size="3xl" color={iconColor} />
         )}
         <Box
           pl="1"

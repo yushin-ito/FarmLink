@@ -80,7 +80,7 @@ const EditFarmTemplate = ({
   }, [farm]);
 
   useEffect(() => {
-    if (mapRef.current && farm?.latitude && farm.longitude) {
+    if (mapRef.current && farm) {
       mapRef.current.animateToRegion({
         latitude: farm.latitude,
         longitude: farm.longitude,
@@ -268,7 +268,7 @@ const EditFarmTemplate = ({
                   borderRadius: 12,
                 }}
               >
-                {farm?.latitude && farm?.longitude && (
+                {farm && (
                   <Marker
                     coordinate={{
                       latitude: farm.latitude,

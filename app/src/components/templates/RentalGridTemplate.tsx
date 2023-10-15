@@ -68,7 +68,7 @@ const RentalGrid = memo(
         pt="2"
         px="2"
         numColumns={3}
-        data={rentals?.filter((item) => item.imageUrls?.length)}
+        data={rentals}
         renderItem={({ item }) => (
           <RentalGridItem
             item={item}

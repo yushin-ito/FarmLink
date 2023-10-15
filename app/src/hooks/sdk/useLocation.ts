@@ -34,7 +34,7 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
     []
   );
 
-  const getCurrentPosition = useCallback(async () => {
+  const getPosition = useCallback(async () => {
     setIsLoadingPosition(true);
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -62,7 +62,7 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
     geocode,
     getAddress,
     getGeocode,
-    getCurrentPosition,
+    getPosition,
     isLoadingPosition,
     isLoadingAddress,
     isLoadingGeocode,

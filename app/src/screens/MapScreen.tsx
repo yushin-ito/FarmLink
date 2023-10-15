@@ -25,7 +25,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const [touch, setTouch] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
 
-  const { position, getCurrentPosition, isLoadingPosition } = useLocation({
+  const { position, getPosition, isLoadingPosition } = useLocation({
     onDisable: () => {
       showAlert(
         toast,
@@ -57,7 +57,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
         longitude: params.longitude,
       });
     } else {
-      getCurrentPosition();
+      getPosition();
     }
     params?.type === "farm" && refetchFarms();
     params?.type === "rental" && refetchRentals();

@@ -20,7 +20,7 @@ const RentalGridScreen = ({
   const [sceneIndex, setSceneIndex] = useState(0);
   const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
 
-  const { position, getCurrentPosition, isLoadingPosition } = useLocation({
+  const { position, getPosition, isLoadingPosition } = useLocation({
     onDisable: () => {
       showAlert(
         toast,
@@ -74,7 +74,7 @@ const RentalGridScreen = ({
   }, []);
 
   useEffect(() => {
-    getCurrentPosition();
+    getPosition();
   }, []);
 
   const refetchRentals = useCallback(async () => {

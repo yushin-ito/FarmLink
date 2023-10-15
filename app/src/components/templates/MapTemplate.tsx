@@ -127,26 +127,18 @@ const MapTemplate = ({
         style={{ flex: 1 }}
       >
         {position &&
-          !farms?.some((item) => {
-            if (item.latitude && item.longitude) {
-              return (
-                type === "farm" &&
-                Math.floor(position.coords.latitude * 10000) ===
-                  Math.floor(item.latitude * 10000)
-              );
-            }
-            return false;
-          }) &&
-          !rentals?.some((item) => {
-            if (item.latitude && item.longitude) {
-              return (
-                type === "rental" &&
-                Math.floor(position.coords.latitude * 10000) ===
-                  Math.floor(item.latitude * 10000)
-              );
-            }
-            return false;
-          }) && (
+          !farms?.some(
+            (item) =>
+              type === "farm" &&
+              Math.floor(position.coords.latitude * 10000) ===
+                Math.floor(item.latitude * 10000)
+          ) &&
+          !rentals?.some(
+            (item) =>
+              type === "rental" &&
+              Math.floor(position.coords.latitude * 10000) ===
+                Math.floor(item.latitude * 10000)
+          ) && (
             <Marker coordinate={position.coords}>
               <VStack alignItems="center" maxW="24">
                 <Text bold fontSize="xs" numberOfLines={1} ellipsizeMode="tail">
@@ -246,13 +238,11 @@ const MapTemplate = ({
             <Pressable
               onPress={() => {
                 if (farms?.length) {
-                  farms[0].latitude &&
-                    farms[0].longitude &&
-                    setRegion({
-                      regionId: farms[0].farmId,
-                      latitude: farms[0].latitude,
-                      longitude: farms[0].longitude,
-                    });
+                  setRegion({
+                    regionId: farms[0].farmId,
+                    latitude: farms[0].latitude,
+                    longitude: farms[0].longitude,
+                  });
                 }
                 setType("farm");
               }}
@@ -279,13 +269,11 @@ const MapTemplate = ({
             <Pressable
               onPress={() => {
                 if (rentals?.length) {
-                  rentals[0].latitude &&
-                    rentals[0].longitude &&
-                    setRegion({
-                      regionId: rentals[0].rentalId,
-                      latitude: rentals[0].latitude,
-                      longitude: rentals[0].longitude,
-                    });
+                  setRegion({
+                    regionId: rentals[0].rentalId,
+                    latitude: rentals[0].latitude,
+                    longitude: rentals[0].longitude,
+                  });
                 }
                 setType("rental");
               }}

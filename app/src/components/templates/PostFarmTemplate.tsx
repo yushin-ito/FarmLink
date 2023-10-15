@@ -30,7 +30,6 @@ type PostFarmTemplateProps = {
   searchResult: SearchDeviceResponse[0] | undefined;
   position: LocationObject | undefined;
   address: LocationGeocodedAddress | undefined;
-  getCurrentPosition: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
   postFarm: (
     name: string,
@@ -53,7 +52,6 @@ const PostFarmTemplate = ({
   isLoadingPosition,
   position,
   address,
-  getCurrentPosition,
   getAddress,
   searchResult,
   postFarm,
@@ -70,15 +68,13 @@ const PostFarmTemplate = ({
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
+  const [ready, setReady] = useState(false);
   const [privated, setPrivated] = useState(false);
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
-    getCurrentPosition();
-  }, []);
-
-  useEffect(() => {
-    if (mapRef.current && position) {
+    if (mapRef.current && position && ready) {
+      console.log("did");
       mapRef.current.animateToRegion({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -87,7 +83,7 @@ const PostFarmTemplate = ({
       });
       getAddress(position.coords.latitude, position.coords.longitude);
     }
-  }, [position, mapRef.current]);
+  }, [mapRef.current, position, ready]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -265,11 +261,11 @@ const PostFarmTemplate = ({
                   ref={mapRef}
                   userInterfaceStyle={useColorModeValue("light", "dark")}
                   showsCompass={false}
+                  onMapReady={() => setReady(true)}
                   style={{
                     width: "100%",
                     height: 160,
                     borderRadius: 12,
-                    opacity: isLoadingPosition ? 0.5 : 1,
                   }}
                 >
                   {position && (
@@ -302,10 +298,7 @@ const PostFarmTemplate = ({
               <Switch
                 defaultIsChecked
                 colorScheme="brand"
-                onValueChange={async (value) => {
-                  setPrivated(!value);
-                  value && (await getCurrentPosition());
-                }}
+                onValueChange={(value) => setPrivated(!value)}
               />
             </HStack>
           </VStack>
