@@ -40,33 +40,29 @@ const getRentals = async (
       throw error;
     }
 
-    return data.filter(
-      (item) => item.privated === false || item.ownerId === userId
-    );
+    return data.filter((item) => !item.privated || item.ownerId === userId);
   } else if (scene === "newest") {
     const { data, error } = await supabase
       .from("rental")
       .select("*")
-      .or(`privated.eq.false, ownerId.eq.${userId}`)
       .order("updatedAt", { ascending: false })
       .range(from, to);
     if (error) {
       throw error;
     }
 
-    return data;
+    return data.filter((item) => !item.privated || item.ownerId === userId);
   } else if (scene === "popular") {
     const { data, error } = await supabase
       .from("rental")
       .select("*")
-      .or(`privated.eq.false, ownerId.eq.${userId}`)
       .order("like_count", { ascending: false })
       .range(from, to);
     if (error) {
       throw error;
     }
 
-    return data;
+    return data.filter((item) => !item.privated || item.ownerId === userId);
   } else {
     return [];
   }
