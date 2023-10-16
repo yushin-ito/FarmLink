@@ -25,14 +25,13 @@ const getRentals = async (
   scene: Scene,
   from: number,
   to: number,
-  userId: string | undefined,
-  position?: LatLng
+  location?: LatLng
 ) => {
-  if (scene === "near" && position) {
+  if (scene === "near" && location) {
     const { data, error } = await supabase
       .rpc("sort_by_location_rental", {
-        lat: position.latitude,
-        long: position.longitude,
+        lat: location.latitude,
+        long: location.longitude,
       })
       .range(from, to)
       .returns<Rental["Row"][]>();
@@ -40,7 +39,7 @@ const getRentals = async (
       throw error;
     }
 
-    return data.filter((item) => !item.privated || item.ownerId === userId);
+    return data;
   } else if (scene === "newest") {
     const { data, error } = await supabase
       .from("rental")
@@ -51,7 +50,7 @@ const getRentals = async (
       throw error;
     }
 
-    return data.filter((item) => !item.privated || item.ownerId === userId);
+    return data;
   } else if (scene === "popular") {
     const { data, error } = await supabase
       .from("rental")
@@ -62,7 +61,7 @@ const getRentals = async (
       throw error;
     }
 
-    return data.filter((item) => !item.privated || item.ownerId === userId);
+    return data;
   } else {
     return [];
   }
@@ -91,22 +90,12 @@ export const useQueryRental = (rentalId: number) =>
     queryFn: async () => await getRental(rentalId),
   });
 
-export const useInfiniteQueryRentals = (
-  scene: Scene,
-  userId: string | undefined,
-  position?: LatLng
-) => {
+export const useInfiniteQueryRentals = (scene: Scene, location?: LatLng) => {
   const PAGE_COUNT = 30;
   const query = useInfiniteQuery<GetRentalsResponse, PostgrestError>({
-    queryKey: ["rental", scene, userId, position],
+    queryKey: ["rental", scene, location],
     queryFn: async ({ pageParam = 0 }) =>
-      await getRentals(
-        scene,
-        pageParam,
-        pageParam + PAGE_COUNT - 1,
-        userId,
-        position
-      ),
+      await getRentals(scene, pageParam, pageParam + PAGE_COUNT - 1, location),
     getNextPageParam: (lastPage, pages) => {
       if (lastPage && lastPage.length === PAGE_COUNT) {
         return pages.map((page) => page).flat().length;

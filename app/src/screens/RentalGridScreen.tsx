@@ -48,7 +48,7 @@ const RentalGridScreen = ({
     isLoading: isLoadingRentals,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQueryRentals(scenes[sceneIndex], session?.user.id, position);
+  } = useInfiniteQueryRentals(scenes[sceneIndex], position);
 
   useEffect(() => {
     const channel = supabase
@@ -101,7 +101,7 @@ const RentalGridScreen = ({
     <RentalGridTemplate
       sceneIndex={sceneIndex}
       setSceneIndex={setSceneIndex}
-      rentals={rentals}
+      rentals={rentals?.filter((item) => !item.privated || item.ownerId === session?.user.id)}
       refetchRentals={refetchRentals}
       readMore={fetchNextPage}
       hasMore={hasNextPage}

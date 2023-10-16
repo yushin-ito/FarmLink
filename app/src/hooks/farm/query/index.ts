@@ -22,20 +22,15 @@ const getFarm = async (farmId: number) => {
   return data[0];
 };
 
-const getFarms = async (
-  userId: string | undefined,
-  position: LatLng | undefined,
-  from: number,
-  to: number
-) => {
-  if (!position) {
+const getFarms = async (from: number, to: number, location?: LatLng) => {
+  if (!location) {
     return [];
   }
 
   const { data, error } = await supabase
     .rpc("sort_by_location_farm", {
-      lat: position.latitude,
-      long: position.longitude,
+      lat: location.latitude,
+      long: location.longitude,
     })
     .range(from, to)
     .returns<(Farm["Row"] & { device: Device["Row"] })[]>();
@@ -43,9 +38,7 @@ const getFarms = async (
     throw error;
   }
 
-  return data.filter(
-    (item) => item.privated === false || item.ownerId === userId
-  );
+  return data;
 };
 
 const getUserFarms = async (ownerId: string | undefined) => {
@@ -71,15 +64,12 @@ export const useQueryFarm = (farmId: number) =>
     queryFn: async () => await getFarm(farmId),
   });
 
-export const useInfiniteQueryFarms = (
-  userId: string | undefined,
-  position: LatLng | undefined
-) => {
+export const useInfiniteQueryFarms = (location?: LatLng) => {
   const PAGE_COUNT = 30;
   const query = useInfiniteQuery<GetFarmsResponse, PostgrestError>({
-    queryKey: ["farm", userId, position],
+    queryKey: ["farm", location],
     queryFn: async ({ pageParam = 0 }) =>
-      await getFarms(userId, position, pageParam, pageParam + PAGE_COUNT - 1),
+      await getFarms(pageParam, pageParam + PAGE_COUNT - 1, location),
     getNextPageParam: (lastPage, pages) => {
       if (lastPage && lastPage.length === PAGE_COUNT) {
         return pages.map((page) => page).flat().length;

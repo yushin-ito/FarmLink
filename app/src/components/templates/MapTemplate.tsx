@@ -111,7 +111,7 @@ const MapTemplate = ({
             longitude: rentals[0].longitude,
           });
     }
-  }, [mapRef.current, region, type, farms, rentals]);
+  }, [mapRef.current, region, type, position, farms, rentals]);
 
   if (isLoading) {
     return (

@@ -12,6 +12,7 @@ import { useRoute, RouteProp } from "@react-navigation/native";
 import { useQueryUser } from "../hooks/user/query";
 import useAuth from "../hooks/auth/useAuth";
 import { supabase } from "../supabase";
+import { LatLng } from "react-native-maps";
 
 const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { t } = useTranslation("map");
@@ -24,6 +25,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const [type, setType] = useState<"farm" | "rental">("farm");
   const [touch, setTouch] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
+  const [location, setLocation] = useState<LatLng>();
 
   const { position, getPosition, isLoadingPosition } = useLocation({
     onDisable: () => {
@@ -49,10 +51,18 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   });
 
   useEffect(() => {
+    setLocation(position)
+  },[position])
+
+  useEffect(() => {
     if (params?.regionId && params?.latitude && params?.longitude) {
       setTouch(false);
       setRegion({
         regionId: params.regionId,
+        latitude: params.latitude,
+        longitude: params.longitude,
+      });
+      setLocation({
         latitude: params.latitude,
         longitude: params.longitude,
       });
@@ -69,7 +79,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     refetch: refetchRentals,
     fetchNextPage: fetchNextPageRentals,
     isLoading: isLoadingRentals,
-  } = useInfiniteQueryRentals("near", session?.user.id, position);
+  } = useInfiniteQueryRentals("near", location);
 
   useEffect(() => {
     const channel = supabase
@@ -97,7 +107,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     refetch: refetchFarms,
     fetchNextPage: fetchNextPageFams,
     isLoading: isLoadingFarms,
-  } = useInfiniteQueryFarms(session?.user.id, position);
+  } = useInfiniteQueryFarms(location);
 
   useEffect(() => {
     const channel = supabase
@@ -146,8 +156,12 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       setRegion={setRegion}
       position={position}
       user={user}
-      farms={farms}
-      rentals={rentals}
+      farms={farms?.filter(
+        (item) => !item.privated || item.ownerId === session?.user.id
+      )}
+      rentals={rentals?.filter(
+        (item) => !item.privated || item.ownerId === session?.user.id
+      )}
       readMore={type === "farm" ? fetchNextPageFams : fetchNextPageRentals}
       isLoading={
         isLoadingPosition || isLoadingUser || isLoadingRentals || isLoadingFarms

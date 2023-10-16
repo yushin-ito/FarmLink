@@ -72,7 +72,7 @@ const RentalGrid = memo(
           />
         )}
         ListFooterComponent={
-          <Center mt={hasMore ? "0" : "12"}>
+          <Center mt={hasMore ? "4" : "12"}>
             {hasMore && <Spinner color="muted.400" />}
           </Center>
         }
