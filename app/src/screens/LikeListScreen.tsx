@@ -18,12 +18,15 @@ const LikeListScreen = ({
   const {
     data: likes,
     refetch,
-    isLoading,
+    isLoading: isLoadingUserLikes,
   } = useQueryUserLikes(session?.user.id);
   const [isRefetchingLikes, setIsRefetchingRentals] = useState(false);
   const [type, setType] = useState<"farm" | "rental">("farm");
 
-  const { mutateAsync: mutateAsyncDeleteFarmLike } = useDeleteFarmLike({
+  const {
+    mutateAsync: mutateAsyncDeleteFarmLike,
+    isLoading: isLoadingDeleteFarmLike,
+  } = useDeleteFarmLike({
     onSuccess: async () => {
       await refetch();
     },
@@ -40,7 +43,10 @@ const LikeListScreen = ({
     },
   });
 
-  const { mutateAsync: mutateAsyncDeleteRentalLike } = useDeleteRentalLike({
+  const {
+    mutateAsync: mutateAsyncDeleteRentalLike,
+    isLoading: isLoadingDeleteRentalLike,
+  } = useDeleteRentalLike({
     onSuccess: async () => {
       await refetch();
     },
@@ -97,7 +103,11 @@ const LikeListScreen = ({
       deleteFarmLike={deleteFarmLike}
       deleteRentalLike={deleteRentalLike}
       refetchLikes={refetchLikes}
-      isLoading={isLoading}
+      isLoading={
+        isLoadingUserLikes ||
+        isLoadingDeleteFarmLike ||
+        isLoadingDeleteRentalLike
+      }
       isRefetchingLikes={isRefetchingLikes}
       mapNavigationHandler={mapNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}

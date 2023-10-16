@@ -28,6 +28,7 @@ const EditRentalScreen = ({
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
+    getPosition();
     rental?.imageUrls && setImages(rental.imageUrls);
   }, [rental]);
 
@@ -35,17 +36,25 @@ const EditRentalScreen = ({
     mutateAsync: mutateAsyncUpdateRental,
     isLoading: isLoadingUpdateRental,
   } = useUpdateRental({
-    onSuccess: async () => {
-      navigation.goBack();
+    onSuccess: async (data) => {
       await refetchRental();
-      showAlert(
-        toast,
-        <Alert
-          status="success"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("saved")}
-        />
-      );
+      if (position && data?.length) {
+        navigation.navigate("Map", {
+          regionId: data[0].rentalId,
+          latitude: position.latitude,
+          longitude: position.longitude,
+          type: "rental",
+        });
+      } else {
+        showAlert(
+          toast,
+          <Alert
+            status="success"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("saved")}
+          />
+        );
+      }
     },
     onError: () => {
       navigation.goBack();
@@ -82,30 +91,31 @@ const EditRentalScreen = ({
     },
   });
 
-  const { address, getAddress } = useLocation({
-    onDisable: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequestGPS")}
-        />
-      );
-    },
-    onError: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { position, getPosition, address, getAddress, isLoadingPosition } =
+    useLocation({
+      onDisable: () => {
+        navigation.goBack();
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("permitRequestGPS")}
+          />
+        );
+      },
+      onError: () => {
+        navigation.goBack();
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const {
     mutateAsync: mutateAsyncPostRentalImage,
@@ -173,7 +183,7 @@ const EditRentalScreen = ({
       equipment: string,
       rate: Rate
     ) => {
-      if (rental) {
+      if (rental && position) {
         const publicUrls = await Promise.all(
           images.map(async (item) => {
             if (item.indexOf("http") == -1) {
@@ -187,7 +197,6 @@ const EditRentalScreen = ({
             }
           })
         );
-
         await mutateAsyncUpdateRental({
           rentalId: rental.rentalId,
           name,
@@ -197,11 +206,13 @@ const EditRentalScreen = ({
           equipment,
           imageUrls: publicUrls,
           rate,
-          location: `POINT(${rental.longitude} ${rental.latitude})`,
+          latitude: position.latitude,
+          longitude: position.longitude,
+          location: `POINT(${position.longitude} ${position.latitude})`,
         });
       }
     },
-    [images]
+    [rental, images, position]
   );
 
   const deleteRental = useCallback(async () => {
@@ -216,6 +227,7 @@ const EditRentalScreen = ({
     <EditRentalTemplate
       rental={rental}
       images={images}
+      position={position}
       address={address}
       pickImageByLibrary={pickImageByLibrary}
       getAddress={getAddress}
@@ -223,6 +235,7 @@ const EditRentalScreen = ({
       deleteRental={deleteRental}
       isLoadingUpdateRental={isLoadingUpdateRental || isLoadingPostRentalImage}
       isLoadingDeleteRental={isLoadingDeleteRental}
+      isLoadingPosition={isLoadingPosition}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

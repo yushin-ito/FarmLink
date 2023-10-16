@@ -15,9 +15,10 @@ import {
   Pressable,
   useColorModeValue,
   useDisclose,
+  Spinner,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { LatLng, Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -31,6 +32,7 @@ import RateActionSheet from "../organisms/RateActionSheet";
 type EditRentalTemplateProps = {
   rental: GetRentalResponse | null | undefined;
   images: string[];
+  position: LatLng | undefined;
   address: LocationGeocodedAddress | undefined;
   pickImageByLibrary: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
@@ -45,6 +47,7 @@ type EditRentalTemplateProps = {
   deleteRental: () => Promise<void>;
   isLoadingUpdateRental: boolean;
   isLoadingDeleteRental: boolean;
+  isLoadingPosition: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -59,6 +62,7 @@ type FormValues = {
 const EditRentalTemplate = ({
   rental,
   images,
+  position,
   address,
   pickImageByLibrary,
   getAddress,
@@ -66,6 +70,7 @@ const EditRentalTemplate = ({
   deleteRental,
   isLoadingUpdateRental,
   isLoadingDeleteRental,
+  isLoadingPosition,
   goBackNavigationHandler,
 }: EditRentalTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -81,10 +86,11 @@ const EditRentalTemplate = ({
     formState: { errors },
   } = useForm<FormValues>();
   const mapRef = useRef<MapView>(null);
-  const { width } = useWindowDimensions();
-  const { isOpen, onOpen, onClose } = useDisclose();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rate, setRate] = useState<Rate>("year");
+  const [ready, setReady] = useState(false);
+  const { width } = useWindowDimensions();
+  const { isOpen, onOpen, onClose } = useDisclose();
 
   useEffect(() => {
     if (rental) {
@@ -98,16 +104,16 @@ const EditRentalTemplate = ({
   }, [rental]);
 
   useEffect(() => {
-    if (mapRef.current && rental) {
+    if (mapRef.current && position && ready) {
       mapRef.current.animateToRegion({
-        latitude: rental.latitude,
-        longitude: rental.longitude,
+        latitude: position.latitude,
+        longitude: position.longitude,
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       });
-      getAddress(rental.latitude, rental.longitude);
+      getAddress(position.latitude, position.longitude);
     }
-  }, [rental, mapRef.current]);
+  }, [mapRef.current, position, rental]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -472,43 +478,50 @@ const EditRentalTemplate = ({
             </FormControl>
             <VStack space="1">
               <Text bold color={textColor} fontSize="md">
-                {t("location")}
+                {t("setLocation")}
               </Text>
-              <MapView
-                ref={mapRef}
-                userInterfaceStyle={useColorModeValue("light", "dark")}
-                showsCompass={false}
-                style={{
-                  width: "100%",
-                  height: 160,
-                  borderRadius: 12,
-                }}
-              >
-                {rental && (
-                  <Marker
-                    coordinate={{
-                      latitude: rental.latitude,
-                      longitude: rental.longitude,
-                    }}
-                  >
-                    <VStack alignItems="center" maxW="24">
-                      <Text
-                        bold
-                        fontSize="2xs"
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                      >
-                        {rental.name}
-                      </Text>
-                      <Image
-                        source={require("../../../assets/app/pin-brand.png")}
-                        style={{ width: 16, height: 16 }}
-                        contentFit="contain"
-                      />
-                    </VStack>
-                  </Marker>
-                )}
-              </MapView>
+              {isLoadingPosition ? (
+                <Center h="40" bg="muted.200" rounded="xl">
+                  <Spinner color="muted.400" />
+                </Center>
+              ) : (
+                <MapView
+                  ref={mapRef}
+                  onMapReady={() => setReady(true)}
+                  userInterfaceStyle={useColorModeValue("light", "dark")}
+                  showsCompass={false}
+                  style={{
+                    width: "100%",
+                    height: 160,
+                    borderRadius: 12,
+                  }}
+                >
+                  {rental && (
+                    <Marker
+                      coordinate={{
+                        latitude: rental.latitude,
+                        longitude: rental.longitude,
+                      }}
+                    >
+                      <VStack alignItems="center" maxW="24">
+                        <Text
+                          bold
+                          fontSize="2xs"
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {rental.name}
+                        </Text>
+                        <Image
+                          source={require("../../../assets/app/pin-brand.png")}
+                          style={{ width: 16, height: 16 }}
+                          contentFit="contain"
+                        />
+                      </VStack>
+                    </Marker>
+                  )}
+                </MapView>
+              )}
               {address && (
                 <Text color={textColor}>{`${t("address")}: ${address.city}${
                   address.name

@@ -24,7 +24,7 @@ type RentalListTemplateProps = {
   refetchRentals: () => Promise<void>;
   privateRental: (rentalId: number) => Promise<void>;
   publicRental: (rentalId: number) => Promise<void>;
-  isLoadingRentals: boolean;
+  isLoading: boolean;
   isRefetchingRentals: boolean;
   mapNavigationHandler: (
     regionId: number,
@@ -38,7 +38,7 @@ type RentalListTemplateProps = {
 const RentalListTemplate = ({
   rentals,
   deleteRental,
-  isLoadingRentals,
+  isLoading,
   isRefetchingRentals,
   refetchRentals,
   privateRental,
@@ -74,7 +74,7 @@ const RentalListTemplate = ({
         />
       </HStack>
       <Box flex={1}>
-        {isLoadingRentals ? (
+        {isLoading ? (
           <SkeletonRentalList rows={4} />
         ) : (
           <FlatList

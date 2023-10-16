@@ -8,14 +8,11 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
-      },
-      "ios": {
-        "simulator": true
       }
     },
     "development": {
-      "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "developmentClient": false
     }
   },
   "submit": {

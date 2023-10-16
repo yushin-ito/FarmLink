@@ -13,9 +13,11 @@ import {
   Icon,
   Switch,
   useColorModeValue,
+  Center,
+  Spinner,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { LatLng, Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
 import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -27,7 +29,7 @@ import { Alert } from "react-native";
 
 type EditFarmTemplateProps = {
   farm: GetFarmResponse | null | undefined;
-  searchResult: SearchDeviceResponse[0] | undefined;
+  position: LatLng | undefined;
   address: LocationGeocodedAddress | undefined;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
   updateFarm: (
@@ -37,9 +39,11 @@ type EditFarmTemplateProps = {
     privated: boolean
   ) => Promise<void>;
   deleteFarm: () => Promise<void>;
+  searchResult: SearchDeviceResponse[0] | undefined;
   searchDevice: (query: string) => Promise<void>;
   isLoadingUpdateFarm: boolean;
   isLoadingDeleteFarm: boolean;
+  isLoadingPosition: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -51,6 +55,7 @@ type FormValues = {
 
 const EditFarmTemplate = ({
   farm,
+  position,
   address,
   getAddress,
   searchResult,
@@ -59,6 +64,7 @@ const EditFarmTemplate = ({
   searchDevice,
   isLoadingUpdateFarm,
   isLoadingDeleteFarm,
+  isLoadingPosition,
   goBackNavigationHandler,
 }: EditFarmTemplateProps) => {
   const { t } = useTranslation("farm");
@@ -71,6 +77,7 @@ const EditFarmTemplate = ({
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
+  const [ready, setReady] = useState(false);
   const [privated, setPrivated] = useState(true);
   const mapRef = useRef<MapView>(null);
 
@@ -85,16 +92,16 @@ const EditFarmTemplate = ({
   }, [farm]);
 
   useEffect(() => {
-    if (mapRef.current && farm) {
+    if (mapRef.current && position && ready) {
       mapRef.current.animateToRegion({
-        latitude: farm.latitude,
-        longitude: farm.longitude,
+        latitude: position.latitude,
+        longitude: position.longitude,
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       });
-      getAddress(farm.latitude, farm.longitude);
+      getAddress(position.latitude, position.longitude);
     }
-  }, [mapRef.current, farm]);
+  }, [mapRef.current, position, ready]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -261,43 +268,50 @@ const EditFarmTemplate = ({
             </FormControl>
             <VStack space="1">
               <Text bold color={textColor} fontSize="md">
-                {t("location")}
+                {t("setLocation")}
               </Text>
-              <MapView
-                ref={mapRef}
-                userInterfaceStyle={useColorModeValue("light", "dark")}
-                showsCompass={false}
-                style={{
-                  width: "100%",
-                  height: 160,
-                  borderRadius: 12,
-                }}
-              >
-                {farm && (
-                  <Marker
-                    coordinate={{
-                      latitude: farm.latitude,
-                      longitude: farm.longitude,
-                    }}
-                  >
-                    <VStack alignItems="center" maxW="24">
-                      <Text
-                        bold
-                        fontSize="2xs"
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                      >
-                        {farm.name}
-                      </Text>
-                      <Image
-                        source={require("../../../assets/app/pin-brand.png")}
-                        style={{ width: 16, height: 16 }}
-                        contentFit="contain"
-                      />
-                    </VStack>
-                  </Marker>
-                )}
-              </MapView>
+              {isLoadingPosition ? (
+                <Center h="40" bg="muted.200" rounded="xl">
+                  <Spinner color="muted.400" />
+                </Center>
+              ) : (
+                <MapView
+                  ref={mapRef}
+                  onMapReady={() => setReady(true)}
+                  userInterfaceStyle={useColorModeValue("light", "dark")}
+                  showsCompass={false}
+                  style={{
+                    width: "100%",
+                    height: 160,
+                    borderRadius: 12,
+                  }}
+                >
+                  {farm && (
+                    <Marker
+                      coordinate={{
+                        latitude: farm.latitude,
+                        longitude: farm.longitude,
+                      }}
+                    >
+                      <VStack alignItems="center" maxW="24">
+                        <Text
+                          bold
+                          fontSize="2xs"
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {farm.name}
+                        </Text>
+                        <Image
+                          source={require("../../../assets/app/pin-brand.png")}
+                          style={{ width: 16, height: 16 }}
+                          contentFit="contain"
+                        />
+                      </VStack>
+                    </Marker>
+                  )}
+                </MapView>
+              )}
               {address && (
                 <Text color={textColor}>{`${t("address")}: ${address.city}${
                   address.name
@@ -306,7 +320,7 @@ const EditFarmTemplate = ({
             </VStack>
             <HStack mt="12" alignItems="center" justifyContent="space-between">
               <Text fontSize="md" bold color={textColor}>
-                {t("doPublic")}
+                {t("changePublic")}
               </Text>
               <Switch
                 defaultIsChecked={!farm?.privated}

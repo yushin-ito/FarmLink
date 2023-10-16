@@ -7,7 +7,7 @@
 
 #include "env.h"
 
-#define SLEEP_TIME 10 * 60 // 1分
+#define SLEEP_TIME 1 * 60 // 10分
 
 const char* table = "device";
 
@@ -34,7 +34,6 @@ void setup() {
 
     // 初期化
     Wire.begin(26, 32);
-    pinMode(33, INPUT);
     WiFiClientSecure client;
     client.setInsecure();
 
@@ -46,11 +45,11 @@ void setup() {
         tmp = 0;
         hum = 0;
     }
-    delay(2000);
     moi = analogRead(33);
+
     delay(100);
 
-    Serial.printf("Tmp:%2.1fC Hum:%2.1f%% Moi:%d\n", tmp, hum, moi);
+    Serial.printf("Tmp:%2.1fC Hum:%2.1f%%", tmp, hum);
 
     HTTPClient http;
     int http_code;

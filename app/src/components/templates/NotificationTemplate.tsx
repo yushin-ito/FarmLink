@@ -21,8 +21,8 @@ type NotificationTemplateProps = {
   notifications: GetNotificationsResponse | undefined;
   deleteNotification: (notificationId: number) => Promise<void>;
   refetchNotifications: () => Promise<void>;
+  isLoading: boolean;
   isRefetchingNotifications: boolean;
-  isLoadingNotifications: boolean;
   mapNavigationHandler: (
     notificationId: number,
     regionId: number,
@@ -39,8 +39,8 @@ const NotificationTemplate = ({
   notifications,
   deleteNotification,
   refetchNotifications,
+  isLoading,
   isRefetchingNotifications,
-  isLoadingNotifications,
   mapNavigationHandler,
   talkChatNavigationHandler,
   goBackNavigationHandler,
@@ -59,7 +59,7 @@ const NotificationTemplate = ({
       } else if (notification.talkId) {
         return "chat";
       } else {
-        return "unknown"
+        return "unknown";
       }
     },
     []
@@ -87,7 +87,7 @@ const NotificationTemplate = ({
         />
       </HStack>
       <Box flex={1}>
-        {isLoadingNotifications ? (
+        {isLoading ? (
           <SkeletonNotification rows={4} />
         ) : (
           <FlatList

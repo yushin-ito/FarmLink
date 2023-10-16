@@ -24,21 +24,22 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
   } = useQueryTalks(session?.user.id);
   const [isRefetchingTalks, setIsRefetchingTalks] = useState(false);
 
-  const { mutateAsync: mutateAsyncDeleteTalk } = useDeleteTalk({
-    onSuccess: async () => {
-      await refetch();
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncDeleteTalk, isLoading: isLoadingDeleteTalk } =
+    useDeleteTalk({
+      onSuccess: async () => {
+        await refetch();
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const refetchTalks = useCallback(async () => {
     setIsRefetchingTalks(true);
@@ -76,7 +77,7 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
       locale={locale}
       talks={talks}
       user={user}
-      isLoading={isLoadingUser || isLoadingTalks}
+      isLoading={isLoadingUser || isLoadingTalks || isLoadingDeleteTalk}
       isRefetchingTalks={isRefetchingTalks}
       refetchTalks={refetchTalks}
       deleteTalk={deleteTalk}

@@ -49,7 +49,10 @@ const NotificationScreen = ({
     };
   }, [session]);
 
-  const { mutateAsync: mutateAsyncUpdateNotification } = useUpdateNotification({
+  const {
+    mutateAsync: mutateAsyncUpdateNotification,
+    isLoading: isLoadingUpdateNotification,
+  } = useUpdateNotification({
     onSuccess: async () => {
       await refetch();
     },
@@ -66,7 +69,10 @@ const NotificationScreen = ({
     },
   });
 
-  const { mutateAsync: mutateAsyncDeleteNotification } = useDeleteNotification({
+  const {
+    mutateAsync: mutateAsyncDeleteNotification,
+    isLoading: isLoadingDeleteNotification,
+  } = useDeleteNotification({
     onSuccess: async () => {
       await refetch();
     },
@@ -150,7 +156,11 @@ const NotificationScreen = ({
       notifications={notifications}
       refetchNotifications={refetchNotifications}
       isRefetchingNotifications={isRefetchingNotifications}
-      isLoadingNotifications={isLoadingNotifications}
+      isLoading={
+        isLoadingNotifications ||
+        isLoadingUpdateNotification ||
+        isLoadingDeleteNotification
+      }
       deleteNotification={deleteNotification}
       mapNavigationHandler={mapNavigationHandler}
       talkChatNavigationHandler={talkChatNavigationHandler}

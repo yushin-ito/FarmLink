@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import EditFarmTemplate from "../components/templates/EditFarmTemplate";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
@@ -16,21 +16,34 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   const { t } = useTranslation("farm");
   const { params } = useRoute<RouteProp<MapStackParamList, "EditFarm">>();
   const { data: farm, refetch: refetchFarm } = useQueryFarm(params.farmId);
-  const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
+  const [searchResult, setSearchResult] =
+    useState<SearchDeviceResponse[number]>();
+
+  useEffect(() => {
+    getPosition();
+  }, []);
 
   const { mutateAsync: mutateAsyncUpdateFarm, isLoading: isLoadingUpdateFarm } =
     useUpdateFarm({
-      onSuccess: async () => {
+      onSuccess: async (data) => {
         await refetchFarm();
-        navigation.goBack();
-        showAlert(
-          toast,
-          <Alert
-            status="success"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("saved")}
-          />
-        );
+        if (position && data?.length) {
+          navigation.navigate("Map", {
+            regionId: data[0].farmId,
+            latitude: position.latitude,
+            longitude: position.longitude,
+            type: "farm",
+          });
+        } else {
+          showAlert(
+            toast,
+            <Alert
+              status="success"
+              onPressCloseButton={() => toast.closeAll()}
+              text={t("saved")}
+            />
+          );
+        }
       },
       onError: () => {
         navigation.goBack();
@@ -65,30 +78,31 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       },
     });
 
-  const { address, getAddress } = useLocation({
-    onDisable: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("permitRequestGPS")}
-        />
-      );
-    },
-    onError: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { position, getPosition, address, getAddress, isLoadingPosition } =
+    useLocation({
+      onDisable: () => {
+        navigation.goBack();
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("permitRequestGPS")}
+          />
+        );
+      },
+      onError: () => {
+        navigation.goBack();
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const { mutateAsync: mutateAsyncSearchDevice } = useSearchDevice({
     onSuccess: (data) => {
@@ -122,17 +136,20 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       description: string,
       privated: boolean
     ) => {
-      if (farm) {
+      if (farm && position) {
         await mutateAsyncUpdateFarm({
           farmId: farm.farmId,
           name,
           deviceId,
           description,
           privated,
+          latitude: position.latitude,
+          longitude: position.longitude,
+          location: `POINT(${position.longitude} ${position.latitude})`,
         });
       }
     },
-    [farm]
+    [farm, position]
   );
 
   const deleteFarm = useCallback(async () => {
@@ -146,6 +163,7 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   return (
     <EditFarmTemplate
       farm={farm}
+      position={position}
       address={address}
       getAddress={getAddress}
       searchResult={searchResult}
@@ -154,6 +172,7 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       searchDevice={searchDevice}
       isLoadingUpdateFarm={isLoadingUpdateFarm}
       isLoadingDeleteFarm={isLoadingDeleteFarm}
+      isLoadingPosition={isLoadingPosition}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

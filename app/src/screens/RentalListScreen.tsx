@@ -22,7 +22,10 @@ const RentalListScreen = ({
   } = useQueryUserRentals(session?.user.id);
   const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
 
-  const { mutateAsync: mutateAsyncUpdateRental } = useUpdateRental({
+  const {
+    mutateAsync: mutateAsyncUpdateRental,
+    isLoading: isLoadingUpdateRental,
+  } = useUpdateRental({
     onSuccess: async () => {
       await refetch();
     },
@@ -39,7 +42,10 @@ const RentalListScreen = ({
     },
   });
 
-  const { mutateAsync: mutateAsyncDeleteRental } = useDeleteRental({
+  const {
+    mutateAsync: mutateAsyncDeleteRental,
+    isLoading: isLoadingDeleteRental,
+  } = useDeleteRental({
     onSuccess: async () => {
       await refetch();
     },
@@ -102,11 +108,13 @@ const RentalListScreen = ({
     <RentalListTemplate
       rentals={rentals}
       deleteRental={deleteRental}
-      isLoadingRentals={isLoadingRentals}
-      isRefetchingRentals={isRefetchingRentals}
       refetchRentals={refetchRentals}
       publicRental={publicRental}
       privateRental={privateRental}
+      isLoading={
+        isLoadingRentals || isLoadingUpdateRental || isLoadingDeleteRental
+      }
+      isRefetchingRentals={isRefetchingRentals}
       mapNavigationHandler={mapNavigationHandler}
       postRentalNavigationHandler={postRentalNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}

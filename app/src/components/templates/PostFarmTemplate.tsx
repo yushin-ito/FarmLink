@@ -278,12 +278,6 @@ const PostFarmTemplate = ({
                   )}
                 </MapView>
               )}
-              <HStack alignItems="center" space="1">
-                <Icon as={<Feather />} name="alert-circle" color="error.600" />
-                <Text fontSize="xs" color="error.600">
-                  {t("alertLocation")}
-                </Text>
-              </HStack>
               {!isLoadingPosition && address && (
                 <Text mt="1" color={textColor}>{`${t("address")}: ${
                   address.city
@@ -292,7 +286,7 @@ const PostFarmTemplate = ({
             </VStack>
             <HStack mt="9" alignItems="center" justifyContent="space-between">
               <Text fontSize="md" bold color={textColor}>
-                {t("doPublic")}
+                {t("changePublic")}
               </Text>
               <Switch
                 defaultIsChecked

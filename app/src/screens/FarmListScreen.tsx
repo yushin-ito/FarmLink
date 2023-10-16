@@ -24,37 +24,39 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   } = useQueryUserFarms(session?.user.id);
   const [isRefetchingFarms, setIsRefetchingFarms] = useState(false);
 
-  const { mutateAsync: mutateAsyncUpdateFarm } = useUpdateFarm({
-    onSuccess: async () => {
-      await refetch();
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncUpdateFarm, isLoading: isLoadingUpdateFarm } =
+    useUpdateFarm({
+      onSuccess: async () => {
+        await refetch();
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
-  const { mutateAsync: mutateAsyncDeleteFarm } = useDeleteFarm({
-    onSuccess: async () => {
-      await refetch();
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncDeleteFarm, isLoading: isLoadingDeleteFarm } =
+    useDeleteFarm({
+      onSuccess: async () => {
+        await refetch();
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const refetchFarms = useCallback(async () => {
     setIsRefetchingFarms(true);
@@ -104,7 +106,12 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     <FarmListTemplate
       user={user}
       farms={farms}
-      isLoading={isLoadingUser || isLoadingFarms}
+      isLoading={
+        isLoadingUser ||
+        isLoadingFarms ||
+        isLoadingUpdateFarm ||
+        isLoadingDeleteFarm
+      }
       isRefetchingFarms={isRefetchingFarms}
       refetchFarms={refetchFarms}
       deleteFarm={deleteFarm}

@@ -485,12 +485,6 @@ const PostRentalTemplate = ({
                   )}
                 </MapView>
               )}
-              <HStack alignItems="center" space="1">
-                <Icon as={<Feather />} name="alert-circle" color="error.600" />
-                <Text fontSize="xs" color="error.600">
-                  {t("alertLocation")}
-                </Text>
-              </HStack>
               {!isLoadingPosition && address && (
                 <Text mt="1" color={textColor}>{`${t("address")}: ${
                   address.city
