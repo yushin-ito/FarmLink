@@ -15,11 +15,9 @@ SHT3X sht30;
 
 float tmp = 0.0;
 float hum = 0.0;
-uint16_t moi = 0;
 
 void setup() {
     Serial.begin(115200);
-    delay(1000);
 
     // WiFi接続
     WiFi.begin(SSID, PASSWORD);
@@ -36,7 +34,8 @@ void setup() {
     Wire.begin(26, 32);
     WiFiClientSecure client;
     client.setInsecure();
-
+    
+    // センサーデータを取得
     if (sht30.get() == 0) {
         tmp = sht30.cTemp;
         hum = sht30.humidity;
@@ -45,8 +44,6 @@ void setup() {
         tmp = 0;
         hum = 0;
     }
-    moi = analogRead(33);
-
     delay(100);
 
     Serial.printf("Tmp:%2.1fC Hum:%2.1f%%", tmp, hum);
@@ -60,7 +57,7 @@ void setup() {
         http.addHeader("apikey", String(SUPABASE_KEY));
         http.addHeader("Authorization", "Bearer " + String(SUPABASE_KEY));
         http.addHeader("Prefer", "resolution=merge-duplicates"); // UPSERT
-        String payload = "{\"deviceId\":\"" + String(UUID) + "\",\"temperture\":\"" + String(tmp) + "\",\"humidity\":\"" + String(hum) + "\",\"moisture\":\"" + String(moi) + "\"}";
+        String payload = "{\"deviceId\":\"" + String(UUID) + "\",\"temperture\":\"" + String(tmp) + "\",\"humidity\":\"" + String(hum) + "\"}";
         http_code = http.sendRequest("POST", payload);
         if (http_code > 0) {
             String response = http.getString();

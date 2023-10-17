@@ -74,7 +74,10 @@ void setup() {
   init_camera();
   bat_init();
   bmm8563_init(); // https://esp32.com/viewtopic.php?t=21030
+  WiFiClientSecure client;
+  client.setInsecure();
 
+  // 撮影
   camera_fb_t* fb = esp_camera_fb_get();
 
   if (!fb) {
@@ -83,9 +86,6 @@ void setup() {
     ESP.restart();
   }
   Serial.println("Capture completed.");
-
-  WiFiClientSecure client;
-  client.setInsecure();
 
   HTTPClient http;
   int http_code;
@@ -135,6 +135,8 @@ void setup() {
   }
 
   esp_camera_fb_return(fb);
+
+  WiFi.disconnect(true);
 
   bmm8563_setTimerIRQ(SLEEP_TIME);
 
