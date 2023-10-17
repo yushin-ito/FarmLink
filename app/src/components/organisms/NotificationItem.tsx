@@ -102,7 +102,7 @@ const NotificationItem = memo(
                   </HStack>
                   <VStack w="75%" space="1">
                     <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
-                      {item.farm?.name + t("to") + item.from?.name + t("liked")}
+                      {item.farm.name + t("to") + item.from.name + t("liked")}
                     </Text>
                     <Text color={textColor} fontSize="xs">
                       {getTimeDistance(item.createdAt, locale)}
@@ -166,15 +166,15 @@ const NotificationItem = memo(
                       size="md"
                       fontSize="2xl"
                       disabled
-                      text={item.from?.name.charAt(0)}
-                      uri={item.from?.avatarUrl}
-                      color={item.from?.color}
-                      updatedAt={item.from?.updatedAt}
+                      text={item.from.name?.charAt(0)}
+                      uri={item.from.avatarUrl}
+                      color={item.from.color}
+                      updatedAt={item.from.updatedAt}
                     />
                   </HStack>
                   <VStack w="75%" space="1">
                     <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
-                      {item.from?.name + t("send")}
+                      {item.from.name + t("send")}
                     </Text>
                     <Text color={textColor} fontSize="xs">
                       {getTimeDistance(item.createdAt, locale)}

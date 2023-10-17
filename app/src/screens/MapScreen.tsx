@@ -22,7 +22,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     session?.user.id
   );
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
-  const [type, setType] = useState<"farm" | "rental">("farm");
+  const [type, setType] = useState<"farm" | "rental">("rental");
   const [touch, setTouch] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
   const [location, setLocation] = useState<LatLng>();
@@ -51,8 +51,8 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   });
 
   useEffect(() => {
-    setLocation(position)
-  },[position])
+    setLocation(position);
+  }, [position]);
 
   useEffect(() => {
     if (params?.regionId && params?.latitude && params?.longitude) {

@@ -72,7 +72,7 @@ const SettingTemplate = ({
   }
 
   return (
-    <Box flex={1} pt="6" px="8" safeAreaTop>
+    <Box flex={1} pt="7" px="8" safeAreaTop>
       <ImageActionSheet
         isOpen={isOpen}
         onClose={onClose}
@@ -80,7 +80,7 @@ const SettingTemplate = ({
         pickImageByCamera={pickImageByCamera}
         pickImageByLibrary={pickImageByLibrary}
       />
-      <Heading mt="3">{t("setting")}</Heading>
+      <Heading>{t("setting")}</Heading>
       <HStack mt="6" mb="9" alignItems="center">
         <Box w="25%">
           <Avatar
@@ -105,7 +105,7 @@ const SettingTemplate = ({
               {user?.name}
             </Text>
             <Text color={textColor} numberOfLines={2} ellipsizeMode="tail">
-              {!user?.profile ?   t("noProfile") :user?.profile}
+              {!user?.profile ? t("noProfile") : user?.profile}
             </Text>
           </VStack>
         )}

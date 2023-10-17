@@ -23,11 +23,7 @@ const getCommunityChats = async (
     throw error;
   }
 
-  return data.map((item) =>
-    Array.isArray(item.user)
-      ? { ...item, user: item.user[0] }
-      : { ...item, user: item.user }
-  );
+  return data;
 };
 
 const getTalkChats = async (talkId: number, from: number, to: number) => {
@@ -41,11 +37,7 @@ const getTalkChats = async (talkId: number, from: number, to: number) => {
     throw error;
   }
 
-  return data.map((item) =>
-    Array.isArray(item.user)
-      ? { ...item, user: item.user[0] }
-      : { ...item, user: item.user }
-  );
+  return data;
 };
 
 export const useInfiniteQueryCommunityChats = (communityId: number) => {

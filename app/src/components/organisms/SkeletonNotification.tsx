@@ -1,4 +1,11 @@
-import { Divider, HStack, Icon, VStack, Skeleton, useColorModeValue } from "native-base";
+import {
+  Divider,
+  HStack,
+  Icon,
+  VStack,
+  Skeleton,
+  useColorModeValue,
+} from "native-base";
 import React, { memo } from "react";
 import { Feather } from "@expo/vector-icons";
 
@@ -22,7 +29,7 @@ const SkeletonNotification = memo(({ rows }: SkeletonNotificationProps) => {
             justifyContent="space-between"
           >
             <HStack alignItems="center" space="3">
-              <Skeleton size="12" rounded={index % 2 === 1 ? "md" : "full"} />
+              <Skeleton size="12" rounded="full" />
               <Skeleton.Text w="40" lines={2} />
             </HStack>
             <Icon

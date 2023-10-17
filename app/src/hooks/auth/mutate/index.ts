@@ -38,7 +38,7 @@ const signInWithEmail = async (credentials: SignInWithPasswordCredentials) => {
 const signInWithProvider = async (provider: string) => {
   const redirectUrl = makeRedirectUri({
     scheme: "farmlink",
-    path: "verify",
+    path: "redirect",
     isTripleSlashed: true,
   });
 

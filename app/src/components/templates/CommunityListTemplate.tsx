@@ -89,7 +89,7 @@ const CommunityListTemplate = ({
         <HStack alignItems="center" justifyContent="space-between">
           <Heading>{t("community")}</Heading>
           <Avatar
-            text={user?.name.charAt(0)}
+            text={user?.name?.charAt(0)}
             uri={user?.avatarUrl}
             color={user?.color}
             onPress={settingNavigationHandler}
