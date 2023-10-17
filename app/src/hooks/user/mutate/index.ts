@@ -31,16 +31,12 @@ const postAvatar = async (base64: string) => {
   return data;
 };
 
-const searchUser = async (userId: string | undefined) => {
-  if (!userId) {
-    return;
-  }
-
+const searchUser = async (userId: string) => {
   const { data, error } = await supabase
     .from("user")
     .select()
-    .eq("userId", userId)
-    .single();
+    .eq("userId", userId);
+
   if (error) {
     throw error;
   }

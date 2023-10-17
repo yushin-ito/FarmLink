@@ -25,12 +25,9 @@ import { StatusBar } from "expo-status-bar";
 
 export type SignUpTemplateProps = {
   isLoading: boolean;
-  signUpWithEmail: (
-    email: string,
-    password: string,
-    name: string
-  ) => Promise<void>;
+  signUpWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithGoogle: () => Promise<void>;
+  signUpWithApple: () => Promise<void>;
   signUpWithTwitter: () => Promise<void>;
   signUpWithFacebook: () => Promise<void>;
   signInNavigationHandler: () => void;
@@ -40,7 +37,6 @@ export type SignUpTemplateProps = {
 type FormValues = {
   email: string;
   password: string;
-  name: string;
 };
 
 const SignUpTemplate = memo(
@@ -48,6 +44,7 @@ const SignUpTemplate = memo(
     isLoading,
     signUpWithEmail,
     signUpWithGoogle,
+    signUpWithApple,
     signUpWithTwitter,
     signUpWithFacebook,
     signInNavigationHandler,
@@ -68,7 +65,7 @@ const SignUpTemplate = memo(
     return (
       <VStack flex={1} safeAreaTop>
         <StatusBar style={useColorModeValue("dark", "light")} />
-        <HStack px="2" alignItems="center" justifyContent="space-between">
+        <HStack pt="2" px="2" alignItems="center" justifyContent="space-between">
           <IconButton
             onPress={goBackNavigationHandler}
             icon={
@@ -88,40 +85,7 @@ const SignUpTemplate = memo(
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
         >
-          <VStack flex={1} pt="6" pb="12" px="10" space="3">
-            <FormControl isRequired isInvalid={"name" in errors}>
-              <FormControl.Label>{t("displayName")}</FormControl.Label>
-              <Controller
-                name="name"
-                control={control}
-                render={({ field: { value, onChange } }) => (
-                  <Input
-                    returnKeyType="done"
-                    placeholder={t("enter")}
-                    placeholderTextColor="muted.400"
-                    InputRightElement={
-                      <Icon
-                        as={<Feather />}
-                        name="user"
-                        size="5"
-                        mr="2"
-                        color="muted.400"
-                      />
-                    }
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                )}
-                rules={{
-                  required: t("displayNameRequired"),
-                }}
-              />
-              <FormControl.ErrorMessage
-                leftIcon={<Icon as={<Feather name="alert-circle" />} />}
-              >
-                {errors.name && <Text>{errors.name.message}</Text>}
-              </FormControl.ErrorMessage>
-            </FormControl>
+          <VStack flex={1} pt="9" pb="12" px="12" space="3">
             <FormControl isRequired isInvalid={"email" in errors}>
               <FormControl.Label>{t("email")}</FormControl.Label>
               <Controller
@@ -213,12 +177,12 @@ const SignUpTemplate = memo(
             <VStack alignItems="center">
               <Button
                 w="100%"
-                mt="9"
+                mt="12"
                 size="lg"
                 rounded="xl"
                 colorScheme="brand"
                 onPress={handleSubmit((data) =>
-                  signUpWithEmail(data.email, data.password, data.name)
+                  signUpWithEmail(data.email, data.password)
                 )}
                 isLoading={isLoading}
               >
@@ -226,7 +190,7 @@ const SignUpTemplate = memo(
                   {t("signup")}
                 </Text>
               </Button>
-              <HStack mt="2" alignItems="center" space="2">
+              <HStack mt="3" alignItems="center" space="2">
                 <Text color={textColor}>{t("alreadyHaveAccount")}</Text>
                 <Link
                   _text={{ color: "brand.600" }}
@@ -237,7 +201,7 @@ const SignUpTemplate = memo(
               </HStack>
             </VStack>
             <HStack
-              mt="4"
+              my="5"
               alignItems="center"
               justifyContent="center"
               space="3"
@@ -246,7 +210,7 @@ const SignUpTemplate = memo(
               <Text color={textColor}>{t("or")}</Text>
               <Divider w="40%" bg="muted.300" />
             </HStack>
-            <VStack mt="4" space="4">
+            <VStack space="4">
               <Pressable
                 py="3"
                 rounded="full"
@@ -263,6 +227,23 @@ const SignUpTemplate = memo(
                   />
                 </Center>
                 <Text>{t("signUpWithGoogle")}</Text>
+              </Pressable>
+              <Pressable
+                py="3"
+                rounded="full"
+                borderWidth="1"
+                borderColor="muted.200"
+                alignItems="center"
+                _pressed={{ bg: pressedColor }}
+                onPress={signUpWithApple}
+              >
+                <Center h="100%" position="absolute" top="3" left="3">
+                  <Image
+                    style={{ width: 32, height: 32 }}
+                    source={require("../../../assets/provider/apple.png")}
+                  />
+                </Center>
+                <Text>{t("signUpWithApple")}</Text>
               </Pressable>
               <Pressable
                 py="3"

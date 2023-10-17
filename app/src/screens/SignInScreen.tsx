@@ -4,7 +4,7 @@ import {
   useSignInWithProvider,
 } from "../hooks/auth/mutate";
 import SignIn from "../components/templates/SignInTemplate";
-import { showAlert, wait } from "../functions";
+import { showAlert } from "../functions";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
@@ -17,6 +17,20 @@ const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
 
   const { mutateAsync: mutateAsyncSearchUser, isLoading: isLoadingSearchUser } =
     useSearchUser({
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
+
+  const { mutateAsync: mutateAsyncPostUser, isLoading: isLoadingPostUser } =
+    usePostUser({
       onError: () => {
         showAlert(
           toast,
@@ -56,32 +70,24 @@ const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostUser, isLoading: isLoadingPostUser } =
-    usePostUser({
-      onError: () => {
-        showAlert(
-          toast,
-          <Alert
-            status="error"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("error")}
-          />
-        );
-      },
-    });
-
   const { mutateAsync: mutateAsyncSignInWithProvider } = useSignInWithProvider({
     onSuccess: async (data) => {
-      const user = await mutateAsyncSearchUser(data?.user?.id);
-      if (data?.user && !user) {
-        navigation.navigate("Walkthrough");
-        await wait(0.1);
-        mutateAsyncPostUser({
-          userId: data.user.id,
-          name: data.user.user_metadata.name,
-          avatarUrl: data.user.user_metadata.avatar_url.replace("_normal", ""), // for Twitter
-          color: `hsl(${Math.floor(Math.random() * 360).toString()}, 60%, 60%)`,
-        });
+      if (data?.user) {
+        const user = await mutateAsyncSearchUser(data?.user?.id);
+        if (!user.length) {
+          navigation.navigate("Walkthrough");
+          mutateAsyncPostUser({
+            userId: data.user.id,
+            name: data.user.user_metadata?.name ?? t("user"),
+            avatarUrl: data.user.user_metadata?.avatar_url?.replace(
+              "_normal",
+              ""
+            ), // for Twitter
+            color: `hsl(${Math.floor(
+              Math.random() * 360
+            ).toString()}, 60%, 60%)`,
+          });
+        }
       }
     },
     onError: () => {
@@ -107,6 +113,10 @@ const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
     await mutateAsyncSignInWithProvider("google");
   }, []);
 
+  const signInWithApple = useCallback(async () => {
+    await mutateAsyncSignInWithProvider("apple");
+  }, []);
+
   const signInWithTwitter = useCallback(async () => {
     await mutateAsyncSignInWithProvider("twitter");
   }, []);
@@ -130,6 +140,7 @@ const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
       }
       signInWithEmail={signInWithEmail}
       signInWithGoogle={signInWithGoogle}
+      signInWithApple={signInWithApple}
       signInWithTwitter={signInWithTwitter}
       signInWithFacebook={signInWithFacebook}
       signUpNavigationHandler={signUpNavigationHandler}

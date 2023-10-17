@@ -2,9 +2,9 @@
   "license": "MIT",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "build": "eas build --profile preview --resource-class large",
+    "device": "eas device:create",
+    "generate": "supabase gen types typescript --linked > ./src/types/schema.ts"
   },
   "dependencies": {
     "@expo/config": "~8.0.0",

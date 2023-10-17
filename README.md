@@ -1,15 +1,5 @@
 # FarmLink
 
-## Supabase
-
-型を生成する
-
-```
-npx supabase init
-npx supabase link --project-ref fqtmezifujskuyljoich
-npx supabase gen types typescript --linked > ./src/types/db/schema.ts
-```
-
 ## Git・GitHub
 
 ### 1. ブランチを切る

@@ -32,7 +32,9 @@ const RootNavigator = () => {
       ) : (
         <RootStack.Screen name="AuthNavigator" component={AuthNavigator} />
       )}
-      <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
+      {session && session?.user.id && (
+        <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
+      )}
     </RootStack.Navigator>
   );
 };

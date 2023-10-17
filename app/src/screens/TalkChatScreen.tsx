@@ -116,7 +116,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { mutateAsync: mutateAsyncPostChat, isLoading: isLoadingPostChat } =
     usePostChat({
       onSuccess: async ({ chatId, authorId, message, imageUrl }) => {
-        if (talk?.to.token && user) {
+        if (talk?.to.token && user?.name) {
           if (message)
             await sendNotification({
               to: talk.to.token,

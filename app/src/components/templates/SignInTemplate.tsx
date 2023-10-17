@@ -27,6 +27,7 @@ type SignInTemplateProps = {
   isLoading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
+  signInWithApple: () => Promise<void>;
   signInWithTwitter: () => Promise<void>;
   signInWithFacebook: () => Promise<void>;
   signUpNavigationHandler: () => void;
@@ -43,6 +44,7 @@ const SignInTemplate = memo(
     isLoading,
     signInWithEmail,
     signInWithGoogle,
+    signInWithApple,
     signInWithTwitter,
     signInWithFacebook,
     signUpNavigationHandler,
@@ -63,7 +65,12 @@ const SignInTemplate = memo(
     return (
       <VStack flex={1} safeAreaTop>
         <StatusBar style={useColorModeValue("dark", "light")} />
-        <HStack px="2" alignItems="center" justifyContent="space-between">
+        <HStack
+          pt="2"
+          px="2"
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <IconButton
             onPress={goBackNavigationHandler}
             icon={
@@ -83,7 +90,7 @@ const SignInTemplate = memo(
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
         >
-          <VStack flex={1} pt="9" pb="12" px="10" space="3">
+          <VStack flex={1} pt="9" pb="12" px="12" space="3">
             <FormControl isRequired isInvalid={"email" in errors}>
               <FormControl.Label>{t("email")}</FormControl.Label>
               <Controller
@@ -178,7 +185,7 @@ const SignInTemplate = memo(
                   {t("signin")}
                 </Text>
               </Button>
-              <HStack mt="2" alignItems="center" space="2">
+              <HStack mt="3" alignItems="center" space="2">
                 <Text color={textColor}>{t("notHaveAccount")}</Text>
                 <Link
                   _text={{ color: "brand.600" }}
@@ -189,7 +196,7 @@ const SignInTemplate = memo(
               </HStack>
             </VStack>
             <HStack
-              mt="4"
+              my="5"
               alignItems="center"
               justifyContent="center"
               space="3"
@@ -198,7 +205,7 @@ const SignInTemplate = memo(
               <Text color={textColor}>{t("or")}</Text>
               <Divider w="40%" bg="muted.300" />
             </HStack>
-            <VStack mt="4" space="4">
+            <VStack space="4">
               <Pressable
                 py="3"
                 rounded="full"
@@ -215,6 +222,23 @@ const SignInTemplate = memo(
                   />
                 </Center>
                 <Text>{t("signInWithGoogle")}</Text>
+              </Pressable>
+              <Pressable
+                py="3"
+                rounded="full"
+                borderWidth="1"
+                borderColor="muted.200"
+                alignItems="center"
+                _pressed={{ bg: pressedColor }}
+                onPress={signInWithApple}
+              >
+                <Center h="100%" position="absolute" top="3" left="3">
+                  <Image
+                    style={{ width: 32, height: 32 }}
+                    source={require("../../../assets/provider/apple.png")}
+                  />
+                </Center>
+                <Text>{t("signInWithApple")}</Text>
               </Pressable>
               <Pressable
                 py="3"

@@ -13,7 +13,7 @@ export interface ExtendedExpoConfig extends ExpoConfig {
 
 export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
   ...config,
-  name: "farmlink",
+  name: "FarmLink",
   slug: "farmlink",
   scheme: "farmlink",
   owner: "farmlink",
@@ -28,8 +28,8 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
     fallbackToCacheTimeout: 0,
   },
   ios: {
-    supportsTablet: true,
-    bundleIdentifier: "com.farmlink.app",
+    bundleIdentifier: "app.com.farmlink.app",
+    usesAppleSignIn: true,
     config: {
       googleMapsApiKey: process.env.GOOGLE_MAP_API_KEY_IOS,
     },
