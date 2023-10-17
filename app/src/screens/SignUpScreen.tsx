@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useSignInWithProvider, useSignUp } from "../hooks/auth/mutate";
+import { useSignInWithProvider, useSignUpWithEmail } from "../hooks/auth/mutate";
 import * as Linking from "expo-linking";
 import SignUpTemplate from "../components/templates/SignUpTemplate";
 import { showAlert } from "../functions";
@@ -44,7 +44,7 @@ const SignUpScreen = ({ navigation }: AuthStackScreenProps) => {
   const {
     mutateAsync: mutateAsyncSignUpWithEmail,
     isLoading: isLoadingSignUpWithEmail,
-  } = useSignUp({
+  } = useSignUpWithEmail({
     onSuccess: async ({ user }) => {
       if (user && user.identities && user.identities.length > 0) {
         navigation.navigate("Walkthrough");

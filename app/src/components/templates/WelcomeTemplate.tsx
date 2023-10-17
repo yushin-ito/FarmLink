@@ -4,14 +4,12 @@ import { useTranslation } from "react-i18next";
 import { StatusBar } from "expo-status-bar";
 
 export type WelcomeTemplateProps = {
-  path: string;
   signInNavigationHandler: () => void;
   signUpNavigationHandler: () => void;
 };
 
 const WelcomeTemplate = memo(
   ({
-    path,
     signInNavigationHandler,
     signUpNavigationHandler,
   }: WelcomeTemplateProps) => {
@@ -58,15 +56,6 @@ const WelcomeTemplate = memo(
             </Text>
           </Button>
         </VStack>
-        <Text
-          position="absolute"
-          bottom="6"
-          color="white"
-          fontSize="xs"
-          alignSelf="center"
-        >
-          {path}
-        </Text>
       </Box>
     );
   }

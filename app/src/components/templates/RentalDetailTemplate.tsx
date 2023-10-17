@@ -207,13 +207,13 @@ const RentalDetailTemplate = ({
                 <Avatar
                   isDisabled
                   size="7"
-                  text={rental?.user?.name?.charAt(0)}
-                  uri={rental?.user?.avatarUrl}
-                  color={rental?.user?.color}
-                  updatedAt={rental?.user?.updatedAt}
+                  text={rental?.owner?.name?.charAt(0)}
+                  uri={rental?.owner?.avatarUrl}
+                  color={rental?.owner?.color}
+                  updatedAt={rental?.owner?.updatedAt}
                 />
                 <Text maxW="20" numberOfLines={1} ellipsizeMode="tail">
-                  {rental?.user?.name}
+                  {rental?.owner?.name}
                 </Text>
               </HStack>
             </HStack>

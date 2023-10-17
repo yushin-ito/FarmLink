@@ -65,12 +65,7 @@ const SignInTemplate = memo(
     return (
       <VStack flex={1} safeAreaTop>
         <StatusBar style={useColorModeValue("dark", "light")} />
-        <HStack
-          pt="2"
-          px="2"
-          alignItems="center"
-          justifyContent="space-between"
-        >
+        <HStack px="2" alignItems="center" justifyContent="space-between">
           <IconButton
             onPress={goBackNavigationHandler}
             icon={
@@ -172,7 +167,7 @@ const SignInTemplate = memo(
             <VStack alignItems="center">
               <Button
                 w="100%"
-                mt="12"
+                mt="9"
                 size="lg"
                 rounded="xl"
                 colorScheme="brand"

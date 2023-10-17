@@ -117,7 +117,10 @@ const FarmPreviewList = memo(
                 >
                   {item.device.imageUrl ? (
                     <Image
-                      source={{ uri: item.device.imageUrl }}
+                      source={{
+                        uri:
+                          item.device.imageUrl + "?=" + item.device.updatedAt,
+                      }}
                       style={{ width: 96, height: 96 }}
                     />
                   ) : (
@@ -130,8 +133,8 @@ const FarmPreviewList = memo(
                   )}
                 </Center>
                 <VStack w="60%">
-                  <Heading fontSize="lg" numberOfLines={1} ellipsizeMode="tail">
-                    {item.name}
+                  <Heading fontSize="md" numberOfLines={1} ellipsizeMode="tail">
+                    {item.owner?.name + t("own") + item.name}
                   </Heading>
                   <Text
                     color={textColor}

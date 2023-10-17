@@ -12,9 +12,9 @@ export type GetUserRentalsResponse = Awaited<ReturnType<typeof getUserRentals>>;
 const getRental = async (rentalId: number) => {
   const { data, error } = await supabase
     .from("rental")
-    .select("*, user(*)")
+    .select("*, owner:user(*)")
     .eq("rentalId", rentalId)
-    .returns<(Rental["Row"] & { user: User["Row"] })[]>();
+    .returns<(Rental["Row"] & { owner: User["Row"] })[]>();
   if (error) {
     throw error;
   }

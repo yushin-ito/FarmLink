@@ -12,9 +12,9 @@ export type GetUserFarmsResponse = Awaited<ReturnType<typeof getUserFarms>>;
 const getFarm = async (farmId: number) => {
   const { data, error } = await supabase
     .from("farm")
-    .select("*, user(*), device(*)")
+    .select("*, owner:user(*), device(*)")
     .eq("farmId", farmId)
-    .returns<(Farm["Row"] & { user: User["Row"]; device: Device["Row"] })[]>();
+    .returns<(Farm["Row"] & { owner: User["Row"]; device: Device["Row"] })[]>();
 
   if (error) {
     throw error;
@@ -33,7 +33,9 @@ const getFarms = async (from: number, to: number, location?: LatLng) => {
       long: location.longitude,
     })
     .range(from, to)
-    .returns<(Farm["Row"] & { device: Device["Row"] })[]>();
+    .returns<
+      (Farm["Row"] & { owner: { name: string }; device: Device["Row"] })[]
+    >();
   if (error) {
     throw error;
   }

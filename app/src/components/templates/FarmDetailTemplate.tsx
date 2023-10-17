@@ -148,13 +148,13 @@ const FarmDetailTemplate = ({
                 <Avatar
                   isDisabled
                   size="7"
-                  text={farm?.user?.name?.charAt(0)}
-                  uri={farm?.user?.avatarUrl}
-                  color={farm?.user?.color}
-                  updatedAt={farm?.user?.updatedAt}
+                  text={farm?.owner?.name?.charAt(0)}
+                  uri={farm?.owner?.avatarUrl}
+                  color={farm?.owner?.color}
+                  updatedAt={farm?.owner?.updatedAt}
                 />
                 <Text maxW="20" numberOfLines={1} ellipsizeMode="tail">
-                  {farm?.user?.name}
+                  {farm?.owner?.name}
                 </Text>
               </HStack>
             </HStack>

@@ -14,7 +14,7 @@ export interface ExtendedExpoConfig extends ExpoConfig {
 export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
   ...config,
   name: "FarmLink",
-  slug: "farmlink",
+  slug: "FarmLink",
   scheme: "farmlink",
   owner: "farmlink",
   version: "1.0.0",
@@ -28,8 +28,10 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
     fallbackToCacheTimeout: 0,
   },
   ios: {
-    bundleIdentifier: "app.com.farmlink.app",
-    usesAppleSignIn: true,
+    bundleIdentifier: "com.farmlink.app",
+    entitlements: {
+      "com.apple.developer.applesignin": ["Default"],
+    },
     config: {
       googleMapsApiKey: process.env.GOOGLE_MAP_API_KEY_IOS,
     },
@@ -73,7 +75,7 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
   ],
   extra: {
     eas: {
-      projectId: "d1f11309-5bb7-4e9b-ab8b-79cbdbbfd037",
+      projectId: "df9e736c-f430-41d3-9968-20058477c49c",
     },
     SUPABASE_URL: process.env.SUPABASE_URL as string,
     SUPABASE_KEY: process.env.SUPABASE_KEY as string,

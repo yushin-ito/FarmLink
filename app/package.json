@@ -2,7 +2,7 @@
   "license": "MIT",
   "scripts": {
     "start": "expo start",
-    "build": "eas build --profile preview --resource-class large",
+    "build": "eas build --profile preview",
     "device": "eas device:create",
     "generate": "supabase gen types typescript --linked > ./src/types/schema.ts"
   },

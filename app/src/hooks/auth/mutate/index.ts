@@ -8,7 +8,9 @@ import { useMutation } from "react-query";
 import { UseMutationResult } from "../../../types";
 import { makeRedirectUri, startAsync } from "expo-auth-session";
 
-export type SignUpResponse = Awaited<ReturnType<typeof signUp>>;
+export type SignUpWithEmailResponse = Awaited<
+  ReturnType<typeof signUpWithEmail>
+>;
 export type SignInWithEmailResponse = Awaited<
   ReturnType<typeof signInWithEmail>
 >;
@@ -17,7 +19,7 @@ export type SignInWithProviderResponse = Awaited<
 >;
 export type SignOutResponse = Awaited<ReturnType<typeof signOut>>;
 
-const signUp = async (credentials: SignUpWithPasswordCredentials) => {
+const signUpWithEmail = async (credentials: SignUpWithPasswordCredentials) => {
   const { data, error } = await supabase.auth.signUp(credentials);
   if (error) {
     throw error;
@@ -35,7 +37,9 @@ const signInWithEmail = async (credentials: SignInWithPasswordCredentials) => {
 
 const signInWithProvider = async (provider: string) => {
   const redirectUrl = makeRedirectUri({
+    scheme: "farmlink",
     path: "verify",
+    isTripleSlashed: true,
   });
 
   const authResponse = await startAsync({
@@ -66,12 +70,12 @@ const signOut = async () => {
   }
 };
 
-export const useSignUp = ({
+export const useSignUpWithEmail = ({
   onSuccess,
   onError,
-}: UseMutationResult<SignUpResponse, AuthError>) =>
+}: UseMutationResult<SignUpWithEmailResponse, AuthError>) =>
   useMutation({
-    mutationFn: signUp,
+    mutationFn: signUpWithEmail,
     onSuccess,
     onError,
   });
