@@ -22,7 +22,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     session?.user.id
   );
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
-  const [type, setType] = useState<"farm" | "rental">("rental");
+  const [type, setType] = useState<"rental" | "farm">("rental");
   const [touch, setTouch] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
   const [location, setLocation] = useState<LatLng>();
@@ -69,8 +69,8 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     } else {
       getPosition();
     }
-    params?.type === "farm" && refetchFarms();
     params?.type === "rental" && refetchRentals();
+    params?.type === "farm" && refetchFarms();
     params?.type && setType(params.type);
   }, [params]);
 
@@ -130,12 +130,12 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     };
   }, []);
 
-  const farmDetailNavigationHandler = useCallback((farmId: number) => {
-    navigation.navigate("FarmDetail", { farmId });
-  }, []);
-
   const rentalDetailNavigationHandler = useCallback((rentalId: number) => {
     navigation.navigate("RentalDetail", { rentalId });
+  }, []);
+
+  const farmDetailNavigationHandler = useCallback((farmId: number) => {
+    navigation.navigate("FarmDetail", { farmId });
   }, []);
 
   const searchMapNavigationHandler = useCallback(() => {
@@ -156,18 +156,18 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       setRegion={setRegion}
       position={position}
       user={user}
-      farms={farms?.filter(
-        (item) => !item.privated || item.ownerId === session?.user.id
-      )}
       rentals={rentals?.filter(
         (item) => !item.privated || item.ownerId === session?.user.id
       )}
-      readMore={type === "farm" ? fetchNextPageFams : fetchNextPageRentals}
+      farms={farms?.filter(
+        (item) => !item.privated || item.ownerId === session?.user.id
+      )}
+      readMore={type === "rental" ? fetchNextPageRentals : fetchNextPageFams}
       isLoading={
         isLoadingPosition || isLoadingUser || isLoadingRentals || isLoadingFarms
       }
-      farmDetailNavigationHandler={farmDetailNavigationHandler}
       rentalDetailNavigationHandler={rentalDetailNavigationHandler}
+      farmDetailNavigationHandler={farmDetailNavigationHandler}
       searchMapNavigationHandler={searchMapNavigationHandler}
       rentalGridNavigationHandler={rentalGridNavigationHandler}
     />

@@ -16,38 +16,10 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
   const { t } = useTranslation("map");
   const toast = useToast();
   const { params } = useRoute<RouteProp<MapStackParamList, "SearchMap">>();
-  const [searchFarmsResult, setSearchFarmsResult] =
-    useState<SearchFarmsResponse>();
   const [searchRentalsResult, setSearchRentalsResult] =
     useState<SearchRentalsResponse>();
-
-  const {
-    mutateAsync: mutateAsyncSearchFarms,
-    isLoading: isLoadingSearchFarms,
-  } = useSearchFarms({
-    onSuccess: (data) => {
-      setSearchFarmsResult(data);
-    },
-    onError: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
-
-  const searchFarms = useCallback(async (query: string) => {
-    if (query === "") {
-      setSearchFarmsResult([]);
-      return;
-    }
-    await mutateAsyncSearchFarms(query);
-  }, []);
+  const [searchFarmsResult, setSearchFarmsResult] =
+    useState<SearchFarmsResponse>();
 
   const {
     mutateAsync: mutateAsyncSearchRentals,
@@ -77,6 +49,34 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
     await mutateAsyncSearchRentals(query);
   }, []);
 
+  const {
+    mutateAsync: mutateAsyncSearchFarms,
+    isLoading: isLoadingSearchFarms,
+  } = useSearchFarms({
+    onSuccess: (data) => {
+      setSearchFarmsResult(data);
+    },
+    onError: () => {
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
+  const searchFarms = useCallback(async (query: string) => {
+    if (query === "") {
+      setSearchFarmsResult([]);
+      return;
+    }
+    await mutateAsyncSearchFarms(query);
+  }, []);
+
   const mapNavigationHandler = useCallback(
     async (regionId: number, latitude: number, longitude: number) => {
       navigation.navigate("Map", {
@@ -96,12 +96,12 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
   return (
     <SearchMapTemplate
       type={params.type}
-      searchFarmsResult={searchFarmsResult}
       searchRentalsResult={searchRentalsResult}
-      searchFarms={searchFarms}
+      searchFarmsResult={searchFarmsResult}
       searchRentals={searchRentals}
-      isLoadingSearchFarms={isLoadingSearchFarms}
+      searchFarms={searchFarms}
       isLoadingSearchRentals={isLoadingSearchRentals}
+      isLoadingSearchFarms={isLoadingSearchFarms}
       mapNavigationHandler={mapNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

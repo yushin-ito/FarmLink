@@ -19,11 +19,11 @@ import SkeletonLikeList from "../organisms/SkeletonLikeList";
 import { RefreshControl } from "react-native";
 
 type LikeListTemplateProps = {
-  type: "farm" | "rental";
-  setType: Dispatch<SetStateAction<"farm" | "rental">>;
+  type: "rental" | "farm";
+  setType: Dispatch<SetStateAction<"rental" | "farm">>;
   likes: GetUserLikesResponse | undefined;
-  deleteFarmLike: (farmId: number) => Promise<void>;
   deleteRentalLike: (likeId: number) => Promise<void>;
+  deleteFarmLike: (farmId: number) => Promise<void>;
   refetchLikes: () => Promise<void>;
   mapNavigationHandler: (
     regionId: number,
@@ -76,25 +76,6 @@ const LikeListTemplate = ({
       </HStack>
       <Box flex={1}>
         <HStack my="2" ml="6" space="2">
-          <Pressable onPress={() => setType("farm")}>
-            <Box
-              px="3"
-              py="1"
-              rounded="full"
-              bg={type === "farm" ? "brand.600" : bgColor}
-              alignItems="center"
-            >
-              <Text
-                color={
-                  type === "farm"
-                    ? "white"
-                    : useColorModeValue("black", "white")
-                }
-              >
-                {t("farm")}
-              </Text>
-            </Box>
-          </Pressable>
           <Pressable onPress={() => setType("rental")}>
             <Box
               px="3"
@@ -114,52 +95,29 @@ const LikeListTemplate = ({
               </Text>
             </Box>
           </Pressable>
+          <Pressable onPress={() => setType("farm")}>
+            <Box
+              px="3"
+              py="1"
+              rounded="full"
+              bg={type === "farm" ? "brand.600" : bgColor}
+              alignItems="center"
+            >
+              <Text
+                color={
+                  type === "farm"
+                    ? "white"
+                    : useColorModeValue("black", "white")
+                }
+              >
+                {t("farm")}
+              </Text>
+            </Box>
+          </Pressable>
         </HStack>
         {isLoading ? (
           <SkeletonLikeList rows={4} />
-        ) : type === "farm" ? (
-          <FlatList
-            data={likes?.filter((item) => item.farmId)}
-            renderItem={({ item }) => (
-              <LikeListItem
-                item={item}
-                onPress={() =>
-                  item.farm.farmId &&
-                  item.farm.latitude &&
-                  item.farm.longitude &&
-                  mapNavigationHandler(
-                    item.farm.farmId,
-                    item.farm.latitude,
-                    item.farm.longitude
-                  )
-                }
-                type="farm"
-                onPressRight={() => item.farmId && deleteFarmLike(item.farmId)}
-              />
-            )}
-            ListEmptyComponent={
-              <Text
-                bold
-                lineHeight="2xl"
-                fontSize="md"
-                textAlign="center"
-                color={textColor}
-              >
-                {t("notExistFarmLike")}
-              </Text>
-            }
-            refreshing={isRefetchingLikes}
-            onRefresh={refetchLikes}
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefetchingLikes}
-                onRefresh={refetchLikes}
-                tintColor={spinnerColor}
-              />
-            }
-            keyExtractor={(item) => item.likeId.toString()}
-          />
-        ) : (
+        ) : type === "rental" ? (
           <FlatList
             data={likes?.filter((item) => item.rentalId)}
             renderItem={({ item }) => (
@@ -192,6 +150,48 @@ const LikeListTemplate = ({
                 {t("notExistRentalLike")}
               </Text>
             }
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetchingLikes}
+                onRefresh={refetchLikes}
+                tintColor={spinnerColor}
+              />
+            }
+            keyExtractor={(item) => item.likeId.toString()}
+          />
+        ) : (
+          <FlatList
+            data={likes?.filter((item) => item.farmId)}
+            renderItem={({ item }) => (
+              <LikeListItem
+                item={item}
+                onPress={() =>
+                  item.farm.farmId &&
+                  item.farm.latitude &&
+                  item.farm.longitude &&
+                  mapNavigationHandler(
+                    item.farm.farmId,
+                    item.farm.latitude,
+                    item.farm.longitude
+                  )
+                }
+                type="farm"
+                onPressRight={() => item.farmId && deleteFarmLike(item.farmId)}
+              />
+            )}
+            ListEmptyComponent={
+              <Text
+                bold
+                lineHeight="2xl"
+                fontSize="md"
+                textAlign="center"
+                color={textColor}
+              >
+                {t("notExistFarmLike")}
+              </Text>
+            }
+            refreshing={isRefetchingLikes}
+            onRefresh={refetchLikes}
             refreshControl={
               <RefreshControl
                 refreshing={isRefetchingLikes}

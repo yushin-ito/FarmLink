@@ -15,18 +15,18 @@ import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import SearchMapItem from "../organisms/SearchMapItem";
-import { SearchFarmsResponse } from "../../hooks/farm/mutate";
 import { SearchRentalsResponse } from "../../hooks/rental/mutate";
+import { SearchFarmsResponse } from "../../hooks/farm/mutate";
 import { useTranslation } from "react-i18next";
 
 type SearchMapTemplateProps = {
-  type: "farm" | "rental";
-  searchFarmsResult: SearchFarmsResponse | undefined;
+  type: "rental" | "farm";
   searchRentalsResult: SearchRentalsResponse | undefined;
-  searchFarms: (query: string) => Promise<void>;
+  searchFarmsResult: SearchFarmsResponse | undefined;
   searchRentals: (query: string) => Promise<void>;
-  isLoadingSearchFarms: boolean;
+  searchFarms: (query: string) => Promise<void>;
   isLoadingSearchRentals: boolean;
+  isLoadingSearchFarms: boolean;
   mapNavigationHandler: (
     regionId: number,
     latitude: number,

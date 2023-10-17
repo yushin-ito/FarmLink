@@ -72,9 +72,9 @@ export type MapStackParamList = {
     regionId: number;
     latitude: number;
     longitude: number;
-    type: "farm" | "rental";
+    type: "rental" | "farm";
   };
-  SearchMap: { type: "farm" | "rental" };
+  SearchMap: { type: "rental" | "farm" };
   RentalGrid: undefined;
   RentalDetail: { rentalId: number };
   EditRental: { rentalId: number };

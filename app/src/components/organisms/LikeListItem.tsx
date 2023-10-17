@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import { GetUserLikesResponse } from "../../hooks/like/query";
 
 type LikeListItemProps = {
-  type: "farm" | "rental";
+  type: "rental" | "farm";
   item: GetUserLikesResponse[number];
   onPress: () => void;
   onPressRight: () => void;
@@ -54,11 +54,11 @@ const LikeListItem = memo(
             backgroundColor: bgColor,
           }}
           underlayColor={pressedColor}
-          disabled={item.farm?.privated || item.rental?.privated}
+          disabled={item.rental?.privated || item.farm?.privated}
         >
           <VStack
             alignItems="center"
-            opacity={item.farm?.privated || item.rental?.privated ? 0.6 : 1}
+            opacity={item.rental?.privated || item.farm?.privated ? 0.6 : 1}
           >
             <HStack
               w="100%"
@@ -68,6 +68,50 @@ const LikeListItem = memo(
               justifyContent="space-between"
             >
               {type === "farm" ? (
+                <HStack alignItems="center" space="3">
+                  <Center
+                    size="12"
+                    p="1"
+                    rounded="md"
+                    bg={imageColor}
+                    overflow="hidden"
+                  >
+                    {item.rental.imageUrls?.length ? (
+                      <Image
+                        style={{ width: 48, height: 48 }}
+                        source={{ uri: item.rental.imageUrls[0] }}
+                      />
+                    ) : (
+                      <Icon
+                        as={<Feather />}
+                        name="image"
+                        size="lg"
+                        color={iconColor}
+                      />
+                    )}
+                  </Center>
+                  <VStack
+                    w={
+                      item.rental?.privated || item.farm?.privated
+                        ? "70%"
+                        : "80%"
+                    }
+                    space="1"
+                  >
+                    <Text bold fontSize="md">
+                      {item.rental.name}
+                    </Text>
+                    <Text
+                      color={textColor}
+                      fontSize="xs"
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.rental.description}
+                    </Text>
+                  </VStack>
+                </HStack>
+              ) : (
                 <HStack alignItems="center" space="3">
                   <Center
                     size="12"
@@ -96,7 +140,7 @@ const LikeListItem = memo(
                   </Center>
                   <VStack
                     w={
-                      item.farm?.privated || item.rental?.privated
+                      item.rental?.privated || item.farm?.privated
                         ? "70%"
                         : "80%"
                     }
@@ -112,50 +156,6 @@ const LikeListItem = memo(
                       ellipsizeMode="tail"
                     >
                       {item.farm.description ?? t("noDescription")}
-                    </Text>
-                  </VStack>
-                </HStack>
-              ) : (
-                <HStack alignItems="center" space="3">
-                  <Center
-                    size="12"
-                    p="1"
-                    rounded="md"
-                    bg={imageColor}
-                    overflow="hidden"
-                  >
-                    {item.rental.imageUrls?.length ? (
-                      <Image
-                        style={{ width: 48, height: 48 }}
-                        source={{ uri: item.rental.imageUrls[0] }}
-                      />
-                    ) : (
-                      <Icon
-                        as={<Feather />}
-                        name="image"
-                        size="lg"
-                        color={iconColor}
-                      />
-                    )}
-                  </Center>
-                  <VStack
-                    w={
-                      item.farm?.privated || item.rental?.privated
-                        ? "70%"
-                        : "80%"
-                    }
-                    space="1"
-                  >
-                    <Text bold fontSize="md">
-                      {item.rental.name}
-                    </Text>
-                    <Text
-                      color={textColor}
-                      fontSize="xs"
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                    >
-                      {item.rental.description}
                     </Text>
                   </VStack>
                 </HStack>

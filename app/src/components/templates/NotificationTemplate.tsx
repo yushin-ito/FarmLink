@@ -28,7 +28,7 @@ type NotificationTemplateProps = {
     regionId: number,
     latitude: number,
     longitude: number,
-    type: "farm" | "rental"
+    type: "rental" | "farm"
   ) => void;
   talkChatNavigationHandler: (notificationId: number, talkId: number) => void;
   goBackNavigationHandler: () => void;

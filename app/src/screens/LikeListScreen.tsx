@@ -21,27 +21,7 @@ const LikeListScreen = ({
     isLoading: isLoadingUserLikes,
   } = useQueryUserLikes(session?.user.id);
   const [isRefetchingLikes, setIsRefetchingRentals] = useState(false);
-  const [type, setType] = useState<"farm" | "rental">("farm");
-
-  const {
-    mutateAsync: mutateAsyncDeleteFarmLike,
-    isLoading: isLoadingDeleteFarmLike,
-  } = useDeleteFarmLike({
-    onSuccess: async () => {
-      await refetch();
-    },
-    onError: () => {
-      navigation.goBack();
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const [type, setType] = useState<"rental" | "farm">("rental");
 
   const {
     mutateAsync: mutateAsyncDeleteRentalLike,
@@ -63,12 +43,32 @@ const LikeListScreen = ({
     },
   });
 
-  const deleteFarmLike = useCallback(async (farmId: number) => {
-    await mutateAsyncDeleteFarmLike(farmId);
-  }, []);
+  const {
+    mutateAsync: mutateAsyncDeleteFarmLike,
+    isLoading: isLoadingDeleteFarmLike,
+  } = useDeleteFarmLike({
+    onSuccess: async () => {
+      await refetch();
+    },
+    onError: () => {
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   const deleteRentalLike = useCallback(async (rentalId: number) => {
     await mutateAsyncDeleteRentalLike(rentalId);
+  }, []);
+
+  const deleteFarmLike = useCallback(async (farmId: number) => {
+    await mutateAsyncDeleteFarmLike(farmId);
   }, []);
 
   const refetchLikes = useCallback(async () => {
@@ -100,13 +100,13 @@ const LikeListScreen = ({
       type={type}
       setType={setType}
       likes={likes}
-      deleteFarmLike={deleteFarmLike}
       deleteRentalLike={deleteRentalLike}
+      deleteFarmLike={deleteFarmLike}
       refetchLikes={refetchLikes}
       isLoading={
         isLoadingUserLikes ||
-        isLoadingDeleteFarmLike ||
-        isLoadingDeleteRentalLike
+        isLoadingDeleteRentalLike ||
+        isLoadingDeleteFarmLike
       }
       isRefetchingLikes={isRefetchingLikes}
       mapNavigationHandler={mapNavigationHandler}

@@ -27,8 +27,8 @@ import { Image } from "expo-image";
 import { Region } from "../../types";
 
 type MapTemplateProps = {
-  type: "farm" | "rental";
-  setType: Dispatch<SetStateAction<"farm" | "rental">>;
+  type: "rental" | "farm";
+  setType: Dispatch<SetStateAction<"rental" | "farm">>;
   touch: boolean;
   setTouch: Dispatch<SetStateAction<boolean>>;
   region: Region | null;
@@ -39,8 +39,8 @@ type MapTemplateProps = {
   rentals: GetRentalsResponse | undefined;
   readMore: () => void;
   isLoading: boolean;
-  farmDetailNavigationHandler: (farmId: number) => void;
   rentalDetailNavigationHandler: (rentalId: number) => void;
+  farmDetailNavigationHandler: (farmId: number) => void;
   searchMapNavigationHandler: () => void;
   rentalGridNavigationHandler: () => void;
 };
@@ -53,12 +53,12 @@ const MapTemplate = ({
   region,
   setRegion,
   position,
-  farms,
   rentals,
+  farms,
   readMore,
   isLoading,
-  farmDetailNavigationHandler,
   rentalDetailNavigationHandler,
+  farmDetailNavigationHandler,
   searchMapNavigationHandler,
   rentalGridNavigationHandler,
 }: MapTemplateProps) => {
@@ -136,17 +136,17 @@ const MapTemplate = ({
         style={{ flex: 1 }}
       >
         {position &&
-          !farms?.some(
+          !rentals?.some(
             ({ latitude, longitude }) =>
-              type === "farm" &&
+              type === "rental" &&
               getOverlap(position, {
                 latitude,
                 longitude,
               })
           ) &&
-          !rentals?.some(
+          !farms?.some(
             ({ latitude, longitude }) =>
-              type === "rental" &&
+              type === "farm" &&
               getOverlap(position, {
                 latitude,
                 longitude,
@@ -165,49 +165,8 @@ const MapTemplate = ({
               </VStack>
             </Marker>
           )}
-        {type === "farm"
-          ? farms?.map(
-              ({ farmId, latitude, longitude, name }) =>
-                region &&
-                (region.regionId === farmId ||
-                  !getOverlap(
-                    { latitude: region.latitude, longitude: region.longitude },
-                    { latitude, longitude }
-                  )) && (
-                  <Marker
-                    key={farmId}
-                    coordinate={{
-                      latitude,
-                      longitude,
-                    }}
-                    onPress={() => {
-                      setTouch(false);
-                      region?.regionId === farmId
-                        ? farmDetailNavigationHandler(farmId)
-                        : setRegion({ regionId: farmId, latitude, longitude });
-                    }}
-                  >
-                    <VStack alignItems="center" maxW="24">
-                      {farmId === region?.regionId && (
-                        <Text
-                          bold
-                          fontSize="xs"
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                        >
-                          {name}
-                        </Text>
-                      )}
-                      <Image
-                        source={require("../../../assets/app/pin-brand.png")}
-                        style={{ width: 20, height: 20 }}
-                        contentFit="contain"
-                      />
-                    </VStack>
-                  </Marker>
-                )
-            )
-          : rentals?.map(
+        {type === "rental"
+          ? rentals?.map(
               ({ rentalId, latitude, longitude, name }) =>
                 region &&
                 (region.regionId === rentalId ||
@@ -251,6 +210,47 @@ const MapTemplate = ({
                     </VStack>
                   </Marker>
                 )
+            )
+          : farms?.map(
+              ({ farmId, latitude, longitude, name }) =>
+                region &&
+                (region.regionId === farmId ||
+                  !getOverlap(
+                    { latitude: region.latitude, longitude: region.longitude },
+                    { latitude, longitude }
+                  )) && (
+                  <Marker
+                    key={farmId}
+                    coordinate={{
+                      latitude,
+                      longitude,
+                    }}
+                    onPress={() => {
+                      setTouch(false);
+                      region?.regionId === farmId
+                        ? farmDetailNavigationHandler(farmId)
+                        : setRegion({ regionId: farmId, latitude, longitude });
+                    }}
+                  >
+                    <VStack alignItems="center" maxW="24">
+                      {farmId === region?.regionId && (
+                        <Text
+                          bold
+                          fontSize="xs"
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
+                          {name}
+                        </Text>
+                      )}
+                      <Image
+                        source={require("../../../assets/app/pin-brand.png")}
+                        style={{ width: 20, height: 20 }}
+                        contentFit="contain"
+                      />
+                    </VStack>
+                  </Marker>
+                )
             )}
       </MapView>
       <VStack w="80%" position="absolute" top="16" alignSelf="center" space="3">
@@ -264,31 +264,6 @@ const MapTemplate = ({
         </Box>
         <HStack alignItems="center" justifyContent="space-between">
           <HStack space="2">
-            <Pressable
-              onPress={() => {
-                if (farms?.length) {
-                  setRegion({
-                    regionId: farms[0].farmId,
-                    latitude: farms[0].latitude,
-                    longitude: farms[0].longitude,
-                  });
-                }
-                setType("farm");
-              }}
-            >
-              <Box
-                px="3"
-                py="1"
-                rounded="full"
-                bg={type === "farm" ? "brand.600" : bgColor}
-                shadow="1"
-                alignItems="center"
-              >
-                <Text color={type === "farm" ? "white" : textColor}>
-                  {t("farm")}
-                </Text>
-              </Box>
-            </Pressable>
             <Pressable
               onPress={() => {
                 if (rentals?.length) {
@@ -314,6 +289,31 @@ const MapTemplate = ({
                 </Text>
               </Box>
             </Pressable>
+            <Pressable
+              onPress={() => {
+                if (farms?.length) {
+                  setRegion({
+                    regionId: farms[0].farmId,
+                    latitude: farms[0].latitude,
+                    longitude: farms[0].longitude,
+                  });
+                }
+                setType("farm");
+              }}
+            >
+              <Box
+                px="3"
+                py="1"
+                rounded="full"
+                bg={type === "farm" ? "brand.600" : bgColor}
+                shadow="1"
+                alignItems="center"
+              >
+                <Text color={type === "farm" ? "white" : textColor}>
+                  {t("farm")}
+                </Text>
+              </Box>
+            </Pressable>
           </HStack>
           {type === "rental" && (
             <Pressable
@@ -329,16 +329,7 @@ const MapTemplate = ({
           )}
         </HStack>
       </VStack>
-      {type === "farm" ? (
-        <FarmPreviewList
-          farms={farms}
-          touch={touch}
-          setTouch={setTouch}
-          region={region}
-          setRegion={setRegion}
-          farmDetailNavigationHandler={farmDetailNavigationHandler}
-        />
-      ) : (
+      {type === "rental" ? (
         <RentalPreviewList
           rentals={rentals}
           touch={touch}
@@ -347,6 +338,15 @@ const MapTemplate = ({
           setRegion={setRegion}
           readMore={readMore}
           rentalDetailNavigationHandler={rentalDetailNavigationHandler}
+        />
+      ) : (
+        <FarmPreviewList
+          farms={farms}
+          touch={touch}
+          setTouch={setTouch}
+          region={region}
+          setRegion={setRegion}
+          farmDetailNavigationHandler={farmDetailNavigationHandler}
         />
       )}
     </Box>

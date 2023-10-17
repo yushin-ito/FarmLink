@@ -19,7 +19,7 @@ import Avatar from "../molecules/Avatar";
 import { getTimeDistance } from "../../functions";
 
 type NotificationItemProps = {
-  type: "farm" | "rental" | "chat" | "unknown";
+  type: "rental" | "farm" | "chat" | "unknown";
   item: GetNotificationsResponse[number];
   locale: "en" | "ja" | null;
   onPress: () => void;
@@ -66,50 +66,6 @@ const NotificationItem = memo(
               alignItems="center"
               justifyContent="space-between"
             >
-              {type === "farm" && (
-                <HStack alignItems="center" space="3">
-                  <HStack space="2">
-                    <Box
-                      size="2.5"
-                      rounded="full"
-                      bg={item.clicked ? "transparent" : "blue.500"}
-                    />
-                    <Center
-                      size="12"
-                      rounded="md"
-                      bg={imageColor}
-                      overflow="hidden"
-                    >
-                      {item.farm.device.imageUrl ? (
-                        <Image
-                          style={{ width: 48, height: 48 }}
-                          source={{
-                            uri:
-                              item.farm.device.imageUrl +
-                              "?=" +
-                              item.farm.device.updatedAt,
-                          }}
-                        />
-                      ) : (
-                        <Icon
-                          as={<Feather />}
-                          name="image"
-                          size="lg"
-                          color={iconColor}
-                        />
-                      )}
-                    </Center>
-                  </HStack>
-                  <VStack w="75%" space="1">
-                    <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
-                      {item.farm.name + t("to") + item.from.name + t("liked")}
-                    </Text>
-                    <Text color={textColor} fontSize="xs">
-                      {getTimeDistance(item.createdAt, locale)}
-                    </Text>
-                  </VStack>
-                </HStack>
-              )}
               {type === "rental" && (
                 <HStack alignItems="center" space="3">
                   <HStack space="2">
@@ -147,6 +103,50 @@ const NotificationItem = memo(
                         t("to") +
                         item.from?.name +
                         t("liked")}
+                    </Text>
+                    <Text color={textColor} fontSize="xs">
+                      {getTimeDistance(item.createdAt, locale)}
+                    </Text>
+                  </VStack>
+                </HStack>
+              )}
+              {type === "farm" && (
+                <HStack alignItems="center" space="3">
+                  <HStack space="2">
+                    <Box
+                      size="2.5"
+                      rounded="full"
+                      bg={item.clicked ? "transparent" : "blue.500"}
+                    />
+                    <Center
+                      size="12"
+                      rounded="md"
+                      bg={imageColor}
+                      overflow="hidden"
+                    >
+                      {item.farm.device.imageUrl ? (
+                        <Image
+                          style={{ width: 48, height: 48 }}
+                          source={{
+                            uri:
+                              item.farm.device.imageUrl +
+                              "?=" +
+                              item.farm.device.updatedAt,
+                          }}
+                        />
+                      ) : (
+                        <Icon
+                          as={<Feather />}
+                          name="image"
+                          size="lg"
+                          color={iconColor}
+                        />
+                      )}
+                    </Center>
+                  </HStack>
+                  <VStack w="75%" space="1">
+                    <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
+                      {item.farm.name + t("to") + item.from.name + t("liked")}
                     </Text>
                     <Text color={textColor} fontSize="xs">
                       {getTimeDistance(item.createdAt, locale)}

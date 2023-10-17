@@ -105,7 +105,7 @@ const NotificationScreen = ({
       regionId: number,
       latitude: number,
       longitude: number,
-      type: "farm" | "rental"
+      type: "rental" | "farm"
     ) => {
       await mutateAsyncUpdateNotification({ notificationId, clicked: true });
       navigation.goBack();
