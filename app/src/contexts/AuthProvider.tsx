@@ -4,7 +4,6 @@ import { supabase } from "../supabase";
 import { Locale } from "../types";
 import { Session } from "@supabase/supabase-js";
 import * as Linking from "expo-linking";
-import { getSessionFromLink } from "../functions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type AuthContextProps = {
@@ -58,6 +57,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
+  const getSessionByLink = useCallback((link: string) => {
+    const { queryParams } = Linking.parse(link.replace("#", "?"));
+    if (queryParams) {
+      return {
+        access_token: queryParams.access_token as string,
+        refresh_token: queryParams.refresh_token as string,
+      };
+    }
+    return null;
+  }, []);
+
   const getLocale = useCallback(async () => {
     const locale = await AsyncStorage.getItem("@locale");
     if (locale === "en") {
@@ -93,7 +103,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     (async () => {
       const url = await Linking.getInitialURL();
       if (url) {
-        const session = getSessionFromLink(url);
+        const session = getSessionByLink(url);
 
         if (session?.access_token && session?.refresh_token) {
           setCurrentSession({
@@ -105,7 +115,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     })();
 
     const subscription = Linking.addEventListener("url", async (res) => {
-      const session = getSessionFromLink(res.url);
+      const session = getSessionByLink(res.url);
 
       if (session?.access_token && session?.refresh_token) {
         setCurrentSession({

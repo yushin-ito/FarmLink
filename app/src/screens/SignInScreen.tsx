@@ -90,13 +90,13 @@ const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
         }
       }
     },
-    onError: () => {
+    onError: (error) => {
       showAlert(
         toast,
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
+          text={error.message}
         />
       );
     },

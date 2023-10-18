@@ -67,7 +67,7 @@ const LikeListItem = memo(
               alignItems="center"
               justifyContent="space-between"
             >
-              {type === "farm" ? (
+              {type === "rental" ? (
                 <HStack alignItems="center" space="3">
                   <Center
                     size="12"
@@ -160,7 +160,7 @@ const LikeListItem = memo(
                   </VStack>
                 </HStack>
               )}
-              {item.farm?.privated || item.rental?.privated ? (
+              {item.rental?.privated || item.farm?.privated ? (
                 <Text bold>{t("private")}</Text>
               ) : (
                 <Icon

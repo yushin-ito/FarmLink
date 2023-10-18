@@ -115,13 +115,13 @@ const SignUpScreen = ({ navigation }: AuthStackScreenProps) => {
         }
       }
     },
-    onError: () => {
+    onError: (error) => {
       showAlert(
         toast,
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
+          text={error.message}
         />
       );
     },
@@ -129,7 +129,7 @@ const SignUpScreen = ({ navigation }: AuthStackScreenProps) => {
 
   const signUpWithEmail = useCallback(
     async (email: string, password: string) => {
-      const redirectURL = Linking.createURL("verify");
+      const redirectURL = Linking.createURL("redirect");
       await mutateAsyncSignUpWithEmail({
         email,
         password,
