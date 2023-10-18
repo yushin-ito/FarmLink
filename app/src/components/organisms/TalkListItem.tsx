@@ -14,10 +14,11 @@ import { useTranslation } from "react-i18next";
 import Avatar from "../molecules/Avatar";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { getTimeDistance } from "../../functions";
+import { Locale } from "../../types";
 
 type TalkListItemProps = {
   item: GetTalksResponse[number];
-  locale: "en" | "ja" | null;
+  locale: Locale | null;
   onPress: () => void;
   onPressRight: () => void;
 };

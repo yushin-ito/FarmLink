@@ -19,9 +19,10 @@ import SearchBar from "../organisms/SearchBar";
 import { GetUserResponse } from "../../hooks/user/query";
 import { GetTalksResponse } from "../../hooks/talk/query";
 import SkeletonTalkList from "../organisms/SkeletonTalkList";
+import { Locale } from "../../types";
 
 type TalkListTemplateProps = {
-  locale: "en" | "ja" | null;
+  locale: Locale | null;
   user: GetUserResponse | null | undefined;
   talks: GetTalksResponse | null | undefined;
   isLoading: boolean;

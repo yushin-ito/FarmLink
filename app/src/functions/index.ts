@@ -2,6 +2,7 @@ import { IToastService } from "native-base/lib/typescript/components/composites/
 import { format, formatDistance } from "date-fns";
 import { ja, enUS } from "date-fns/locale";
 import { ReactNode } from "react";
+import { Locale } from "../types";
 
 export const wait = (sec: number) => {
   return new Promise((resolve) => setTimeout(resolve, sec * 1000));
@@ -18,7 +19,7 @@ export const showAlert = (toast: IToastService, Alert: ReactNode) => {
   }
 };
 
-export const getTimeDistance = (date: string, locale: "en" | "ja" | null) => {
+export const getTimeDistance = (date: string, locale: Locale | null) => {
   if (locale === "en") {
     const distance = formatDistance(new Date(), new Date(date), {
       locale: enUS,

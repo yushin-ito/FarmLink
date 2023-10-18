@@ -4,7 +4,7 @@ import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
-import ChatTemplate from "../components/templates/ChatTemplate";
+import TalkChatTemplate from "../components/templates/TalkChatTemplate";
 import { useDeleteTalk, useUpdateTalk } from "../hooks/talk/mutate";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { TalkStackParamList, TalkStackScreenProps } from "../types";
@@ -290,11 +290,9 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   }, []);
 
   return (
-    <ChatTemplate
-      type="talk"
+    <TalkChatTemplate
       locale={locale}
       title={talk?.to.name}
-      owned
       user={user}
       chats={chats}
       onSend={onSend}

@@ -17,11 +17,12 @@ import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 import Avatar from "../molecules/Avatar";
 import { getTimeDistance } from "../../functions";
+import { Locale } from "../../types";
 
 type NotificationItemProps = {
   type: "rental" | "farm" | "chat" | "unknown";
   item: GetNotificationsResponse[number];
-  locale: "en" | "ja" | null;
+  locale: Locale | null;
   onPress: () => void;
   onPressRight: () => void;
 };

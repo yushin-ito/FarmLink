@@ -4,7 +4,7 @@ import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
-import ChatTemplate from "../components/templates/ChatTemplate";
+import CommunityChatTemplate from "../components/templates/CommunityChatTemplate";
 import {
   useDeleteCommunity,
   useUpdateCommunity,
@@ -279,8 +279,7 @@ const CommunityChatScreen = ({
   }, []);
 
   return (
-    <ChatTemplate
-      type="community"
+    <CommunityChatTemplate
       locale={locale}
       title={community?.name}
       owned={session?.user.id === community?.ownerId}

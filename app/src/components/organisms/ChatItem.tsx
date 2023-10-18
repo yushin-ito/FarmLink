@@ -15,11 +15,12 @@ import {
   GetCommunityChatsResponse,
   GetTalkChatsResponse,
 } from "../../hooks/chat/query";
+import { Locale } from "../../types";
 
 type ChatItemProps = {
   item: GetCommunityChatsResponse[number] | GetTalkChatsResponse[number];
   authored: boolean;
-  locale: "en" | "ja" | null;
+  locale: Locale | null;
   onLongPress: () => void;
   imagePreviewNavigationHandler: (imageUrl: string, chatId?: number) => void;
 };

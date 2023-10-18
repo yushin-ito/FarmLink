@@ -21,29 +21,26 @@ import ChatBar from "../organisms/ChatBar";
 import { GetUserResponse } from "../../hooks/user/query";
 import ChatActionSheet from "../organisms/ChatActionSheet";
 import { useTranslation } from "react-i18next";
-import {
-  GetCommunityChatsResponse,
-  GetTalkChatsResponse,
-} from "../../hooks/chat/query";
+import { GetCommunityChatsResponse } from "../../hooks/chat/query";
 import ImageActionSheet from "../organisms/ImageActionSheet";
+import { Locale } from "../../types";
 
-type ChatTemplateProps = {
-  type: "community" | "talk";
-  locale: "en" | "ja" | null;
+type CommunityChatTemplateProps = {
+  locale: Locale | null;
   title: string | null | undefined;
-  owned?: boolean;
+  owned: boolean;
   user: GetUserResponse | null | undefined;
-  chats: GetCommunityChatsResponse | GetTalkChatsResponse | undefined;
+  chats: GetCommunityChatsResponse | undefined;
   isLoading: boolean;
   isLoadingPostChat: boolean;
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;
-  leaveRoom?: () => Promise<void>;
+  leaveRoom: () => Promise<void>;
   deleteRoom: () => Promise<void>;
   deleteChat: (chatId: number) => Promise<void>;
-  deleteImage?: () => Promise<void>;
-  pickIconImageByCamera?: () => Promise<void>;
-  pickIconImageByLibrary?: () => Promise<void>;
+  deleteImage: () => Promise<void>;
+  pickIconImageByCamera: () => Promise<void>;
+  pickIconImageByLibrary: () => Promise<void>;
   pickChatImageByCamera: () => Promise<void>;
   pickChatImageByLibrary: () => Promise<void>;
   readMore: () => void;
@@ -51,8 +48,7 @@ type ChatTemplateProps = {
   goBackNavigationHandler: () => void;
 };
 
-const ChatTemplate = ({
-  type,
+const CommunityChatTemplate = ({
   locale,
   title,
   owned,
@@ -73,8 +69,8 @@ const ChatTemplate = ({
   readMore,
   imagePreviewNavigationHandler,
   goBackNavigationHandler,
-}: ChatTemplateProps) => {
-  const { t } = useTranslation(["chat", "community", "talk"]);
+}: CommunityChatTemplateProps) => {
+  const { t } = useTranslation(["chat", "community"]);
   const bgColor = useColorModeValue("muted.100", "muted.800");
   const menuColor = useColorModeValue("white", "muted.700");
   const pressedColor = useColorModeValue("muted.100", "muted.900");
@@ -169,29 +165,23 @@ const ChatTemplate = ({
               />
             )}
           >
-            {type === "community" && (
-              <Menu.Item
-                pl="1"
-                onPress={onImageActionSheetOpen}
-                _pressed={{ bg: pressedColor }}
-              >
-                <Text fontSize="md">{t("community:changeIcon")}</Text>
-              </Menu.Item>
-            )}
+            <Menu.Item
+              pl="1"
+              onPress={onImageActionSheetOpen}
+              _pressed={{ bg: pressedColor }}
+            >
+              <Text fontSize="md">{t("community:changeIcon")}</Text>
+            </Menu.Item>
             <Menu.Item
               pl="1"
               onPress={() =>
                 Alert.alert(
-                  type === "community"
-                    ? owned
-                      ? t("community:deleteCommunity")
-                      : t("community:leaveCommunity")
-                    : t("talk:deleteTalk"),
-                  type === "community"
-                    ? owned
-                      ? t("community:askDeleteCommunity")
-                      : t("community:askLeaveCommunity")
-                    : t("talk:askDeleteTalk"),
+                  owned
+                    ? t("community:deleteCommunity")
+                    : t("community:leaveCommunity"),
+                  owned
+                    ? t("community:askLeaveCommunity")
+                    : t("community:askLeaveCommunity"),
                   [
                     {
                       text: t("community:cancel"),
@@ -213,11 +203,9 @@ const ChatTemplate = ({
               _pressed={{ bg: pressedColor }}
             >
               <Text fontSize="md">
-                {type === "community"
-                  ? owned
-                    ? t("community:deleteCommunity")
-                    : t("community:leaveCommunity")
-                  : t("talk:deleteTalk")}
+                {owned
+                  ? t("community:deleteCommunity")
+                  : t("community:leaveCommunity")}
               </Text>
             </Menu.Item>
           </Menu>
@@ -263,4 +251,4 @@ const ChatTemplate = ({
   );
 };
 
-export default ChatTemplate;
+export default CommunityChatTemplate;
