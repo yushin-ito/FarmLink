@@ -210,13 +210,14 @@ const SignUpTemplate = memo(
               <Text color={textColor}>{t("or")}</Text>
               <Divider w="40%" bg="muted.300" />
             </HStack>
-            <VStack space="4">
+            <VStack space="3">
               <Pressable
                 py="3"
                 rounded="full"
                 borderWidth="1"
                 borderColor="muted.200"
                 alignItems="center"
+                bg="white"
                 _pressed={{ bg: pressedColor }}
                 onPress={signUpWithGoogle}
               >
@@ -224,6 +225,7 @@ const SignUpTemplate = memo(
                   <Image
                     style={{ width: 32, height: 32 }}
                     source={require("../../../assets/provider/google.png")}
+                    contentFit="contain"
                   />
                 </Center>
                 <Text>{t("signUpWithGoogle")}</Text>
@@ -234,13 +236,15 @@ const SignUpTemplate = memo(
                 borderWidth="1"
                 borderColor="muted.200"
                 alignItems="center"
+                bg="white"
                 _pressed={{ bg: pressedColor }}
                 onPress={signUpWithApple}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
                   <Image
-                    style={{ width: 32, height: 32 }}
+                    style={{ width: 28, height: 28 }}
                     source={require("../../../assets/provider/apple.png")}
+                    contentFit="contain"
                   />
                 </Center>
                 <Text>{t("signUpWithApple")}</Text>
@@ -251,6 +255,7 @@ const SignUpTemplate = memo(
                 borderWidth="1"
                 borderColor="muted.200"
                 alignItems="center"
+                bg="white"
                 _pressed={{ bg: pressedColor }}
                 onPress={signUpWithTwitter}
               >
@@ -258,6 +263,7 @@ const SignUpTemplate = memo(
                   <Image
                     style={{ width: 32, height: 32 }}
                     source={require("../../../assets/provider/twitter.png")}
+                    contentFit="contain"
                   />
                 </Center>
                 <Text>{t("signUpWithTwitter")}</Text>
@@ -268,6 +274,7 @@ const SignUpTemplate = memo(
                 borderWidth="1"
                 borderColor="muted.200"
                 alignItems="center"
+                bg="white"
                 _pressed={{ bg: pressedColor }}
                 onPress={signUpWithFacebook}
               >
@@ -275,6 +282,7 @@ const SignUpTemplate = memo(
                   <Image
                     style={{ width: 32, height: 32 }}
                     source={require("../../../assets/provider/facebook.png")}
+                    contentFit="contain"
                   />
                 </Center>
                 <Text>{t("signUpWithFacebook")}</Text>

@@ -100,6 +100,7 @@ const SearchTalkTemplate = ({
               <SearchTalkItem
                 item={item}
                 onPress={() =>
+                  item.to.name &&
                   talkChatNavigationHandler(
                     item.talkId,
                     item.to.userId,
