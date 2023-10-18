@@ -31,13 +31,13 @@ type CommunityListTemplateProps = {
   setCategoryIndex: Dispatch<SetStateAction<number>>;
   user: GetUserResponse | null | undefined;
   communities: GetCommunitiesResponse | null | undefined;
+  refetchCommunities: () => Promise<void>;
+  joinCommunity: (communityId: number, memberIds: string[]) => Promise<void>;
+  hasMore: boolean | undefined;
+  readMore: () => void;
   isLoading: boolean;
   isLoadingUpdateCommunity: boolean;
   isRefetchingCommunities: boolean;
-  hasMore: boolean | undefined;
-  refetchCommunities: () => Promise<void>;
-  joinCommunity: (communityId: number, memberIds: string[]) => Promise<void>;
-  readMore: () => void;
   communityChatNavigationHandler: (communityId: number) => void;
   postCommunityNavigationHandler: () => void;
   settingNavigationHandler: () => void;
@@ -49,13 +49,13 @@ const CommunityListTemplate = ({
   setCategoryIndex,
   user,
   communities,
+  refetchCommunities,
+  joinCommunity,
+  hasMore,
+  readMore,
   isLoading,
   isLoadingUpdateCommunity,
   isRefetchingCommunities,
-  hasMore,
-  refetchCommunities,
-  joinCommunity,
-  readMore,
   communityChatNavigationHandler,
   postCommunityNavigationHandler,
   settingNavigationHandler,
@@ -97,11 +97,9 @@ const CommunityListTemplate = ({
             isLoading={isLoading}
           />
         </HStack>
-        <SearchBar
-          isReadOnly
-          placeholder={t("searchCommunity")}
-          onPressIn={searchCommunityNavigationHandler}
-        />
+        <Pressable onPress={searchCommunityNavigationHandler}>
+          <SearchBar isReadOnly placeholder={t("searchCommunity")} />
+        </Pressable>
       </VStack>
       <Pressable onPress={onOpen} alignSelf="flex-end" mr="8" mb="2">
         <HStack

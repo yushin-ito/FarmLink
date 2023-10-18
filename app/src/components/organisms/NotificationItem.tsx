@@ -77,7 +77,7 @@ const NotificationItem = memo(
                     />
                     <Center
                       size="12"
-                      rounded="md"
+                      rounded="full"
                       bg="muted.200"
                       overflow="hidden"
                     >
@@ -121,7 +121,7 @@ const NotificationItem = memo(
                     />
                     <Center
                       size="12"
-                      rounded="md"
+                      rounded="full"
                       bg={imageColor}
                       overflow="hidden"
                     >

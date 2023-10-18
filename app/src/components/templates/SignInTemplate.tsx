@@ -53,7 +53,6 @@ const SignInTemplate = memo(
     const { t } = useTranslation("auth");
     const textColor = useColorModeValue("muted.500", "muted.300");
     const iconColor = useColorModeValue("black", "white");
-    const pressedColor = useColorModeValue("muted.100", "muted.800");
 
     const [showPassword, setShowPassword] = useState(false);
     const {
@@ -116,7 +115,9 @@ const SignInTemplate = memo(
               <FormControl.ErrorMessage
                 leftIcon={<Icon as={<Feather name="alert-circle" />} />}
               >
-                {errors.email && <Text>{errors.email.message}</Text>}
+                {errors.email && (
+                  <Text color="black">{errors.email.message}</Text>
+                )}
               </FormControl.ErrorMessage>
             </FormControl>
             <FormControl isRequired isInvalid={"password" in errors}>
@@ -161,7 +162,9 @@ const SignInTemplate = memo(
               <FormControl.ErrorMessage
                 leftIcon={<Icon as={<Feather name="alert-circle" />} />}
               >
-                {errors.password && <Text>{errors.password.message}</Text>}
+                {errors.password && (
+                  <Text color="black">{errors.password.message}</Text>
+                )}
               </FormControl.ErrorMessage>
             </FormControl>
             <VStack alignItems="center">
@@ -208,7 +211,7 @@ const SignInTemplate = memo(
                 borderColor="muted.200"
                 alignItems="center"
                 bg="white"
-                _pressed={{ bg: pressedColor }}
+                _pressed={{ bg: "muted.200" }}
                 onPress={signInWithGoogle}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -218,7 +221,7 @@ const SignInTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text>{t("signInWithGoogle")}</Text>
+                <Text color="black">{t("signInWithGoogle")}</Text>
               </Pressable>
               <Pressable
                 py="3"
@@ -227,7 +230,7 @@ const SignInTemplate = memo(
                 borderColor="muted.200"
                 alignItems="center"
                 bg="white"
-                _pressed={{ bg: pressedColor }}
+                _pressed={{ bg: "muted.200" }}
                 onPress={signInWithApple}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -237,7 +240,7 @@ const SignInTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text>{t("signInWithApple")}</Text>
+                <Text color="black">{t("signInWithApple")}</Text>
               </Pressable>
               <Pressable
                 py="3"
@@ -246,7 +249,7 @@ const SignInTemplate = memo(
                 borderColor="muted.200"
                 alignItems="center"
                 bg="white"
-                _pressed={{ bg: pressedColor }}
+                _pressed={{ bg: "muted.200" }}
                 onPress={signInWithTwitter}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -256,7 +259,7 @@ const SignInTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text>{t("signInWithTwitter")}</Text>
+                <Text color="black">{t("signInWithTwitter")}</Text>
               </Pressable>
               <Pressable
                 py="3"
@@ -265,7 +268,7 @@ const SignInTemplate = memo(
                 borderColor="muted.200"
                 alignItems="center"
                 bg="white"
-                _pressed={{ bg: pressedColor }}
+                _pressed={{ bg: "muted.200" }}
                 onPress={signInWithFacebook}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -275,7 +278,7 @@ const SignInTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text>{t("signInWithFacebook")}</Text>
+                <Text color="black">{t("signInWithFacebook")}</Text>
               </Pressable>
             </VStack>
           </VStack>

@@ -63,8 +63,8 @@ const CommunityChatScreen = ({
           table: "chat",
           filter: `communityId=eq.${params.communityId}`,
         },
-        () => {
-          refetchChats();
+        async () => {
+          await refetchChats();
         }
       )
       .subscribe();

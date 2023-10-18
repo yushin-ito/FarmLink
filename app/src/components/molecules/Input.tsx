@@ -7,7 +7,6 @@ import {
 
 const Input = memo(({ ref, ...props }: IInputProps) => {
   const borderColor = useColorModeValue("muted.400", "muted.200");
-
   return (
     <NativeBaseInput
       ref={ref}

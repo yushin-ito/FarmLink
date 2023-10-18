@@ -12,7 +12,7 @@ import {
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
-import { TouchableWithoutFeedback, Keyboard } from "react-native";
+import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import SearchTalkItem from "../organisms/SearchTalkItem";
 import { GetTalksResponse } from "../../hooks/talk/query";
 import { useTranslation } from "react-i18next";
@@ -55,7 +55,7 @@ const SearchTalkTemplate = ({
               render={({ field: { value, onChange } }) => (
                 <SearchBar
                   w="90%"
-                  autoFocus
+                  autoFocus={Platform.OS === "ios"}
                   returnKeyType="search"
                   placeholder={t("searchTalk")}
                   InputRightElement={

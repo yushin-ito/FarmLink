@@ -51,7 +51,16 @@ const getCommunities = async (
 
     return data;
   } else {
-    return [];
+    const { data, error } = await supabase
+      .from("community")
+      .select("*")
+      .eq("category", category)
+      .range(from, to);
+    if (error) {
+      throw error;
+    }
+
+    return data;
   }
 };
 

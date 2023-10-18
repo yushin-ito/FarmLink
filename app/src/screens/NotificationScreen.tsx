@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import NotificationTemplate from "../components/templates/NotificationTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
@@ -11,7 +11,6 @@ import {
   useDeleteNotification,
   useUpdateNotification,
 } from "../hooks/notification/mutate";
-import { supabase } from "../supabase";
 
 const NotificationScreen = ({
   navigation,
@@ -27,32 +26,7 @@ const NotificationScreen = ({
   const [isRefetchingNotifications, setIsRefetchingNotifications] =
     useState(false);
 
-  useEffect(() => {
-    const channel = supabase
-      .channel("notification")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "notification",
-          filter: `recieverId=eq.${session?.user.id}`,
-        },
-        () => {
-          refetch();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [session]);
-
-  const {
-    mutateAsync: mutateAsyncUpdateNotification,
-    isLoading: isLoadingUpdateNotification,
-  } = useUpdateNotification({
+  const { mutateAsync: mutateAsyncUpdateNotification } = useUpdateNotification({
     onSuccess: async () => {
       await refetch();
     },
@@ -107,7 +81,6 @@ const NotificationScreen = ({
       longitude: number,
       type: "rental" | "farm"
     ) => {
-      await mutateAsyncUpdateNotification({ notificationId, clicked: true });
       navigation.goBack();
       await wait(0.1);
       navigation.navigate("TabNavigator", {
@@ -117,13 +90,13 @@ const NotificationScreen = ({
           params: { regionId, latitude, longitude, type },
         },
       });
+      await mutateAsyncUpdateNotification({ notificationId, clicked: true });
     },
     []
   );
 
   const talkChatNavigationHandler = useCallback(
     async (notificationId: number, talkId: number) => {
-      await mutateAsyncUpdateNotification({ notificationId, clicked: true });
       navigation.goBack();
       await wait(0.1);
       navigation.navigate("TabNavigator", {
@@ -132,7 +105,6 @@ const NotificationScreen = ({
           screen: "TalkList",
         },
       });
-      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "TalkNavigator",
         params: {
@@ -142,6 +114,7 @@ const NotificationScreen = ({
           },
         },
       });
+      await mutateAsyncUpdateNotification({ notificationId, clicked: true });
     },
     []
   );
@@ -156,11 +129,7 @@ const NotificationScreen = ({
       notifications={notifications}
       refetchNotifications={refetchNotifications}
       isRefetchingNotifications={isRefetchingNotifications}
-      isLoading={
-        isLoadingNotifications ||
-        isLoadingUpdateNotification ||
-        isLoadingDeleteNotification
-      }
+      isLoading={isLoadingNotifications || isLoadingDeleteNotification}
       deleteNotification={deleteNotification}
       mapNavigationHandler={mapNavigationHandler}
       talkChatNavigationHandler={talkChatNavigationHandler}

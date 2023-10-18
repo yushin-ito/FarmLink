@@ -256,27 +256,25 @@ const PostFarmTemplate = ({
                   <Spinner color="muted.400" />
                 </Center>
               ) : (
-                <MapView
-                  ref={mapRef}
-                  userInterfaceStyle={useColorModeValue("light", "dark")}
-                  showsCompass={false}
-                  onMapReady={() => setReady(true)}
-                  style={{
-                    width: "100%",
-                    height: 160,
-                    borderRadius: 12,
-                  }}
-                >
-                  {position && (
-                    <Marker coordinate={position}>
-                      <Image
-                        source={require("../../../assets/app/pin-brand.png")}
-                        style={{ width: 16, height: 16 }}
-                        contentFit="contain"
-                      />
-                    </Marker>
-                  )}
-                </MapView>
+                <Box w="100%" h="40" rounded="xl" overflow="hidden">
+                  <MapView
+                    ref={mapRef}
+                    userInterfaceStyle={useColorModeValue("light", "dark")}
+                    showsCompass={false}
+                    onMapReady={() => setReady(true)}
+                    style={{ flex: 1 }}
+                  >
+                    {position && (
+                      <Marker coordinate={position}>
+                        <Image
+                          source={require("../../../assets/app/pin-brand.png")}
+                          style={{ width: 16, height: 16 }}
+                          contentFit="contain"
+                        />
+                      </Marker>
+                    )}
+                  </MapView>
+                </Box>
               )}
               {!isLoadingPosition && address && (
                 <Text mt="1" color={textColor}>{`${t("address")}: ${
@@ -284,7 +282,7 @@ const PostFarmTemplate = ({
                 }${address.name}`}</Text>
               )}
             </VStack>
-            <HStack mt="9" alignItems="center" justifyContent="space-between">
+            <HStack mt="4" alignItems="center" justifyContent="space-between">
               <Text fontSize="md" bold color={textColor}>
                 {t("changePublic")}
               </Text>

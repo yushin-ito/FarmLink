@@ -1,12 +1,13 @@
 import React, { memo } from "react";
-import { Box, PresenceTransition } from "native-base";
+import { Box, Center, PresenceTransition, Spinner } from "native-base";
 import { useWindowDimensions } from "react-native";
 
 type OverlayProps = {
   isOpen: boolean;
+  showSpinner?: boolean;
 };
 
-const Overlay = memo(({ isOpen }: OverlayProps) => {
+const Overlay = memo(({ isOpen, showSpinner }: OverlayProps) => {
   const { width, height } = useWindowDimensions();
 
   if (!isOpen) {
@@ -27,7 +28,9 @@ const Overlay = memo(({ isOpen }: OverlayProps) => {
           },
         }}
       >
-        <Box w={width} h={height} bg="black" />
+        <Center w={width} h={height} bg="black">
+          {showSpinner && <Spinner color="muted.400" />}
+        </Center>
       </PresenceTransition>
     </Box>
   );

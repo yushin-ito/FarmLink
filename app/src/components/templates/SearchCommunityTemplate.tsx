@@ -14,7 +14,7 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
 import { GetCommunitiesResponse } from "../../hooks/community/query";
-import { TouchableWithoutFeedback, Keyboard } from "react-native";
+import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import SearchCommunityItem from "../organisms/SearchCommunityItem";
 import { useTranslation } from "react-i18next";
 import { GetUserResponse } from "../../hooks/user/query";
@@ -60,7 +60,7 @@ const SearchCommunityTemplate = ({
               render={({ field: { value, onChange } }) => (
                 <SearchBar
                   w="90%"
-                  autoFocus
+                  autoFocus={Platform.OS === "ios"}
                   returnKeyType="search"
                   placeholder={t("searchCommunity")}
                   InputRightElement={

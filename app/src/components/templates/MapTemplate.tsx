@@ -7,6 +7,8 @@ import {
   Text,
   Center,
   useColorModeValue,
+  IconButton,
+  Icon,
 } from "native-base";
 import React, {
   Dispatch,
@@ -14,17 +16,20 @@ import React, {
   useCallback,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import MapView, { LatLng, Marker } from "react-native-maps";
 import SearchBar from "../organisms/SearchBar";
+import { GetUserResponse } from "../../hooks/user/query";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { GetRentalsResponse } from "../../hooks/rental/query";
 import { useTranslation } from "react-i18next";
 import FarmPreviewList from "../organisms/FarmPreviewList";
 import RentalPreviewList from "../organisms/RentalPreviewList";
-import { GetUserResponse } from "../../hooks/user/query";
 import { Image } from "expo-image";
 import { Region } from "../../types";
+import { Feather } from "@expo/vector-icons";
+import { Platform } from "react-native";
 
 type MapTemplateProps = {
   type: "rental" | "farm";
@@ -37,8 +42,10 @@ type MapTemplateProps = {
   user: GetUserResponse | null | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
+  refetch: () => Promise<void>;
   readMore: () => void;
   isLoading: boolean;
+  isRefetching: boolean;
   rentalDetailNavigationHandler: (rentalId: number) => void;
   farmDetailNavigationHandler: (farmId: number) => void;
   searchMapNavigationHandler: () => void;
@@ -55,6 +62,7 @@ const MapTemplate = ({
   position,
   rentals,
   farms,
+  refetch,
   readMore,
   isLoading,
   rentalDetailNavigationHandler,
@@ -66,8 +74,11 @@ const MapTemplate = ({
   const mapColor = useColorModeValue("light", "dark");
   const bgColor = useColorModeValue("white", "muted.800");
   const textColor = useColorModeValue("black", "white");
+  const iconColor = useColorModeValue("muted.600", "muted.100");
+  const pressedColor = useColorModeValue("muted.200", "muted.700");
 
   const mapRef = useRef<MapView>(null);
+  const [ready, setReady] = useState(false);
 
   const getOverlap = useCallback(
     (a: LatLng, b: LatLng) =>
@@ -76,26 +87,16 @@ const MapTemplate = ({
     []
   );
 
-  const animateToRegion = useCallback(
-    ({ latitude, longitude }: LatLng) => {
-      if (mapRef.current) {
+  useEffect(() => {
+    if (region) {
+      if (mapRef.current && ready) {
         mapRef.current.animateToRegion({
-          latitude,
-          longitude,
+          latitude: region.latitude,
+          longitude: region.longitude,
           latitudeDelta: 0.001,
           longitudeDelta: 0.001,
         });
       }
-    },
-    [mapRef.current]
-  );
-
-  useEffect(() => {
-    if (region) {
-      animateToRegion({
-        latitude: region.latitude,
-        longitude: region.longitude,
-      });
     } else {
       type === "farm"
         ? farms?.length &&
@@ -111,7 +112,7 @@ const MapTemplate = ({
             longitude: rentals[0].longitude,
           });
     }
-  }, [mapRef.current, region, type, position, farms, rentals]);
+  }, [mapRef.current, region, type, position, farms, rentals, ready]);
 
   if (isLoading) {
     return (
@@ -126,6 +127,7 @@ const MapTemplate = ({
       <MapView
         ref={mapRef}
         userInterfaceStyle={mapColor}
+        onMapReady={() => setReady(true)}
         showsCompass={false}
         initialRegion={{
           latitude: 35,
@@ -154,7 +156,13 @@ const MapTemplate = ({
           ) && (
             <Marker coordinate={position}>
               <VStack alignItems="center" maxW="24">
-                <Text bold fontSize="xs" numberOfLines={1} ellipsizeMode="tail">
+                <Text
+                  bold
+                  fontSize="xs"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  color={Platform.OS === "android" ? "black" : textColor}
+                >
                   {t("current")}
                 </Text>
                 <Image
@@ -198,6 +206,9 @@ const MapTemplate = ({
                           fontSize="xs"
                           numberOfLines={1}
                           ellipsizeMode="tail"
+                          color={
+                            Platform.OS === "android" ? "black" : textColor
+                          }
                         >
                           {name}
                         </Text>
@@ -239,6 +250,9 @@ const MapTemplate = ({
                           fontSize="xs"
                           numberOfLines={1}
                           ellipsizeMode="tail"
+                          color={
+                            Platform.OS === "android" ? "black" : textColor
+                          }
                         >
                           {name}
                         </Text>
@@ -253,18 +267,51 @@ const MapTemplate = ({
                 )
             )}
       </MapView>
-      <VStack w="80%" position="absolute" top="16" alignSelf="center" space="3">
-        <Box shadow="1" bg={bgColor} rounded="lg">
-          <SearchBar
-            isReadOnly
+      <VStack
+        w="100%"
+        position="absolute"
+        top={Platform.OS === "android" ? "12" : "16"}
+        alignItems="center"
+        space="3"
+      >
+        <HStack alignItems="center" space="3">
+          <Pressable
+            w="70%"
+            justifyContent="center"
+            shadow="1"
             bg={bgColor}
-            placeholder={t(type === "farm" ? "searchFarm" : "searchRental")}
+            rounded="lg"
             onPressIn={searchMapNavigationHandler}
+          >
+            <SearchBar
+              isReadOnly
+              bg={bgColor}
+              placeholder={t(type === "farm" ? "searchFarm" : "searchRental")}
+              onPressIn={searchMapNavigationHandler}
+            />
+          </Pressable>
+          <IconButton
+            icon={
+              <Icon as={<Feather />} name="flag" size="sm" color={iconColor} />
+            }
+            variant="unstyled"
+            size="8"
+            rounded="full"
+            bg={bgColor}
+            shadow="1"
+            _pressed={{ bg: pressedColor }}
+            onPress={refetch}
           />
-        </Box>
-        <HStack alignItems="center" justifyContent="space-between">
+        </HStack>
+        <HStack w="80%" alignItems="center" justifyContent="space-between">
           <HStack space="2">
             <Pressable
+              px="3"
+              py="1"
+              rounded="full"
+              bg={type === "rental" ? "brand.600" : bgColor}
+              _pressed={{ bg: pressedColor }}
+              shadow="1"
               onPress={() => {
                 if (rentals?.length) {
                   setRegion({
@@ -276,20 +323,17 @@ const MapTemplate = ({
                 setType("rental");
               }}
             >
-              <Box
-                px="3"
-                py="1"
-                rounded="full"
-                bg={type === "rental" ? "brand.600" : bgColor}
-                shadow="1"
-                alignItems="center"
-              >
-                <Text color={type === "rental" ? "white" : textColor}>
-                  {t("rental")}
-                </Text>
-              </Box>
+              <Text color={type === "rental" ? "white" : textColor}>
+                {t("rental")}
+              </Text>
             </Pressable>
             <Pressable
+              px="3"
+              py="1"
+              bg={type === "farm" ? "brand.600" : bgColor}
+              _pressed={{ bg: pressedColor }}
+              rounded="full"
+              shadow="1"
               onPress={() => {
                 if (farms?.length) {
                   setRegion({
@@ -301,26 +345,18 @@ const MapTemplate = ({
                 setType("farm");
               }}
             >
-              <Box
-                px="3"
-                py="1"
-                rounded="full"
-                bg={type === "farm" ? "brand.600" : bgColor}
-                shadow="1"
-                alignItems="center"
-              >
-                <Text color={type === "farm" ? "white" : textColor}>
-                  {t("farm")}
-                </Text>
-              </Box>
+              <Text color={type === "farm" ? "white" : textColor}>
+                {t("farm")}
+              </Text>
             </Pressable>
           </HStack>
           {type === "rental" && (
             <Pressable
               px="3"
               py="1"
-              rounded="full"
               bg={bgColor}
+              _pressed={{ bg: pressedColor }}
+              rounded="full"
               shadow="1"
               onPress={rentalGridNavigationHandler}
             >

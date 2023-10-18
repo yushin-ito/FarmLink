@@ -275,42 +275,40 @@ const EditFarmTemplate = ({
                   <Spinner color="muted.400" />
                 </Center>
               ) : (
-                <MapView
-                  ref={mapRef}
-                  onMapReady={() => setReady(true)}
-                  userInterfaceStyle={useColorModeValue("light", "dark")}
-                  showsCompass={false}
-                  style={{
-                    width: "100%",
-                    height: 160,
-                    borderRadius: 12,
-                  }}
-                >
-                  {farm && (
-                    <Marker
-                      coordinate={{
-                        latitude: farm.latitude,
-                        longitude: farm.longitude,
-                      }}
-                    >
-                      <VStack alignItems="center" maxW="24">
-                        <Text
-                          bold
-                          fontSize="2xs"
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                        >
-                          {farm.name}
-                        </Text>
-                        <Image
-                          source={require("../../../assets/app/pin-brand.png")}
-                          style={{ width: 16, height: 16 }}
-                          contentFit="contain"
-                        />
-                      </VStack>
-                    </Marker>
-                  )}
-                </MapView>
+                <Box w="100%" h="40" rounded="xl" overflow="hidden">
+                  <MapView
+                    ref={mapRef}
+                    onMapReady={() => setReady(true)}
+                    userInterfaceStyle={useColorModeValue("light", "dark")}
+                    showsCompass={false}
+                    style={{ flex: 1 }}
+                  >
+                    {position && (
+                      <Marker
+                        coordinate={{
+                          latitude: position.latitude,
+                          longitude: position.longitude,
+                        }}
+                      >
+                        <VStack alignItems="center" maxW="24">
+                          <Text
+                            bold
+                            fontSize="2xs"
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                          >
+                            {farm?.name}
+                          </Text>
+                          <Image
+                            source={require("../../../assets/app/pin-brand.png")}
+                            style={{ width: 16, height: 16 }}
+                            contentFit="contain"
+                          />
+                        </VStack>
+                      </Marker>
+                    )}
+                  </MapView>
+                </Box>
               )}
               {address && (
                 <Text color={textColor}>{`${t("address")}: ${address.city}${
@@ -318,7 +316,7 @@ const EditFarmTemplate = ({
                 }`}</Text>
               )}
             </VStack>
-            <HStack mt="12" alignItems="center" justifyContent="space-between">
+            <HStack mt="4" alignItems="center" justifyContent="space-between">
               <Text fontSize="md" bold color={textColor}>
                 {t("changePublic")}
               </Text>

@@ -41,7 +41,7 @@ const FarmDetailScreen = ({
     refetch: refetchLikes,
     isLoading: isLoadingLikes,
   } = useQueryFarmLikes(params.farmId);
-  const [isRefetchingFarm, setIsRefetchingFarm] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
   const liked =
     likes?.some(
       (item) =>
@@ -57,10 +57,10 @@ const FarmDetailScreen = ({
   }, [farm]);
 
   const refetch = useCallback(async () => {
-    setIsRefetchingFarm(true);
+    setIsRefetching(true);
     await refetchFarm();
     await refetchLikes();
-    setIsRefetchingFarm(false);
+    setIsRefetching(false);
   }, []);
 
   const {
@@ -83,19 +83,18 @@ const FarmDetailScreen = ({
     usePostFarmLike({
       onSuccess: async () => {
         await refetchLikes();
-        if (user && farm) {
+        if (user && farm && session?.user.id !== farm.ownerId) {
           await mutateAsyncPostNotification({
             recieverId: farm.ownerId,
             senderId: user.userId,
             farmId: params.farmId,
             clicked: false,
           });
-
-          if (farm.user.token && farm.name) {
+          if (farm.owner.token && farm.name) {
             await sendNotification({
-              to: farm.user.token,
+              to: farm.owner.token,
               title: farm.name,
-              body: farm.name + t("to") + user.name + t("liked"),
+              body: farm.name + "さんが" + user.name + "いいねしました。",
               data: {
                 data: {
                   scheme: `TabNavigator/MapNavigator/Map?id=${params.farmId}&latitude=${farm.latitude}&longitude=${farm.longitude}&type=farm}`,
@@ -217,17 +216,20 @@ const FarmDetailScreen = ({
   });
 
   const postLike = useCallback(async () => {
-    if (session && farm) {
+    if (session) {
       await mutateAsyncPostLike({
         userId: session.user.id,
         farmId: params.farmId,
       });
     }
-  }, [session, farm]);
+  }, [params, session]);
 
   const deleteLike = useCallback(async () => {
-    await mutateAsyncDeleteLike(params.farmId);
-  }, []);
+    await mutateAsyncDeleteLike({
+      farmId: params.farmId,
+      userId: session?.user.id,
+    });
+  }, [params, session]);
 
   const talkChatNavigationHandler = useCallback(async () => {
     const talk = talks?.find((item) => item.to.userId === farm?.ownerId);
@@ -289,7 +291,7 @@ const FarmDetailScreen = ({
       isLoadingPostTalk={isLoadingPostTalk}
       isLoadingPostLike={isLoadingPostLike || isLoadingPostNotification}
       isLoadingDeleteLike={isLoadingDeleteLike}
-      isRefetching={isRefetchingFarm}
+      isRefetching={isRefetching}
       editFarmNavigationHandler={editFarmNavigationHandler}
       talkChatNavigationHandler={talkChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}

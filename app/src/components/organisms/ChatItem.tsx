@@ -49,6 +49,7 @@ const ChatItem = memo(
       >
         {!authored && (
           <Avatar
+            isDisabled
             size="sm"
             mb="3"
             text={item.user?.name?.charAt(0)}

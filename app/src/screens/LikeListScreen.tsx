@@ -64,12 +64,15 @@ const LikeListScreen = ({
   });
 
   const deleteRentalLike = useCallback(async (rentalId: number) => {
-    await mutateAsyncDeleteRentalLike(rentalId);
-  }, []);
+    await mutateAsyncDeleteRentalLike({ rentalId, userId: session?.user.id });
+  }, [session]);
 
-  const deleteFarmLike = useCallback(async (farmId: number) => {
-    await mutateAsyncDeleteFarmLike(farmId);
-  }, []);
+  const deleteFarmLike = useCallback(
+    async (farmId: number) => {
+      await mutateAsyncDeleteFarmLike({ farmId, userId: session?.user.id });
+    },
+    [session]
+  );
 
   const refetchLikes = useCallback(async () => {
     setIsRefetchingRentals(true);

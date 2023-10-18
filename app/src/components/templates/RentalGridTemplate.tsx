@@ -9,6 +9,7 @@ import {
   IScrollViewProps,
   Center,
   Spinner,
+  Pressable,
 } from "native-base";
 import React, { Dispatch, SetStateAction, memo, useState } from "react";
 import Fab from "../molecules/Fab";
@@ -173,12 +174,13 @@ const RentalGridTemplate = ({
           pr="0"
           variant="unstyled"
         />
-        <SearchBar
-          maxW="70%"
-          isReadOnly
-          placeholder={t("searchRental")}
-          onPressIn={searchMapNavigationHandler}
-        />
+        <Pressable w="70%" onPress={searchMapNavigationHandler}>
+          <SearchBar
+            isReadOnly
+            placeholder={t("searchRental")}
+            onPressIn={searchMapNavigationHandler}
+          />
+        </Pressable>
         <IconButton
           onPress={() => Alert.alert(t("dev"))}
           icon={

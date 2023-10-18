@@ -54,8 +54,8 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
           table: "chat",
           filter: `talkId=eq.${params.talkId}`,
         },
-        () => {
-          refetchChats();
+        async () => {
+          await refetchChats();
         }
       )
       .subscribe();
@@ -130,7 +130,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
             (await sendNotification({
               to: talk.to.token,
               title: user.name,
-              body: t("sendImage"),
+              body: "写真が送信されました。",
               data: {
                 scheme: `TabNavigator/TalkNavigator/TalkChat?talkId=${params.talkId}`,
               },

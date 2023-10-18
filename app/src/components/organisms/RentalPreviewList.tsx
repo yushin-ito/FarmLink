@@ -146,20 +146,32 @@ const RentalPreviewList = memo(
                   >
                     {item.description ?? t("noDescription")}
                   </Text>
-                  <HStack mt="2" space="6">
-                    <VStack>
-                      <Text color="muted.400" bold fontSize="xs">
+                  <HStack mt="2">
+                    <VStack w="50%">
+                      <Text
+                        color="muted.400"
+                        bold
+                        fontSize="xs"
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
                         {t("area")}
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
                         {item.area ? item.area + "㎡" : t("unknown")}
                       </Text>
                     </VStack>
-                    <VStack>
+                    <VStack w="50%">
                       <Text color="muted.400" bold fontSize="xs">
                         {t("fee")}
                       </Text>
-                      <Text color={textColor} bold fontSize="sm">
+                      <Text
+                        color={textColor}
+                        bold
+                        fontSize="sm"
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
                         {"￥" + item.fee + t(item.rate as Rate)}
                       </Text>
                     </VStack>
@@ -171,7 +183,7 @@ const RentalPreviewList = memo(
         )}
         onEndReached={readMore}
         onEndReachedThreshold={0.3}
-        onTouchEnd={() => setTouch(true)}
+        onScrollEndDrag={() => setTouch(true)}
         onMomentumScrollEnd={(event) => {
           const currentIndex = Math.floor(
             event.nativeEvent.contentOffset.x /

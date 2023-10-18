@@ -181,7 +181,7 @@ const FarmPreviewList = memo(
             )}
           </Pressable>
         )}
-        onTouchEnd={() => setTouch(true)}
+        onScrollEndDrag={() => setTouch(true)}
         onMomentumScrollEnd={(event) => {
           const currentIndex = Math.floor(
             event.nativeEvent.contentOffset.x /

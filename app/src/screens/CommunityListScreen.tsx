@@ -27,7 +27,7 @@ const CommunityListScreen = ({
     "fertilizer",
     "disease",
   ] as Category[];
-  const [categoryIndex, setCategoryIndex] = useState(1);
+  const [categoryIndex, setCategoryIndex] = useState(0);
   const {
     data: communities,
     isLoading: isLoadingCommunities,
@@ -113,13 +113,13 @@ const CommunityListScreen = ({
       setCategoryIndex={setCategoryIndex}
       communities={communities}
       user={user}
-      isLoading={isLoadingUser || isLoadingCommunities}
-      isLoadingUpdateCommunity={isLoadingUpdateCommunity}
-      isRefetchingCommunities={isRefetchingCommunities}
       hasMore={hasNextPage}
       readMore={fetchNextPage}
       refetchCommunities={refetchCommunities}
       joinCommunity={joinCommunity}
+      isLoading={isLoadingUser || isLoadingCommunities}
+      isLoadingUpdateCommunity={isLoadingUpdateCommunity}
+      isRefetchingCommunities={isRefetchingCommunities}
       communityChatNavigationHandler={communityChatNavigationHandler}
       postCommunityNavigationHandler={postCommunityNavigationHandler}
       settingNavigationHandler={settingNavigationHandler}

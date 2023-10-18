@@ -84,8 +84,6 @@
     "equipment": "設備",
     "area": "面積",
     "like": "いいね",
-    "to": "に",
-    "liked": "さんがいいねしました。",
     "unknown": "不明",
     "description": "詳細",
     "edit": "編集する",
@@ -119,7 +117,7 @@
   },
   "community": {
     "community": "コミュニティ",
-    "notExistCommunity": "参加中のコミュニティはありません",
+    "notExistCommunity": "コミュニティが見つかりません",
     "createCommunity": "コミュニティを作成",
     "leaveCommunity": "コミュニティを脱退",
     "askLeaveCommunity": "コミュニティを脱退してもよろしいですか",

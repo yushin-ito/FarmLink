@@ -107,6 +107,7 @@ export type CommunityStackParamList = {
 
 export type FarmStackParamList = {
   FarmList: undefined;
+  FarmDetail: { farmId: number };
   PostFarm: undefined;
 };
 

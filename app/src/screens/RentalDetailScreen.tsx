@@ -40,7 +40,7 @@ const RentalDetailScreen = ({
     refetch: refetchLikes,
     isLoading: isLoadingLikes,
   } = useQueryRentalLikes(params.rentalId);
-  const [isRefetchingRental, setIsRefetchingRental] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
   const liked =
     likes?.some(
       (item) =>
@@ -54,10 +54,10 @@ const RentalDetailScreen = ({
   }, [rental]);
 
   const refetch = useCallback(async () => {
-    setIsRefetchingRental(true);
+    setIsRefetching(true);
     await refetchRental();
     await refetchLikes();
-    setIsRefetchingRental(false);
+    setIsRefetching(false);
   }, []);
 
   const {
@@ -80,19 +80,18 @@ const RentalDetailScreen = ({
     usePostRentalLike({
       onSuccess: async () => {
         await refetchLikes();
-        if (user && rental) {
+        if (user && rental && session?.user.id !== rental.ownerId) {
           await mutateAsyncPostNotification({
             recieverId: rental.ownerId,
             senderId: user.userId,
             rentalId: params.rentalId,
             clicked: false,
           });
-
-          if (rental.user.token && rental.name) {
+          if (rental.owner.token && rental.name) {
             await sendNotification({
-              to: rental.user.token,
+              to: rental.owner.token,
               title: rental.name,
-              body: rental.name + t("to") + user.name + t("liked"),
+              body: rental.name + "さんが" + user.name + "いいねしました。",
               data: {
                 data: {
                   scheme: `TabNavigator/MapNavigator/Map?id=${params.rentalId}&latitude=${rental.latitude}&longitude=${rental.longitude}&type=rental`,
@@ -220,11 +219,14 @@ const RentalDetailScreen = ({
         rentalId: params.rentalId,
       });
     }
-  }, [session]);
+  }, [params, session]);
 
   const deleteLike = useCallback(async () => {
-    await mutateAsyncDeleteLike(params.rentalId);
-  }, []);
+    await mutateAsyncDeleteLike({
+      rentalId: params.rentalId,
+      userId: session?.user.id,
+    });
+  }, [params, session]);
 
   const talkChatNavigationHandler = useCallback(async () => {
     const talk = talks?.find((item) => item.to.userId === rental?.ownerId);
@@ -292,7 +294,7 @@ const RentalDetailScreen = ({
       }
       isLoadingPostTalk={isLoadingPostTalk}
       isLoadingPostLike={isLoadingPostLike || isLoadingPostNotification}
-      isRefetching={isRefetchingRental}
+      isRefetching={isRefetching}
       isLoadingDeleteLike={isLoadingDeleteLike}
       talkChatNavigationHandler={talkChatNavigationHandler}
       editRentalNavigationHandler={editRentalNavigationHandler}

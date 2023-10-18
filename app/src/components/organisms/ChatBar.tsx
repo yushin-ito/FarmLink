@@ -13,7 +13,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useState } from "react";
-import { Keyboard } from "react-native";
+import { Keyboard, Platform } from "react-native";
 import Stagger from "./Stagger";
 import { memo } from "react";
 
@@ -61,12 +61,12 @@ const ChatBar = memo(
     return (
       <HStack
         w="100%"
-        pt="1"
+        pt={Platform.OS === "ios" ? "1" : "3"}
         px="3"
         space="2"
         alignItems="flex-end"
         justifyContent="space-between"
-        pb={showKeyboard ? "1" : "9"}
+        pb={showKeyboard || Platform.OS === "android" ? "1" : "9"}
       >
         <Center>
           <Box position="absolute" bottom="12">
@@ -126,13 +126,17 @@ const ChatBar = memo(
             data.message && (await onSend(data.message));
           })}
           icon={
-            <Icon
-              as={isLoading ? <Spinner color="muted.200" /> : <Ionicons />}
-              mb="1"
-              name="ios-send"
-              size="6"
-              color="brand.600"
-            />
+            isLoading ? (
+              <Spinner color="muted.200" />
+            ) : (
+              <Icon
+                as={<Ionicons />}
+                mb="1"
+                name="ios-send"
+                size="6"
+                color="brand.600"
+              />
+            )
           }
           variant="unstyled"
           _pressed={{

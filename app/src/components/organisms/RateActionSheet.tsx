@@ -2,7 +2,6 @@ import { Actionsheet, Text, Radio, Box, useColorModeValue } from "native-base";
 import React, { Dispatch, SetStateAction, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Rate } from "../../types";
-import { Platform } from "react-native";
 import Overlay from "../molecules/Overlay";
 
 type RateActionSheetProps = {
@@ -25,7 +24,7 @@ const RateActionSheet = memo(
         <Actionsheet
           isOpen={isOpen}
           onClose={onClose}
-          useRNModal={Platform.OS === "ios"}
+          useRNModal
           _backdrop={{ style: { opacity: 0 } }}
         >
           <Actionsheet.Content>

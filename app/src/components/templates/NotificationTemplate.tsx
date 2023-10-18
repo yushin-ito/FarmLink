@@ -15,7 +15,7 @@ import SkeletonNotification from "../organisms/SkeletonNotification";
 import NotificationItem from "../organisms/NotificationItem";
 import { GetNotificationsResponse } from "../../hooks/notification/query";
 import { RefreshControl } from "react-native";
-import { Locale } from "../../types"
+import { Locale } from "../../types";
 
 type NotificationTemplateProps = {
   locale: Locale | null;
@@ -89,7 +89,7 @@ const NotificationTemplate = ({
       </HStack>
       <Box flex={1}>
         {isLoading ? (
-          <SkeletonNotification rows={4} />
+          <SkeletonNotification rows={6} />
         ) : (
           <FlatList
             data={notifications}

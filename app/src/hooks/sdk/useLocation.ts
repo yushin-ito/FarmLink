@@ -44,7 +44,7 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
         return;
       }
       const { coords } = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Lowest,
+        accuracy: Location.Accuracy.Low,
       });
 
       setPosition({ latitude: coords.latitude, longitude: coords.longitude });

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
@@ -20,10 +20,43 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
   const {
     data: user,
     isLoading: isLoadingUser,
-    refetch,
+    refetch: refetchUser,
   } = useQueryUser(session?.user.id);
-  const { data: notifications, isLoading: isLoadingNotifications } =
-    useQueryNotifications(session?.user.id);
+  const {
+    data: notifications,
+    isLoading: isLoadingNotifications,
+    refetch: refetchNotifications,
+  } = useQueryNotifications(session?.user.id);
+  const [isRefetching, setIsRefetching] = useState(false);
+
+  const refetch = useCallback(async () => {
+    setIsRefetching(true);
+    await refetchUser();
+    await refetchNotifications();
+    setIsRefetching(false);
+  }, []);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("notification")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notification",
+          filter: `recieverId=eq.${session?.user.id}`,
+        },
+        async () => {
+          await refetchNotifications();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session]);
 
   const { mutateAsync: mutateAsyncSignOut, isLoading: isLoadingSignOut } =
     useSignOut({
@@ -143,7 +176,13 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     <SettingTemplate
       user={user}
       unread={notifications?.filter((item) => !item.clicked).length ?? 0}
+      signOut={signOut}
+      pickImageByCamera={pickImageByCamera}
+      pickImageByLibrary={pickImageByLibrary}
+      deleteAvatar={deleteAvatar}
       isLoading={isLoadingUser || isLoadingNotifications}
+      refetch={refetch}
+      isRefetching={isRefetching}
       isLoadingAvatar={
         isLoadingUser ||
         isLoadingNotifications ||
@@ -151,10 +190,6 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
         isLoadingPostAvatar
       }
       isLoadingSignOut={isLoadingSignOut}
-      signOut={signOut}
-      pickImageByCamera={pickImageByCamera}
-      pickImageByLibrary={pickImageByLibrary}
-      deleteAvatar={deleteAvatar}
       notificationNavigationHandler={notificationNavigationHandler}
       postRentalNavigationHandler={postRentalNavigationHandler}
       postProfileNavigationHandler={postProfileNavigationHandler}

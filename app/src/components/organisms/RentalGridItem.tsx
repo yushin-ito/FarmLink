@@ -39,13 +39,14 @@ const RentalGridItem = memo(({ item, onPress }: RentalGridItemProps) => {
         <Box
           pl="1"
           pr="2"
+          maxW="100%"
           roundedRight="xl"
           position="absolute"
           left="0"
           bottom="0"
           bg="rgba(0, 0, 0, 0.70)"
         >
-          <Text bold color="white">
+          <Text bold color="white" numberOfLines={1} ellipsizeMode="tail">
             {"￥" + item.fee + t(item.rate as Rate)}
           </Text>
         </Box>

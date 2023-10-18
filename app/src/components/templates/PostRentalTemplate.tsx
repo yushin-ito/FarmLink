@@ -333,7 +333,7 @@ const PostRentalTemplate = ({
                   }}
                 />
               </FormControl>
-              <VStack w="40%">
+              <Pressable w="40%" onPressIn={onOpen}>
                 <FormControl.Label>{t("rate")}</FormControl.Label>
                 <Input
                   isReadOnly
@@ -349,7 +349,7 @@ const PostRentalTemplate = ({
                   borderColor={isOpen ? "brand.600" : borderColor}
                   onPressIn={onOpen}
                 />
-              </VStack>
+              </Pressable>
             </HStack>
             <FormControl isInvalid={"area" in errors}>
               <FormControl.Label>{t("area") + "(㎡)"}</FormControl.Label>
@@ -463,27 +463,25 @@ const PostRentalTemplate = ({
                   <Spinner color="muted.400" />
                 </Center>
               ) : (
-                <MapView
-                  ref={mapRef}
-                  userInterfaceStyle={useColorModeValue("light", "dark")}
-                  showsCompass={false}
-                  onMapReady={() => setReady(true)}
-                  style={{
-                    width: "100%",
-                    height: 160,
-                    borderRadius: 12,
-                  }}
-                >
-                  {position && (
-                    <Marker coordinate={position}>
-                      <Image
-                        source={require("../../../assets/app/pin-brand.png")}
-                        style={{ width: 16, height: 16 }}
-                        contentFit="contain"
-                      />
-                    </Marker>
-                  )}
-                </MapView>
+                <Box w="100%" h="40" rounded="xl" overflow="hidden">
+                  <MapView
+                    ref={mapRef}
+                    userInterfaceStyle={useColorModeValue("light", "dark")}
+                    showsCompass={false}
+                    onMapReady={() => setReady(true)}
+                    style={{ flex: 1 }}
+                  >
+                    {position && (
+                      <Marker coordinate={position}>
+                        <Image
+                          source={require("../../../assets/app/pin-brand.png")}
+                          style={{ width: 16, height: 16 }}
+                          contentFit="contain"
+                        />
+                      </Marker>
+                    )}
+                  </MapView>
+                </Box>
               )}
               {!isLoadingPosition && address && (
                 <Text mt="1" color={textColor}>{`${t("address")}: ${

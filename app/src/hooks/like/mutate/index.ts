@@ -43,22 +43,42 @@ const postRentalLike = async (like: Like["Insert"]) => {
   return data;
 };
 
-const deleteFarmLike = async (farmId: number) => {
+const deleteFarmLike = async ({
+  farmId,
+  userId,
+}: {
+  farmId: number;
+  userId: string | undefined;
+}) => {
+  if (!userId) {
+    return;
+  }
+
   const { data, error } = await supabase
     .from("like")
     .delete()
-    .eq("farmId", farmId);
+    .or(`farmId.eq.${farmId}, userId.eq.${userId}`);
   if (error) {
     throw error;
   }
   return data;
 };
 
-const deleteRentalLike = async (rentalId: number) => {
+const deleteRentalLike = async ({
+  rentalId,
+  userId,
+}: {
+  rentalId: number;
+  userId: string | undefined;
+}) => {
+  if (!userId) {
+    return;
+  }
+
   const { data, error } = await supabase
     .from("like")
     .delete()
-    .eq("rentalId", rentalId);
+    .or(`rentalId.eq.${rentalId}, userId.eq.${userId}`);
   if (error) {
     throw error;
   }

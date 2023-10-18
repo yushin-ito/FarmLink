@@ -7,6 +7,7 @@ import {
   VStack,
   Text,
   useColorModeValue,
+  Pressable,
 } from "native-base";
 import React from "react";
 import Fab from "../molecules/Fab";
@@ -66,11 +67,13 @@ const TalkListTemplate = ({
             isLoading={isLoading}
           />
         </HStack>
-        <SearchBar
-          isReadOnly
-          placeholder={t("searchTalk")}
-          onPressIn={searchTalkNavigationHandler}
-        />
+        <Pressable onPressIn={searchTalkNavigationHandler}>
+          <SearchBar
+            isReadOnly
+            placeholder={t("searchTalk")}
+            onPressIn={searchTalkNavigationHandler}
+          />
+        </Pressable>
       </VStack>
       {isLoading ? (
         <SkeletonTalkList rows={6} />

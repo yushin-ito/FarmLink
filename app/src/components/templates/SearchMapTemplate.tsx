@@ -13,7 +13,7 @@ import {
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
-import { TouchableWithoutFeedback, Keyboard } from "react-native";
+import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import SearchMapItem from "../organisms/SearchMapItem";
 import { SearchRentalsResponse } from "../../hooks/rental/mutate";
 import { SearchFarmsResponse } from "../../hooks/farm/mutate";
@@ -66,7 +66,7 @@ const SearchMapTemplate = ({
               render={({ field: { value, onChange } }) => (
                 <SearchBar
                   w="90%"
-                  autoFocus
+                  autoFocus={Platform.OS === "ios"}
                   returnKeyType="search"
                   placeholder={t(
                     type === "farm" ? "searchFarm" : "searchRental"

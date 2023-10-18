@@ -113,7 +113,7 @@ const EditRentalTemplate = ({
       });
       getAddress(position.latitude, position.longitude);
     }
-  }, [mapRef.current, position, rental]);
+  }, [mapRef.current, position, ready]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -276,6 +276,7 @@ const EditRentalTemplate = ({
                       <Input
                         h="48"
                         multiline
+                        textAlignVertical="top"
                         value={value}
                         onChangeText={onChange}
                       />
@@ -355,7 +356,7 @@ const EditRentalTemplate = ({
                   }}
                 />
               </FormControl>
-              <VStack w="40%">
+              <Pressable w="40%" onPressIn={onOpen}>
                 <FormControl.Label>{t("rate")}</FormControl.Label>
                 <Input
                   isReadOnly
@@ -371,7 +372,7 @@ const EditRentalTemplate = ({
                   borderColor={isOpen ? "brand.600" : borderColor}
                   onPressIn={onOpen}
                 />
-              </VStack>
+              </Pressable>
             </HStack>
             <FormControl isInvalid={"area" in errors}>
               <FormControl.Label>{t("area") + "(㎡)"}</FormControl.Label>
@@ -485,42 +486,40 @@ const EditRentalTemplate = ({
                   <Spinner color="muted.400" />
                 </Center>
               ) : (
-                <MapView
-                  ref={mapRef}
-                  onMapReady={() => setReady(true)}
-                  userInterfaceStyle={useColorModeValue("light", "dark")}
-                  showsCompass={false}
-                  style={{
-                    width: "100%",
-                    height: 160,
-                    borderRadius: 12,
-                  }}
-                >
-                  {rental && (
-                    <Marker
-                      coordinate={{
-                        latitude: rental.latitude,
-                        longitude: rental.longitude,
-                      }}
-                    >
-                      <VStack alignItems="center" maxW="24">
-                        <Text
-                          bold
-                          fontSize="2xs"
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                        >
-                          {rental.name}
-                        </Text>
-                        <Image
-                          source={require("../../../assets/app/pin-brand.png")}
-                          style={{ width: 16, height: 16 }}
-                          contentFit="contain"
-                        />
-                      </VStack>
-                    </Marker>
-                  )}
-                </MapView>
+                <Box w="100%" h="40" rounded="xl" overflow="hidden">
+                  <MapView
+                    ref={mapRef}
+                    onMapReady={() => setReady(true)}
+                    userInterfaceStyle={useColorModeValue("light", "dark")}
+                    showsCompass={false}
+                    style={{ flex: 1 }}
+                  >
+                    {position && (
+                      <Marker
+                        coordinate={{
+                          latitude: position.latitude,
+                          longitude: position.longitude,
+                        }}
+                      >
+                        <VStack alignItems="center" maxW="24">
+                          <Text
+                            bold
+                            fontSize="2xs"
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                          >
+                            {rental?.name}
+                          </Text>
+                          <Image
+                            source={require("../../../assets/app/pin-brand.png")}
+                            style={{ width: 16, height: 16 }}
+                            contentFit="contain"
+                          />
+                        </VStack>
+                      </Marker>
+                    )}
+                  </MapView>
+                </Box>
               )}
               {address && (
                 <Text color={textColor}>{`${t("address")}: ${address.city}${

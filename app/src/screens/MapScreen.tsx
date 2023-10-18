@@ -26,6 +26,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const [touch, setTouch] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
   const [location, setLocation] = useState<LatLng>();
+  const [isRefetching, setIsRefetching] = useState<boolean>(false);
 
   const { position, getPosition, isLoadingPosition } = useLocation({
     onDisable: () => {
@@ -53,6 +54,13 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   useEffect(() => {
     setLocation(position);
   }, [position]);
+
+  const refetch = useCallback(async () => {
+    setIsRefetching(true);
+    setRegion(null);
+    await getPosition();
+    setIsRefetching(false);
+  }, []);
 
   useEffect(() => {
     if (params?.regionId && params?.latitude && params?.longitude) {
@@ -91,8 +99,8 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           schema: "public",
           table: "rental",
         },
-        () => {
-          refetchRentals();
+        async () => {
+          await refetchRentals();
         }
       )
       .subscribe();
@@ -119,8 +127,8 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           schema: "public",
           table: "farm",
         },
-        () => {
-          refetchFarms();
+        async () => {
+          await refetchFarms();
         }
       )
       .subscribe();
@@ -131,11 +139,11 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   }, []);
 
   const rentalDetailNavigationHandler = useCallback((rentalId: number) => {
-    navigation.navigate("RentalDetail", { rentalId });
+    rentalId && navigation.navigate("RentalDetail", { rentalId });
   }, []);
 
   const farmDetailNavigationHandler = useCallback((farmId: number) => {
-    navigation.navigate("FarmDetail", { farmId });
+    farmId && navigation.navigate("FarmDetail", { farmId });
   }, []);
 
   const searchMapNavigationHandler = useCallback(() => {
@@ -162,10 +170,12 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       farms={farms?.filter(
         (item) => !item.privated || item.ownerId === session?.user.id
       )}
+      refetch={refetch}
       readMore={type === "rental" ? fetchNextPageRentals : fetchNextPageFams}
       isLoading={
         isLoadingPosition || isLoadingUser || isLoadingRentals || isLoadingFarms
       }
+      isRefetching={isRefetching}
       rentalDetailNavigationHandler={rentalDetailNavigationHandler}
       farmDetailNavigationHandler={farmDetailNavigationHandler}
       searchMapNavigationHandler={searchMapNavigationHandler}

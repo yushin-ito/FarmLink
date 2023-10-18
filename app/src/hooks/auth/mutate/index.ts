@@ -39,7 +39,6 @@ const signInWithProvider = async (provider: string) => {
   const redirectUrl = makeRedirectUri({
     scheme: "farmlink",
     path: "redirect",
-    isTripleSlashed: true,
   });
 
   const authResponse = await startAsync({
