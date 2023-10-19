@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
+import { Platform } from "react-native";
 
 type UseLocationType = {
   onError?: (error: Error) => void;
@@ -44,7 +45,10 @@ const useLocation = ({ onError, onDisable }: UseLocationType) => {
         return;
       }
       const { coords } = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Low,
+        accuracy:
+          Platform.OS === "android"
+            ? Location.Accuracy.Low
+            : Location.Accuracy.Lowest,
       });
 
       setPosition({ latitude: coords.latitude, longitude: coords.longitude });

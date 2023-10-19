@@ -97,8 +97,12 @@ const CommunityListTemplate = ({
             isLoading={isLoading}
           />
         </HStack>
-        <Pressable onPress={searchCommunityNavigationHandler}>
-          <SearchBar isReadOnly placeholder={t("searchCommunity")} />
+        <Pressable onPressIn={searchCommunityNavigationHandler}>
+          <SearchBar
+            isReadOnly
+            placeholder={t("searchCommunity")}
+            onPressIn={searchCommunityNavigationHandler}
+          />
         </Pressable>
       </VStack>
       <Pressable onPress={onOpen} alignSelf="flex-end" mr="8" mb="2">

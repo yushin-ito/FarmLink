@@ -310,7 +310,6 @@ const MapTemplate = ({
               py="1"
               rounded="full"
               bg={type === "rental" ? "brand.600" : bgColor}
-              _pressed={{ bg: pressedColor }}
               shadow="1"
               onPress={() => {
                 if (rentals?.length) {
@@ -331,7 +330,6 @@ const MapTemplate = ({
               px="3"
               py="1"
               bg={type === "farm" ? "brand.600" : bgColor}
-              _pressed={{ bg: pressedColor }}
               rounded="full"
               shadow="1"
               onPress={() => {

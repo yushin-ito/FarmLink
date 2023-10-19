@@ -16,7 +16,7 @@ const TalkNavigator = () => {
     <TalkStack.Navigator screenOptions={{ headerShown: false }}>
       <TalkStack.Screen name="TalkList" component={TalkListScreen} />
       <TalkStack.Screen name="TalkChat" component={TalkChatScreen} />
-      <TalkStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
+      <TalkStack.Group screenOptions={{ presentation: "containedModal" }}>
         <TalkStack.Screen name="PostTalk" component={PostTalkScreen} />
       </TalkStack.Group>
       <TalkStack.Group

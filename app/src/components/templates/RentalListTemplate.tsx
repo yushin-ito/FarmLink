@@ -78,6 +78,7 @@ const RentalListTemplate = ({
           <SkeletonRentalList rows={4} />
         ) : (
           <FlatList
+            contentContainerStyle={{ paddingBottom: 40 }}
             data={rentals}
             renderItem={({ item }) => (
               <RentalListItem
@@ -135,7 +136,7 @@ const RentalListTemplate = ({
       </Box>
       <Fab
         position="absolute"
-        bottom="16"
+        bottom="12"
         right="8"
         onPress={postRentalNavigationHandler}
       >

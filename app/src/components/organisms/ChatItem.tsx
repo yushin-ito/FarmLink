@@ -111,7 +111,6 @@ const ChatItem = memo(
                       borderRadius: 16,
                     }}
                     source={{ uri: item?.imageUrl }}
-                    cachePolicy="memory-disk"
                   />
                 </Box>
               </Box>

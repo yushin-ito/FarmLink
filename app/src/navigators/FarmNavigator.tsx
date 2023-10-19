@@ -11,7 +11,7 @@ const FarmNavigator = () => {
   return (
     <FarmStack.Navigator screenOptions={{ headerShown: false }}>
       <FarmStack.Screen name="FarmList" component={FarmListScreen} />
-      <FarmStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
+      <FarmStack.Group screenOptions={{ presentation: "containedModal" }}>
         <FarmStack.Screen name="PostFarm" component={PostFarmScreen} />
       </FarmStack.Group>
     </FarmStack.Navigator>

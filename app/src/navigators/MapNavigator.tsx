@@ -22,7 +22,7 @@ const MapNavigator = () => {
       <MapStack.Screen name="RentalDetail" component={RentalDetailScreen} />
       <MapStack.Screen name="FarmDetail" component={FarmDetailScreen} />
       <MapStack.Screen name="RentalGrid" component={RentalGridScreen} />
-      <MapStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
+      <MapStack.Group screenOptions={{ presentation: "containedModal" }}>
         <MapStack.Screen name="EditRental" component={EditRentalScreen} />
         <MapStack.Screen name="EditFarm" component={EditFarmScreen} />
       </MapStack.Group>
@@ -38,7 +38,7 @@ const MapNavigator = () => {
       >
         <MapStack.Screen name="SearchMap" component={SearchMapScreen} />
       </MapStack.Group>
-      <MapStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
+      <MapStack.Group screenOptions={{ presentation: "containedModal" }}>
         <MapStack.Screen name="PostRental" component={PostRentalScreen} />
       </MapStack.Group>
     </MapStack.Navigator>

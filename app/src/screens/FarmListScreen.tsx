@@ -28,6 +28,14 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     useUpdateFarm({
       onSuccess: async () => {
         await refetch();
+        showAlert(
+          toast,
+          <Alert
+            status="success"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("changed")}
+          />
+        );
       },
       onError: () => {
         showAlert(
@@ -50,7 +58,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
         showAlert(
           toast,
           <Alert
-            status="error"
+            status="success"
             onPressCloseButton={() => toast.closeAll()}
             text={t("error")}
           />

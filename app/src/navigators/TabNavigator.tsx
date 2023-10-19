@@ -81,7 +81,10 @@ const TabNavigator = () => {
         routeName === "PostProfile" ||
         routeName === "PostRental" ||
         routeName === "EditRental" ||
+        routeName === "LikeList" ||
+        routeName === "Notification" ||
         routeName === "RentalList" ||
+        routeName === "Environment" ||
         routeName === "ImagePreview"
       )
         return false;

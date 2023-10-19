@@ -100,7 +100,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           table: "rental",
         },
         async () => {
-          await refetchRentals();
+          await getPosition();
         }
       )
       .subscribe();
@@ -128,7 +128,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           table: "farm",
         },
         async () => {
-          await refetchFarms();
+          await getPosition();
         }
       )
       .subscribe();

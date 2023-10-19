@@ -92,6 +92,7 @@ const NotificationTemplate = ({
           <SkeletonNotification rows={6} />
         ) : (
           <FlatList
+            contentContainerStyle={{ paddingBottom: 40 }}
             data={notifications}
             renderItem={({ item }) => (
               <NotificationItem

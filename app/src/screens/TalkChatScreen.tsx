@@ -117,15 +117,15 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     usePostChat({
       onSuccess: async ({ chatId, authorId, message, imageUrl }) => {
         if (talk?.to.token && user?.name) {
-          if (message)
-            await sendNotification({
+          message &&
+            (await sendNotification({
               to: talk.to.token,
               title: user.name,
               body: message,
               data: {
                 scheme: `TabNavigator/TalkNavigator/TalkChat?talkId=${params.talkId}`,
               },
-            });
+            }));
           imageUrl &&
             (await sendNotification({
               to: talk.to.token,
@@ -135,17 +135,19 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
                 scheme: `TabNavigator/TalkNavigator/TalkChat?talkId=${params.talkId}`,
               },
             }));
+        }
+        if (talk?.to.userId) {
           await mutateAsyncPostNotification({
             recieverId: talk.to.userId,
             senderId: authorId,
             talkId: params.talkId,
             clicked: false,
           });
-          await mutateAsyncUpdateTalk({
-            talkId: params.talkId,
-            chatId,
-          });
         }
+        await mutateAsyncUpdateTalk({
+          talkId: params.talkId,
+          chatId,
+        });
       },
       onError: () => {
         showAlert(

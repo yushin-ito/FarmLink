@@ -119,6 +119,7 @@ const LikeListTemplate = ({
           <SkeletonLikeList rows={4} />
         ) : type === "rental" ? (
           <FlatList
+            contentContainerStyle={{ paddingBottom: 40 }}
             data={likes?.filter((item) => item.rentalId)}
             renderItem={({ item }) => (
               <LikeListItem
@@ -161,6 +162,7 @@ const LikeListTemplate = ({
           />
         ) : (
           <FlatList
+            contentContainerStyle={{ paddingBottom: 40 }}
             data={likes?.filter((item) => item.farmId)}
             renderItem={({ item }) => (
               <LikeListItem

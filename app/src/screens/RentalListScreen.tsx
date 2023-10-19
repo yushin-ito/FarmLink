@@ -28,6 +28,14 @@ const RentalListScreen = ({
   } = useUpdateRental({
     onSuccess: async () => {
       await refetch();
+      showAlert(
+        toast,
+        <Alert
+          status="success"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("changed")}
+        />
+      );
     },
     onError: () => {
       navigation.goBack();

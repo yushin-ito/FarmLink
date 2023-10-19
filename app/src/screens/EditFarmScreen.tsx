@@ -34,7 +34,6 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
             longitude: position.longitude,
             type: "farm",
           });
-        } else {
           showAlert(
             toast,
             <Alert

@@ -7,7 +7,6 @@ import {
   useDisclose,
   Box,
   Center,
-  Spinner,
   useColorModeValue,
 } from "native-base";
 import { useForm, Controller } from "react-hook-form";
@@ -64,7 +63,7 @@ const ChatBar = memo(
         pt={Platform.OS === "ios" ? "1" : "3"}
         px="3"
         space="2"
-        alignItems="flex-end"
+        alignItems="center"
         justifyContent="space-between"
         pb={showKeyboard || Platform.OS === "android" ? "1" : "9"}
       >
@@ -96,14 +95,13 @@ const ChatBar = memo(
             onPress={onToggle}
           />
         </Center>
-        <Box w="70%">
+        <Box w="70%" alignItems="center">
           <Controller
             name="message"
             control={control}
             render={({ field: { value, onChange } }) => (
               <Input
                 keyboardAppearance={useColorModeValue("light", "dark")}
-                mb="2"
                 variant="unstyled"
                 textAlignVertical="top"
                 multiline
@@ -126,22 +124,15 @@ const ChatBar = memo(
             data.message && (await onSend(data.message));
           })}
           icon={
-            isLoading ? (
-              <Spinner color="muted.200" />
-            ) : (
-              <Icon
-                as={<Ionicons />}
-                mb="1"
-                name="ios-send"
-                size="6"
-                color="brand.600"
-              />
-            )
+            <Icon
+              as={<Ionicons />}
+              name="ios-send"
+              size="6"
+              color="brand.600"
+              opacity={isLoading ? 0.5 : 1}
+            />
           }
           variant="unstyled"
-          _pressed={{
-            opacity: 0.5,
-          }}
         />
       </HStack>
     );

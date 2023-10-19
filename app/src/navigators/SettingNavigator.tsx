@@ -17,7 +17,7 @@ const SettingNavigator = () => {
   return (
     <SettingStack.Navigator screenOptions={{ headerShown: false }}>
       <SettingStack.Screen name="Setting" component={SettingScreen} />
-      <SettingStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
+      <SettingStack.Group screenOptions={{ presentation: "containedModal" }}>
         <SettingStack.Screen name="PostProfile" component={PostProfileScreen} />
         <SettingStack.Screen name="PostRental" component={PostRentalScreen} />
         <SettingStack.Screen name="RentalList" component={RentalListScreen} />

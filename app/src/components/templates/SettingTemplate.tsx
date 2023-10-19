@@ -110,8 +110,8 @@ const SettingTemplate = ({
             />
           </Box>
           {isLoading ? (
-            <VStack space="2">
-              <Skeleton w="24" h="6" rounded="12" />
+            <VStack space="3">
+              <Skeleton w="24" h="5" rounded="12" />
               <Skeleton w="40" h="4" rounded="9" />
             </VStack>
           ) : (
@@ -224,7 +224,7 @@ const SettingTemplate = ({
                     size="md"
                     color={iconColor}
                   />
-                  <Text fontSize="md">{t("rentalFarm")}</Text>
+                  <Text fontSize="md">{t("createRental")}</Text>
                 </HStack>
                 <Icon
                   as={<Feather />}

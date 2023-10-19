@@ -45,7 +45,6 @@ const EditRentalScreen = ({
           longitude: position.longitude,
           type: "rental",
         });
-      } else {
         showAlert(
           toast,
           <Alert

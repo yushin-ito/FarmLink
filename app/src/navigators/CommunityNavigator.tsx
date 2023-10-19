@@ -22,7 +22,7 @@ const CommunityNavigator = () => {
         name="CommunityChat"
         component={CommunityChatScreen}
       />
-      <CommunityStack.Group screenOptions={{ presentation: "fullScreenModal" }}>
+      <CommunityStack.Group screenOptions={{ presentation: "containedModal" }}>
         <CommunityStack.Screen
           name="PostCommunity"
           component={PostCommunityScreen}

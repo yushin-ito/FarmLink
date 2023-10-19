@@ -495,27 +495,12 @@ const EditRentalTemplate = ({
                     style={{ flex: 1 }}
                   >
                     {position && (
-                      <Marker
-                        coordinate={{
-                          latitude: position.latitude,
-                          longitude: position.longitude,
-                        }}
-                      >
-                        <VStack alignItems="center" maxW="24">
-                          <Text
-                            bold
-                            fontSize="2xs"
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                          >
-                            {rental?.name}
-                          </Text>
-                          <Image
-                            source={require("../../../assets/app/pin-brand.png")}
-                            style={{ width: 16, height: 16 }}
-                            contentFit="contain"
-                          />
-                        </VStack>
+                      <Marker coordinate={position}>
+                        <Image
+                          source={require("../../../assets/app/pin-brand.png")}
+                          style={{ width: 16, height: 16 }}
+                          contentFit="contain"
+                        />
                       </Marker>
                     )}
                   </MapView>
