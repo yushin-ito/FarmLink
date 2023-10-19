@@ -8,7 +8,7 @@ import { useColorMode } from "native-base";
 import { Locale } from "../types";
 
 const EnvironmentScreen = () => {
-  const { i18n } = useTranslation("common");
+  const { i18n } = useTranslation("app");
   const navigation = useNavigation();
   const { setColorMode } = useColorMode();
   const [theme, setTheme] = useState<ColorSchemeName>(null);

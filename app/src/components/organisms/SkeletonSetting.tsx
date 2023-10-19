@@ -7,13 +7,13 @@ type SkeletonSettingProps = {
 };
 const SkeletonSetting = memo(({ rows }: SkeletonSettingProps) => {
   const iconColor = useColorModeValue("muted.300", "muted.600");
-  
+
   return (
     <VStack>
       {[...Array(rows)].map((_, index) => (
         <HStack
           key={index}
-          mt="5"
+          mt={index === 0 ? "3" : "6"}
           alignItems="center"
           justifyContent="space-between"
         >

@@ -15,9 +15,16 @@ const SettingStack = createNativeStackNavigator<SettingStackParamList>();
 
 const SettingNavigator = () => {
   return (
-    <SettingStack.Navigator screenOptions={{ headerShown: false }}>
+    <SettingStack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: true }}
+    >
       <SettingStack.Screen name="Setting" component={SettingScreen} />
-      <SettingStack.Group screenOptions={{ presentation: "containedModal" }}>
+      <SettingStack.Group
+        screenOptions={{
+          animation: "fade_from_bottom",
+          animationDuration: 100,
+        }}
+      >
         <SettingStack.Screen name="PostProfile" component={PostProfileScreen} />
         <SettingStack.Screen name="PostRental" component={PostRentalScreen} />
         <SettingStack.Screen name="RentalList" component={RentalListScreen} />

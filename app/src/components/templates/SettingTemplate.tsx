@@ -128,7 +128,7 @@ const SettingTemplate = ({
         {isLoading ? (
           <SkeletonSetting rows={7} />
         ) : (
-          <VStack space="3">
+          <VStack space="4">
             <Pressable
               _pressed={{
                 opacity: 0.5,
@@ -147,8 +147,8 @@ const SettingTemplate = ({
                 </HStack>
                 <HStack alignItems="center" space="2">
                   {unread !== 0 && (
-                    <Center size="5" bg="brand.600" rounded="full">
-                      <Text color="white" fontSize="xs">
+                    <Center size="6" bg="brand.600" rounded="full">
+                      <Text color="white" fontSize="sm">
                         {unread}
                       </Text>
                     </Center>

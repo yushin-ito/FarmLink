@@ -9,9 +9,16 @@ const FarmStack = createNativeStackNavigator<FarmStackParamList>();
 
 const FarmNavigator = () => {
   return (
-    <FarmStack.Navigator screenOptions={{ headerShown: false }}>
+    <FarmStack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: true }}
+    >
       <FarmStack.Screen name="FarmList" component={FarmListScreen} />
-      <FarmStack.Group screenOptions={{ presentation: "containedModal" }}>
+      <FarmStack.Group
+        screenOptions={{
+          animation: "fade_from_bottom",
+          animationDuration: 100,
+        }}
+      >
         <FarmStack.Screen name="PostFarm" component={PostFarmScreen} />
       </FarmStack.Group>
     </FarmStack.Navigator>

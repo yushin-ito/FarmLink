@@ -88,6 +88,7 @@ const PostCommunityTemplate = ({
       </HStack>
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
+        enableResetScrollToCoords={false}
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} pb="16" justifyContent="space-between">

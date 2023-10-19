@@ -13,10 +13,17 @@ const TalkStack = createNativeStackNavigator<TalkStackParamList>();
 
 const TalkNavigator = () => {
   return (
-    <TalkStack.Navigator screenOptions={{ headerShown: false }}>
+    <TalkStack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: true }}
+    >
       <TalkStack.Screen name="TalkList" component={TalkListScreen} />
       <TalkStack.Screen name="TalkChat" component={TalkChatScreen} />
-      <TalkStack.Group screenOptions={{ presentation: "containedModal" }}>
+      <TalkStack.Group
+        screenOptions={{
+          animation: "fade_from_bottom",
+          animationDuration: 100,
+        }}
+      >
         <TalkStack.Screen name="PostTalk" component={PostTalkScreen} />
       </TalkStack.Group>
       <TalkStack.Group

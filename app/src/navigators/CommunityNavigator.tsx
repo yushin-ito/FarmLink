@@ -13,7 +13,7 @@ const CommunityStack = createNativeStackNavigator<CommunityStackParamList>();
 
 const CommunityNavigator = () => {
   return (
-    <CommunityStack.Navigator screenOptions={{ headerShown: false }}>
+    <CommunityStack.Navigator screenOptions={{ headerShown: false, gestureEnabled: true }}>
       <CommunityStack.Screen
         name="CommunityList"
         component={CommunityListScreen}
@@ -22,7 +22,12 @@ const CommunityNavigator = () => {
         name="CommunityChat"
         component={CommunityChatScreen}
       />
-      <CommunityStack.Group screenOptions={{ presentation: "containedModal" }}>
+      <CommunityStack.Group
+        screenOptions={{
+          animation: "fade_from_bottom",
+          animationDuration: 100,
+        }}
+      >
         <CommunityStack.Screen
           name="PostCommunity"
           component={PostCommunityScreen}

@@ -41,6 +41,7 @@ const SearchUserItem = memo(
         >
           <HStack alignItems="center" space="3">
             <Avatar
+              isDisabled
               text={item.name?.charAt(0)}
               uri={item.avatarUrl}
               color={item.color}

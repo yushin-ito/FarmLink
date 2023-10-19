@@ -50,7 +50,7 @@ const useColorScheme = (delay = 250) => {
 };
 
 const App = () => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("app");
   const toast = useToast();
 
   const theme = extendTheme({

@@ -32,7 +32,6 @@ const PostTalkScreen = () => {
       );
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -51,7 +50,6 @@ const PostTalkScreen = () => {
         navigation.goBack();
       },
       onError: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert

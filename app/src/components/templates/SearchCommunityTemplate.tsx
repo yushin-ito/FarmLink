@@ -10,6 +10,7 @@ import {
   FlatList,
   Spinner,
   useColorModeValue,
+  KeyboardAvoidingView,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import SearchBar from "../organisms/SearchBar";
@@ -50,83 +51,89 @@ const SearchCommunityTemplate = ({
   const { control, reset } = useForm<FormValues>();
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} pt="4" safeAreaTop>
-        <VStack space="7">
-          <HStack px="5" alignItems="center" justifyContent="space-between">
-            <Controller
-              name="query"
-              control={control}
-              render={({ field: { value, onChange } }) => (
-                <SearchBar
-                  w="90%"
-                  autoFocus={Platform.OS === "ios"}
-                  returnKeyType="search"
-                  placeholder={t("searchCommunity")}
-                  InputRightElement={
-                    <IconButton
-                      onPress={() => reset()}
-                      icon={
-                        <Icon
-                          as={<Feather name="x" />}
-                          size="4"
-                          color="muted.400"
-                        />
-                      }
-                      variant="unstyled"
-                      _pressed={{
-                        opacity: 0.5,
-                      }}
-                    />
-                  }
-                  value={value}
-                  onChangeText={(text) => {
-                    onChange(text);
-                    searchCommunities(text);
-                  }}
-                />
-              )}
-            />
-            <IconButton
-              onPress={goBackNavigationHandler}
-              icon={
-                <Icon as={<Feather name="x" />} size="6" color={iconColor} />
-              }
-              variant="unstyled"
-              _pressed={{
-                opacity: 0.5,
-              }}
-            />
-          </HStack>
-          {isLoadingSearchCommunities ? (
-            <Spinner color="muted.400" />
-          ) : (
-            <FlatList
-              keyboardShouldPersistTaps="handled"
-              data={searchResult}
-              renderItem={({ item }) => (
-                <SearchCommunityItem
-                  item={item}
-                  joined={
-                    user?.userId === item.ownerId ||
-                    (item?.memberIds?.some(
-                      (memeberId) => user?.userId === memeberId
-                    ) ??
-                      false)
-                  }
-                  joinCommunity={joinCommunity}
-                  isLoading={isLoadingUpdateCommunity}
-                  communityChatNavigationHandler={
-                    communityChatNavigationHandler
-                  }
-                />
-              )}
-              keyExtractor={(item) => item.communityId.toString()}
-            />
-          )}
-        </VStack>
-      </Box>
-    </TouchableWithoutFeedback>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Box flex={1} pt="4" safeAreaTop>
+          <VStack space="7">
+            <HStack px="5" alignItems="center" justifyContent="space-between">
+              <Controller
+                name="query"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <SearchBar
+                    w="90%"
+                    autoFocus={Platform.OS === "ios"}
+                    returnKeyType="search"
+                    placeholder={t("searchCommunity")}
+                    InputRightElement={
+                      <IconButton
+                        onPress={() => reset()}
+                        icon={
+                          <Icon
+                            as={<Feather name="x" />}
+                            size="4"
+                            color="muted.400"
+                          />
+                        }
+                        variant="unstyled"
+                        _pressed={{
+                          opacity: 0.5,
+                        }}
+                      />
+                    }
+                    value={value}
+                    onChangeText={(text) => {
+                      onChange(text);
+                      searchCommunities(text);
+                    }}
+                  />
+                )}
+              />
+              <IconButton
+                onPress={goBackNavigationHandler}
+                icon={
+                  <Icon as={<Feather name="x" />} size="6" color={iconColor} />
+                }
+                variant="unstyled"
+                _pressed={{
+                  opacity: 0.5,
+                }}
+              />
+            </HStack>
+            {isLoadingSearchCommunities ? (
+              <Spinner color="muted.400" />
+            ) : (
+              <FlatList
+                contentContainerStyle={{ paddingBottom: 64 }}
+                keyboardShouldPersistTaps="handled"
+                data={searchResult}
+                renderItem={({ item }) => (
+                  <SearchCommunityItem
+                    item={item}
+                    joined={
+                      user?.userId === item.ownerId ||
+                      (item?.memberIds?.some(
+                        (memeberId) => user?.userId === memeberId
+                      ) ??
+                        false)
+                    }
+                    joinCommunity={joinCommunity}
+                    isLoading={isLoadingUpdateCommunity}
+                    communityChatNavigationHandler={
+                      communityChatNavigationHandler
+                    }
+                  />
+                )}
+                keyExtractor={(item) => item.communityId.toString()}
+              />
+            )}
+          </VStack>
+        </Box>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 export default SearchCommunityTemplate;

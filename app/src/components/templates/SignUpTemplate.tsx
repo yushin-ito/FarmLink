@@ -82,6 +82,7 @@ const SignUpTemplate = memo(
         </HStack>
         <KeyboardAwareScrollView
           contentContainerStyle={{ flexGrow: 1 }}
+          enableResetScrollToCoords={false}
           keyboardShouldPersistTaps="handled"
         >
           <VStack flex={1} pt="9" pb="12" px="12" space="3">

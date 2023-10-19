@@ -23,7 +23,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   );
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
   const [type, setType] = useState<"rental" | "farm">("rental");
-  const [touch, setTouch] = useState<boolean>(false);
+  const [touch, setTouch] = useState<boolean>(true);
   const [region, setRegion] = useState<Region | null>(null);
   const [location, setLocation] = useState<LatLng>();
   const [isRefetching, setIsRefetching] = useState<boolean>(false);
@@ -57,8 +57,8 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
 
   const refetch = useCallback(async () => {
     setIsRefetching(true);
-    setRegion(null);
     await getPosition();
+    setRegion(null);
     setIsRefetching(false);
   }, []);
 
@@ -100,7 +100,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           table: "rental",
         },
         async () => {
-          await getPosition();
+          await refetchRentals();
         }
       )
       .subscribe();
@@ -128,7 +128,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           table: "farm",
         },
         async () => {
-          await getPosition();
+          await refetchFarms();
         }
       )
       .subscribe();

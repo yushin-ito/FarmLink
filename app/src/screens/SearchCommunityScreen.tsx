@@ -49,7 +49,6 @@ const SearchCommunitieScreen = ({
       setSearchResult(data);
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert

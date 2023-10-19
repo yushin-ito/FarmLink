@@ -29,7 +29,6 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
       setSearchRentalsResult(data);
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert

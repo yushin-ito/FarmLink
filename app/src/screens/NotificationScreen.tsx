@@ -15,7 +15,7 @@ import {
 const NotificationScreen = ({
   navigation,
 }: SettingStackScreenProps<"Notification">) => {
-  const { t } = useTranslation("farm");
+  const { t } = useTranslation("setting");
   const toast = useToast();
   const { session, locale } = useAuth();
   const {
@@ -31,7 +31,6 @@ const NotificationScreen = ({
       await refetch();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -51,7 +50,6 @@ const NotificationScreen = ({
       await refetch();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -82,7 +80,6 @@ const NotificationScreen = ({
       type: "rental" | "farm"
     ) => {
       navigation.goBack();
-      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "MapNavigator",
         params: {
@@ -98,13 +95,13 @@ const NotificationScreen = ({
   const talkChatNavigationHandler = useCallback(
     async (notificationId: number, talkId: number) => {
       navigation.goBack();
-      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "TalkNavigator",
         params: {
           screen: "TalkList",
         },
       });
+      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "TalkNavigator",
         params: {

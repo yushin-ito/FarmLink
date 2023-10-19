@@ -108,8 +108,8 @@ const EditRentalTemplate = ({
       mapRef.current.animateToRegion({
         latitude: position.latitude,
         longitude: position.longitude,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.001,
+        latitudeDelta: 0.0001,
+        longitudeDelta: 0.0001,
       });
       getAddress(position.latitude, position.longitude);
     }
@@ -144,6 +144,8 @@ const EditRentalTemplate = ({
       </HStack>
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
+        extraScrollHeight={24}
+        enableResetScrollToCoords={false}
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} pb="16" justifyContent="space-between">

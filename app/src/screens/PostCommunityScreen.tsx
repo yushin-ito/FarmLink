@@ -25,10 +25,17 @@ const PostCommunityScreen = () => {
   const { mutateAsync, isLoading } = usePostCommunity({
     onSuccess: async () => {
       await refetch();
+      showAlert(
+        toast,
+        <Alert
+          status="success"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("created")}
+        />
+      );
       navigation.goBack();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert

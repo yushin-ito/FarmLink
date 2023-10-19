@@ -3,7 +3,7 @@ import RentalListTemplate from "../components/templates/RentalListTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
 import { useQueryUserRentals } from "../hooks/rental/query";
-import { showAlert, wait } from "../functions";
+import { showAlert } from "../functions";
 import { useDeleteRental, useUpdateRental } from "../hooks/rental/mutate";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
@@ -38,7 +38,6 @@ const RentalListScreen = ({
       );
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -58,7 +57,6 @@ const RentalListScreen = ({
       await refetch();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -96,7 +94,6 @@ const RentalListScreen = ({
   const mapNavigationHandler = useCallback(
     async (regionId: number, latitude: number, longitude: number) => {
       navigation.goBack();
-      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "MapNavigator",
         params: {

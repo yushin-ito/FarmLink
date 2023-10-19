@@ -24,7 +24,7 @@ const WalkthroughTemplate = ({
   verified,
   farmListNavigationHandler,
 }: WalkthroughTemplateProps) => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("app");
   const bgColor = useColorModeValue("white", "muted.900");
   const textColor = useColorModeValue("muted.600", "muted.300");
 

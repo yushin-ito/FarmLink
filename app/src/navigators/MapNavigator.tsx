@@ -17,12 +17,19 @@ const MapStack = createNativeStackNavigator<MapStackParamList>();
 
 const MapNavigator = () => {
   return (
-    <MapStack.Navigator screenOptions={{ headerShown: false }}>
+    <MapStack.Navigator
+      screenOptions={{ headerShown: false, gestureEnabled: true }}
+    >
       <MapStack.Screen name="Map" component={MapScreen} />
       <MapStack.Screen name="RentalDetail" component={RentalDetailScreen} />
       <MapStack.Screen name="FarmDetail" component={FarmDetailScreen} />
       <MapStack.Screen name="RentalGrid" component={RentalGridScreen} />
-      <MapStack.Group screenOptions={{ presentation: "containedModal" }}>
+      <MapStack.Group
+        screenOptions={{
+          animation: "fade_from_bottom",
+          animationDuration: 100,
+        }}
+      >
         <MapStack.Screen name="EditRental" component={EditRentalScreen} />
         <MapStack.Screen name="EditFarm" component={EditFarmScreen} />
       </MapStack.Group>

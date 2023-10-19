@@ -1,10 +1,15 @@
-import React, { useEffect } from "react";
-import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  Keyboard,
+  Platform,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  TextInput,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import {
   Button,
-  KeyboardAvoidingView,
   Box,
   VStack,
   Heading,
@@ -41,6 +46,7 @@ const PostProfileTemplate = ({
   const { t } = useTranslation("setting");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
+  const inputRef = useRef<TextInput>(null);
 
   const {
     control,
@@ -50,13 +56,19 @@ const PostProfileTemplate = ({
   } = useForm<FormValues>();
 
   useEffect(() => {
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 1000);
+  }, [inputRef.current]);
+
+  useEffect(() => {
     user?.name && setValue("name", user.name);
     user?.profile && setValue("profile", user.profile);
   }, [user]);
 
   return (
     <KeyboardAvoidingView
-      flex={1}
+      style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -98,7 +110,7 @@ const PostProfileTemplate = ({
                     return (
                       <VStack>
                         <Input
-                          autoFocus
+                          ref={inputRef}
                           returnKeyType="done"
                           InputRightElement={
                             <IconButton

@@ -45,7 +45,7 @@ i18n
       }
       return "en";
     },
-    ns: ["common", "auth", "map", "chat", "community", "farm", "setting"],
+    ns: ["app", "auth", "map", "chat", "community", "farm", "setting"],
     resources,
     interpolation: {
       escapeValue: false,

@@ -40,87 +40,91 @@ const ChatItem = memo(
     const { width } = useWindowDimensions();
 
     return (
-      <HStack
-        w="100%"
-        my="2"
-        space="2"
-        alignItems="flex-end"
-        justifyContent={!authored ? "flex-start" : "flex-end"}
-      >
+      <VStack space="0.5">
         {!authored && (
-          <Avatar
-            isDisabled
-            size="sm"
-            mb="3"
-            text={item.user?.name?.charAt(0)}
-            uri={item.user?.avatarUrl}
-            color={item.user?.color}
-            updatedAt={item.user?.updatedAt}
-          />
+          <Text fontSize="10" color={textColor}>
+            {item.user?.name}
+          </Text>
         )}
-        {item?.message && (
-          <Pressable onLongPress={() => authored && onLongPress()} maxW="70%">
-            <VStack
-              space="1"
-              alignItems={!authored ? "flex-end" : "flex-start"}
-            >
-              <Box
-                px="2"
-                py="1"
-                bg={bgColor}
-                shadow="1"
-                roundedTop="xl"
-                roundedBottomRight={!authored ? "xl" : "0"}
-                roundedBottomLeft={!authored ? "0" : "xl"}
+        <HStack
+          mb="2"
+          space="2"
+          justifyContent={!authored ? "flex-start" : "flex-end"}
+        >
+          {!authored && (
+            <Avatar
+              isDisabled
+              size="sm"
+              text={item.user?.name?.charAt(0)}
+              uri={item.user?.avatarUrl}
+              color={item.user?.color}
+              updatedAt={item.user?.updatedAt}
+            />
+          )}
+          {item?.message && (
+            <Pressable onLongPress={() => authored && onLongPress()} maxW="70%">
+              <VStack
+                space="1"
+                alignItems={!authored ? "flex-end" : "flex-start"}
               >
-                <Text bold fontSize="md">
-                  {item.message}
-                </Text>
-              </Box>
-              <Text mx="1" fontSize="10" color={textColor}>
-                {getTimeDistance(item.createdAt, locale)}
-              </Text>
-            </VStack>
-          </Pressable>
-        )}
-        {item.imageUrl && item.width && item.height && (
-          <Pressable
-            onPress={() =>
-              item.imageUrl &&
-              imagePreviewNavigationHandler(
-                item.imageUrl,
-                authored ? item.chatId : undefined
-              )
-            }
-            onLongPress={() => authored && onLongPress()}
-          >
-            <VStack
-              space="1"
-              alignItems={!authored ? "flex-end" : "flex-start"}
-            >
-              <Box alignItems={!authored ? "flex-start" : "flex-end"}>
                 <Box
-                  w={width * ASPECT}
-                  h={(width * ASPECT * item.height) / item.width}
-                  rounded="16"
-                  bg={imageColor}
+                  px="2"
+                  py="1"
+                  bg={bgColor}
+                  shadow="1"
+                  roundedTop="xl"
+                  roundedBottomRight={!authored ? "xl" : "0"}
+                  roundedBottomLeft={!authored ? "0" : "xl"}
                 >
-                  <Image
-                    style={{
-                      flex: 1,
-                      borderRadius: 16,
-                    }}
-                    source={{ uri: item?.imageUrl }}
-                  />
+                  <Text bold fontSize="md">
+                    {item.message}
+                  </Text>
                 </Box>
-              </Box>
-              <Text mx="1" fontSize="10" color={textColor}>
-                {getTimeDistance(item.createdAt, locale)}
-              </Text>
-            </VStack>
-          </Pressable>
-        )}
-      </HStack>
+                <Text mx="1" fontSize="10" color={textColor}>
+                  {getTimeDistance(item.createdAt, locale)}
+                </Text>
+              </VStack>
+            </Pressable>
+          )}
+          {item.imageUrl && item.width && item.height && (
+            <Pressable
+              onPress={() =>
+                item.imageUrl &&
+                imagePreviewNavigationHandler(
+                  item.imageUrl,
+                  authored ? item.chatId : undefined
+                )
+              }
+              onLongPress={() => authored && onLongPress()}
+            >
+              <VStack
+                space="1"
+                alignItems={!authored ? "flex-end" : "flex-start"}
+              >
+                <Box alignItems={!authored ? "flex-start" : "flex-end"}>
+                  <Box
+                    w={width * ASPECT}
+                    h={(width * ASPECT * item.height) / item.width}
+                    rounded="16"
+                    bg={imageColor}
+                  >
+                    <Image
+                      style={{
+                        flex: 1,
+                        borderRadius: 16,
+                      }}
+                      source={{ uri: item?.imageUrl }}
+                    />
+                  </Box>
+                </Box>
+                <Text mx="1" fontSize="10" color={textColor}>
+                  {getTimeDistance(item.createdAt, locale)}
+                </Text>
+              </VStack>
+            </Pressable>
+          )}
+        </HStack>
+      </VStack>
     );
   }
 );

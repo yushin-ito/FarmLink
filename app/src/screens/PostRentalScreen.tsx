@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import PostRentalTemplate from "../components/templates/PostRentalTemplate";
 import { useToast } from "native-base";
-import { showAlert, wait } from "../functions";
+import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
 import { usePostRental, usePostRentalImage } from "../hooks/rental/mutate";
 import useAuth from "../hooks/auth/useAuth";
@@ -37,7 +37,6 @@ const PostRentalScreen = ({
         );
       },
       onError: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -54,7 +53,6 @@ const PostRentalScreen = ({
       onSuccess: async (data) => {
         navigation.goBack();
         if (position) {
-          await wait(0.1);
           navigation.navigate("TabNavigator", {
             screen: "MapNavigator",
             params: {
@@ -68,7 +66,6 @@ const PostRentalScreen = ({
             },
           });
         } else {
-          navigation.goBack();
           showAlert(
             toast,
             <Alert
@@ -80,7 +77,6 @@ const PostRentalScreen = ({
         }
       },
       onError: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -97,7 +93,6 @@ const PostRentalScreen = ({
     isLoading: isLoadingPostRentalImage,
   } = usePostRentalImage({
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -114,7 +109,6 @@ const PostRentalScreen = ({
       if (base64) {
         setBase64((prev) => [...prev, base64]);
       } else {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -126,7 +120,6 @@ const PostRentalScreen = ({
       }
     },
     onDisable: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -137,7 +130,6 @@ const PostRentalScreen = ({
       );
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert

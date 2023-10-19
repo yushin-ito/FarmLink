@@ -45,7 +45,6 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
         }
       },
       onError: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -63,9 +62,16 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
         navigation.goBack();
         navigation.goBack();
         await refetchFarm();
+        showAlert(
+          toast,
+          <Alert
+            status="success"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("deleted")}
+          />
+        );
       },
       onError: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -80,7 +86,6 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
   const { position, getPosition, address, getAddress, isLoadingPosition } =
     useLocation({
       onDisable: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -91,7 +96,6 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
         );
       },
       onError: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -108,7 +112,6 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
       setSearchResult(data[0]);
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert

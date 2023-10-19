@@ -22,13 +22,7 @@ import { Platform } from "react-native";
 const Tab = createBottomTabNavigator<TabParamList>();
 
 const TabNavigator = () => {
-  const { t } = useTranslation([
-    "common",
-    "map",
-    "community",
-    "talk",
-    "setting",
-  ]);
+  const { t } = useTranslation(["app", "map", "community", "talk", "setting"]);
   const bgColor = useColorModeValue("white", "#262626");
   const borderColor = useColorModeValue("#d4d4d4", "#525252");
   const iconColor = useColorModeValue("muted.400", "muted.200");
@@ -47,7 +41,7 @@ const TabNavigator = () => {
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("common:permitRequestNoti")}
+          text={t("app:permitRequestNoti")}
         />
       );
     },

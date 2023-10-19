@@ -1,5 +1,10 @@
-import React, { useState } from "react";
-import { Keyboard, Platform, TouchableWithoutFeedback } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Keyboard,
+  Platform,
+  TextInput,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import {
@@ -48,6 +53,13 @@ const PostTalkTemplate = ({
 
   const { control, reset } = useForm<FormValues>();
   const [recieverId, setRecieverId] = useState<string>("");
+  const inputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 1000);
+  }, [inputRef.current]);
 
   return (
     <KeyboardAvoidingView
@@ -89,8 +101,8 @@ const PostTalkTemplate = ({
                 control={control}
                 render={({ field: { value, onChange } }) => (
                   <SearchBar
+                    ref={inputRef}
                     mx="10"
-                    autoFocus
                     returnKeyType="search"
                     placeholder={t("searchUser")}
                     InputRightElement={

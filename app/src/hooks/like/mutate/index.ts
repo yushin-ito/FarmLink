@@ -57,7 +57,8 @@ const deleteFarmLike = async ({
   const { data, error } = await supabase
     .from("like")
     .delete()
-    .or(`farmId.eq.${farmId}, userId.eq.${userId}`);
+    .eq("farmId", farmId)
+    .eq("userId", userId);
   if (error) {
     throw error;
   }
@@ -78,7 +79,8 @@ const deleteRentalLike = async ({
   const { data, error } = await supabase
     .from("like")
     .delete()
-    .or(`rentalId.eq.${rentalId}, userId.eq.${userId}`);
+    .eq("rentalId", rentalId)
+    .eq("userId", userId);
   if (error) {
     throw error;
   }

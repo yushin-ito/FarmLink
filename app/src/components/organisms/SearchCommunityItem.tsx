@@ -54,6 +54,7 @@ const SearchCommunityItem = memo(
             <Modal.CloseButton _pressed={{ bg: "transparent" }} />
             <VStack mt="6" alignItems="center" space="3">
               <Avatar
+                isDisabled
                 size="xl"
                 fontSize="5xl"
                 disabled

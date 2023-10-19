@@ -19,7 +19,7 @@ import useAuth from "../hooks/auth/useAuth";
 import { useUpdateTalk } from "../hooks/talk/mutate";
 
 const ImagePreviewScreen = () => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("app");
   const toast = useToast();
   const navigation = useNavigation();
   const { params } = useRoute<
@@ -35,7 +35,6 @@ const ImagePreviewScreen = () => {
       await refetchTalks();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -50,14 +49,13 @@ const ImagePreviewScreen = () => {
   const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
     onSuccess: async ({ chatId }) => {
       params.talkId &&
-        mutateAsyncUpdateTalk({
+        (await mutateAsyncUpdateTalk({
           talkId: params.talkId,
           chatId,
-        });
+        }));
       navigation.goBack();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -81,7 +79,6 @@ const ImagePreviewScreen = () => {
       );
     },
     onDisable: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -92,7 +89,6 @@ const ImagePreviewScreen = () => {
       );
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert

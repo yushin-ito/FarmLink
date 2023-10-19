@@ -39,6 +39,7 @@ const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
       >
         <HStack alignItems="center" space="3">
           <Avatar
+            isDisabled
             text={item.to.name?.charAt(0)}
             uri={item.to.avatarUrl}
             color={item.to.color}

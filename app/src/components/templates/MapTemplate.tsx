@@ -93,24 +93,25 @@ const MapTemplate = ({
         mapRef.current.animateToRegion({
           latitude: region.latitude,
           longitude: region.longitude,
-          latitudeDelta: 0.001,
-          longitudeDelta: 0.001,
+          latitudeDelta: 0.0001,
+          longitudeDelta: 0.0001,
         });
       }
     } else {
-      type === "farm"
-        ? farms?.length &&
-          setRegion({
-            regionId: farms[0].farmId,
-            latitude: farms[0].latitude,
-            longitude: farms[0].longitude,
-          })
-        : rentals?.length &&
-          setRegion({
-            regionId: rentals[0].rentalId,
-            latitude: rentals[0].latitude,
-            longitude: rentals[0].longitude,
-          });
+      if (type === "rental" && rentals?.length) {
+        setRegion({
+          regionId: rentals[0].rentalId,
+          latitude: rentals[0].latitude,
+          longitude: rentals[0].longitude,
+        });
+      }
+      if (type === "farm" && farms?.length) {
+        setRegion({
+          regionId: farms[0].farmId,
+          latitude: farms[0].latitude,
+          longitude: farms[0].longitude,
+        });
+      }
     }
   }, [mapRef.current, region, type, position, farms, rentals, ready]);
 
@@ -132,8 +133,8 @@ const MapTemplate = ({
         initialRegion={{
           latitude: 35,
           longitude: 135,
-          latitudeDelta: 1,
-          longitudeDelta: 1,
+          latitudeDelta: 0.0001,
+          longitudeDelta: 0.0001,
         }}
         style={{ flex: 1 }}
       >
@@ -274,7 +275,7 @@ const MapTemplate = ({
         alignItems="center"
         space="3"
       >
-        <HStack alignItems="center" space="3">
+        <HStack alignItems="center" space="2">
           <Pressable
             w="70%"
             justifyContent="center"
@@ -292,7 +293,12 @@ const MapTemplate = ({
           </Pressable>
           <IconButton
             icon={
-              <Icon as={<Feather />} name="flag" size="sm" color={iconColor} />
+              <Icon
+                as={<Feather />}
+                name="refresh-cw"
+                size="sm"
+                color={iconColor}
+              />
             }
             variant="unstyled"
             size="8"

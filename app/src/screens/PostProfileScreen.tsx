@@ -22,10 +22,17 @@ const PostProfileScreen = () => {
   } = usePostUser({
     onSuccess: async () => {
       await refetch();
+      showAlert(
+        toast,
+        <Alert
+          status="success"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("saved")}
+        />
+      );
       navigation.goBack();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert

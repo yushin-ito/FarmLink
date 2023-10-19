@@ -94,6 +94,7 @@ const SearchTalkTemplate = ({
             />
           </HStack>
           <FlatList
+            contentContainerStyle={{ paddingBottom: 64 }}
             keyboardShouldPersistTaps="handled"
             data={searchResult}
             renderItem={({ item }) => (

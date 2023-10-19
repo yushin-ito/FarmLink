@@ -20,7 +20,7 @@ const EditRentalScreen = ({
   navigation,
 }: MapStackScreenProps<"EditRental">) => {
   const toast = useToast();
-  const { t } = useTranslation("map");
+  const { t } = useTranslation("setting");
   const { params } = useRoute<RouteProp<MapStackParamList, "EditRental">>();
   const { data: rental, refetch: refetchRental } = useQueryRental(
     params.rentalId
@@ -76,9 +76,16 @@ const EditRentalScreen = ({
       navigation.goBack();
       navigation.goBack();
       await refetchRental();
+      showAlert(
+        toast,
+        <Alert
+          status="success"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("deleted")}
+        />
+      );
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -93,7 +100,6 @@ const EditRentalScreen = ({
   const { position, getPosition, address, getAddress, isLoadingPosition } =
     useLocation({
       onDisable: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -104,7 +110,6 @@ const EditRentalScreen = ({
         );
       },
       onError: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -121,7 +126,6 @@ const EditRentalScreen = ({
     isLoading: isLoadingPostRentalImage,
   } = usePostRentalImage({
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -138,7 +142,6 @@ const EditRentalScreen = ({
       if (base64) {
         setImages((prev) => [...prev, base64]);
       } else {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -150,7 +153,6 @@ const EditRentalScreen = ({
       }
     },
     onDisable: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -161,7 +163,6 @@ const EditRentalScreen = ({
       );
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert

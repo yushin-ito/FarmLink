@@ -31,7 +31,7 @@ const getCommunities = async (
     const { data, error } = await supabase
       .from("community")
       .select("*")
-      .order("createdAt", { ascending: false })
+      .order("updatedAt", { ascending: false })
       .range(from, to);
     if (error) {
       throw error;
@@ -43,7 +43,7 @@ const getCommunities = async (
       .from("community")
       .select("*")
       .or(`ownerId.eq.${userId}, memberIds.cs.{"${userId}"}`)
-      .order("createdAt", { ascending: false })
+      .order("updatedAt", { ascending: false })
       .range(from, to);
     if (error) {
       throw error;
@@ -55,6 +55,7 @@ const getCommunities = async (
       .from("community")
       .select("*")
       .eq("category", category)
+      .order("updatedAt", { ascending: false })
       .range(from, to);
     if (error) {
       throw error;

@@ -41,6 +41,16 @@ const CommunityListScreen = ({
     mutateAsync: mutateAsyncUpdateCommunity,
     isLoading: isLoadingUpdateCommunity,
   } = useUpdateCommunity({
+    onSuccess: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="success"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("changed")}
+        />
+      );
+    },
     onError: () => {
       showAlert(
         toast,

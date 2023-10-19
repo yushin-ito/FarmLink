@@ -61,11 +61,11 @@ const ChatBar = memo(
       <HStack
         w="100%"
         pt={Platform.OS === "ios" ? "1" : "3"}
+        pb={showKeyboard || Platform.OS === "android" ? "1" : "9"}
         px="3"
         space="2"
         alignItems="center"
         justifyContent="space-between"
-        pb={showKeyboard || Platform.OS === "android" ? "1" : "9"}
       >
         <Center>
           <Box position="absolute" bottom="12">

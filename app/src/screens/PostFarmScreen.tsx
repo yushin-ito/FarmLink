@@ -27,7 +27,6 @@ const PostFarmScreen = () => {
         navigation.goBack();
       },
       onError: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -42,7 +41,6 @@ const PostFarmScreen = () => {
   const { position, address, getPosition, getAddress, isLoadingPosition } =
     useLocation({
       onDisable: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -53,7 +51,6 @@ const PostFarmScreen = () => {
         );
       },
       onError: () => {
-        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -70,7 +67,6 @@ const PostFarmScreen = () => {
       setSearchResult(data[0]);
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert

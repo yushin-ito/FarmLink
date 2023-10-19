@@ -3,7 +3,7 @@ import LikeListTemplate from "../components/templates/LikeListTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
 import { useQueryUserLikes } from "../hooks/like/query";
-import { showAlert, wait } from "../functions";
+import { showAlert } from "../functions";
 import { useDeleteFarmLike, useDeleteRentalLike } from "../hooks/like/mutate";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
@@ -31,7 +31,6 @@ const LikeListScreen = ({
       await refetch();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -51,7 +50,6 @@ const LikeListScreen = ({
       await refetch();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -63,9 +61,12 @@ const LikeListScreen = ({
     },
   });
 
-  const deleteRentalLike = useCallback(async (rentalId: number) => {
-    await mutateAsyncDeleteRentalLike({ rentalId, userId: session?.user.id });
-  }, [session]);
+  const deleteRentalLike = useCallback(
+    async (rentalId: number) => {
+      await mutateAsyncDeleteRentalLike({ rentalId, userId: session?.user.id });
+    },
+    [session]
+  );
 
   const deleteFarmLike = useCallback(
     async (farmId: number) => {
@@ -83,7 +84,6 @@ const LikeListScreen = ({
   const mapNavigationHandler = useCallback(
     async (regionId: number, latitude: number, longitude: number) => {
       navigation.goBack();
-      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "MapNavigator",
         params: {
