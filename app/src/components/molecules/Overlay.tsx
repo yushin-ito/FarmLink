@@ -29,7 +29,7 @@ const Overlay = memo(({ isOpen, showSpinner }: OverlayProps) => {
         }}
       >
         <Center w={width} h={height} bg="black">
-          {showSpinner && <Spinner color="muted.400" />}
+          {showSpinner && <Spinner color="white" />}
         </Center>
       </PresenceTransition>
     </Box>

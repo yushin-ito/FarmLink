@@ -81,7 +81,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncDeleteTalk } = useDeleteTalk({
+  const { mutateAsync: mutateAsyncDeleteTalk, isLoading: isLoadingDeleteTalk } = useDeleteTalk({
     onSuccess: async () => {
       await refetchTalks();
     },
@@ -297,15 +297,16 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
       title={talk?.to.name}
       user={user}
       chats={chats}
+      hasMore={hasMore}
       onSend={onSend}
       deleteChat={deleteChat}
-      deleteRoom={deleteTalk}
+      deleteTalk={deleteTalk}
       pickChatImageByCamera={pickImageByCamera}
       pickChatImageByLibrary={pickImageByLibrary}
       readMore={fetchNextPage}
       isLoading={isLoadingUser || isLoadingTalk || isLoadingChats}
       isLoadingPostChat={isLoadingPostChat || isLoadingPostNotification}
-      hasMore={hasMore}
+      isLoadingDeleteTalk={isLoadingDeleteTalk}
       imagePreviewNavigationHandler={imagePreviewNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

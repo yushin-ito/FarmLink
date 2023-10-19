@@ -101,9 +101,31 @@ const CommunityChatScreen = ({
     },
   });
 
-  const { mutateAsync: mutateAsyncUpdateCommunity } = useUpdateCommunity({
-    onSuccess: async () => {
+  const {
+    mutateAsync: mutateAsyncUpdateCommunity,
+    isLoading: isLoadingUpdateCommunity,
+  } = useUpdateCommunity({
+    onSuccess: async (data) => {
       await refetchCommunities();
+      if (session && data?.memberIds?.includes(session.user.id)) {
+        data.imageUrl
+          ? showAlert(
+              toast,
+              <Alert
+                status="success"
+                onPressCloseButton={() => toast.closeAll()}
+                text={t("changed")}
+              />
+            )
+          : showAlert(
+              toast,
+              <Alert
+                status="success"
+                onPressCloseButton={() => toast.closeAll()}
+                text={t("deleted")}
+              />
+            );
+      }
     },
     onError: () => {
       showAlert(
@@ -117,7 +139,10 @@ const CommunityChatScreen = ({
     },
   });
 
-  const { mutateAsync: mutateAsyncDeleteCommunity } = useDeleteCommunity({
+  const {
+    mutateAsync: mutateAsyncDeleteCommunity,
+    isLoading: isLoadingDeleteCommunity,
+  } = useDeleteCommunity({
     onSuccess: async () => {
       await refetchCommunities();
     },
@@ -285,8 +310,8 @@ const CommunityChatScreen = ({
       owned={session?.user.id === community?.ownerId}
       user={user}
       chats={chats}
-      leaveRoom={leaveCommunity}
-      deleteRoom={deleteCommunity}
+      leaveCommunity={leaveCommunity}
+      deleteCommunity={deleteCommunity}
       deleteChat={deleteChat}
       deleteImage={deleteImage}
       pickChatImageByCamera={pickChatImageByCamera}
@@ -297,6 +322,8 @@ const CommunityChatScreen = ({
       readMore={fetchNextPage}
       isLoading={isLoadingUser || isLoadingCommunity || isLoadingChats}
       isLoadingPostChat={isLoadingPostChat}
+      isLoadingUpdateCommunity={isLoadingUpdateCommunity}
+      isLoadingDeleteCommunity={isLoadingDeleteCommunity}
       hasMore={hasMore}
       imagePreviewNavigationHandler={imagePreviewNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}

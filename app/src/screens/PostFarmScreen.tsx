@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import PostFarmTemplate from "../components/templates/PostFarmTemplate";
-import { useNavigation } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
@@ -9,11 +8,11 @@ import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
 import useLocation from "../hooks/sdk/useLocation";
+import { FarmStackScreenProps } from "../types";
 
-const PostFarmScreen = () => {
+const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
   const toast = useToast();
   const { t } = useTranslation("farm");
-  const navigation = useNavigation();
   const { session } = useAuth();
   const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
 
@@ -21,10 +20,17 @@ const PostFarmScreen = () => {
     getPosition();
   }, []);
 
-  const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
-    usePostFarm({
-      onSuccess: async () => {
-        navigation.goBack();
+  const { position, address, getPosition, getAddress, isLoadingPosition } =
+    useLocation({
+      onDisable: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("permitRequestGPS")}
+          />
+        );
       },
       onError: () => {
         showAlert(
@@ -38,17 +44,33 @@ const PostFarmScreen = () => {
       },
     });
 
-  const { position, address, getPosition, getAddress, isLoadingPosition } =
-    useLocation({
-      onDisable: () => {
-        showAlert(
-          toast,
-          <Alert
-            status="error"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("permitRequestGPS")}
-          />
-        );
+  const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
+    usePostFarm({
+      onSuccess: async (data) => {
+        navigation.goBack();
+        if (position) {
+          navigation.navigate("TabNavigator", {
+            screen: "MapNavigator",
+            params: {
+              screen: "Map",
+              params: {
+                regionId: data[0].farmId,
+                latitude: position.latitude,
+                longitude: position.longitude,
+                type: "rental",
+              },
+            },
+          });
+        } else {
+          showAlert(
+            toast,
+            <Alert
+              status="error"
+              onPressCloseButton={() => toast.closeAll()}
+              text={t("error")}
+            />
+          );
+        }
       },
       onError: () => {
         showAlert(

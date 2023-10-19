@@ -22,7 +22,7 @@ const CategoryActionSheet = memo(
 
     const categories = [
       "all",
-      "joined",
+      "joining",
       "vegetable",
       "fruit",
       "fertilizer",

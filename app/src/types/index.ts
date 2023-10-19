@@ -14,7 +14,7 @@ export type Rate = "year" | "month" | "week" | "day" | "once";
 
 export type Category =
   | "all"
-  | "joined"
+  | "joining"
   | "none"
   | "vegetable"
   | "fruit"

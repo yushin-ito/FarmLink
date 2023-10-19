@@ -83,7 +83,6 @@ const RentalListScreen = ({
   }, []);
 
   const postRentalNavigationHandler = useCallback(() => {
-    navigation.goBack();
     navigation.navigate("PostRental");
   }, []);
 

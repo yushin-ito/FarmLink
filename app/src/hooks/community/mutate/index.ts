@@ -33,7 +33,8 @@ const updateCommunity = async (community: Community["Update"]) => {
     .from("community")
     .update(community)
     .eq("communityId", community.communityId)
-    .select();
+    .select()
+    .single();
   if (error) {
     throw error;
   }

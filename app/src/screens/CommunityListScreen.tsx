@@ -21,7 +21,7 @@ const CommunityListScreen = ({
   );
   const categories = [
     "all",
-    "joined",
+    "joining",
     "vegetable",
     "fruit",
     "fertilizer",
@@ -47,7 +47,7 @@ const CommunityListScreen = ({
         <Alert
           status="success"
           onPressCloseButton={() => toast.closeAll()}
-          text={t("changed")}
+          text={t("joined")}
         />
       );
     },

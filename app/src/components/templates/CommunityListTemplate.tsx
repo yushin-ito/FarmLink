@@ -70,7 +70,7 @@ const CommunityListTemplate = ({
   const { isOpen, onOpen, onClose } = useDisclose();
   const categories = [
     "all",
-    "joined",
+    "joining",
     "vegetable",
     "fruit",
     "fertilizer",

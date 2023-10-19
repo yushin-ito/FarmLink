@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { GetCommunityChatsResponse } from "../../hooks/chat/query";
 import ImageActionSheet from "../organisms/ImageActionSheet";
 import { Locale } from "../../types";
+import Overlay from "../molecules/Overlay";
 
 type CommunityChatTemplateProps = {
   locale: Locale | null;
@@ -31,12 +32,10 @@ type CommunityChatTemplateProps = {
   owned: boolean;
   user: GetUserResponse | null | undefined;
   chats: GetCommunityChatsResponse | undefined;
-  isLoading: boolean;
-  isLoadingPostChat: boolean;
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;
-  leaveRoom: () => Promise<void>;
-  deleteRoom: () => Promise<void>;
+  leaveCommunity: () => Promise<void>;
+  deleteCommunity: () => Promise<void>;
   deleteChat: (chatId: number) => Promise<void>;
   deleteImage: () => Promise<void>;
   pickIconImageByCamera: () => Promise<void>;
@@ -44,6 +43,10 @@ type CommunityChatTemplateProps = {
   pickChatImageByCamera: () => Promise<void>;
   pickChatImageByLibrary: () => Promise<void>;
   readMore: () => void;
+  isLoading: boolean;
+  isLoadingPostChat: boolean;
+  isLoadingUpdateCommunity: boolean;
+  isLoadingDeleteCommunity: boolean;
   imagePreviewNavigationHandler: (imageUrl: string, chatId?: number) => void;
   goBackNavigationHandler: () => void;
 };
@@ -54,12 +57,10 @@ const CommunityChatTemplate = ({
   owned,
   user,
   chats,
-  isLoading,
-  isLoadingPostChat,
   hasMore,
   onSend,
-  leaveRoom,
-  deleteRoom,
+  leaveCommunity,
+  deleteCommunity,
   deleteChat,
   deleteImage,
   pickIconImageByCamera,
@@ -67,6 +68,10 @@ const CommunityChatTemplate = ({
   pickChatImageByCamera,
   pickChatImageByLibrary,
   readMore,
+  isLoading,
+  isLoadingPostChat,
+  isLoadingUpdateCommunity,
+  isLoadingDeleteCommunity,
   imagePreviewNavigationHandler,
   goBackNavigationHandler,
 }: CommunityChatTemplateProps) => {
@@ -93,6 +98,10 @@ const CommunityChatTemplate = ({
       flex={1}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <Overlay
+        isOpen={isLoadingUpdateCommunity || isLoadingDeleteCommunity}
+        showSpinner
+      />
       <Box flex={1} safeAreaTop>
         {deleteImage && pickIconImageByCamera && pickIconImageByLibrary && (
           <ImageActionSheet
@@ -109,7 +118,7 @@ const CommunityChatTemplate = ({
           deleteChat={async () =>
             Alert.alert(t("chat:deleteChat"), t("chat:askDeleteChat"), [
               {
-                text: t("cancel"),
+                text: t("chat:cancel"),
                 style: "cancel",
               },
               {
@@ -184,17 +193,15 @@ const CommunityChatTemplate = ({
                     : t("community:askLeaveCommunity"),
                   [
                     {
-                      text: t("community:cancel"),
+                      text: t("chat:cancel"),
                       style: "cancel",
                     },
                     {
-                      text: owned
-                        ? t("community:delete")
-                        : t("community:leave"),
+                      text: owned ? t("chat:delete") : t("community:leave"),
                       onPress: async () =>
                         owned
-                          ? await deleteRoom()
-                          : leaveRoom && (await leaveRoom()),
+                          ? await deleteCommunity()
+                          : leaveCommunity && (await leaveCommunity()),
                       style: "destructive",
                     },
                   ]
@@ -227,6 +234,7 @@ const CommunityChatTemplate = ({
             }
             renderItem={({ item }) => (
               <ChatItem
+                type="community"
                 item={item}
                 authored={item.authorId === user?.userId}
                 locale={locale}

@@ -18,6 +18,7 @@ import {
 import { Locale } from "../../types";
 
 type ChatItemProps = {
+  type: "community" | "talk";
   item: GetCommunityChatsResponse[number] | GetTalkChatsResponse[number];
   authored: boolean;
   locale: Locale | null;
@@ -27,6 +28,7 @@ type ChatItemProps = {
 
 const ChatItem = memo(
   ({
+    type,
     item,
     authored,
     locale,
@@ -40,9 +42,9 @@ const ChatItem = memo(
     const { width } = useWindowDimensions();
 
     return (
-      <VStack space="0.5">
-        {!authored && (
-          <Text fontSize="10" color={textColor}>
+      <VStack space="1">
+        {type === "community" && !authored && (
+          <Text ml="-1" fontSize="10" color={textColor}>
             {item.user?.name}
           </Text>
         )}

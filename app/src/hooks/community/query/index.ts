@@ -38,7 +38,7 @@ const getCommunities = async (
     }
 
     return data;
-  } else if (category === "joined") {
+  } else if (category === "joining") {
     const { data, error } = await supabase
       .from("community")
       .select("*")

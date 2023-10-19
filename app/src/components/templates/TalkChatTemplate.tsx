@@ -23,21 +23,23 @@ import ChatActionSheet from "../organisms/ChatActionSheet";
 import { useTranslation } from "react-i18next";
 import { GetTalkChatsResponse } from "../../hooks/chat/query";
 import { Locale } from "../../types";
+import Overlay from "../molecules/Overlay";
 
 type ChatTemplateProps = {
   locale: Locale | null;
   title: string | null | undefined;
   user: GetUserResponse | null | undefined;
   chats: GetTalkChatsResponse | undefined;
-  isLoading: boolean;
-  isLoadingPostChat: boolean;
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;
-  deleteRoom: () => Promise<void>;
+  deleteTalk: () => Promise<void>;
   deleteChat: (chatId: number) => Promise<void>;
   pickChatImageByCamera: () => Promise<void>;
   pickChatImageByLibrary: () => Promise<void>;
   readMore: () => void;
+  isLoading: boolean;
+  isLoadingPostChat: boolean;
+  isLoadingDeleteTalk: boolean;
   imagePreviewNavigationHandler: (imageUrl: string, chatId?: number) => void;
   goBackNavigationHandler: () => void;
 };
@@ -47,15 +49,16 @@ const ChatTemplate = ({
   title,
   user,
   chats,
-  isLoading,
-  isLoadingPostChat,
   hasMore,
   onSend,
-  deleteRoom,
+  deleteTalk,
   deleteChat,
   pickChatImageByCamera,
   pickChatImageByLibrary,
   readMore,
+  isLoading,
+  isLoadingPostChat,
+  isLoadingDeleteTalk,
   imagePreviewNavigationHandler,
   goBackNavigationHandler,
 }: ChatTemplateProps) => {
@@ -77,6 +80,7 @@ const ChatTemplate = ({
       flex={1}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <Overlay isOpen={isLoadingDeleteTalk} showSpinner />
       <Box flex={1} safeAreaTop>
         <ChatActionSheet
           isOpen={isChatActionSheetOpen}
@@ -84,7 +88,7 @@ const ChatTemplate = ({
           deleteChat={async () =>
             Alert.alert(t("chat:deleteChat"), t("chat:askDeleteChat"), [
               {
-                text: t("cancel"),
+                text: t("chat:cancel"),
                 style: "cancel",
               },
               {
@@ -145,12 +149,12 @@ const ChatTemplate = ({
               onPress={() =>
                 Alert.alert(t("talk:deleteTalk"), t("talk:askDeleteTalk"), [
                   {
-                    text: t("talk:cancel"),
+                    text: t("chat:cancel"),
                     style: "cancel",
                   },
                   {
-                    text: t("talk:delete"),
-                    onPress: async () => await deleteRoom(),
+                    text: t("chat:delete"),
+                    onPress: async () => await deleteTalk(),
                     style: "destructive",
                   },
                 ])
@@ -174,10 +178,11 @@ const ChatTemplate = ({
             onEndReached={readMore}
             onEndReachedThreshold={0.3}
             ListFooterComponent={
-              <Center>{hasMore && <Spinner color="muted.400" />}</Center>
+              <Center>{hasMore && <Spinner color="talk:muted.400" />}</Center>
             }
             renderItem={({ item }) => (
               <ChatItem
+                type="talk"
                 item={item}
                 authored={item.authorId === user?.userId}
                 locale={locale}
