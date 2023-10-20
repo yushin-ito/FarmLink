@@ -168,7 +168,6 @@
     "changed": "Changed.",
     "cancel": "Cancel",
     "delete": "Delete",
-    "deleted": "Deleted.",
     "notExistFarm": "Click the button\nto connect and manage your farm!",
     "farmName": "Farm name",
     "farmNameRequired": "Farm name is required",
@@ -191,7 +190,6 @@
     "edit": "Edit",
     "editFarm": "Edit farm",
     "save": "Save",
-    "saved": "Saved in.",
     "chat": "Chat",
     "error": "An error occurred",
     "dev": "This function is currently under development."
@@ -260,7 +258,6 @@
     "private": "Private",
     "changed": "Changed.",
     "delete": "Delete",
-    "deleted": "Deleted.",
     "deleteRental": "Delete rental",
     "askDeleteRental": "Are you sure want to delete Rental?",
     "createRental": "Create rental",

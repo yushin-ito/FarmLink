@@ -25,24 +25,9 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
 
   const { mutateAsync: mutateAsyncUpdateFarm, isLoading: isLoadingUpdateFarm } =
     useUpdateFarm({
-      onSuccess: async (data) => {
+      onSuccess: async () => {
         await refetchFarm();
-        if (position && data?.length) {
-          navigation.navigate("Map", {
-            regionId: data[0].farmId,
-            latitude: position.latitude,
-            longitude: position.longitude,
-            type: "farm",
-          });
-          showAlert(
-            toast,
-            <Alert
-              status="success"
-              onPressCloseButton={() => toast.closeAll()}
-              text={t("saved")}
-            />
-          );
-        }
+        navigation.goBack();
       },
       onError: () => {
         showAlert(
@@ -62,14 +47,6 @@ const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
         navigation.goBack();
         navigation.goBack();
         await refetchFarm();
-        showAlert(
-          toast,
-          <Alert
-            status="success"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("deleted")}
-          />
-        );
       },
       onError: () => {
         showAlert(

@@ -23,7 +23,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   );
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
   const [type, setType] = useState<"rental" | "farm">("rental");
-  const [touch, setTouch] = useState<boolean>(true);
+  const [touch, setTouch] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
   const [location, setLocation] = useState<LatLng>();
   const [isRefetching, setIsRefetching] = useState<boolean>(false);
@@ -53,12 +53,13 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
 
   useEffect(() => {
     setLocation(position);
+    setTouch(false);
+    setRegion(null);
   }, [position]);
 
   const refetch = useCallback(async () => {
     setIsRefetching(true);
     await getPosition();
-    setRegion(null);
     setIsRefetching(false);
   }, []);
 
@@ -77,8 +78,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     } else {
       getPosition();
     }
-    params?.type === "rental" && refetchRentals();
-    params?.type === "farm" && refetchFarms();
     params?.type && setType(params.type);
   }, [params]);
 
@@ -98,9 +97,14 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           event: "*",
           schema: "public",
           table: "rental",
+          filter: `ownerId=eq.${session?.user.id}`,
         },
         async () => {
+          setIsRefetching(true);
           await refetchRentals();
+          setIsRefetching(false);
+          setTouch(false);
+          setRegion(null);
         }
       )
       .subscribe();
@@ -126,9 +130,14 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           event: "*",
           schema: "public",
           table: "farm",
+          filter: `ownerId=eq.${session?.user.id}`,
         },
         async () => {
+          setIsRefetching(true);
           await refetchFarms();
+          setIsRefetching(false);
+          setTouch(false);
+          setRegion(null);
         }
       )
       .subscribe();
@@ -139,11 +148,11 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   }, []);
 
   const rentalDetailNavigationHandler = useCallback((rentalId: number) => {
-    rentalId && navigation.navigate("RentalDetail", { rentalId });
+    navigation.navigate("RentalDetail", { rentalId });
   }, []);
 
   const farmDetailNavigationHandler = useCallback((farmId: number) => {
-    farmId && navigation.navigate("FarmDetail", { farmId });
+    navigation.navigate("FarmDetail", { farmId });
   }, []);
 
   const searchMapNavigationHandler = useCallback(() => {

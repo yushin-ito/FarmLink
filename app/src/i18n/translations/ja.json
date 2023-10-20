@@ -168,7 +168,6 @@
     "changed": "変更しました",
     "cancel": "キャンセル",
     "delete": "削除",
-    "deleted": "削除しました",
     "notExistFarm": "右下のボタンからデバイスを接続して\nファームを管理しましょう",
     "farmName": "ファーム名",
     "farmNameRequired": "ファーム名を入力してください",
@@ -189,7 +188,6 @@
     "create": "作成",
     "editFarm": "ファームを編集",
     "save": "保存",
-    "saved": "保存しました",
     "chat": "チャットする",
     "error": "エラーが発生しました",
     "dev": "この機能は開発中です。\n実装までお待ちください。"
@@ -258,7 +256,6 @@
     "private": "非公開",
     "changed": "変更しました",
     "delete": "削除",
-    "deleted": "削除しました",
     "deleteRental": "レンタルを削除",
     "askDeleteRental": "レンタルを削除してもよろしいですか",
     "createRental": "レンタルを作成",

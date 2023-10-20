@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Box, Center, PresenceTransition, Spinner } from "native-base";
+import { Center, Modal, Spinner } from "native-base";
 import { useWindowDimensions } from "react-native";
 
 type OverlayProps = {
@@ -15,24 +15,11 @@ const Overlay = memo(({ isOpen, showSpinner }: OverlayProps) => {
   }
 
   return (
-    <Box position="absolute" zIndex="1">
-      <PresenceTransition
-        visible={isOpen}
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 0.3,
-          transition: {
-            duration: 100,
-          },
-        }}
-      >
-        <Center w={width} h={height} bg="black">
-          {showSpinner && <Spinner color="white" />}
-        </Center>
-      </PresenceTransition>
-    </Box>
+    <Modal isOpen={isOpen}>
+      <Center w={width} h={height} bg="rgba(0, 0, 0, 0.60)">
+        {showSpinner && <Spinner color="white" />}
+      </Center>
+    </Modal>
   );
 });
 export default Overlay;

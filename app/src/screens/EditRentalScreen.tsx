@@ -36,24 +36,9 @@ const EditRentalScreen = ({
     mutateAsync: mutateAsyncUpdateRental,
     isLoading: isLoadingUpdateRental,
   } = useUpdateRental({
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await refetchRental();
-      if (position && data?.length) {
-        navigation.navigate("Map", {
-          regionId: data[0].rentalId,
-          latitude: position.latitude,
-          longitude: position.longitude,
-          type: "rental",
-        });
-        showAlert(
-          toast,
-          <Alert
-            status="success"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("saved")}
-          />
-        );
-      }
+      navigation.goBack();
     },
     onError: () => {
       navigation.goBack();
@@ -76,14 +61,6 @@ const EditRentalScreen = ({
       navigation.goBack();
       navigation.goBack();
       await refetchRental();
-      showAlert(
-        toast,
-        <Alert
-          status="success"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("deleted")}
-        />
-      );
     },
     onError: () => {
       showAlert(

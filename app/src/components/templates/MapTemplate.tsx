@@ -30,6 +30,7 @@ import { Image } from "expo-image";
 import { Region } from "../../types";
 import { Feather } from "@expo/vector-icons";
 import { Platform } from "react-native";
+import Overlay from "../molecules/Overlay";
 
 type MapTemplateProps = {
   type: "rental" | "farm";
@@ -65,6 +66,7 @@ const MapTemplate = ({
   refetch,
   readMore,
   isLoading,
+  isRefetching,
   rentalDetailNavigationHandler,
   farmDetailNavigationHandler,
   searchMapNavigationHandler,
@@ -78,6 +80,7 @@ const MapTemplate = ({
   const pressedColor = useColorModeValue("muted.200", "muted.700");
 
   const mapRef = useRef<MapView>(null);
+  const regionRef = useRef<Region | null>(null);
   const [ready, setReady] = useState(false);
 
   const getOverlap = useCallback(
@@ -89,13 +92,18 @@ const MapTemplate = ({
 
   useEffect(() => {
     if (region) {
-      if (mapRef.current && ready) {
+      if (
+        mapRef.current &&
+        ready &&
+        region.regionId !== regionRef.current?.regionId
+      ) {
         mapRef.current.animateToRegion({
           latitude: region.latitude,
           longitude: region.longitude,
           latitudeDelta: 0.0001,
           longitudeDelta: 0.0001,
         });
+        regionRef.current = region;
       }
     } else {
       if (type === "rental" && rentals?.length) {
@@ -113,9 +121,9 @@ const MapTemplate = ({
         });
       }
     }
-  }, [mapRef.current, region, type, position, farms, rentals, ready]);
+  }, [mapRef.current, regionRef.current, region, type, farms, rentals, ready]);
 
-  if (isLoading) {
+  if (isLoading && !isRefetching) {
     return (
       <Center flex={1}>
         <Spinner color="muted.400" />
@@ -125,6 +133,7 @@ const MapTemplate = ({
 
   return (
     <Box flex={1}>
+      <Overlay isOpen={isRefetching} showSpinner />
       <MapView
         ref={mapRef}
         userInterfaceStyle={mapColor}
