@@ -52,18 +52,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   });
 
   useEffect(() => {
-    setLocation(position);
-    setTouch(false);
-    setRegion(null);
-  }, [position]);
-
-  const refetch = useCallback(async () => {
-    setIsRefetching(true);
-    await getPosition();
-    setIsRefetching(false);
-  }, []);
-
-  useEffect(() => {
     if (params?.regionId && params?.latitude && params?.longitude) {
       setTouch(false);
       setRegion({
@@ -103,8 +91,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           setIsRefetching(true);
           await refetchRentals();
           setIsRefetching(false);
-          setTouch(false);
-          setRegion(null);
         }
       )
       .subscribe();
@@ -136,8 +122,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           setIsRefetching(true);
           await refetchFarms();
           setIsRefetching(false);
-          setTouch(false);
-          setRegion(null);
         }
       )
       .subscribe();
@@ -145,6 +129,34 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     return () => {
       supabase.removeChannel(channel);
     };
+  }, []);
+
+  useEffect(() => {
+    setTouch(false);
+    if (type === "rental" && rentals?.length) {
+      setRegion({
+        regionId: rentals[0].rentalId,
+        latitude: rentals[0].latitude,
+        longitude: rentals[0].longitude,
+      });
+    }
+    if (type === "farm" && farms?.length) {
+      setRegion({
+        regionId: farms[0].farmId,
+        latitude: farms[0].latitude,
+        longitude: farms[0].longitude,
+      });
+    }
+  }, [rentals, farms]);
+
+  useEffect(() => {
+    setLocation(position);
+  }, [position]);
+
+  const refetch = useCallback(async () => {
+    setIsRefetching(true);
+    await getPosition();
+    setIsRefetching(false);
   }, []);
 
   const rentalDetailNavigationHandler = useCallback((rentalId: number) => {

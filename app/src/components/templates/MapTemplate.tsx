@@ -2,10 +2,8 @@ import {
   Box,
   HStack,
   Pressable,
-  Spinner,
   VStack,
   Text,
-  Center,
   useColorModeValue,
   IconButton,
   Icon,
@@ -65,7 +63,6 @@ const MapTemplate = ({
   farms,
   refetch,
   readMore,
-  isLoading,
   isRefetching,
   rentalDetailNavigationHandler,
   farmDetailNavigationHandler,
@@ -80,56 +77,25 @@ const MapTemplate = ({
   const pressedColor = useColorModeValue("muted.200", "muted.700");
 
   const mapRef = useRef<MapView>(null);
-  const regionRef = useRef<Region | null>(null);
   const [ready, setReady] = useState(false);
 
   const getOverlap = useCallback(
     (a: LatLng, b: LatLng) =>
-      Math.floor(a.latitude * 1000000) === Math.floor(b.latitude * 1000000) ||
+      Math.floor(a.latitude * 1000000) === Math.floor(b.latitude * 1000000) &&
       Math.floor(a.longitude * 1000000) === Math.floor(b.longitude * 1000000),
     []
   );
 
   useEffect(() => {
-    if (region) {
-      if (
-        mapRef.current &&
-        ready &&
-        region.regionId !== regionRef.current?.regionId
-      ) {
-        mapRef.current.animateToRegion({
-          latitude: region.latitude,
-          longitude: region.longitude,
-          latitudeDelta: 0.0001,
-          longitudeDelta: 0.0001,
-        });
-        regionRef.current = region;
-      }
-    } else {
-      if (type === "rental" && rentals?.length) {
-        setRegion({
-          regionId: rentals[0].rentalId,
-          latitude: rentals[0].latitude,
-          longitude: rentals[0].longitude,
-        });
-      }
-      if (type === "farm" && farms?.length) {
-        setRegion({
-          regionId: farms[0].farmId,
-          latitude: farms[0].latitude,
-          longitude: farms[0].longitude,
-        });
-      }
+    if (region && mapRef.current && ready) {
+      mapRef.current.animateToRegion({
+        latitude: region.latitude,
+        longitude: region.longitude,
+        latitudeDelta: 0.0001,
+        longitudeDelta: 0.0001,
+      });
     }
-  }, [mapRef.current, regionRef.current, region, type, farms, rentals, ready]);
-
-  if (isLoading && !isRefetching) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
+  }, [mapRef.current, region, ready]);
 
   return (
     <Box flex={1}>
