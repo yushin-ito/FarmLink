@@ -20,7 +20,7 @@ const RateActionSheet = memo(
 
     return (
       <>
-        <Overlay isOpen={isOpen} />
+        <Overlay isOpen={isOpen} opacity="0.2" />
         <Actionsheet
           isOpen={isOpen}
           onClose={onClose}

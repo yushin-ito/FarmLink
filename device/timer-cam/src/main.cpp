@@ -9,7 +9,7 @@
 
 #include "env.h"
 
-#define SLEEP_TIME 10 * 60 // X分
+#define SLEEP_TIME 1 * 60 // X分
 
 const char* bucket = "image";
 const char* directory = "device";

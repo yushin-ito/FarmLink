@@ -15,12 +15,16 @@ import {
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { ColorSchemeName } from "react-native";
+import Overlay from "../molecules/Overlay";
 
 type EnvironmentTemplateProps = {
   locale: Locale | null;
   theme: ColorSchemeName;
   changeLanguage: (language: Locale | null) => Promise<void>;
   changeTheme: (theme: ColorSchemeName) => Promise<void>;
+  isLoading: boolean;
+  isLoadingChangeLanguage: boolean;
+  isLoadingChangeTheme: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -29,6 +33,9 @@ const EnvironmentTemplate = ({
   theme,
   changeLanguage,
   changeTheme,
+  isLoading,
+  isLoadingChangeLanguage,
+  isLoadingChangeTheme,
   goBackNavigationHandler,
 }: EnvironmentTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -36,6 +43,10 @@ const EnvironmentTemplate = ({
 
   return (
     <Box flex={1} safeAreaTop>
+      <Overlay
+        isOpen={isLoadingChangeLanguage || isLoadingChangeTheme}
+        showSpinner
+      />
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
@@ -55,64 +66,68 @@ const EnvironmentTemplate = ({
           variant="unstyled"
         />
       </HStack>
-      <VStack px="10">
-        <VStack mt="2" space="3">
-          <Text bold fontSize="lg">
-            {t("language")}
-          </Text>
-          <Radio.Group
-            name="language"
-            accessibilityLabel="switch language"
-            value={[null, "ja", "en"]
-              .indexOf(locale as string | null)
-              .toString()}
-            onChange={(value) => {
-              const languages = [null, "ja", "en"] as Locale[];
-              changeLanguage(languages[Number(value)]);
-            }}
-          >
-            <VStack space="3">
-              <Radio value="0" mr="2" colorScheme="brand">
-                {t("system")}
-              </Radio>
-              <Radio value="1" mr="2" colorScheme="brand">
-                {t("japanese")}
-              </Radio>
-              <Radio value="2" mr="2" colorScheme="brand">
-                {t("english")}
-              </Radio>
-            </VStack>
-          </Radio.Group>
+      {!isLoading && (
+        <VStack px="10">
+          <VStack mt="2" space="3">
+            <Text bold fontSize="lg">
+              {t("language")}
+            </Text>
+            {
+              <Radio.Group
+                name="language"
+                accessibilityLabel="switch language"
+                value={[null, "ja", "en"]
+                  .indexOf(locale as string | null)
+                  .toString()}
+                onChange={(value) => {
+                  const languages = [null, "ja", "en"] as Locale[];
+                  changeLanguage(languages[Number(value)]);
+                }}
+              >
+                <VStack space="3">
+                  <Radio value="0" mr="2" colorScheme="brand">
+                    {t("system")}
+                  </Radio>
+                  <Radio value="1" mr="2" colorScheme="brand">
+                    {t("japanese")}
+                  </Radio>
+                  <Radio value="2" mr="2" colorScheme="brand">
+                    {t("english")}
+                  </Radio>
+                </VStack>
+              </Radio.Group>
+            }
+          </VStack>
+          <VStack mt="9" space="3">
+            <Text bold fontSize="lg">
+              {t("theme")}
+            </Text>
+            <Radio.Group
+              name="theme"
+              accessibilityLabel="switch theme"
+              value={[null, "light", "dark"]
+                .indexOf(theme as string | null)
+                .toString()}
+              onChange={(value) => {
+                const themes = [null, "light", "dark"] as ColorSchemeName[];
+                changeTheme(themes[Number(value)]);
+              }}
+            >
+              <VStack space="3">
+                <Radio value="0" mr="2" colorScheme="brand">
+                  {t("system")}
+                </Radio>
+                <Radio value="1" mr="2" colorScheme="brand">
+                  {t("light")}
+                </Radio>
+                <Radio value="2" mr="2" colorScheme="brand">
+                  {t("dark")}
+                </Radio>
+              </VStack>
+            </Radio.Group>
+          </VStack>
         </VStack>
-        <VStack mt="9" space="3">
-          <Text bold fontSize="lg">
-            {t("theme")}
-          </Text>
-          <Radio.Group
-            name="theme"
-            accessibilityLabel="switch theme"
-            value={[null, "light", "dark"]
-              .indexOf(theme as string | null)
-              .toString()}
-            onChange={(value) => {
-              const themes = [null, "light", "dark"] as ColorSchemeName[];
-              changeTheme(themes[Number(value)]);
-            }}
-          >
-            <VStack space="3">
-              <Radio value="0" mr="2" colorScheme="brand">
-                {t("system")}
-              </Radio>
-              <Radio value="1" mr="2" colorScheme="brand">
-                {t("light")}
-              </Radio>
-              <Radio value="2" mr="2" colorScheme="brand">
-                {t("dark")}
-              </Radio>
-            </VStack>
-          </Radio.Group>
-        </VStack>
-      </VStack>
+      )}
     </Box>
   );
 };

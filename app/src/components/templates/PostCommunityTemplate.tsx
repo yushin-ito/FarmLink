@@ -195,12 +195,12 @@ const PostCommunityTemplate = ({
                   <Button
                     mr="3"
                     key={index}
-                    colorScheme={index === categoryIndex ? "brand" : undefined}
-                    variant={index === categoryIndex ? undefined : "unstyled"}
-                    bg={index === categoryIndex ? undefined : bgColor}
-                    _text={
-                      index === categoryIndex ? undefined : { color: textColor }
-                    }
+                    variant="unstyled"
+                    _pressed={{ bg: "brand.600" }}
+                    bg={index === categoryIndex ? "brand.600" : bgColor}
+                    _text={{
+                      color: index === categoryIndex ? "white" : textColor,
+                    }}
                     rounded="md"
                     onPress={() => setCategoryIndex(index)}
                   >

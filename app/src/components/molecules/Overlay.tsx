@@ -4,22 +4,25 @@ import { useWindowDimensions } from "react-native";
 
 type OverlayProps = {
   isOpen: boolean;
+  opacity?: string;
   showSpinner?: boolean;
 };
 
-const Overlay = memo(({ isOpen, showSpinner }: OverlayProps) => {
-  const { width, height } = useWindowDimensions();
+const Overlay = memo(
+  ({ isOpen, opacity = "0.6", showSpinner }: OverlayProps) => {
+    const { width, height } = useWindowDimensions();
 
-  if (!isOpen) {
-    return null;
+    if (!isOpen) {
+      return null;
+    }
+
+    return (
+      <Modal isOpen={isOpen}>
+        <Center w={width} h={height} bg={`rgba(0, 0, 0, ${opacity})`}>
+          {showSpinner && <Spinner color="muted.200" />}
+        </Center>
+      </Modal>
+    );
   }
-
-  return (
-    <Modal isOpen={isOpen}>
-      <Center w={width} h={height} bg="rgba(0, 0, 0, 0.60)">
-        {showSpinner && <Spinner color="white" />}
-      </Center>
-    </Modal>
-  );
-});
+);
 export default Overlay;

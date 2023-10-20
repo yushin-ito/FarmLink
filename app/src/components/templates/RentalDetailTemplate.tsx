@@ -130,7 +130,6 @@ const RentalDetailTemplate = ({
               renderItem={({ item }) => (
                 <Pressable
                   onPress={() =>
-                    rental.name &&
                     imagePreviewNavigationHandler(rental.name, item)
                   }
                 >
