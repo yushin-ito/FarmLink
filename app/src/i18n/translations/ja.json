@@ -111,8 +111,9 @@
     "deleteImage": "画像の送信を取り消しました",
     "deleteChat": "送信取消",
     "askDeleteChat": "送信を取り消してもよろしいでしょうか",
-    "delete": "送信取消",
+    "delete": "取消",
     "cancel": "キャンセル",
+    "time": "{{ date, time }}",
     "error": "エラーが発生しました",
     "dev": "この機能は開発中です。\n実装までお待ちください。"
   },
@@ -208,6 +209,7 @@
     "delete": "削除",
     "search": "検索",
     "create": "作成",
+    "time": "{{ date, time }}",
     "error": "エラーが発生しました",
     "dev": "この機能は開発中です。\n実装までお待ちください。"
   },
@@ -227,8 +229,7 @@
     "light": "ライトモード",
     "dark": "ダークモード",
     "notExistNotification": "お知らせはありません",
-    "to": "に",
-    "liked": "さんがいいねしました。",
+    "liked": "{{ what }}に{{ who }}さんがいいねしました",
     "send": "さんがメッセージを送信しました。",
     "signout": "サインアウト",
     "askSignout": "サインアウトしてもよろしいですか",
@@ -288,6 +289,7 @@
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
     "create": "作成",
     "editRental": "レンタルを編集",
+    "time": "{{ date, time }}",
     "error": "エラーが発生しました",
     "dev": "この機能は開発中です。\n実装までお待ちください。"
   }

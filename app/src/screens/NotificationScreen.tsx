@@ -17,7 +17,7 @@ const NotificationScreen = ({
 }: SettingStackScreenProps<"Notification">) => {
   const { t } = useTranslation("setting");
   const toast = useToast();
-  const { session, locale } = useAuth();
+  const { session } = useAuth();
   const {
     data: notifications,
     refetch,
@@ -122,7 +122,6 @@ const NotificationScreen = ({
 
   return (
     <NotificationTemplate
-      locale={locale}
       notifications={notifications}
       refetchNotifications={refetchNotifications}
       isRefetchingNotifications={isRefetchingNotifications}

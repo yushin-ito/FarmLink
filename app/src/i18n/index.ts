@@ -4,6 +4,8 @@ import i18n, { LanguageDetectorAsyncModule } from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./translations/en.json";
 import ja from "./translations/ja.json";
+import { format as formatDate, formatDistance } from "date-fns";
+import { ja as fnsJa, enUS as fnsEn } from "date-fns/locale";
 
 export const resources = {
   en,
@@ -49,6 +51,39 @@ i18n
     resources,
     interpolation: {
       escapeValue: false,
+      format: (value, format, lng) => {
+        if (format === "time") {
+          if (lng === "ja") {
+            const distance = formatDistance(new Date(), new Date(value), {
+              locale: fnsJa,
+            });
+
+            if (distance.indexOf("未満") !== -1) {
+              return "たった今";
+            } else if (
+              distance.indexOf("か月") !== -1 ||
+              distance.indexOf("年") !== -1
+            ) {
+              return formatDate(new Date(value), "yyyy/M/d");
+            } else {
+              return distance.replace("約", "") + "前";
+            }
+          } else {
+            const distance = formatDistance(new Date(), new Date(value), {
+              locale: fnsEn,
+            });
+
+            if (distance.indexOf("less") !== -1) {
+              return "now";
+            } else if (distance.indexOf("about") !== -1) {
+              return distance.replace("about", "");
+            } else {
+              return distance;
+            }
+          }
+        }
+        return value;
+      },
     },
     react: {
       useSuspense: false,

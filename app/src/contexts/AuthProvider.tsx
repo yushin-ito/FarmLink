@@ -1,14 +1,11 @@
 import React, { useCallback } from "react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { supabase } from "../supabase";
-import { Locale } from "../types";
 import { Session } from "@supabase/supabase-js";
 import * as Linking from "expo-linking";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type AuthContextProps = {
   session: Session | null;
-  locale: Locale | null;
   error: Error | undefined;
   isLoading: boolean;
 };
@@ -26,7 +23,6 @@ export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(null);
-  const [locale, setLocale] = useState<Locale | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>();
 
@@ -68,20 +64,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return null;
   }, []);
 
-  const getLocale = useCallback(async () => {
-    const locale = await AsyncStorage.getItem("@locale");
-    if (locale === "en") {
-      setLocale("en");
-      return;
-    } else if (locale === "ja") {
-      setLocale("ja");
-      return;
-    }
-    setLocale("en");
-  }, []);
-
   useEffect(() => {
-    getLocale();
     getCurrentSession();
 
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -131,7 +114,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, locale, error, isLoading }}>
+    <AuthContext.Provider value={{ session, error, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -24,7 +24,7 @@ const RentalGridItem = memo(({ item, onPress }: RentalGridItemProps) => {
   const imageColor = useColorModeValue("muted.200", "muted.600");
 
   return (
-    <Pressable flex={1 / 3} mt="2" onPress={onPress}>
+    <Pressable flex={1 / 3} mt="2" onPress={onPress}   alignItems="center">
       <Center size="110" rounded="sm" bg={imageColor} overflow="hidden">
         {item.imageUrls?.length ? (
           <Image

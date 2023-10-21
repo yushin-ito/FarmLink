@@ -60,7 +60,7 @@ const RentalGrid = memo(
       <FlatList
         w={width}
         pt="2"
-        px="2"
+        px="3"
         mb="20"
         numColumns={3}
         data={rentals}

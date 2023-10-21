@@ -22,11 +22,9 @@ import { GetUserResponse } from "../../hooks/user/query";
 import ChatActionSheet from "../organisms/ChatActionSheet";
 import { useTranslation } from "react-i18next";
 import { GetTalkChatsResponse } from "../../hooks/chat/query";
-import { Locale } from "../../types";
 import Overlay from "../molecules/Overlay";
 
 type ChatTemplateProps = {
-  locale: Locale | null;
   title: string | null | undefined;
   user: GetUserResponse | null | undefined;
   chats: GetTalkChatsResponse | undefined;
@@ -45,7 +43,6 @@ type ChatTemplateProps = {
 };
 
 const ChatTemplate = ({
-  locale,
   title,
   user,
   chats,
@@ -185,7 +182,6 @@ const ChatTemplate = ({
                 type="talk"
                 item={item}
                 authored={item.authorId === user?.userId}
-                locale={locale}
                 onLongPress={() => {
                   onChatActionSheetOpen();
                   setChatId(item.chatId);

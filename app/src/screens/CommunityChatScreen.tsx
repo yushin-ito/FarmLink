@@ -31,7 +31,7 @@ const CommunityChatScreen = ({
 }: CommunityStackScreenProps<"CommunityChat">) => {
   const { t } = useTranslation("chat");
   const toast = useToast();
-  const { session, locale } = useAuth();
+  const { session } = useAuth();
   const { data: user, isLoading: isLoadingUser } = useQueryUser(
     session?.user.id
   );
@@ -305,7 +305,6 @@ const CommunityChatScreen = ({
 
   return (
     <CommunityChatTemplate
-      locale={locale}
       title={community?.name}
       owned={session?.user.id === community?.ownerId}
       user={user}

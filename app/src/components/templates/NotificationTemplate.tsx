@@ -15,10 +15,8 @@ import SkeletonNotification from "../organisms/SkeletonNotification";
 import NotificationItem from "../organisms/NotificationItem";
 import { GetNotificationsResponse } from "../../hooks/notification/query";
 import { RefreshControl } from "react-native";
-import { Locale } from "../../types";
 
 type NotificationTemplateProps = {
-  locale: Locale | null;
   notifications: GetNotificationsResponse | undefined;
   deleteNotification: (notificationId: number) => Promise<void>;
   refetchNotifications: () => Promise<void>;
@@ -36,7 +34,6 @@ type NotificationTemplateProps = {
 };
 
 const NotificationTemplate = ({
-  locale,
   notifications,
   deleteNotification,
   refetchNotifications,
@@ -98,7 +95,6 @@ const NotificationTemplate = ({
               <NotificationItem
                 type={getNotificationType(item)}
                 item={item}
-                locale={locale}
                 onPress={() => {
                   if (getNotificationType(item) === "farm") {
                     item.farmId &&

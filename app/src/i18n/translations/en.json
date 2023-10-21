@@ -113,6 +113,7 @@
     "askDeleteChat": "Are you sure you want to unsend?",
     "delete": "unsend",
     "cancel": "Cancel",
+    "time": "{{ date, time }}",
     "error": "An error occurred",
     "dev": "This function is currently under development."
   },
@@ -210,6 +211,7 @@
     "delete": "Delete",
     "search": "Search",
     "create": "Create",
+    "time": "{{ date, time }}",
     "error": "An error occurred",
     "dev": "This function is currently under development."
   },
@@ -228,8 +230,7 @@
     "system": "System",
     "light": "Light",
     "dark": "Dark",
-    "to": "has been liked by",
-    "liked": ".",
+    "liked": "{{ what }} has been liked by {{ who }}.",
     "send": "has sent you a message.",
     "notExistNotification": "No notifications",
     "signout": "Sign out",
@@ -289,6 +290,7 @@
     "descriptionMaxLength": "Description must be 100 or less",
     "create": "Create",
     "editRental": "Edit rental",
+    "time": "{{ date, time }}",
     "error": "An error occurred",
     "dev": "This function is currently under development."
   }

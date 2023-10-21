@@ -16,19 +16,16 @@ import { Image } from "expo-image";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
 import Avatar from "../molecules/Avatar";
-import { getTimeDistance } from "../../functions";
-import { Locale } from "../../types";
 
 type NotificationItemProps = {
   type: "rental" | "farm" | "chat" | "unknown";
   item: GetNotificationsResponse[number];
-  locale: Locale | null;
   onPress: () => void;
   onPressRight: () => void;
 };
 
 const NotificationItem = memo(
-  ({ type, item, locale, onPress, onPressRight }: NotificationItemProps) => {
+  ({ type, item, onPress, onPressRight }: NotificationItemProps) => {
     const { t } = useTranslation("setting");
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
@@ -100,13 +97,13 @@ const NotificationItem = memo(
                   </HStack>
                   <VStack w="75%" space="1">
                     <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
-                      {item.rental?.name +
-                        t("to") +
-                        item.from?.name +
-                        t("liked")}
+                      {t("liked", {
+                        what: item.rental.name,
+                        who: item.from.name,
+                      })}
                     </Text>
                     <Text color={textColor} fontSize="xs">
-                      {getTimeDistance(item.createdAt, locale)}
+                      {t("time", { date: item.createdAt })}
                     </Text>
                   </VStack>
                 </HStack>
@@ -147,10 +144,13 @@ const NotificationItem = memo(
                   </HStack>
                   <VStack w="75%" space="1">
                     <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
-                      {item.farm.name + t("to") + item.from.name + t("liked")}
+                      {t("liked", {
+                        what: item.rental.name,
+                        who: item.from.name,
+                      })}
                     </Text>
                     <Text color={textColor} fontSize="xs">
-                      {getTimeDistance(item.createdAt, locale)}
+                      {t("time", { date: item.createdAt })}
                     </Text>
                   </VStack>
                 </HStack>
@@ -178,7 +178,7 @@ const NotificationItem = memo(
                       {item.from.name + t("send")}
                     </Text>
                     <Text color={textColor} fontSize="xs">
-                      {getTimeDistance(item.createdAt, locale)}
+                      {t("time", { date: item.createdAt })}
                     </Text>
                   </VStack>
                 </HStack>

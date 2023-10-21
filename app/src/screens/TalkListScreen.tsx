@@ -13,7 +13,7 @@ import TalkListTemplate from "../components/templates/TalkListTemplate";
 const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
   const toast = useToast();
   const { t } = useTranslation("talk");
-  const { session, locale } = useAuth();
+  const { session } = useAuth();
   const { data: user, isLoading: isLoadingUser } = useQueryUser(
     session?.user.id
   );
@@ -74,7 +74,6 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
 
   return (
     <TalkListTemplate
-      locale={locale}
       talks={talks}
       user={user}
       isLoading={isLoadingUser || isLoadingTalks || isLoadingDeleteTalk}

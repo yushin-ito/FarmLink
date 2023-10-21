@@ -25,7 +25,7 @@ import { usePostNotification } from "../hooks/notification/mutate";
 const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { t } = useTranslation("chat");
   const toast = useToast();
-  const { session, locale } = useAuth();
+  const { session } = useAuth();
   const { data: user, isLoading: isLoadingUser } = useQueryUser(
     session?.user.id
   );
@@ -302,7 +302,6 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   return (
     <TalkChatTemplate
-      locale={locale}
       title={talk?.to.name}
       user={user}
       chats={chats}

@@ -13,18 +13,15 @@ import { GetTalksResponse } from "../../hooks/talk/query";
 import { useTranslation } from "react-i18next";
 import Avatar from "../molecules/Avatar";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
-import { getTimeDistance } from "../../functions";
-import { Locale } from "../../types";
 
 type TalkListItemProps = {
   item: GetTalksResponse[number];
-  locale: Locale | null;
   onPress: () => void;
   onPressRight: () => void;
 };
 
 const TalkListItem = memo(
-  ({ item, locale, onPressRight, onPress }: TalkListItemProps) => {
+  ({ item,  onPressRight, onPress }: TalkListItemProps) => {
     const { t } = useTranslation("talk");
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
@@ -71,7 +68,7 @@ const TalkListItem = memo(
                     {item.to.name}
                   </Text>
                   <Text fontSize="sm">
-                    {getTimeDistance(item.updatedAt, locale)}
+                    {t("time", { date: item.updatedAt })}
                   </Text>
                 </HStack>
                 {item.chat?.message && (

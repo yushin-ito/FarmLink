@@ -23,11 +23,9 @@ import ChatActionSheet from "../organisms/ChatActionSheet";
 import { useTranslation } from "react-i18next";
 import { GetCommunityChatsResponse } from "../../hooks/chat/query";
 import ImageActionSheet from "../organisms/ImageActionSheet";
-import { Locale } from "../../types";
 import Overlay from "../molecules/Overlay";
 
 type CommunityChatTemplateProps = {
-  locale: Locale | null;
   title: string | null | undefined;
   owned: boolean;
   user: GetUserResponse | null | undefined;
@@ -52,7 +50,6 @@ type CommunityChatTemplateProps = {
 };
 
 const CommunityChatTemplate = ({
-  locale,
   title,
   owned,
   user,
@@ -237,7 +234,6 @@ const CommunityChatTemplate = ({
                 type="community"
                 item={item}
                 authored={item.authorId === user?.userId}
-                locale={locale}
                 onLongPress={() => {
                   onChatActionSheetOpen();
                   setChatId(item.chatId);

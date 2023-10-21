@@ -292,16 +292,7 @@ const MapTemplate = ({
               rounded="full"
               bg={type === "rental" ? "brand.600" : bgColor}
               shadow="1"
-              onPress={() => {
-                if (rentals?.length) {
-                  setRegion({
-                    regionId: rentals[0].rentalId,
-                    latitude: rentals[0].latitude,
-                    longitude: rentals[0].longitude,
-                  });
-                }
-                setType("rental");
-              }}
+              onPress={() => setType("rental")}
             >
               <Text color={type === "rental" ? "white" : textColor}>
                 {t("rental")}
@@ -313,16 +304,7 @@ const MapTemplate = ({
               bg={type === "farm" ? "brand.600" : bgColor}
               rounded="full"
               shadow="1"
-              onPress={() => {
-                if (farms?.length) {
-                  setRegion({
-                    regionId: farms[0].farmId,
-                    latitude: farms[0].latitude,
-                    longitude: farms[0].longitude,
-                  });
-                }
-                setType("farm");
-              }}
+              onPress={() => setType("farm")}
             >
               <Text color={type === "farm" ? "white" : textColor}>
                 {t("farm")}
