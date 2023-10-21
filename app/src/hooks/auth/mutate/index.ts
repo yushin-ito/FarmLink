@@ -39,6 +39,7 @@ const signInWithProvider = async (provider: string) => {
   const redirectUrl = makeRedirectUri({
     scheme: "farmlink",
     path: "redirect",
+    projectNameForProxy: "farmlink",
   });
 
   const authResponse = await startAsync({

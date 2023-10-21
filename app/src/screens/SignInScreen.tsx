@@ -83,20 +83,18 @@ const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
               "_normal",
               ""
             ), // for Twitter
-            color: `hsl(${Math.floor(
-              Math.random() * 360
-            ).toString()}, 60%, 60%)`,
+            color: `hsl(${Math.floor(Math.random() * 360)}, 60%, 60%)`,
           });
         }
       }
     },
-    onError: (error) => {
+    onError: () => {
       showAlert(
         toast,
         <Alert
           status="error"
           onPressCloseButton={() => toast.closeAll()}
-          text={error.message}
+          text={t("error")}
         />
       );
     },

@@ -17,12 +17,12 @@ import { useTranslation } from "react-i18next";
 
 type WalkthroughTemplateProps = {
   verified: boolean;
-  farmListNavigationHandler: () => void;
+  tabNavigatorNavigationHandler: () => void;
 };
 
 const WalkthroughTemplate = ({
   verified,
-  farmListNavigationHandler,
+  tabNavigatorNavigationHandler,
 }: WalkthroughTemplateProps) => {
   const { t } = useTranslation("app");
   const bgColor = useColorModeValue("white", "muted.900");
@@ -84,7 +84,7 @@ const WalkthroughTemplate = ({
                   rounded="xl"
                   colorScheme="brand"
                   isDisabled={!verified}
-                  onPress={farmListNavigationHandler}
+                  onPress={tabNavigatorNavigationHandler}
                 >
                   <Text bold color="white" fontSize="md">
                     {t("start")}

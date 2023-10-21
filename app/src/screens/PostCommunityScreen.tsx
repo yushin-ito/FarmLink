@@ -55,7 +55,7 @@ const PostCommunityScreen = () => {
           description,
           category,
           ownerId: session?.user.id,
-          color: `hsl(${Math.floor(Math.random() * 360).toString()}, 60%, 60%)`,
+          color: `hsl(${Math.floor(Math.random() * 360)}, 60%, 60%)`,
         });
       }
     },

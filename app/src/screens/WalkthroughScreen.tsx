@@ -13,14 +13,15 @@ type WalkthroughNavigationProp = NativeStackNavigationProp<
 const WalkthroughScreen = () => {
   const navigation = useNavigation<WalkthroughNavigationProp>();
   const { session } = useAuth();
-  const farmListNavigationHandler = useCallback(() => {
+  
+  const tabNavigatorNavigationHandler = useCallback(() => {
     navigation.push("TabNavigator");
   }, []);
 
   return (
     <WalkthroughTemplate
       verified={!!session?.user.id}
-      farmListNavigationHandler={farmListNavigationHandler}
+      tabNavigatorNavigationHandler={tabNavigatorNavigationHandler}
     />
   );
 };

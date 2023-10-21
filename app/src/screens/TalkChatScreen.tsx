@@ -81,21 +81,30 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncDeleteTalk, isLoading: isLoadingDeleteTalk } = useDeleteTalk({
-    onSuccess: async () => {
-      await refetchTalks();
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncDeleteTalk, isLoading: isLoadingDeleteTalk } =
+    useDeleteTalk({
+      onSuccess: async () => {
+        await refetchTalks();
+        showAlert(
+          toast,
+          <Alert
+            status="success"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("deleted")}
+          />
+        );
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const {
     mutateAsync: mutateAsyncPostNotification,
