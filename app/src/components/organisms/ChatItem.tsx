@@ -73,9 +73,9 @@ const ChatItem = memo(
                   py="1"
                   bg={bgColor}
                   shadow="1"
-                  rounded="lg"
-                  roundedTopLeft={authored ? "xl" : "0"}
-                  roundedBottomRight={authored ? "0" : "xl"}
+                  rounded="xl"
+                  roundedTopLeft={authored ? "xl" : "xs"}
+                  roundedBottomRight={authored ? "xs" : "xl"}
                 >
                   <Text bold fontSize="md">
                     {item.message}

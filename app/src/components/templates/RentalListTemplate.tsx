@@ -26,11 +26,7 @@ type RentalListTemplateProps = {
   publicRental: (rentalId: number) => Promise<void>;
   isLoading: boolean;
   isRefetchingRentals: boolean;
-  mapNavigationHandler: (
-    regionId: number,
-    latitude: number,
-    longitude: number
-  ) => Promise<void>;
+  rentalDetailNavigationHandler: (rentalId: number) => void;
   postRentalNavigationHandler: () => void;
   goBackNavigationHandler: () => void;
 };
@@ -43,7 +39,7 @@ const RentalListTemplate = ({
   refetchRentals,
   privateRental,
   publicRental,
-  mapNavigationHandler,
+  rentalDetailNavigationHandler,
   postRentalNavigationHandler,
   goBackNavigationHandler,
 }: RentalListTemplateProps) => {
@@ -83,15 +79,7 @@ const RentalListTemplate = ({
             renderItem={({ item }) => (
               <RentalListItem
                 item={item}
-                onPress={() =>
-                  item.latitude &&
-                  item.longitude &&
-                  mapNavigationHandler(
-                    item.rentalId,
-                    item.latitude,
-                    item.longitude
-                  )
-                }
+                onPress={() => rentalDetailNavigationHandler(item.rentalId)}
                 onPressLeft={() =>
                   item.privated
                     ? publicRental(item.rentalId)

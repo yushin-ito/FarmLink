@@ -1,10 +1,6 @@
 import React, { useCallback } from "react";
 import ImagePreviewTemplate from "../components/templates/ImagePreviewTemplate";
-import {
-  CommunityStackParamList,
-  MapStackParamList,
-  TalkStackParamList,
-} from "../types";
+import { RootStackParamList } from "../types";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import { useDeleteChat } from "../hooks/chat/mutate";
 import { useTranslation } from "react-i18next";
@@ -16,43 +12,18 @@ import * as FileSystem from "expo-file-system";
 import useMediaLibrary from "../hooks/sdk/useMediaLibrary";
 import { useQueryTalks } from "../hooks/talk/query";
 import useAuth from "../hooks/auth/useAuth";
-import { useUpdateTalk } from "../hooks/talk/mutate";
 
 const ImagePreviewScreen = () => {
   const { t } = useTranslation("app");
   const toast = useToast();
   const navigation = useNavigation();
-  const { params } = useRoute<
-    | RouteProp<MapStackParamList, "ImagePreview">
-    | RouteProp<TalkStackParamList, "ImagePreview">
-    | RouteProp<CommunityStackParamList, "ImagePreview">
-  >();
+  const { params } = useRoute<RouteProp<RootStackParamList, "ImagePreview">>();
   const { session } = useAuth();
   const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
 
-  const { mutateAsync: mutateAsyncUpdateTalk } = useUpdateTalk({
+  const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
     onSuccess: async () => {
       await refetchTalks();
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
-
-  const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
-    onSuccess: async ({ chatId }) => {
-      params.talkId &&
-        (await mutateAsyncUpdateTalk({
-          talkId: params.talkId,
-          chatId,
-        }));
       navigation.goBack();
     },
     onError: () => {
@@ -137,7 +108,9 @@ const ImagePreviewScreen = () => {
   }, [params]);
 
   const deleteImage = useCallback(async () => {
-    params.chatId && (await mutateAsyncDeleteChat(params.chatId));
+    if (params.chatId) {
+      await mutateAsyncDeleteChat(params.chatId);
+    }
   }, [params]);
 
   const goBackNavigationHandler = useCallback(() => {

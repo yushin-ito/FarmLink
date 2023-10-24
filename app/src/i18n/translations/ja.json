@@ -1,7 +1,6 @@
 {
   "app": {
     "permitRequestNoti": "通知を許可してください",
-    "fetchError": "データの取得に失敗しました。",
     "error": "エラーが発生しました",
     "permitRequestSave": "画像の保存を許可してください",
     "saved": "保存しました",
@@ -66,7 +65,7 @@
     "searchFarm": "ファームを探す",
     "searchRental": "レンタルを探す",
     "noDescription": "詳細がありません",
-    "own": "さんの",
+    "own": "{{ who }}さんの",
     "temperture": "温度",
     "humidity": "湿度",
     "moisture": "水分",
@@ -95,6 +94,9 @@
     "permitRequestGPS": "位置情報を許可してください",
     "permitRequestNoti": "通知を許可してください",
     "permitRequestCam": "カメラを許可してください",
+    "fetchError": "データの取得に失敗しました",
+    "tryAgain": "しばらく経ってから再度お試しください。",
+    "close": "閉じる",
     "error": "エラーが発生しました",
     "dev": "この機能は開発中です。\n実装までお待ちください。"
   },
@@ -209,6 +211,7 @@
     "delete": "削除",
     "search": "検索",
     "create": "作成",
+    "selectUser": "ユーザーを検索して選択してください",
     "time": "{{ date, time }}",
     "error": "エラーが発生しました",
     "dev": "この機能は開発中です。\n実装までお待ちください。"

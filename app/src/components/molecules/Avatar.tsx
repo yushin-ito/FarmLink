@@ -30,7 +30,7 @@ const Avatar = memo(
     fontSize = "md",
     ...props
   }: AvatarProps & IPressableProps) => {
-    const bgColor = useColorModeValue("muted.100", "muted.800");
+    const bgColor = useColorModeValue("muted.200", "muted.600");
 
     return isLoading ? (
       <Skeleton size={size} rounded="full" />
@@ -50,7 +50,7 @@ const Avatar = memo(
             }}
           />
         ) : (
-          <NativeBaseAvatar size={size} bg={color}>
+          <NativeBaseAvatar size={size} bg={color ?? bgColor}>
             <Text color="white" fontSize={fontSize}>
               {text}
             </Text>

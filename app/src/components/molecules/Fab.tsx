@@ -1,18 +1,13 @@
-import React, { ReactNode, memo } from "react";
+import React, { memo } from "react";
 
 import { Center, Pressable, IPressableProps } from "native-base";
 
 type FabProps = {
   buttonSize?: string;
-  children: ReactNode;
 };
 
 const Fab = memo(
-  ({
-    buttonSize = "md",
-    children,
-    ...props
-  }: FabProps & IPressableProps) => {
+  ({ buttonSize = "md", children, ...props }: FabProps & IPressableProps) => {
     return (
       <Pressable {...props} mb="3">
         {({ isPressed }) => {

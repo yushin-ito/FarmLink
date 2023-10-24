@@ -220,7 +220,9 @@ const PostCommunityTemplate = ({
               postCommunity(data.name, data.description, data.category);
             })}
           >
-            {t("create")}
+            <Text bold color="white" fontSize="md">
+              {t("create")}
+            </Text>
           </Button>
         </Box>
       </KeyboardAwareScrollView>

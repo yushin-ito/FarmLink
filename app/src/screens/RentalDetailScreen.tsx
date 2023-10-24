@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { MapStackParamList, MapStackScreenProps } from "../types";
+import { RootStackParamList, RootStackScreenProps } from "../types";
 import RentalDetailTemplate from "../components/templates/RentalDetailTemplate";
 import { useQueryRental } from "../hooks/rental/query";
 import { showAlert, wait } from "../functions";
@@ -17,12 +17,10 @@ import { usePostNotification } from "../hooks/notification/mutate";
 import useNotification from "../hooks/sdk/useNotification";
 import { useQueryUser } from "../hooks/user/query";
 
-const RentalDetailScreen = ({
-  navigation,
-}: MapStackScreenProps<"RentalDetail">) => {
+const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
   const toast = useToast();
   const { t } = useTranslation("map");
-  const { params } = useRoute<RouteProp<MapStackParamList, "RentalDetail">>();
+  const { params } = useRoute<RouteProp<RootStackParamList, "RentalDetail">>();
   const {
     data: rental,
     isLoading: isLoadingRental,
@@ -48,9 +46,7 @@ const RentalDetailScreen = ({
     ) ?? false;
 
   useEffect(() => {
-    rental?.latitude &&
-      rental?.longitude &&
-      getAddress(rental.latitude, rental.longitude);
+    rental && getAddress(rental.latitude, rental.longitude);
   }, [rental]);
 
   const refetch = useCallback(async () => {

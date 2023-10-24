@@ -9,12 +9,12 @@ import { useTranslation } from "react-i18next";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
 import { useQueryFarm } from "../hooks/farm/query";
 import useLocation from "../hooks/sdk/useLocation";
-import { MapStackParamList, MapStackScreenProps } from "../types";
+import { RootStackParamList, RootStackScreenProps } from "../types";
 
-const EditFarmScreen = ({ navigation }: MapStackScreenProps<"EditFarm">) => {
+const EditFarmScreen = ({ navigation }: RootStackScreenProps) => {
   const toast = useToast();
   const { t } = useTranslation("farm");
-  const { params } = useRoute<RouteProp<MapStackParamList, "EditFarm">>();
+  const { params } = useRoute<RouteProp<RootStackParamList, "EditFarm">>();
   const { data: farm, refetch: refetchFarm } = useQueryFarm(params.farmId);
   const [searchResult, setSearchResult] =
     useState<SearchDeviceResponse[number]>();

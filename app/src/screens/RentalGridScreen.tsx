@@ -52,7 +52,7 @@ const RentalGridScreen = ({
 
   useEffect(() => {
     const channel = supabase
-      .channel("rental")
+      .channel("rental_grid")
       .on(
         "postgres_changes",
         {
@@ -101,7 +101,9 @@ const RentalGridScreen = ({
     <RentalGridTemplate
       sceneIndex={sceneIndex}
       setSceneIndex={setSceneIndex}
-      rentals={rentals?.filter((item) => !item.privated || item.ownerId === session?.user.id)}
+      rentals={rentals?.filter(
+        (item) => !item.privated || item.ownerId === session?.user.id
+      )}
       refetchRentals={refetchRentals}
       readMore={fetchNextPage}
       hasMore={hasNextPage}

@@ -6,7 +6,6 @@ import {
   Heading,
   Icon,
   IconButton,
-  KeyboardAvoidingView,
   Menu,
   Spinner,
   Text,
@@ -15,7 +14,7 @@ import {
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Alert, Platform } from "react-native";
+import { Alert } from "react-native";
 import ChatItem from "../organisms/ChatItem";
 import ChatBar from "../organisms/ChatBar";
 import { GetUserResponse } from "../../hooks/user/query";
@@ -61,6 +60,7 @@ const ChatTemplate = ({
 }: ChatTemplateProps) => {
   const { t } = useTranslation(["chat", "talk"]);
   const bgColor = useColorModeValue("muted.100", "muted.800");
+  const headerColor = useColorModeValue("white", "muted.900");
   const menuColor = useColorModeValue("white", "muted.700");
   const pressedColor = useColorModeValue("muted.100", "muted.900");
   const iconColor = useColorModeValue("muted.600", "muted.100");
@@ -73,133 +73,134 @@ const ChatTemplate = ({
   const [chatId, setChatId] = useState<number | null>(null);
 
   return (
-    <KeyboardAvoidingView
-      flex={1}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <Overlay isOpen={isLoadingDeleteTalk} showSpinner />
-      <Box flex={1} safeAreaTop>
-        <ChatActionSheet
-          isOpen={isChatActionSheetOpen}
-          onClose={onChatActionSheetClose}
-          deleteChat={async () =>
-            Alert.alert(t("chat:deleteChat"), t("chat:askDeleteChat"), [
-              {
-                text: t("chat:cancel"),
-                style: "cancel",
-              },
-              {
-                text: t("chat:delete"),
-                onPress: () => chatId && deleteChat(chatId),
-                style: "destructive",
-              },
-            ])
-          }
-        />
-        <HStack
-          pt="1"
-          pb="2"
-          px="2"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <HStack alignItems="center">
+    <Box flex={1} bg={bgColor}>
+      <Overlay isOpen={isLoadingDeleteTalk} loadingEnabled />
+      <ChatActionSheet
+        isOpen={isChatActionSheetOpen}
+        onClose={onChatActionSheetClose}
+        deleteChat={async () =>
+          Alert.alert(t("chat:deleteChat"), t("chat:askDeleteChat"), [
+            {
+              text: t("chat:cancel"),
+              style: "cancel",
+            },
+            {
+              text: t("chat:delete"),
+              onPress: () => chatId && deleteChat(chatId),
+              style: "destructive",
+            },
+          ])
+        }
+      />
+      <HStack
+        pt="2"
+        pb="1"
+        px="2"
+        alignItems="center"
+        justifyContent="space-between"
+        bg={headerColor}
+        safeAreaTop
+      >
+        <HStack alignItems="center">
+          <IconButton
+            onPress={goBackNavigationHandler}
+            icon={
+              <Icon
+                as={<Feather name="chevron-left" />}
+                size="2xl"
+                color={iconColor}
+              />
+            }
+            variant="unstyled"
+          />
+          <Heading fontSize="xl">{title}</Heading>
+        </HStack>
+        <Menu
+          mr="6"
+          shadow="3"
+          rounded="lg"
+          bg={menuColor}
+          trigger={(props) => (
             <IconButton
-              onPress={goBackNavigationHandler}
               icon={
                 <Icon
-                  as={<Feather name="chevron-left" />}
-                  size="2xl"
+                  as={<Feather />}
+                  name="align-justify"
+                  size="md"
+                  mr="3"
                   color={iconColor}
                 />
               }
               variant="unstyled"
+              _pressed={{
+                opacity: 0.5,
+              }}
+              {...props}
             />
-            <Heading fontSize="xl">{title}</Heading>
-          </HStack>
-          <Menu
-            mr="6"
-            shadow="3"
-            rounded="lg"
-            bg={menuColor}
-            trigger={(props) => (
-              <IconButton
-                icon={
-                  <Icon
-                    as={<Feather />}
-                    name="align-justify"
-                    size="md"
-                    mr="3"
-                    color={iconColor}
-                  />
-                }
-                variant="unstyled"
-                _pressed={{
-                  opacity: 0.5,
-                }}
-                {...props}
-              />
-            )}
-          >
-            <Menu.Item
-              pl="1"
-              onPress={() =>
-                Alert.alert(t("talk:deleteTalk"), t("talk:askDeleteTalk"), [
-                  {
-                    text: t("chat:cancel"),
-                    style: "cancel",
-                  },
-                  {
-                    text: t("chat:delete"),
-                    onPress: async () => await deleteTalk(),
-                    style: "destructive",
-                  },
-                ])
-              }
-              _pressed={{ bg: pressedColor }}
-            >
-              <Text fontSize="md">{t("talk:deleteTalk")}</Text>
-            </Menu.Item>
-          </Menu>
-        </HStack>
-        {isLoading ? (
-          <Center flex={1} bg={bgColor}>
-            <Spinner color="muted.400" />
-          </Center>
-        ) : (
-          <FlatList
-            px="5"
-            bg={bgColor}
-            inverted
-            data={chats}
-            onEndReached={readMore}
-            onEndReachedThreshold={0.3}
-            ListFooterComponent={
-              <Center>{hasMore && <Spinner color="talk:muted.400" />}</Center>
+          )}
+        >
+          <Menu.Item
+            pl="1"
+            onPress={() =>
+              Alert.alert(t("talk:deleteTalk"), t("talk:askDeleteTalk"), [
+                {
+                  text: t("chat:cancel"),
+                  style: "cancel",
+                },
+                {
+                  text: t("chat:delete"),
+                  onPress: async () => await deleteTalk(),
+                  style: "destructive",
+                },
+              ])
             }
-            renderItem={({ item }) => (
-              <ChatItem
-                type="talk"
-                item={item}
-                authored={item.authorId === user?.userId}
-                onLongPress={() => {
-                  onChatActionSheetOpen();
-                  setChatId(item.chatId);
-                }}
-                imagePreviewNavigationHandler={imagePreviewNavigationHandler}
-              />
-            )}
-            keyExtractor={(item) => item.chatId.toString()}
-          />
-        )}
-        <ChatBar
-          onSend={onSend}
-          isLoading={isLoadingPostChat}
-          pickImageByCamera={pickChatImageByCamera}
-          pickImageByLibrary={pickChatImageByLibrary}
+            _pressed={{ bg: pressedColor }}
+          >
+            <Text fontSize="md">{t("talk:deleteTalk")}</Text>
+          </Menu.Item>
+        </Menu>
+      </HStack>
+      {isLoading ? (
+        <Center flex={1} bg={bgColor}>
+          <Spinner color="muted.400" />
+        </Center>
+      ) : (
+        <FlatList
+          px="5"
+          mb="2"
+          inverted
+          data={chats}
+          onEndReached={readMore}
+          onEndReachedThreshold={0.3}
+          automaticallyAdjustKeyboardInsets
+          ListFooterComponent={
+            <Center mt="5">
+              {hasMore && <Spinner color="talk:muted.400" />}
+            </Center>
+          }
+          renderItem={({ item }) => (
+            <ChatItem
+              type="talk"
+              item={item}
+              authored={item.authorId === user?.userId}
+              onLongPress={() => {
+                onChatActionSheetOpen();
+                setChatId(item.chatId);
+              }}
+              imagePreviewNavigationHandler={imagePreviewNavigationHandler}
+            />
+          )}
+          keyExtractor={(item) => item.chatId.toString()}
         />
-      </Box>
-    </KeyboardAvoidingView>
+      )}
+      <ChatBar
+        visible={!(isLoadingDeleteTalk || isChatActionSheetOpen)}
+        onSend={onSend}
+        isLoading={isLoadingPostChat}
+        pickImageByCamera={pickChatImageByCamera}
+        pickImageByLibrary={pickChatImageByLibrary}
+      />
+    </Box>
   );
 };
 

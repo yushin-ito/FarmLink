@@ -145,7 +145,7 @@ const NotificationItem = memo(
                   <VStack w="75%" space="1">
                     <Text numberOfLines={2} ellipsizeMode="tail" fontSize="14">
                       {t("liked", {
-                        what: item.rental.name,
+                        what: item.farm.name,
                         who: item.from.name,
                       })}
                     </Text>

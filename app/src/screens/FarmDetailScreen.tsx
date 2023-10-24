@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import FarmDetailTemplate from "../components/templates/FarmDetailTemplate";
-import { MapStackParamList, MapStackScreenProps } from "../types";
+import { RootStackParamList, RootStackScreenProps } from "../types";
 import { useCallback } from "react";
 import { useQueryFarm } from "../hooks/farm/query";
 import { useQueryFarmLikes } from "../hooks/like/query";
@@ -18,12 +18,10 @@ import { usePostNotification } from "../hooks/notification/mutate";
 import useNotification from "../hooks/sdk/useNotification";
 import { useQueryUser } from "../hooks/user/query";
 
-const FarmDetailScreen = ({
-  navigation,
-}: MapStackScreenProps<"FarmDetail">) => {
+const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
   const toast = useToast();
   const { t } = useTranslation("map");
-  const { params } = useRoute<RouteProp<MapStackParamList, "FarmDetail">>();
+  const { params } = useRoute<RouteProp<RootStackParamList, "FarmDetail">>();
   const {
     data: farm,
     refetch: refetchFarm,
@@ -49,11 +47,7 @@ const FarmDetailScreen = ({
     ) ?? false;
 
   useEffect(() => {
-    if (farm) {
-      farm.latitude &&
-        farm.longitude &&
-        getAddress(farm.latitude, farm.longitude);
-    }
+    farm && getAddress(farm.latitude, farm.longitude);
   }, [farm]);
 
   const refetch = useCallback(async () => {

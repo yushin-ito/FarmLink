@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import FarmListTemplate from "../components/templates/FarmListTemplate";
 import { useQueryUserFarms } from "../hooks/farm/query";
 import { useToast } from "native-base";
@@ -9,6 +9,7 @@ import { FarmStackScreenProps } from "../types";
 import { showAlert } from "../functions";
 import Alert from "../components/molecules/Alert";
 import { useDeleteFarm, useUpdateFarm } from "../hooks/farm/mutate";
+import { supabase } from "../supabase";
 
 const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   const toast = useToast();
@@ -24,10 +25,31 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
   } = useQueryUserFarms(session?.user.id);
   const [isRefetchingFarms, setIsRefetchingFarms] = useState(false);
 
+  useEffect(() => {
+    const channel = supabase
+      .channel("farm_list")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "farm",
+          filter: `ownerId=eq.${session?.user.id}`,
+        },
+        async () => {
+          await refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session]);
+
   const { mutateAsync: mutateAsyncUpdateFarm, isLoading: isLoadingUpdateFarm } =
     useUpdateFarm({
-      onSuccess: async () => {
-        await refetch();
+      onSuccess: () => {
         showAlert(
           toast,
           <Alert
@@ -51,9 +73,6 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
 
   const { mutateAsync: mutateAsyncDeleteFarm, isLoading: isLoadingDeleteFarm } =
     useDeleteFarm({
-      onSuccess: async () => {
-        await refetch();
-      },
       onError: () => {
         showAlert(
           toast,
@@ -80,26 +99,17 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     await mutateAsyncUpdateFarm({ farmId, privated: false });
   }, []);
 
-  const postFarmNavigationHandler = useCallback(() => {
-    navigation.navigate("PostFarm");
-  }, []);
-
   const deleteFarm = useCallback(async (farmId: number) => {
     await mutateAsyncDeleteFarm(farmId);
   }, []);
 
-  const mapNavigationHandler = useCallback(
-    (regionId: number, latitude: number, longitude: number) => {
-      navigation.navigate("TabNavigator", {
-        screen: "MapNavigator",
-        params: {
-          screen: "Map",
-          params: { regionId, latitude, longitude, type: "farm" },
-        },
-      });
-    },
-    []
-  );
+  const postFarmNavigationHandler = useCallback(() => {
+    navigation.navigate("PostFarm");
+  }, []);
+
+  const farmDetailNavigationHandler = useCallback((farmId: number) => {
+    navigation.navigate("FarmDetail", { farmId });
+  }, []);
 
   const settingNavigationHandler = useCallback(() => {
     navigation.navigate("TabNavigator", {
@@ -125,7 +135,7 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
       deleteFarm={deleteFarm}
       privateFarm={privateFarm}
       publicFarm={publicFarm}
-      mapNavigationHandler={mapNavigationHandler}
+      farmDetailNavigationHandler={farmDetailNavigationHandler}
       postFarmNavigationHandler={postFarmNavigationHandler}
       settingNavigationHandler={settingNavigationHandler}
     />

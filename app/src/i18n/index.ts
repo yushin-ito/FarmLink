@@ -19,6 +19,37 @@ declare module "i18next" {
   }
 }
 
+const getTimeDistance = (value: string, lng: string | undefined) => {
+  if (lng === "ja") {
+    const distance = formatDistance(new Date(), new Date(value), {
+      locale: fnsJa,
+    });
+
+    if (distance.indexOf("未満") !== -1) {
+      return "たった今";
+    } else if (
+      distance.indexOf("か月") !== -1 ||
+      distance.indexOf("年") !== -1
+    ) {
+      return formatDate(new Date(value), "yyyy/M/d");
+    } else {
+      return distance.replace("約", "") + "前";
+    }
+  } else {
+    const distance = formatDistance(new Date(), new Date(value), {
+      locale: fnsEn,
+    });
+
+    if (distance.indexOf("less") !== -1) {
+      return "now";
+    } else if (distance.indexOf("about") !== -1) {
+      return distance.replace("about", "");
+    } else {
+      return distance;
+    }
+  }
+};
+
 const languageDetector: LanguageDetectorAsyncModule = {
   type: "languageDetector",
   async: true,
@@ -53,34 +84,7 @@ i18n
       escapeValue: false,
       format: (value, format, lng) => {
         if (format === "time") {
-          if (lng === "ja") {
-            const distance = formatDistance(new Date(), new Date(value), {
-              locale: fnsJa,
-            });
-
-            if (distance.indexOf("未満") !== -1) {
-              return "たった今";
-            } else if (
-              distance.indexOf("か月") !== -1 ||
-              distance.indexOf("年") !== -1
-            ) {
-              return formatDate(new Date(value), "yyyy/M/d");
-            } else {
-              return distance.replace("約", "") + "前";
-            }
-          } else {
-            const distance = formatDistance(new Date(), new Date(value), {
-              locale: fnsEn,
-            });
-
-            if (distance.indexOf("less") !== -1) {
-              return "now";
-            } else if (distance.indexOf("about") !== -1) {
-              return distance.replace("about", "");
-            } else {
-              return distance;
-            }
-          }
+          return getTimeDistance(value, lng);
         }
         return value;
       },

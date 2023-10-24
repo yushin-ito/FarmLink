@@ -25,14 +25,10 @@ type FarmListTemplateProps = {
   isLoading: boolean;
   isRefetchingFarms: boolean;
   refetchFarms: () => Promise<void>;
-  deleteFarm: (farmId: number) => Promise<void>;
   privateFarm: (farmId: number) => Promise<void>;
   publicFarm: (farmId: number) => Promise<void>;
-  mapNavigationHandler: (
-    regionId: number,
-    latitude: number,
-    longitude: number
-  ) => void;
+  deleteFarm: (farmId: number) => Promise<void>;
+  farmDetailNavigationHandler: (farmId: number) => void;
   postFarmNavigationHandler: () => void;
   settingNavigationHandler: () => void;
 };
@@ -43,10 +39,10 @@ const FarmListTemplate = ({
   isLoading,
   isRefetchingFarms,
   refetchFarms,
-  deleteFarm,
   privateFarm,
   publicFarm,
-  mapNavigationHandler,
+  deleteFarm,
+  farmDetailNavigationHandler,
   postFarmNavigationHandler,
   settingNavigationHandler,
 }: FarmListTemplateProps) => {
@@ -73,17 +69,12 @@ const FarmListTemplate = ({
         <SkeletonFarmList rows={3} />
       ) : (
         <FlatList
-          w="100%"
           mb="20"
           data={farms}
           renderItem={({ item }) => (
             <FarmListItem
               item={item}
-              onPress={() =>
-                item.latitude &&
-                item.longitude &&
-                mapNavigationHandler(item.farmId, item.latitude, item.longitude)
-              }
+              onPress={() => farmDetailNavigationHandler(item.farmId)}
               onPressLeft={() =>
                 item.privated
                   ? publicFarm(item.farmId)

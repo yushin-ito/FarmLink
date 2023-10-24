@@ -51,24 +51,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     },
   });
 
-  useEffect(() => {
-    if (params?.regionId && params?.latitude && params?.longitude) {
-      setTouch(false);
-      setRegion({
-        regionId: params.regionId,
-        latitude: params.latitude,
-        longitude: params.longitude,
-      });
-      setLocation({
-        latitude: params.latitude,
-        longitude: params.longitude,
-      });
-    } else {
-      getPosition();
-    }
-    params?.type && setType(params.type);
-  }, [params]);
-
   const {
     data: rentals,
     refetch: refetchRentals,
@@ -78,7 +60,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
 
   useEffect(() => {
     const channel = supabase
-      .channel("rental")
+      .channel("rental_map")
       .on(
         "postgres_changes",
         {
@@ -88,9 +70,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           filter: `ownerId=eq.${session?.user.id}`,
         },
         async () => {
-          setIsRefetching(true);
           await refetchRentals();
-          setIsRefetching(false);
         }
       )
       .subscribe();
@@ -98,7 +78,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [session]);
 
   const {
     data: farms,
@@ -109,7 +89,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
 
   useEffect(() => {
     const channel = supabase
-      .channel("farm")
+      .channel("farm_map")
       .on(
         "postgres_changes",
         {
@@ -119,9 +99,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
           filter: `ownerId=eq.${session?.user.id}`,
         },
         async () => {
-          setIsRefetching(true);
           await refetchFarms();
-          setIsRefetching(false);
         }
       )
       .subscribe();
@@ -129,27 +107,46 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [session]);
 
   useEffect(() => {
-    setTouch(false);
-    if (type === "rental" && rentals?.length) {
+    if (params) {
+      setTouch(false);
+      setRegion({
+        regionId: params.regionId,
+        latitude: params.latitude,
+        longitude: params.longitude,
+      });
+      setLocation({
+        latitude: params.latitude,
+        longitude: params.longitude,
+      });
+      setType(params.type);
+    } else {
+      getPosition();
+    }
+  }, [params]);
+
+  useEffect(() => {
+    if (!region && type === "rental" && rentals?.length) {
       setRegion({
         regionId: rentals[0].rentalId,
         latitude: rentals[0].latitude,
         longitude: rentals[0].longitude,
       });
     }
-    if (type === "farm" && farms?.length) {
+    if (!region && type === "farm" && farms?.length) {
       setRegion({
         regionId: farms[0].farmId,
         latitude: farms[0].latitude,
         longitude: farms[0].longitude,
       });
     }
-  }, [rentals, farms]);
+  }, [region, type, rentals, farms]);
 
   useEffect(() => {
+    setTouch(false);
+    setRegion(null);
     setLocation(position);
   }, [position]);
 

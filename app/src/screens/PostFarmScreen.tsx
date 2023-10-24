@@ -14,7 +14,8 @@ const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
   const toast = useToast();
   const { t } = useTranslation("farm");
   const { session } = useAuth();
-  const [searchResult, setSearchResult] = useState<SearchDeviceResponse[0]>();
+  const [searchResult, setSearchResult] =
+    useState<SearchDeviceResponse[number]>();
 
   useEffect(() => {
     getPosition();
@@ -46,31 +47,8 @@ const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
 
   const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
     usePostFarm({
-      onSuccess: async (data) => {
+      onSuccess: () => {
         navigation.goBack();
-        if (position) {
-          navigation.navigate("TabNavigator", {
-            screen: "MapNavigator",
-            params: {
-              screen: "Map",
-              params: {
-                regionId: data[0].farmId,
-                latitude: position.latitude,
-                longitude: position.longitude,
-                type: "rental",
-              },
-            },
-          });
-        } else {
-          showAlert(
-            toast,
-            <Alert
-              status="error"
-              onPressCloseButton={() => toast.closeAll()}
-              text={t("error")}
-            />
-          );
-        }
       },
       onError: () => {
         showAlert(

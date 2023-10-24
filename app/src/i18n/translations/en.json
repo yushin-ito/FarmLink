@@ -1,7 +1,6 @@
 {
   "app": {
     "permitRequestNoti": "Please grant notification permission.",
-    "fetchError": "Failed to fetch data.",
     "error": "An error occurred",
     "permitRequestSave": "Please grant save permission",
     "saved": "Saved in.",
@@ -66,7 +65,7 @@
     "searchFarm": "Search Farm",
     "searchRental": "Search rental",
     "noDescription": "No description",
-    "own": "'s ",
+    "own": "{{ who }}'s ",
     "temperture": "Temp",
     "humidity": "Humi",
     "moisture": "Moi",
@@ -95,6 +94,9 @@
     "permitRequestGPS": "Please grant GPS permission.",
     "permitRequestNoti": "Please grant notification permission.",
     "permitRequestCam": "Please grant camera permission.",
+    "fetchError": "Failed to fetch data.",
+    "tryAgain": "Please try again after a while.",
+    "close": "Close",
     "error": "An error occurred",
     "dev": "This function is currently under development."
   },
@@ -211,6 +213,7 @@
     "delete": "Delete",
     "search": "Search",
     "create": "Create",
+    "selectUser": "Search and select user",
     "time": "{{ date, time }}",
     "error": "An error occurred",
     "dev": "This function is currently under development."

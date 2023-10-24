@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import LikeListTemplate from "../components/templates/LikeListTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
@@ -8,6 +8,7 @@ import { useDeleteFarmLike, useDeleteRentalLike } from "../hooks/like/mutate";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
+import { supabase } from "../supabase";
 
 const LikeListScreen = ({
   navigation,
@@ -23,13 +24,32 @@ const LikeListScreen = ({
   const [isRefetchingLikes, setIsRefetchingRentals] = useState(false);
   const [type, setType] = useState<"rental" | "farm">("rental");
 
+  useEffect(() => {
+    const channel = supabase
+      .channel("like_list")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "like",
+          filter: `userId=eq.${session?.user.id}`,
+        },
+        async () => {
+          await refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session]);
+
   const {
     mutateAsync: mutateAsyncDeleteRentalLike,
     isLoading: isLoadingDeleteRentalLike,
   } = useDeleteRentalLike({
-    onSuccess: async () => {
-      await refetch();
-    },
     onError: () => {
       showAlert(
         toast,
@@ -46,9 +66,6 @@ const LikeListScreen = ({
     mutateAsync: mutateAsyncDeleteFarmLike,
     isLoading: isLoadingDeleteFarmLike,
   } = useDeleteFarmLike({
-    onSuccess: async () => {
-      await refetch();
-    },
     onError: () => {
       showAlert(
         toast,
@@ -81,19 +98,14 @@ const LikeListScreen = ({
     setIsRefetchingRentals(false);
   }, []);
 
-  const mapNavigationHandler = useCallback(
-    async (regionId: number, latitude: number, longitude: number) => {
-      navigation.goBack();
-      navigation.navigate("TabNavigator", {
-        screen: "MapNavigator",
-        params: {
-          screen: "Map",
-          params: { regionId, latitude, longitude, type },
-        },
-      });
-    },
-    [type]
-  );
+  const rentalDetailNavigationHandler = useCallback((rentalId: number) => {
+    navigation.navigate("RentalDetail", { rentalId });
+  }, []);
+
+  const farmDetailNavigationHandler = useCallback((farmId: number) => {
+    navigation.navigate("FarmDetail", { farmId });
+  }, []);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -112,7 +124,8 @@ const LikeListScreen = ({
         isLoadingDeleteFarmLike
       }
       isRefetchingLikes={isRefetchingLikes}
-      mapNavigationHandler={mapNavigationHandler}
+      rentalDetailNavigationHandler={rentalDetailNavigationHandler}
+      farmDetailNavigationHandler={farmDetailNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

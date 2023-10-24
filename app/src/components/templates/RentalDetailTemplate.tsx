@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Feather, AntDesign, Ionicons } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 
 import {
   Box,
@@ -80,6 +80,16 @@ const RentalDetailTemplate = ({
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  if (!isLoading && !rental) {
+    Alert.alert(t("fetchError"), t("tryAgain"), [
+      {
+        text: t("close"),
+        style: "cancel",
+        onPress: goBackNavigationHandler,
+      },
+    ]);
+  }
+
   return (
     <Box flex={1} safeAreaTop>
       <HStack
@@ -151,11 +161,11 @@ const RentalDetailTemplate = ({
               }}
             />
           ) : (
-            <Center w={width} h="240" bg={imageColor}>
+            <Center h="64" bg={imageColor}>
               <Icon
-                as={<Ionicons />}
-                name="image-outline"
-                size="6xl"
+                as={<Feather />}
+                name="image"
+                size="5xl"
                 color={iconColor}
               />
             </Center>
@@ -270,7 +280,6 @@ const RentalDetailTemplate = ({
           pb={Platform.OS === "android" ? "2" : "9"}
           px="6"
           space="2"
-          shadow="2"
           borderColor={borderColor}
           borderTopWidth="0.5"
           bg={bgColor}

@@ -51,6 +51,16 @@ export type RootStackParamList = {
   AuthNavigator: NavigatorScreenParams<AuthStackParamList> | undefined;
   TabNavigator: NavigatorScreenParams<TabParamList> | undefined;
   Walkthrough: undefined;
+  ImagePreview: {
+    title: string;
+    imageUrl: string;
+    chatId?: number;
+    talkId?: number;
+  };
+  FarmDetail: { farmId: number };
+  RentalDetail: { rentalId: number };
+  EditFarm: { farmId: number };
+  EditRental: { rentalId: number };
 };
 
 export type AuthStackParamList = {
@@ -76,17 +86,7 @@ export type MapStackParamList = {
   };
   SearchMap: { type: "rental" | "farm" };
   RentalGrid: undefined;
-  RentalDetail: { rentalId: number };
-  EditRental: { rentalId: number };
-  FarmDetail: { farmId: number };
-  EditFarm: { farmId: number };
   PostRental: undefined;
-  ImagePreview: {
-    title: string;
-    imageUrl: string;
-    chatId?: number;
-    talkId?: number;
-  };
 };
 
 export type CommunityStackParamList = {
@@ -97,12 +97,6 @@ export type CommunityStackParamList = {
   };
   PostCommunity: { category: Category };
   SearchCommunity: { category: Category };
-  ImagePreview: {
-    title: string;
-    imageUrl: string;
-    chatId?: number;
-    talkId?: number;
-  };
 };
 
 export type FarmStackParamList = {
@@ -116,12 +110,6 @@ export type TalkStackParamList = {
   TalkChat: { talkId: number };
   PostTalk: undefined;
   SearchTalk: undefined;
-  ImagePreview: {
-    title: string;
-    imageUrl: string;
-    chatId?: number;
-    talkId?: number;
-  };
 };
 
 export type SettingStackParamList = {
@@ -133,6 +121,8 @@ export type SettingStackParamList = {
   Notification: undefined;
   Environment: undefined;
 };
+
+export type RootStackScreenProps = NativeStackScreenProps<RootStackParamList>;
 
 export type AuthStackScreenProps = CompositeScreenProps<
   NativeStackScreenProps<AuthStackParamList>,

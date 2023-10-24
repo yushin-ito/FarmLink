@@ -2,6 +2,7 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 import {
   Box,
   Button,
+  Center,
   HStack,
   Heading,
   Icon,
@@ -68,6 +69,16 @@ const FarmDetailTemplate = ({
 
   const { width } = useWindowDimensions();
 
+  if (!isLoading && !farm) {
+    Alert.alert(t("fetchError"), t("tryAgain"), [
+      {
+        text: t("close"),
+        style: "cancel",
+        onPress: goBackNavigationHandler,
+      },
+    ]);
+  }
+
   return (
     <Box flex={1} safeAreaTop>
       <HStack
@@ -109,16 +120,25 @@ const FarmDetailTemplate = ({
         {isLoading ? (
           <Skeleton w={width} h="64" />
         ) : (
-          <Box h="64" bg={imageColor}>
+          <Box bg={imageColor}>
             {farm?.device.imageUrl ? (
-              <Image
-                source={{
-                  uri: farm.device.imageUrl + "?=" + farm.device.updatedAt,
-                }}
-                style={{ flex: 1 }}
-              />
+              <Box h="64">
+                <Image
+                  source={{
+                    uri: farm.device.imageUrl + "?=" + farm.device.updatedAt,
+                  }}
+                  style={{ flex: 1 }}
+                />
+              </Box>
             ) : (
-              <Icon as={<Feather />} name="image" size="lg" color={iconColor} />
+              <Center h="64">
+                <Icon
+                  as={<Feather />}
+                  name="image"
+                  size="5xl"
+                  color={iconColor}
+                />
+              </Center>
             )}
           </Box>
         )}
@@ -214,7 +234,6 @@ const FarmDetailTemplate = ({
           pb={Platform.OS === "android" ? "2" : "9"}
           px="6"
           space="2"
-          shadow="2"
           borderColor={borderColor}
           borderTopWidth="0.5"
           bg={bgColor}

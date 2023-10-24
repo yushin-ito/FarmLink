@@ -45,7 +45,7 @@ const EnvironmentTemplate = ({
     <Box flex={1} safeAreaTop>
       <Overlay
         isOpen={isLoadingChangeLanguage || isLoadingChangeTheme}
-        showSpinner
+        loadingEnabled
       />
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton

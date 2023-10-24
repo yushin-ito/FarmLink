@@ -71,7 +71,7 @@ const RentalPreviewList = memo(
 
     useEffect(() => {
       if (region && rentals && !touch) {
-        const index = rentals?.findIndex(
+        const index = rentals.findIndex(
           ({ rentalId }) => rentalId === region.regionId
         );
         index !== -1 && scrollToOffset(index);

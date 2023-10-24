@@ -33,6 +33,7 @@ const updateFarm = async (farm: Farm["Update"]) => {
 
 const deleteFarm = async (farmId: number) => {
   await supabase.from("like").delete().eq("farmId", farmId);
+  await supabase.from("notification").delete().eq("farmId", farmId);
   const { data, error } = await supabase
     .from("farm")
     .delete()

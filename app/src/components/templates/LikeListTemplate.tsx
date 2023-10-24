@@ -25,11 +25,8 @@ type LikeListTemplateProps = {
   deleteRentalLike: (likeId: number) => Promise<void>;
   deleteFarmLike: (farmId: number) => Promise<void>;
   refetchLikes: () => Promise<void>;
-  mapNavigationHandler: (
-    regionId: number,
-    latitude: number,
-    longitude: number
-  ) => Promise<void>;
+  rentalDetailNavigationHandler: (rentalId: number) => void;
+  farmDetailNavigationHandler: (farmId: number) => void;
   isLoading: boolean;
   isRefetchingLikes: boolean;
   goBackNavigationHandler: () => void;
@@ -44,7 +41,8 @@ const LikeListTemplate = ({
   refetchLikes,
   isLoading,
   isRefetchingLikes,
-  mapNavigationHandler,
+  rentalDetailNavigationHandler,
+  farmDetailNavigationHandler,
   goBackNavigationHandler,
 }: LikeListTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -125,14 +123,7 @@ const LikeListTemplate = ({
               <LikeListItem
                 item={item}
                 onPress={() =>
-                  item.rental &&
-                  item.rental.latitude &&
-                  item.rental.longitude &&
-                  mapNavigationHandler(
-                    item.rental.rentalId,
-                    item.rental.latitude,
-                    item.rental.longitude
-                  )
+                  rentalDetailNavigationHandler(item.rental.rentalId)
                 }
                 type="rental"
                 onPressRight={() =>
@@ -167,16 +158,7 @@ const LikeListTemplate = ({
             renderItem={({ item }) => (
               <LikeListItem
                 item={item}
-                onPress={() =>
-                  item.farm.farmId &&
-                  item.farm.latitude &&
-                  item.farm.longitude &&
-                  mapNavigationHandler(
-                    item.farm.farmId,
-                    item.farm.latitude,
-                    item.farm.longitude
-                  )
-                }
+                onPress={() => farmDetailNavigationHandler(item.farm.farmId)}
                 type="farm"
                 onPressRight={() => item.farmId && deleteFarmLike(item.farmId)}
               />

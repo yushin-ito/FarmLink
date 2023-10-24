@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import RentalListTemplate from "../components/templates/RentalListTemplate";
 import { SettingStackScreenProps } from "../types";
 import useAuth from "../hooks/auth/useAuth";
@@ -8,6 +8,7 @@ import { useDeleteRental, useUpdateRental } from "../hooks/rental/mutate";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
+import { supabase } from "../supabase";
 
 const RentalListScreen = ({
   navigation,
@@ -22,12 +23,33 @@ const RentalListScreen = ({
   } = useQueryUserRentals(session?.user.id);
   const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
 
+  useEffect(() => {
+    const channel = supabase
+      .channel("rental_list")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "rental",
+          filter: `ownerId=eq.${session?.user.id}`,
+        },
+        async () => {
+          await refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session]);
+
   const {
     mutateAsync: mutateAsyncUpdateRental,
     isLoading: isLoadingUpdateRental,
   } = useUpdateRental({
     onSuccess: async () => {
-      await refetch();
       showAlert(
         toast,
         <Alert
@@ -53,9 +75,6 @@ const RentalListScreen = ({
     mutateAsync: mutateAsyncDeleteRental,
     isLoading: isLoadingDeleteRental,
   } = useDeleteRental({
-    onSuccess: async () => {
-      await refetch();
-    },
     onError: () => {
       showAlert(
         toast,
@@ -90,19 +109,9 @@ const RentalListScreen = ({
     await mutateAsyncDeleteRental(rentalId);
   }, []);
 
-  const mapNavigationHandler = useCallback(
-    async (regionId: number, latitude: number, longitude: number) => {
-      navigation.goBack();
-      navigation.navigate("TabNavigator", {
-        screen: "MapNavigator",
-        params: {
-          screen: "Map",
-          params: { regionId, latitude, longitude, type: "rental" },
-        },
-      });
-    },
-    []
-  );
+  const rentalDetailNavigationHandler = useCallback((rentalId: number) => {
+    navigation.navigate("RentalDetail", { rentalId });
+  }, []);
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
@@ -119,7 +128,7 @@ const RentalListScreen = ({
         isLoadingRentals || isLoadingUpdateRental || isLoadingDeleteRental
       }
       isRefetchingRentals={isRefetchingRentals}
-      mapNavigationHandler={mapNavigationHandler}
+      rentalDetailNavigationHandler={rentalDetailNavigationHandler}
       postRentalNavigationHandler={postRentalNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />

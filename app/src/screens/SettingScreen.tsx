@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useToast } from "native-base";
 import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
@@ -35,28 +35,6 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     await refetchNotifications();
     setIsRefetching(false);
   }, []);
-
-  useEffect(() => {
-    const channel = supabase
-      .channel("notification")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "notification",
-          filter: `recieverId=eq.${session?.user.id}`,
-        },
-        async () => {
-          await refetchNotifications();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [session]);
 
   const { mutateAsync: mutateAsyncSignOut, isLoading: isLoadingSignOut } =
     useSignOut({

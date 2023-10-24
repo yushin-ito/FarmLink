@@ -25,7 +25,7 @@ const SkeletonCommunityList = memo(({ rows }: SkeletonCommunityListProps) => {
             </Box>
             <VStack w="75%" justifyContent="space-between">
               <Skeleton.Text lines={2} />
-              <Skeleton.Text lines={1} />
+              <Skeleton.Text w="50%" lines={1} />
             </VStack>
           </HStack>
           <Divider w="80%" bg={borderColor} />

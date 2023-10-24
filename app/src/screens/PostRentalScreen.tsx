@@ -50,31 +50,8 @@ const PostRentalScreen = ({
 
   const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
     usePostRental({
-      onSuccess: async (data) => {
+      onSuccess: async () => {
         navigation.goBack();
-        if (position) {
-          navigation.navigate("TabNavigator", {
-            screen: "MapNavigator",
-            params: {
-              screen: "Map",
-              params: {
-                regionId: data[0].rentalId,
-                latitude: position.latitude,
-                longitude: position.longitude,
-                type: "rental",
-              },
-            },
-          });
-        } else {
-          showAlert(
-            toast,
-            <Alert
-              status="error"
-              onPressCloseButton={() => toast.closeAll()}
-              text={t("error")}
-            />
-          );
-        }
       },
       onError: () => {
         showAlert(

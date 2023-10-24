@@ -32,6 +32,7 @@ type FarmPreviewListProps = {
   setTouch: Dispatch<SetStateAction<boolean>>;
   region: Region | null;
   setRegion: Dispatch<SetStateAction<Region | null>>;
+  readMore: () => void;
   farmDetailNavigationHandler: (rentalId: number) => void;
 };
 
@@ -42,6 +43,7 @@ const FarmPreviewList = memo(
     setTouch,
     region,
     setRegion,
+    readMore,
     farmDetailNavigationHandler,
   }: FarmPreviewListProps) => {
     const { t } = useTranslation("map");
@@ -78,6 +80,7 @@ const FarmPreviewList = memo(
 
     return (
       <FlatList
+        ref={previewRef}
         position="absolute"
         bottom="24"
         alignSelf="center"
@@ -134,7 +137,7 @@ const FarmPreviewList = memo(
                 </Center>
                 <VStack w="60%">
                   <Heading fontSize="md" numberOfLines={1} ellipsizeMode="tail">
-                    {item.owner.name + t("own") + item.name}
+                    {t("own", { who: item.owner.name }) + item.name}
                   </Heading>
                   <Text
                     color={textColor}
@@ -181,6 +184,8 @@ const FarmPreviewList = memo(
             )}
           </Pressable>
         )}
+        onEndReached={readMore}
+        onEndReachedThreshold={0.3}
         onScrollEndDrag={() => setTouch(true)}
         onMomentumScrollEnd={(event) => {
           const currentIndex = Math.floor(

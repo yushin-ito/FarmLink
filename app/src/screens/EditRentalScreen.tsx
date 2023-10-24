@@ -12,16 +12,14 @@ import { useTranslation } from "react-i18next";
 import useLocation from "../hooks/sdk/useLocation";
 import useImage from "../hooks/sdk/useImage";
 import { useQueryRental } from "../hooks/rental/query";
-import { MapStackScreenProps, MapStackParamList, Rate } from "../types";
+import { Rate, RootStackScreenProps, RootStackParamList } from "../types";
 import { supabase } from "../supabase";
 import { useRoute, RouteProp } from "@react-navigation/native";
 
-const EditRentalScreen = ({
-  navigation,
-}: MapStackScreenProps<"EditRental">) => {
+const EditRentalScreen = ({ navigation }: RootStackScreenProps) => {
   const toast = useToast();
   const { t } = useTranslation("setting");
-  const { params } = useRoute<RouteProp<MapStackParamList, "EditRental">>();
+  const { params } = useRoute<RouteProp<RootStackParamList, "EditRental">>();
   const { data: rental, refetch: refetchRental } = useQueryRental(
     params.rentalId
   );
