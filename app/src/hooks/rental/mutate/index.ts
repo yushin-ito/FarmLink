@@ -1,7 +1,8 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
+import { decode } from "base64-arraybuffer";
+
 import { supabase } from "../../../supabase";
 import { Rental, UseMutationResult } from "../../../types";
-import { decode } from "base64-arraybuffer";
 
 export type PostRentalResponse = Awaited<ReturnType<typeof postRental>>;
 export type UpdateRentalResponse = Awaited<ReturnType<typeof updateRental>>;
@@ -12,7 +13,12 @@ export type DeleteRentalResponse = Awaited<ReturnType<typeof deleteRental>>;
 export type SearchRentalsResponse = Awaited<ReturnType<typeof searchRentals>>;
 
 const postRental = async (rental: Rental["Insert"]) => {
-  const { data, error } = await supabase.from("rental").insert(rental).select();
+  const { data, error } = await supabase
+    .from("rental")
+    .insert(rental)
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
@@ -21,13 +27,15 @@ const postRental = async (rental: Rental["Insert"]) => {
 
 const updateRental = async (rental: Rental["Update"]) => {
   if (!rental.rentalId) {
-    return;
+    throw Error();
   }
   const { data, error } = await supabase
     .from("rental")
     .update(rental)
     .eq("rentalId", rental.rentalId)
-    .select();
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
@@ -36,12 +44,14 @@ const updateRental = async (rental: Rental["Update"]) => {
 
 const postRentalImage = async (base64: string) => {
   const filePath = `rental/${Math.random()}.png`;
+
   const { data, error } = await supabase.storage
     .from("image")
     .upload(filePath, decode(base64), {
       contentType: "image",
       upsert: true,
     });
+
   if (error) {
     throw error;
   }
@@ -54,18 +64,22 @@ const deleteRental = async (rentalId: number) => {
   const { data, error } = await supabase
     .from("rental")
     .delete()
-    .eq("rentalId", rentalId);
+    .eq("rentalId", rentalId)
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
   return data;
 };
 
-const searchRentals = async (text: string) => {
+const searchRentals = async (query: string) => {
   const { data, error } = await supabase
     .from("rental")
     .select()
-    .ilike("name", `%${text}%`);
+    .ilike("name", `%${query}%`);
+
   if (error) {
     throw error;
   }

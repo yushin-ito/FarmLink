@@ -4,6 +4,7 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
 import { Database } from "./schema";
 
 export type Locale = "en" | "ja";
@@ -95,7 +96,7 @@ export type CommunityStackParamList = {
     communityId: number;
     category: Category;
   };
-  PostCommunity: { category: Category };
+  PostCommunity: undefined;
   SearchCommunity: { category: Category };
 };
 

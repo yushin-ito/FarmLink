@@ -1,6 +1,8 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 import { Device, Farm, Notification, Rental, User } from "../../../types";
+import useAuth from "../../auth/useAuth";
 
 export type GetNotificationsResponse = Awaited<
   ReturnType<typeof getNotifications>
@@ -23,15 +25,18 @@ const getNotifications = async (userId: string | undefined) => {
         from: User["Row"];
       })[]
     >();
+
   if (error) {
     throw error;
   }
-
   return data;
 };
 
-export const useQueryNotifications = (userId: string | undefined) =>
-  useQuery({
-    queryKey: ["notification", userId],
-    queryFn: async () => await getNotifications(userId),
+export const useQueryNotifications = () => {
+  const { session } = useAuth();
+
+  return useQuery({
+    queryKey: ["notification", session?.user.id],
+    queryFn: async () => await getNotifications(session?.user.id),
   });
+};

@@ -1,5 +1,6 @@
 import React, { memo } from "react";
-import { GetTalksResponse } from "../../hooks/talk/query";
+
+import { Feather } from "@expo/vector-icons";
 import {
   Divider,
   HStack,
@@ -9,9 +10,11 @@ import {
   VStack,
   useColorModeValue,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
-import Avatar from "../molecules/Avatar";
 import { useTranslation } from "react-i18next";
+
+import { GetTalksResponse } from "../../hooks/talk/query";
+import Avatar from "../molecules/Avatar";
+
 
 type SearchTalkItemProps = {
   item: GetTalksResponse[number];

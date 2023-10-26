@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Alert, useWindowDimensions } from "react-native";
+
 import { Feather, AntDesign } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { LocationGeocodedAddress } from "expo-location";
 import {
   Button,
   Box,
@@ -18,19 +22,17 @@ import {
   Spinner,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import MapView, { LatLng, Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
-import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Alert, useWindowDimensions } from "react-native";
-import { Image } from "expo-image";
-import { LocationGeocodedAddress } from "expo-location";
+import MapView, { LatLng, Marker } from "react-native-maps";
+
 import { GetRentalResponse } from "../../hooks/rental/query";
 import { Rate } from "../../types";
+import Input from "../molecules/Input";
 import RateActionSheet from "../organisms/RateActionSheet";
 
 type EditRentalTemplateProps = {
-  rental: GetRentalResponse | null | undefined;
+  rental: GetRentalResponse | undefined;
   images: string[];
   position: LatLng | undefined;
   address: LocationGeocodedAddress | undefined;

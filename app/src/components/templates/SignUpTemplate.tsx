@@ -1,6 +1,8 @@
 import React, { memo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+
 import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { StatusBar } from "expo-status-bar";
 import {
   Box,
   Button,
@@ -17,11 +19,12 @@ import {
   VStack,
   useColorModeValue,
 } from "native-base";
+import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Image } from "expo-image";
-import { StatusBar } from "expo-status-bar";
+
+import Input from "../molecules/Input";
+
 
 export type SignUpTemplateProps = {
   isLoading: boolean;

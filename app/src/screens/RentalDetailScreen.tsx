@@ -1,49 +1,70 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList, RootStackScreenProps } from "../types";
-import RentalDetailTemplate from "../components/templates/RentalDetailTemplate";
-import { useQueryRental } from "../hooks/rental/query";
-import { showAlert, wait } from "../functions";
-import { useQueryTalks } from "../hooks/talk/query";
-import useAuth from "../hooks/auth/useAuth";
-import { usePostTalk } from "../hooks/talk/mutate";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+import { RouteProp, useFocusEffect, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
-import useLocation from "../hooks/sdk/useLocation";
-import { useQueryRentalLikes } from "../hooks/like/query";
+import RentalDetailTemplate from "../components/templates/RentalDetailTemplate";
+import { showAlert } from "../functions";
 import { useDeleteRentalLike, usePostRentalLike } from "../hooks/like/mutate";
+import { useQueryRentalLikes } from "../hooks/like/query";
 import { usePostNotification } from "../hooks/notification/mutate";
+import { useQueryRental } from "../hooks/rental/query";
+import useLocation from "../hooks/sdk/useLocation";
 import useNotification from "../hooks/sdk/useNotification";
+import { usePostTalk } from "../hooks/talk/mutate";
+import { useQueryTalks } from "../hooks/talk/query";
 import { useQueryUser } from "../hooks/user/query";
+import { RootStackParamList, RootStackScreenProps } from "../types";
 
 const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
-  const toast = useToast();
   const { t } = useTranslation("map");
+  const toast = useToast();
   const { params } = useRoute<RouteProp<RootStackParamList, "RentalDetail">>();
+
+  const focusRef = useRef(true);
+  const [isRefetching, setIsRefetching] = useState(false);
+
+  const { data: user, isLoading: isLoadingUser } = useQueryUser();
   const {
     data: rental,
     isLoading: isLoadingRental,
     refetch: refetchRental,
   } = useQueryRental(params.rentalId);
-  const { session } = useAuth();
-  const { data: user, isLoading: isLoadingUser } = useQueryUser(
-    session?.user.id
-  );
-  const { data: talks, refetch: refetchTalks } = useQueryTalks(
-    session?.user.id
-  );
   const {
     data: likes,
     refetch: refetchLikes,
     isLoading: isLoadingLikes,
   } = useQueryRentalLikes(params.rentalId);
-  const [isRefetching, setIsRefetching] = useState(false);
-  const liked =
-    likes?.some(
-      (item) =>
-        item.userId === session?.user.id && item.rentalId === params.rentalId
-    ) ?? false;
+  const { data: talks } = useQueryTalks();
+
+  const liked = useMemo(
+    () =>
+      likes?.some(
+        (item) =>
+          item.userId === user?.userId && item.rentalId === params.rentalId
+      ) ?? false,
+    [user, likes, params]
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
+
+      refetchRental();
+      refetchLikes();
+    }, [])
+  );
 
   useEffect(() => {
     rental && getAddress(rental.latitude, rental.longitude);
@@ -58,7 +79,7 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
 
   const {
     mutateAsync: mutateAsyncPostNotification,
-    isLoading: isLoadingPostNotification,
+    isPending: isLoadingPostNotification,
   } = usePostNotification({
     onError: () => {
       showAlert(
@@ -72,11 +93,11 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostLike, isLoading: isLoadingPostLike } =
+  const { mutateAsync: mutateAsyncPostLike, isPending: isLoadingPostLike } =
     usePostRentalLike({
       onSuccess: async () => {
         await refetchLikes();
-        if (user && rental && session?.user.id !== rental.ownerId) {
+        if (user && rental && user.userId !== rental.ownerId) {
           await mutateAsyncPostNotification({
             recieverId: rental.ownerId,
             senderId: user.userId,
@@ -109,7 +130,7 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncDeleteLike, isLoading: isLoadingDeleteLike } =
+  const { mutateAsync: mutateAsyncDeleteLike, isPending: isLoadingDeleteLike } =
     useDeleteRentalLike({
       onSuccess: async () => {
         await refetchLikes();
@@ -149,29 +170,18 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostTalk, isLoading: isLoadingPostTalk } =
+  const { mutateAsync: mutateAsyncPostTalk, isPending: isLoadingPostTalk } =
     usePostTalk({
-      onSuccess: async () => {
-        const { data } = await refetchTalks();
-        const talk = data?.find((item) => item.to.userId === rental?.ownerId);
-        if (talk) {
-          navigation.navigate("TabNavigator", {
-            screen: "TalkNavigator",
+      onSuccess: async ({ talkId }) => {
+        navigation.navigate("TabNavigator", {
+          screen: "TalkNavigator",
+          params: {
+            screen: "TalkChat",
             params: {
-              screen: "TalkList",
+              talkId,
             },
-          });
-          await wait(0.1);
-          navigation.navigate("TabNavigator", {
-            screen: "TalkNavigator",
-            params: {
-              screen: "TalkChat",
-              params: {
-                talkId: talk.talkId,
-              },
-            },
-          });
-        }
+          },
+        });
       },
       onError: () => {
         showAlert(
@@ -209,31 +219,26 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
   });
 
   const postLike = useCallback(async () => {
-    if (session) {
+    if (user) {
       await mutateAsyncPostLike({
-        userId: session.user.id,
+        userId: user.userId,
         rentalId: params.rentalId,
       });
     }
-  }, [params, session]);
+  }, [user, params]);
 
   const deleteLike = useCallback(async () => {
-    await mutateAsyncDeleteLike({
-      rentalId: params.rentalId,
-      userId: session?.user.id,
-    });
-  }, [params, session]);
+    if (user) {
+      await mutateAsyncDeleteLike({
+        rentalId: params.rentalId,
+        userId: user.userId,
+      });
+    }
+  }, [user, params]);
 
   const talkChatNavigationHandler = useCallback(async () => {
     const talk = talks?.find((item) => item.to.userId === rental?.ownerId);
     if (talk) {
-      navigation.navigate("TabNavigator", {
-        screen: "TalkNavigator",
-        params: {
-          screen: "TalkList",
-        },
-      });
-      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "TalkNavigator",
         params: {
@@ -243,9 +248,9 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
           },
         },
       });
-    } else if (session && rental) {
+    } else if (user && rental) {
       await mutateAsyncPostTalk({
-        senderId: session.user.id,
+        senderId: user.userId,
         recieverId: rental.ownerId,
       });
     } else {
@@ -258,7 +263,7 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
         />
       );
     }
-  }, [talks, session, rental]);
+  }, [user, rental, talks]);
 
   const editRentalNavigationHandler = useCallback(async (rentalId: number) => {
     navigation.navigate("EditRental", { rentalId });
@@ -277,7 +282,7 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
 
   return (
     <RentalDetailTemplate
-      owned={session?.user.id === rental?.ownerId}
+      owned={user?.userId === rental?.ownerId}
       liked={liked}
       likes={likes}
       postLike={postLike}

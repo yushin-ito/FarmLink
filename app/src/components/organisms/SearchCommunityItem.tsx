@@ -1,5 +1,7 @@
 import React, { memo } from "react";
-import { SearchCommunitiesResponse } from "../../hooks/community/mutate";
+import { Keyboard } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
 import {
   Divider,
   HStack,
@@ -12,10 +14,12 @@ import {
   Button,
   Modal,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
-import Avatar from "../molecules/Avatar";
 import { useTranslation } from "react-i18next";
-import { Keyboard } from "react-native";
+
+import { SearchCommunitiesResponse } from "../../hooks/community/mutate";
+import Avatar from "../molecules/Avatar";
+
+
 
 type SearchCommunityItemProps = {
   item: SearchCommunitiesResponse[number];

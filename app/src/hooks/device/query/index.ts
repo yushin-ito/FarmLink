@@ -1,21 +1,23 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 
 export type GetDeviceResponse = Awaited<ReturnType<typeof getDevice>>;
 
 const getDevice = async (deviceId: string | undefined) => {
   if (!deviceId) {
-    return null;
+    return;
   }
+
   const { data, error } = await supabase
     .from("device")
     .select("*")
     .eq("deviceId", deviceId)
     .single();
+
   if (error) {
     throw error;
   }
-
   return data;
 };
 

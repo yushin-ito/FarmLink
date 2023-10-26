@@ -1,3 +1,7 @@
+import React, { useState } from "react";
+import { Alert } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   Center,
@@ -12,20 +16,18 @@ import {
   useColorModeValue,
   useDisclose,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { Alert } from "react-native";
-import ChatItem from "../organisms/ChatItem";
-import ChatBar from "../organisms/ChatBar";
-import { GetUserResponse } from "../../hooks/user/query";
-import ChatActionSheet from "../organisms/ChatActionSheet";
 import { useTranslation } from "react-i18next";
+
 import { GetTalkChatsResponse } from "../../hooks/chat/query";
+import { GetUserResponse } from "../../hooks/user/query";
 import Overlay from "../molecules/Overlay";
+import ChatActionSheet from "../organisms/ChatActionSheet";
+import ChatBar from "../organisms/ChatBar";
+import ChatItem from "../organisms/ChatItem";
 
 type ChatTemplateProps = {
   title: string | null | undefined;
-  user: GetUserResponse | null | undefined;
+  user: GetUserResponse | undefined;
   chats: GetTalkChatsResponse | undefined;
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;

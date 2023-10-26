@@ -1,7 +1,7 @@
 import React from "react";
-import { Feather } from "@expo/vector-icons";
-import { Locale } from "../../types";
+import { ColorSchemeName } from "react-native";
 
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   VStack,
@@ -14,7 +14,8 @@ import {
   Radio,
 } from "native-base";
 import { useTranslation } from "react-i18next";
-import { ColorSchemeName } from "react-native";
+
+import { Locale } from "../../types";
 import Overlay from "../molecules/Overlay";
 
 type EnvironmentTemplateProps = {

@@ -1,6 +1,7 @@
+import { ReactNode } from "react";
+
 import { IToastService } from "native-base/lib/typescript/components/composites/Toast";
 
-import { ReactNode } from "react";
 
 export const wait = (sec: number) => {
   return new Promise((resolve) => setTimeout(resolve, sec * 1000));

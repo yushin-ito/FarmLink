@@ -1,21 +1,24 @@
 import React, { useCallback, useState } from "react";
-import SearchMapTemplate from "../components/templates/SearchMapTemplate";
-import { SearchFarmsResponse, useSearchFarms } from "../hooks/farm/mutate";
-import { showAlert } from "../functions";
+
+import { useRoute, RouteProp } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
-import { MapStackParamList, MapStackScreenProps } from "../types";
+import SearchMapTemplate from "../components/templates/SearchMapTemplate";
+import { showAlert } from "../functions";
+import { SearchFarmsResponse, useSearchFarms } from "../hooks/farm/mutate";
 import {
   SearchRentalsResponse,
   useSearchRentals,
 } from "../hooks/rental/mutate";
-import { useRoute, RouteProp } from "@react-navigation/native";
+import { MapStackParamList, MapStackScreenProps } from "../types";
 
 const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
   const { t } = useTranslation("map");
   const toast = useToast();
   const { params } = useRoute<RouteProp<MapStackParamList, "SearchMap">>();
+  
   const [searchRentalsResult, setSearchRentalsResult] =
     useState<SearchRentalsResponse>();
   const [searchFarmsResult, setSearchFarmsResult] =
@@ -23,7 +26,7 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
 
   const {
     mutateAsync: mutateAsyncSearchRentals,
-    isLoading: isLoadingSearchRentals,
+    isPending: isLoadingSearchRentals,
   } = useSearchRentals({
     onSuccess: (data) => {
       setSearchRentalsResult(data);
@@ -50,7 +53,7 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
 
   const {
     mutateAsync: mutateAsyncSearchFarms,
-    isLoading: isLoadingSearchFarms,
+    isPending: isLoadingSearchFarms,
   } = useSearchFarms({
     onSuccess: (data) => {
       setSearchFarmsResult(data);

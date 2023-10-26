@@ -1,11 +1,13 @@
+import { useQuery } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
-import { useQuery } from "react-query";
 import { Talk, User } from "../../../types";
+import useAuth from "../../auth/useAuth";
 
 export type GetTalkResponse = Awaited<ReturnType<typeof getTalk>>;
 export type GetTalksResponse = Awaited<ReturnType<typeof getTalks>>;
 
-const getTalk = async (talkId: number, userId: string | undefined) => {
+const getTalk = async (talkId: number) => {
   const { data, error } = await supabase
     .from("talk")
     .select("*, to:recieverId(*), from:senderId(*)")
@@ -19,9 +21,6 @@ const getTalk = async (talkId: number, userId: string | undefined) => {
 
   if (error) {
     throw error;
-  }
-  if (data[0].recieverId === userId) {
-    return { ...data[0], to: data[0].from, from: data[0].from };
   }
   return data[0];
 };
@@ -39,26 +38,37 @@ const getTalks = async (userId: string | undefined) => {
         chat: { imageUrl: string | null; message: string | null } | null;
       })[]
     >();
+
   if (error) {
     throw error;
   }
+  return data;
+};
 
-  return data.map((item) => {
-    if (item.recieverId === userId) {
-      return { ...item, to: item.from, from: item.to };
-    }
-    return item;
+export const useQueryTalk = (talkId: number) => {
+  const { session } = useAuth();
+
+  return useQuery({
+    queryKey: ["talk", talkId.toString(), session?.user.id],
+    queryFn: async () => await getTalk(talkId),
+    select: (data) =>
+      data.recieverId === session?.user.id
+        ? { ...data, to: data.from, from: data.from }
+        : data,
   });
 };
 
-export const useQueryTalk = (talkId: number, userId: string | undefined) =>
-  useQuery({
-    queryKey: ["talk", talkId.toString(), userId],
-    queryFn: async () => await getTalk(talkId, userId),
-  });
+export const useQueryTalks = () => {
+  const { session } = useAuth();
 
-export const useQueryTalks = (userId: string | undefined) =>
-  useQuery({
-    queryKey: ["talk", userId],
-    queryFn: async () => await getTalks(userId),
+  return useQuery({
+    queryKey: ["talk", session?.user.id],
+    queryFn: async () => await getTalks(session?.user.id),
+    select: (data) =>
+      data.map((item) =>
+        item.recieverId === session?.user.id
+          ? { ...item, to: item.from, from: item.from }
+          : item
+      ),
   });
+};

@@ -2,14 +2,14 @@ import React from "react";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { SettingStackParamList } from "../types";
-import SettingScreen from "../screens/SettingScreen";
+import EnvironmentScreen from "../screens/EnvironmentScreen";
+import LikeListScreen from "../screens/LikeListScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 import PostProfileScreen from "../screens/PostProfileScreen";
 import PostRentalScreen from "../screens/PostRentalScreen";
 import RentalListScreen from "../screens/RentalListScreen";
-import LikeListScreen from "../screens/LikeListScreen";
-import NotificationScreen from "../screens/NotificationScreen";
-import EnvironmentScreen from "../screens/EnvironmentScreen";
+import SettingScreen from "../screens/SettingScreen";
+import { SettingStackParamList } from "../types";
 
 const SettingStack = createNativeStackNavigator<SettingStackParamList>();
 

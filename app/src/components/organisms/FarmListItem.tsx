@@ -1,5 +1,7 @@
 import React, { memo, useRef } from "react";
+
 import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import {
   Box,
   Center,
@@ -13,8 +15,8 @@ import {
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
+
 import { GetUserFarmsResponse } from "../../hooks/farm/query";
-import { Image } from "expo-image";
 
 type FarmListItemProps = {
   item: GetUserFarmsResponse[number];

@@ -1,4 +1,10 @@
+import React from "react";
+import { Platform } from "react-native";
+import { Alert, RefreshControl, useWindowDimensions } from "react-native";
+
 import { Feather, AntDesign } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { LocationGeocodedAddress } from "expo-location";
 import {
   Box,
   Button,
@@ -13,22 +19,18 @@ import {
   VStack,
   useColorModeValue,
 } from "native-base";
-import React from "react";
-import { Platform } from "react-native";
-import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
-import { Alert, RefreshControl, useWindowDimensions } from "react-native";
+
 import { GetFarmResponse } from "../../hooks/farm/query";
 import { GetFarmLikesResponse } from "../../hooks/like/query";
-import { LocationGeocodedAddress } from "expo-location";
 import Avatar from "../molecules/Avatar";
 
 type FarmDetailTemplateProps = {
   owned: boolean;
   liked: boolean;
+  farm: GetFarmResponse | undefined;
   likes: GetFarmLikesResponse | undefined;
   address: LocationGeocodedAddress | undefined;
-  farm: GetFarmResponse | null | undefined;
   postLike: () => Promise<void>;
   deleteLike: () => Promise<void>;
   refetch: () => Promise<void>;
@@ -45,9 +47,9 @@ type FarmDetailTemplateProps = {
 const FarmDetailTemplate = ({
   owned,
   liked,
+  farm,
   likes,
   address,
-  farm,
   postLike,
   deleteLike,
   refetch,

@@ -1,14 +1,16 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 import { UseMutationResult } from "../../../types";
 
 export type SearchDeviceResponse = Awaited<ReturnType<typeof searchDevice>>;
 
-const searchDevice = async (text: string) => {
+const searchDevice = async (query: string) => {
   const { data, error } = await supabase
     .from("device")
     .select()
-    .textSearch("deviceId", `%${text}%`)
+    .textSearch("deviceId", `%${query}%`);
+
   if (error) {
     throw error;
   }

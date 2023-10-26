@@ -1,29 +1,31 @@
 import React, { useCallback, useEffect, useState } from "react";
-import EditRentalTemplate from "../components/templates/EditRentalTemplate";
+
+import { useRoute, RouteProp } from "@react-navigation/native";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
+import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
+import EditRentalTemplate from "../components/templates/EditRentalTemplate";
+import { showAlert } from "../functions";
 import {
   useUpdateRental,
   usePostRentalImage,
   useDeleteRental,
 } from "../hooks/rental/mutate";
-import { useTranslation } from "react-i18next";
-import useLocation from "../hooks/sdk/useLocation";
-import useImage from "../hooks/sdk/useImage";
 import { useQueryRental } from "../hooks/rental/query";
-import { Rate, RootStackScreenProps, RootStackParamList } from "../types";
+import useImage from "../hooks/sdk/useImage";
+import useLocation from "../hooks/sdk/useLocation";
 import { supabase } from "../supabase";
-import { useRoute, RouteProp } from "@react-navigation/native";
+import { Rate, RootStackScreenProps, RootStackParamList } from "../types";
 
 const EditRentalScreen = ({ navigation }: RootStackScreenProps) => {
   const toast = useToast();
   const { t } = useTranslation("setting");
   const { params } = useRoute<RouteProp<RootStackParamList, "EditRental">>();
-  const { data: rental, refetch: refetchRental } = useQueryRental(
-    params.rentalId
-  );
+
   const [images, setImages] = useState<string[]>([]);
+
+  const { data: rental } = useQueryRental(params.rentalId);
 
   useEffect(() => {
     getPosition();
@@ -32,14 +34,12 @@ const EditRentalScreen = ({ navigation }: RootStackScreenProps) => {
 
   const {
     mutateAsync: mutateAsyncUpdateRental,
-    isLoading: isLoadingUpdateRental,
+    isPending: isLoadingUpdateRental,
   } = useUpdateRental({
     onSuccess: async () => {
-      await refetchRental();
       navigation.goBack();
     },
     onError: () => {
-      navigation.goBack();
       showAlert(
         toast,
         <Alert
@@ -53,12 +53,11 @@ const EditRentalScreen = ({ navigation }: RootStackScreenProps) => {
 
   const {
     mutateAsync: mutateAsyncDeleteRental,
-    isLoading: isLoadingDeleteRental,
+    isPending: isLoadingDeleteRental,
   } = useDeleteRental({
     onSuccess: async () => {
       navigation.goBack();
       navigation.goBack();
-      await refetchRental();
     },
     onError: () => {
       showAlert(
@@ -98,7 +97,7 @@ const EditRentalScreen = ({ navigation }: RootStackScreenProps) => {
 
   const {
     mutateAsync: mutateAsyncPostRentalImage,
-    isLoading: isLoadingPostRentalImage,
+    isPending: isLoadingPostRentalImage,
   } = usePostRentalImage({
     onError: () => {
       showAlert(

@@ -1,6 +1,7 @@
 import React from "react";
-import { Feather } from "@expo/vector-icons";
+import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   VStack,
@@ -13,12 +14,13 @@ import {
   KeyboardAvoidingView,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import SearchBar from "../organisms/SearchBar";
-import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
-import SearchMapItem from "../organisms/SearchMapItem";
-import { SearchRentalsResponse } from "../../hooks/rental/mutate";
-import { SearchFarmsResponse } from "../../hooks/farm/mutate";
 import { useTranslation } from "react-i18next";
+
+import { SearchFarmsResponse } from "../../hooks/farm/mutate";
+import { SearchRentalsResponse } from "../../hooks/rental/mutate";
+import SearchBar from "../organisms/SearchBar";
+import SearchMapItem from "../organisms/SearchMapItem";
+
 
 type SearchMapTemplateProps = {
   type: "rental" | "farm";

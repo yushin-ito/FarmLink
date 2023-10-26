@@ -1,4 +1,5 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 import { Talk, UseMutationResult } from "../../../types";
 
@@ -7,7 +8,12 @@ export type UpdateTalkResponse = Awaited<ReturnType<typeof updateTalk>>;
 export type DeleteTalkResponse = Awaited<ReturnType<typeof deleteTalk>>;
 
 const postTalk = async (talk: Talk["Insert"]) => {
-  const { data, error } = await supabase.from("talk").insert(talk).select();
+  const { data, error } = await supabase
+    .from("talk")
+    .insert(talk)
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
@@ -16,14 +22,16 @@ const postTalk = async (talk: Talk["Insert"]) => {
 
 const updateTalk = async (talk: Talk["Update"]) => {
   if (!talk.talkId) {
-    return;
+    throw Error();
   }
 
   const { data, error } = await supabase
     .from("talk")
     .update(talk)
     .eq("talkId", talk.talkId)
-    .select();
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
@@ -31,12 +39,15 @@ const updateTalk = async (talk: Talk["Update"]) => {
 };
 
 const deleteTalk = async (talkId: number) => {
-  await supabase.from("notification").delete().eq("talkId", talkId);
   await supabase.from("chat").delete().eq("talkId", talkId);
+  await supabase.from("notification").delete().eq("talkId", talkId);
   const { data, error } = await supabase
     .from("talk")
     .delete()
-    .eq("talkId", talkId);
+    .eq("talkId", talkId)
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }

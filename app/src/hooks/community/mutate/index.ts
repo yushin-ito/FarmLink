@@ -1,4 +1,5 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 import { Community, UseMutationResult } from "../../../types";
 
@@ -17,7 +18,8 @@ const postCommunity = async (community: Community["Insert"]) => {
   const { data, error } = await supabase
     .from("community")
     .insert(community)
-    .select();
+    .select()
+    .single();
   if (error) {
     throw error;
   }
@@ -42,23 +44,27 @@ const updateCommunity = async (community: Community["Update"]) => {
 };
 
 const deleteCommunity = async (communityId: number) => {
-  await supabase.from("notification").delete().eq("communityId", communityId);
   await supabase.from("chat").delete().eq("communityId", communityId);
+  await supabase.from("notification").delete().eq("communityId", communityId);
   const { data, error } = await supabase
     .from("community")
     .delete()
-    .eq("communityId", communityId);
+    .eq("communityId", communityId)
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
   return data;
 };
 
-const searchCommunities = async (text: string) => {
+const searchCommunities = async (query: string) => {
   const { data, error } = await supabase
     .from("community")
     .select()
-    .ilike("name", `%${text}%`);
+    .ilike("name", `%${query}%`);
+    
   if (error) {
     throw error;
   }

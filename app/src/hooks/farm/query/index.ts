@@ -1,9 +1,10 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { PostgrestError } from "@supabase/supabase-js";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { LatLng } from "react-native-maps";
+
 import { supabase } from "../../../supabase";
 import { Device, Farm, User } from "../../../types";
-import { PostgrestError } from "@supabase/supabase-js";
-import { useMemo } from "react";
-import { LatLng } from "react-native-maps";
+import useAuth from "../../auth/useAuth";
 
 export type GetFarmResponse = Awaited<ReturnType<typeof getFarm>>;
 export type GetFarmsResponse = Awaited<ReturnType<typeof getFarms>>;
@@ -22,7 +23,11 @@ const getFarm = async (farmId: number) => {
   return data[0];
 };
 
-const getFarms = async (from: number, to: number, location?: LatLng) => {
+const getFarms = async (
+  location: LatLng | undefined,
+  from: number,
+  to: number
+) => {
   if (!location) {
     return [];
   }
@@ -36,10 +41,10 @@ const getFarms = async (from: number, to: number, location?: LatLng) => {
     .returns<
       (Farm["Row"] & { owner: { name: string }; device: Device["Row"] })[]
     >();
+
   if (error) {
     throw error;
   }
-
   return data;
 };
 
@@ -54,6 +59,7 @@ const getUserFarms = async (ownerId: string | undefined) => {
     .eq("ownerId", ownerId)
     .order("createdAt", { ascending: false })
     .returns<(Farm["Row"] & { device: Device["Row"] })[]>();
+
   if (error) {
     throw error;
   }
@@ -68,30 +74,41 @@ export const useQueryFarm = (farmId: number) =>
 
 export const useInfiniteQueryFarms = (location?: LatLng) => {
   const PAGE_COUNT = 30;
-  const query = useInfiniteQuery<GetFarmsResponse, PostgrestError>({
-    queryKey: ["farm", location],
-    queryFn: async ({ pageParam = 0 }) =>
-      await getFarms(pageParam, pageParam + PAGE_COUNT - 1, location),
+  const { session } = useAuth();
+
+  return useInfiniteQuery<GetFarmsResponse, PostgrestError>({
+    queryKey: ["farm", location, session?.user.id],
+    queryFn: async ({ pageParam }) =>
+      await getFarms(
+        location,
+        Number(pageParam),
+        Number(pageParam) + PAGE_COUNT - 1
+      ),
+    initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
-      if (lastPage && lastPage.length === PAGE_COUNT) {
-        return pages.map((page) => page).flat().length;
+      if (lastPage.length === PAGE_COUNT) {
+        return pages.flat().length;
       }
+      return undefined;
     },
+    select: ({ pages, pageParams }) => ({
+      pages: [
+        pages
+          .flat()
+          .filter(
+            (item) => !item.privated || item.ownerId === session?.user.id
+          ),
+      ],
+      pageParams,
+    }),
   });
-
-  const data = useMemo(
-    () =>
-      query.data?.pages
-        .flatMap((page) => page)
-        .filter((page): page is NonNullable<typeof page> => page !== null),
-    [query.data]
-  );
-
-  return { ...query, data };
 };
 
-export const useQueryUserFarms = (ownerId: string | undefined) =>
-  useQuery({
-    queryKey: ["farm", ownerId],
-    queryFn: async () => await getUserFarms(ownerId),
+export const useQueryUserFarms = () => {
+  const { session } = useAuth();
+
+  return useQuery({
+    queryKey: ["farm", session?.user.id],
+    queryFn: async () => await getUserFarms(session?.user.id),
   });
+};

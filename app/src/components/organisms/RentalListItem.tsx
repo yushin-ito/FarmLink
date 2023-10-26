@@ -1,4 +1,7 @@
 import React, { memo, useRef } from "react";
+
+import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import {
   Divider,
   HStack,
@@ -9,11 +12,10 @@ import {
   VStack,
   useColorModeValue,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
-import { GetRentalsResponse } from "../../hooks/rental/query";
-import { Image } from "expo-image";
-import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
+import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
+
+import { GetRentalsResponse } from "../../hooks/rental/query";
 
 type RentalListItemProps = {
   item: GetRentalsResponse[number];

@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+
 import {
   Box,
   Center,
@@ -9,10 +10,12 @@ import {
   VStack,
   useColorModeValue,
 } from "native-base";
-import { GetTalksResponse } from "../../hooks/talk/query";
 import { useTranslation } from "react-i18next";
-import Avatar from "../molecules/Avatar";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
+
+import { GetTalksResponse } from "../../hooks/talk/query";
+import Avatar from "../molecules/Avatar";
+
 
 type TalkListItemProps = {
   item: GetTalksResponse[number];

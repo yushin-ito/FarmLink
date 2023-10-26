@@ -1,5 +1,6 @@
-import { HStack, VStack, Skeleton } from "native-base";
 import React, { memo } from "react";
+
+import { HStack, VStack, Skeleton } from "native-base";
 
 type SkeletonRentalGridProps = {
   rows: number;

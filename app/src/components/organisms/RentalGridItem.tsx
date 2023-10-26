@@ -1,4 +1,7 @@
 import React, { memo } from "react";
+
+import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import {
   Text,
   Center,
@@ -7,11 +10,11 @@ import {
   useColorModeValue,
   Pressable,
 } from "native-base";
-import { GetRentalsResponse } from "../../hooks/rental/query";
-import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
+
+import { GetRentalsResponse } from "../../hooks/rental/query";
 import { Rate } from "../../types";
-import { Feather } from "@expo/vector-icons";
+
 
 type RentalGridItemProps = {
   item: GetRentalsResponse[number];

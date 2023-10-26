@@ -1,6 +1,7 @@
-import { Divider, HStack, Icon, VStack, Skeleton, useColorModeValue } from "native-base";
 import React, { memo } from "react";
+
 import { Feather } from "@expo/vector-icons";
+import { Divider, HStack, Icon, VStack, Skeleton, useColorModeValue } from "native-base";
 
 type SkeletonRentalListProps = {
   rows: number;

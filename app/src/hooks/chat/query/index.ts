@@ -1,6 +1,6 @@
 import { PostgrestError } from "@supabase/supabase-js";
-import { useMemo } from "react";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 
 export type GetCommunityChatsResponse = Awaited<
@@ -19,10 +19,10 @@ const getCommunityChats = async (
     .eq("communityId", communityId)
     .order("createdAt", { ascending: false })
     .range(from, to);
+
   if (error) {
     throw error;
   }
-
   return data;
 };
 
@@ -33,63 +33,61 @@ const getTalkChats = async (talkId: number, from: number, to: number) => {
     .eq("talkId", talkId)
     .order("createdAt", { ascending: false })
     .range(from, to);
+    
   if (error) {
     throw error;
   }
-
   return data;
 };
 
 export const useInfiniteQueryCommunityChats = (communityId: number) => {
   const PAGE_COUNT = 15;
-  const query = useInfiniteQuery<GetCommunityChatsResponse, PostgrestError>({
+
+  return useInfiniteQuery<GetCommunityChatsResponse, PostgrestError>({
     queryKey: ["chat", communityId.toString()],
-    queryFn: async ({ pageParam = 0 }) => {
+    queryFn: async ({ pageParam }) => {
       return await getCommunityChats(
         communityId,
-        pageParam,
-        pageParam + PAGE_COUNT - 1
+        Number(pageParam),
+        Number(pageParam) + PAGE_COUNT - 1
       );
     },
+    initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
-      if (lastPage && lastPage.length === PAGE_COUNT) {
-        return pages.map((page) => page).flat().length;
+      if (lastPage.length === PAGE_COUNT) {
+        return pages.flat().length;
       }
+      return undefined;
     },
+    select: ({ pages, pageParams }) => ({
+      pages: [pages.flat()],
+      pageParams: pageParams,
+    }),
   });
-
-  const data = useMemo(
-    () =>
-      query.data?.pages
-        .flatMap((page) => page)
-        .filter((page): page is NonNullable<typeof page> => page !== null),
-
-    [query.data]
-  );
-
-  return { ...query, data };
 };
 
 export const useInfiniteQueryTalkChats = (talkId: number) => {
   const PAGE_COUNT = 15;
-  const query = useInfiniteQuery<GetTalkChatsResponse, PostgrestError>({
-    queryKey: ["chat", talkId.toString()],
-    queryFn: async ({ pageParam = 0 }) => {
-      return await getTalkChats(talkId, pageParam, pageParam + PAGE_COUNT - 1);
-    },
-    getNextPageParam: (lastPage, pages) => {
-      if (lastPage && lastPage.length === PAGE_COUNT) {
-        return pages.map((page) => page).flat().length;
-      }
-    },
-  });
-  const data = useMemo(
-    () =>
-      query.data?.pages
-        .flatMap((page) => page)
-        .filter((page): page is NonNullable<typeof page> => page !== null),
-    [query.data]
-  );
 
-  return { ...query, data };
+  return useInfiniteQuery<GetTalkChatsResponse, PostgrestError>({
+    queryKey: ["chat", talkId.toString()],
+    queryFn: async ({ pageParam }) => {
+      return await getTalkChats(
+        talkId,
+        Number(pageParam),
+        Number(pageParam) + PAGE_COUNT - 1
+      );
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.length === PAGE_COUNT) {
+        return pages.flat().length;
+      }
+      return undefined;
+    },
+    select: ({ pages, pageParams }) => ({
+      pages: [pages.flat()],
+      pageParams,
+    }),
+  });
 };

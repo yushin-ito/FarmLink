@@ -1,30 +1,39 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
+
+import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
-import { useQueryTalks } from "../hooks/talk/query";
-import { useDeleteTalk } from "../hooks/talk/mutate";
-import { useQueryUser } from "../hooks/user/query";
-import useAuth from "../hooks/auth/useAuth";
-import { TalkStackScreenProps } from "../types";
 import TalkListTemplate from "../components/templates/TalkListTemplate";
+import { showAlert } from "../functions";
+import { useDeleteTalk } from "../hooks/talk/mutate";
+import { useQueryTalks } from "../hooks/talk/query";
+import { useQueryUser } from "../hooks/user/query";
+import { TalkStackScreenProps } from "../types";
 
 const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
-  const toast = useToast();
   const { t } = useTranslation("talk");
-  const { session } = useAuth();
-  const { data: user, isLoading: isLoadingUser } = useQueryUser(
-    session?.user.id
-  );
-  const {
-    data: talks,
-    isLoading: isLoadingTalks,
-    refetch,
-  } = useQueryTalks(session?.user.id);
+  const toast = useToast();
+
+  const focusRef = useRef(true);
   const [isRefetchingTalks, setIsRefetchingTalks] = useState(false);
 
-  const { mutateAsync: mutateAsyncDeleteTalk, isLoading: isLoadingDeleteTalk } =
+  const { data: user, isLoading: isLoadingUser } = useQueryUser();
+  const { data: talks, refetch, isLoading: isLoadingTalks } = useQueryTalks();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
+
+      refetch();
+    }, [])
+  );
+
+  const { mutateAsync: mutateAsyncDeleteTalk, isPending: isLoadingDeleteTalk } =
     useDeleteTalk({
       onSuccess: async () => {
         await refetch();
@@ -76,10 +85,10 @@ const TalkListScreen = ({ navigation }: TalkStackScreenProps<"TalkList">) => {
     <TalkListTemplate
       talks={talks}
       user={user}
-      isLoading={isLoadingUser || isLoadingTalks || isLoadingDeleteTalk}
-      isRefetchingTalks={isRefetchingTalks}
       refetchTalks={refetchTalks}
       deleteTalk={deleteTalk}
+      isLoading={isLoadingUser || isLoadingTalks || isLoadingDeleteTalk}
+      isRefetchingTalks={isRefetchingTalks}
       talkChatNavigationHandler={talkChatNavigationHandler}
       postTalkNavigationHandler={postTalkNavigationHandler}
       settingNavigationHandler={settingNavigationHandler}

@@ -1,33 +1,37 @@
 import React, { useCallback, useState } from "react";
-import PostTalkTemplate from "../components/templates/PostTalkTemplate";
+
 import { useNavigation } from "@react-navigation/native";
-import { useQueryTalks } from "../hooks/talk/query";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
-import Alert from "../components/molecules/Alert";
-import { usePostTalk } from "../hooks/talk/mutate";
 import { useTranslation } from "react-i18next";
+
+import Alert from "../components/molecules/Alert";
+import PostTalkTemplate from "../components/templates/PostTalkTemplate";
+import { showAlert } from "../functions";
+import { usePostTalk } from "../hooks/talk/mutate";
+import { useQueryTalks } from "../hooks/talk/query";
 import { SearchUsersResponse, useSearchUsers } from "../hooks/user/mutate";
-import useAuth from "../hooks/auth/useAuth";
+import { useQueryUser } from "../hooks/user/query";
 
 const PostTalkScreen = () => {
-  const toast = useToast();
   const { t } = useTranslation("talk");
+  const toast = useToast();
   const navigation = useNavigation();
-  const { session } = useAuth();
-  const { data: talks, refetch } = useQueryTalks(session?.user.id);
+
   const [searchResult, setSearchResult] = useState<SearchUsersResponse>();
+
+  const { data: user } = useQueryUser();
+  const { data: talks } = useQueryTalks();
 
   const {
     mutateAsync: mutateAsyncSearchUsers,
-    isLoading: isLoadingSearchUsers,
+    isPending: isLoadingSearchUsers,
   } = useSearchUsers({
     onSuccess: (data) => {
       setSearchResult(
         data.filter(
           (item) =>
             !talks?.some((talk) => talk.to.userId === item.userId) &&
-            session?.user.id !== item.userId
+            user?.userId !== item.userId
         )
       );
     },
@@ -43,10 +47,9 @@ const PostTalkScreen = () => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostTalk, isLoading: isLoadingPostTalk } =
+  const { mutateAsync: mutateAsyncPostTalk, isPending: isLoadingPostTalk } =
     usePostTalk({
       onSuccess: async () => {
-        await refetch();
         navigation.goBack();
       },
       onError: () => {
@@ -69,19 +72,19 @@ const PostTalkScreen = () => {
       }
       await mutateAsyncSearchUsers(query);
     },
-    [session]
+    [user]
   );
 
   const postTalk = useCallback(
     async (recieverId: string) => {
-      if (session) {
+      if (user) {
         await mutateAsyncPostTalk({
-          senderId: session?.user.id,
+          senderId: user.userId,
           recieverId,
         });
       }
     },
-    [session]
+    [user]
   );
 
   const goBackNavigationHandler = useCallback(() => {

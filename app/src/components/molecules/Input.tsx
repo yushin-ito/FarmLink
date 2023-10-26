@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+
 import {
   Input as NativeBaseInput,
   IInputProps,

@@ -1,4 +1,5 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 import { Notification, UseMutationResult } from "../../../types";
 
@@ -16,7 +17,9 @@ const postNotification = async (notification: Notification["Insert"]) => {
   const { data, error } = await supabase
     .from("notification")
     .insert(notification)
-    .select();
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
@@ -25,14 +28,16 @@ const postNotification = async (notification: Notification["Insert"]) => {
 
 const updateNotification = async (notification: Notification["Update"]) => {
   if (!notification.notificationId) {
-    return;
+    throw Error();
   }
-  
+
   const { data, error } = await supabase
     .from("notification")
     .update(notification)
     .eq("notificationId", notification.notificationId)
-    .select();
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
@@ -44,7 +49,10 @@ const deleteNotification = async (notificationId: number) => {
   const { data, error } = await supabase
     .from("notification")
     .delete()
-    .eq("notificationId", notificationId);
+    .eq("notificationId", notificationId)
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }

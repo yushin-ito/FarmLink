@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Feather } from "@expo/vector-icons";
+import { RefreshControl } from "react-native";
 
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   Heading,
@@ -13,10 +14,10 @@ import {
   useColorModeValue,
 } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import { GetUserLikesResponse } from "../../hooks/like/query";
 import LikeListItem from "../organisms/LikeListItem";
 import SkeletonLikeList from "../organisms/SkeletonLikeList";
-import { RefreshControl } from "react-native";
 
 type LikeListTemplateProps = {
   type: "rental" | "farm";
@@ -25,10 +26,10 @@ type LikeListTemplateProps = {
   deleteRentalLike: (likeId: number) => Promise<void>;
   deleteFarmLike: (farmId: number) => Promise<void>;
   refetchLikes: () => Promise<void>;
-  rentalDetailNavigationHandler: (rentalId: number) => void;
-  farmDetailNavigationHandler: (farmId: number) => void;
   isLoading: boolean;
   isRefetchingLikes: boolean;
+  rentalDetailNavigationHandler: (rentalId: number) => void;
+  farmDetailNavigationHandler: (farmId: number) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -46,6 +47,7 @@ const LikeListTemplate = ({
   goBackNavigationHandler,
 }: LikeListTemplateProps) => {
   const { t } = useTranslation("setting");
+  
   const bgColor = useColorModeValue("muted.200", "muted.700");
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");

@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+
 import {
   Pressable,
   IPressableProps,
@@ -7,6 +8,7 @@ import {
   Skeleton,
   useColorModeValue,
 } from "native-base";
+
 import { supabaseUrl } from "../../supabase";
 
 type AvatarProps = {

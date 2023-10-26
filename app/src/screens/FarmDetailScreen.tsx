@@ -1,65 +1,72 @@
-import React, { useEffect, useState } from "react";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import FarmDetailTemplate from "../components/templates/FarmDetailTemplate";
-import { RootStackParamList, RootStackScreenProps } from "../types";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useCallback } from "react";
-import { useQueryFarm } from "../hooks/farm/query";
-import { useQueryFarmLikes } from "../hooks/like/query";
-import { showAlert, wait } from "../functions";
-import { usePostFarmLike, useDeleteFarmLike } from "../hooks/like/mutate";
-import useLocation from "../hooks/sdk/useLocation";
-import { usePostTalk } from "../hooks/talk/mutate";
-import useAuth from "../hooks/auth/useAuth";
+
+import { RouteProp, useFocusEffect, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
-import { useQueryTalks } from "../hooks/talk/query";
+import FarmDetailTemplate from "../components/templates/FarmDetailTemplate";
+import { showAlert } from "../functions";
+import { useQueryFarm } from "../hooks/farm/query";
+import { usePostFarmLike, useDeleteFarmLike } from "../hooks/like/mutate";
+import { useQueryFarmLikes } from "../hooks/like/query";
 import { usePostNotification } from "../hooks/notification/mutate";
+import useLocation from "../hooks/sdk/useLocation";
 import useNotification from "../hooks/sdk/useNotification";
+import { usePostTalk } from "../hooks/talk/mutate";
+import { useQueryTalks } from "../hooks/talk/query";
 import { useQueryUser } from "../hooks/user/query";
+import { RootStackParamList, RootStackScreenProps } from "../types";
 
 const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
-  const toast = useToast();
   const { t } = useTranslation("map");
+  const toast = useToast();
   const { params } = useRoute<RouteProp<RootStackParamList, "FarmDetail">>();
+
+  const focusRef = useRef(true);
+  const [isRefetching, setIsRefetching] = useState(false);
+
+  const { data: user, isPending: isLoadingUser } = useQueryUser();
   const {
     data: farm,
     refetch: refetchFarm,
-    isLoading: isLoadingFarm,
+    isPending: isLoadingFarm,
   } = useQueryFarm(params.farmId);
-  const { session } = useAuth();
-  const { data: user, isLoading: isLoadingUser } = useQueryUser(
-    session?.user.id
-  );
-  const { data: talks, refetch: refetchTalks } = useQueryTalks(
-    session?.user.id
-  );
   const {
     data: likes,
     refetch: refetchLikes,
-    isLoading: isLoadingLikes,
+    isPending: isLoadingLikes,
   } = useQueryFarmLikes(params.farmId);
-  const [isRefetching, setIsRefetching] = useState(false);
-  const liked =
-    likes?.some(
-      (item) =>
-        item.userId === session?.user.id && item.farmId === params.farmId
-    ) ?? false;
+  const { data: talks } = useQueryTalks();
+
+  const liked = useMemo(
+    () =>
+      likes?.some(
+        (item) => item.userId === user?.userId && item.farmId === params.farmId
+      ) ?? false,
+    [user, likes, params]
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
+
+      refetchFarm();
+      refetchLikes();
+    }, [])
+  );
 
   useEffect(() => {
     farm && getAddress(farm.latitude, farm.longitude);
   }, [farm]);
 
-  const refetch = useCallback(async () => {
-    setIsRefetching(true);
-    await refetchFarm();
-    await refetchLikes();
-    setIsRefetching(false);
-  }, []);
-
   const {
     mutateAsync: mutateAsyncPostNotification,
-    isLoading: isLoadingPostNotification,
+    isPending: isLoadingPostNotification,
   } = usePostNotification({
     onError: () => {
       showAlert(
@@ -73,11 +80,11 @@ const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostLike, isLoading: isLoadingPostLike } =
+  const { mutateAsync: mutateAsyncPostLike, isPending: isLoadingPostLike } =
     usePostFarmLike({
       onSuccess: async () => {
         await refetchLikes();
-        if (user && farm && session?.user.id !== farm.ownerId) {
+        if (user && farm && user.userId !== farm.ownerId) {
           await mutateAsyncPostNotification({
             recieverId: farm.ownerId,
             senderId: user.userId,
@@ -110,7 +117,7 @@ const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncDeleteLike, isLoading: isLoadingDeleteLike } =
+  const { mutateAsync: mutateAsyncDeleteLike, isPending: isLoadingDeleteLike } =
     useDeleteFarmLike({
       onSuccess: async () => {
         await refetchLikes();
@@ -150,29 +157,18 @@ const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostTalk, isLoading: isLoadingPostTalk } =
+  const { mutateAsync: mutateAsyncPostTalk, isPending: isLoadingPostTalk } =
     usePostTalk({
-      onSuccess: async () => {
-        const { data } = await refetchTalks();
-        const talk = data?.find((item) => item.to.userId === farm?.ownerId);
-        if (talk) {
-          navigation.navigate("TabNavigator", {
-            screen: "TalkNavigator",
+      onSuccess: async ({ talkId }) => {
+        navigation.navigate("TabNavigator", {
+          screen: "TalkNavigator",
+          params: {
+            screen: "TalkChat",
             params: {
-              screen: "TalkList",
+              talkId,
             },
-          });
-          await wait(0.1);
-          navigation.navigate("TabNavigator", {
-            screen: "TalkNavigator",
-            params: {
-              screen: "TalkChat",
-              params: {
-                talkId: talk.talkId,
-              },
-            },
-          });
-        }
+          },
+        });
       },
       onError: () => {
         showAlert(
@@ -209,32 +205,34 @@ const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
     },
   });
 
+  const refetch = useCallback(async () => {
+    setIsRefetching(true);
+    await refetchFarm();
+    await refetchLikes();
+    setIsRefetching(false);
+  }, []);
+
   const postLike = useCallback(async () => {
-    if (session) {
+    if (user) {
       await mutateAsyncPostLike({
-        userId: session.user.id,
+        userId: user.userId,
         farmId: params.farmId,
       });
     }
-  }, [params, session]);
+  }, [user, params]);
 
   const deleteLike = useCallback(async () => {
-    await mutateAsyncDeleteLike({
-      farmId: params.farmId,
-      userId: session?.user.id,
-    });
-  }, [params, session]);
+    if (user) {
+      await mutateAsyncDeleteLike({
+        farmId: params.farmId,
+        userId: user.userId,
+      });
+    }
+  }, [user, params]);
 
   const talkChatNavigationHandler = useCallback(async () => {
     const talk = talks?.find((item) => item.to.userId === farm?.ownerId);
     if (talk) {
-      navigation.navigate("TabNavigator", {
-        screen: "TalkNavigator",
-        params: {
-          screen: "TalkList",
-        },
-      });
-      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "TalkNavigator",
         params: {
@@ -244,9 +242,9 @@ const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
           },
         },
       });
-    } else if (session && farm) {
+    } else if (user && farm) {
       await mutateAsyncPostTalk({
-        senderId: session.user.id,
+        senderId: user.userId,
         recieverId: farm.ownerId,
       });
     } else {
@@ -259,7 +257,7 @@ const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
         />
       );
     }
-  }, [talks, session, farm]);
+  }, [user, farm, talks]);
 
   const editFarmNavigationHandler = useCallback(async (farmId: number) => {
     navigation.navigate("EditFarm", { farmId });
@@ -271,7 +269,7 @@ const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
 
   return (
     <FarmDetailTemplate
-      owned={session?.user.id === farm?.ownerId}
+      owned={user?.userId === farm?.ownerId}
       liked={liked}
       likes={likes}
       farm={farm}

@@ -1,45 +1,58 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
+
+import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
+import CommunityListTemplate from "../components/templates/CommunityListTemplate";
+import { showAlert } from "../functions";
+import { useUpdateCommunity } from "../hooks/community/mutate";
 import { useInfiniteQueryCommunities } from "../hooks/community/query";
 import { useQueryUser } from "../hooks/user/query";
-import useAuth from "../hooks/auth/useAuth";
 import { Category, CommunityStackScreenProps } from "../types";
-import CommunityListTemplate from "../components/templates/CommunityListTemplate";
-import { useUpdateCommunity } from "../hooks/community/mutate";
+
+const categories = [
+  "all",
+  "joining",
+  "vegetable",
+  "fruit",
+  "fertilizer",
+  "disease",
+] as Category[];
 
 const CommunityListScreen = ({
   navigation,
 }: CommunityStackScreenProps<"CommunityList">) => {
-  const toast = useToast();
   const { t } = useTranslation("community");
-  const { session } = useAuth();
-  const { data: user, isLoading: isLoadingUser } = useQueryUser(
-    session?.user.id
-  );
-  const categories = [
-    "all",
-    "joining",
-    "vegetable",
-    "fruit",
-    "fertilizer",
-    "disease",
-  ] as Category[];
-  const [categoryIndex, setCategoryIndex] = useState(0);
+  const toast = useToast();
+
+  const focusRef = useRef(true);
+  const [categoryIndex, setCategoryIndex] = useState(1);
+  const [isRefetchingCommunities, setIsRefetchingCommunities] = useState(false);
+
+  const { data: user, isLoading: isLoadingUser } = useQueryUser();
   const {
     data: communities,
     isLoading: isLoadingCommunities,
     refetch,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQueryCommunities(categories[categoryIndex], session?.user.id);
-  const [isRefetchingCommunities, setIsRefetchingCommunities] = useState(false);
+  } = useInfiniteQueryCommunities(categories[categoryIndex]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
+      refetch();
+    }, [])
+  );
 
   const {
     mutateAsync: mutateAsyncUpdateCommunity,
-    isLoading: isLoadingUpdateCommunity,
+    isPending: isLoadingUpdateCommunity,
   } = useUpdateCommunity({
     onSuccess: () => {
       showAlert(
@@ -71,8 +84,8 @@ const CommunityListScreen = ({
 
   const joinCommunity = useCallback(
     async (communityId: number, memberIds: string[]) => {
-      if (session && !memberIds.includes(session.user.id)) {
-        memberIds.push(session.user.id);
+      if (user && !memberIds.includes(user.userId)) {
+        memberIds.push(user.userId);
         await mutateAsyncUpdateCommunity({
           communityId,
           memberIds,
@@ -83,7 +96,7 @@ const CommunityListScreen = ({
         });
       }
     },
-    [session, categoryIndex]
+    [user, categoryIndex]
   );
 
   const communityChatNavigationHandler = useCallback(
@@ -97,10 +110,8 @@ const CommunityListScreen = ({
   );
 
   const postCommunityNavigationHandler = useCallback(() => {
-    navigation.navigate("PostCommunity", {
-      category: categories[categoryIndex],
-    });
-  }, [categoryIndex]);
+    navigation.navigate("PostCommunity");
+  }, []);
 
   const settingNavigationHandler = useCallback(() => {
     navigation.navigate("TabNavigator", {
@@ -121,7 +132,7 @@ const CommunityListScreen = ({
     <CommunityListTemplate
       categoryIndex={categoryIndex}
       setCategoryIndex={setCategoryIndex}
-      communities={communities}
+      communities={communities?.pages[0]}
       user={user}
       hasMore={hasNextPage}
       readMore={fetchNextPage}

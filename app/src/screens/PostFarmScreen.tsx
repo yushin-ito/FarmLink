@@ -1,21 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
-import PostFarmTemplate from "../components/templates/PostFarmTemplate";
+
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
-import Alert from "../components/molecules/Alert";
-import { usePostFarm } from "../hooks/farm/mutate";
-import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
+
+import Alert from "../components/molecules/Alert";
+import PostFarmTemplate from "../components/templates/PostFarmTemplate";
+import { showAlert } from "../functions";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
+import { usePostFarm } from "../hooks/farm/mutate";
 import useLocation from "../hooks/sdk/useLocation";
+import { useQueryUser } from "../hooks/user/query";
 import { FarmStackScreenProps } from "../types";
 
 const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
-  const toast = useToast();
   const { t } = useTranslation("farm");
-  const { session } = useAuth();
+  const toast = useToast();
+
   const [searchResult, setSearchResult] =
     useState<SearchDeviceResponse[number]>();
+
+  const { data: user } = useQueryUser();
 
   useEffect(() => {
     getPosition();
@@ -45,7 +49,7 @@ const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncPostFarm, isLoading: isLoadingPostFarm } =
+  const { mutateAsync: mutateAsyncPostFarm, isPending: isLoadingPostFarm } =
     usePostFarm({
       onSuccess: () => {
         navigation.goBack();
@@ -93,12 +97,12 @@ const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
       description: string,
       privated: boolean
     ) => {
-      if (session && position) {
+      if (user && position) {
         await mutateAsyncPostFarm({
           name,
           deviceId,
           description,
-          ownerId: session.user.id,
+          ownerId: user.userId,
           privated,
           longitude: position.longitude,
           latitude: position.latitude,
@@ -106,7 +110,7 @@ const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
         });
       }
     },
-    [session, position]
+    [user, position]
   );
 
   const goBackNavigationHandler = useCallback(() => {

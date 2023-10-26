@@ -1,27 +1,27 @@
 import React, { useCallback } from "react";
-import PostProfileTemplate from "../components/templates/PostProfileTemplate";
+
 import { useNavigation } from "@react-navigation/native";
-import useAuth from "../hooks/auth/useAuth";
-import { useQueryUser } from "../hooks/user/query";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
-import { usePostUser } from "../hooks/user/mutate";
-import Alert from "../components/molecules/Alert";
 import { useTranslation } from "react-i18next";
 
+import Alert from "../components/molecules/Alert";
+import PostProfileTemplate from "../components/templates/PostProfileTemplate";
+import { showAlert } from "../functions";
+import { usePostUser } from "../hooks/user/mutate";
+import { useQueryUser } from "../hooks/user/query";
+
 const PostProfileScreen = () => {
-  const toast = useToast();
   const { t } = useTranslation("setting");
+  const toast = useToast();
   const navigation = useNavigation();
-  const { session } = useAuth();
-  const { data: user, refetch } = useQueryUser(session?.user.id);
+
+  const { data: user } = useQueryUser();
 
   const {
     mutateAsync: mutateAsyncPostProfile,
-    isLoading: isLoadingPostProfile,
+    isPending: isLoadingPostProfile,
   } = usePostUser({
     onSuccess: async () => {
-      await refetch();
       showAlert(
         toast,
         <Alert
@@ -46,15 +46,15 @@ const PostProfileScreen = () => {
 
   const postProfile = useCallback(
     async (name: string, profile: string) => {
-      if (session) {
+      if (user) {
         await mutateAsyncPostProfile({
-          userId: session.user.id,
+          userId: user.userId,
           name,
           profile,
         });
       }
     },
-    [session]
+    [user]
   );
 
   const goBackNavigationHandler = useCallback(() => {

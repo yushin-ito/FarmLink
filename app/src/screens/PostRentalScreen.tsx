@@ -1,23 +1,27 @@
 import React, { useCallback, useEffect, useState } from "react";
-import PostRentalTemplate from "../components/templates/PostRentalTemplate";
+
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
-import Alert from "../components/molecules/Alert";
-import { usePostRental, usePostRentalImage } from "../hooks/rental/mutate";
-import useAuth from "../hooks/auth/useAuth";
 import { useTranslation } from "react-i18next";
-import useLocation from "../hooks/sdk/useLocation";
+
+import Alert from "../components/molecules/Alert";
+import PostRentalTemplate from "../components/templates/PostRentalTemplate";
+import { showAlert } from "../functions";
+import { usePostRental, usePostRentalImage } from "../hooks/rental/mutate";
 import useImage from "../hooks/sdk/useImage";
-import { Rate, SettingStackScreenProps } from "../types";
+import useLocation from "../hooks/sdk/useLocation";
+import { useQueryUser } from "../hooks/user/query";
 import { supabase } from "../supabase";
+import { Rate, SettingStackScreenProps } from "../types";
 
 const PostRentalScreen = ({
   navigation,
 }: SettingStackScreenProps<"PostRental">) => {
-  const toast = useToast();
   const { t } = useTranslation("setting");
-  const { session } = useAuth();
+  const toast = useToast();
+
   const [base64, setBase64] = useState<string[]>([]);
+
+  const { data: user } = useQueryUser();
 
   useEffect(() => {
     getPosition();
@@ -48,7 +52,7 @@ const PostRentalScreen = ({
       },
     });
 
-  const { mutateAsync: mutateAsyncPostRental, isLoading: isLoadingPostRental } =
+  const { mutateAsync: mutateAsyncPostRental, isPending: isLoadingPostRental } =
     usePostRental({
       onSuccess: async () => {
         navigation.goBack();
@@ -67,7 +71,7 @@ const PostRentalScreen = ({
 
   const {
     mutateAsync: mutateAsyncPostRentalImage,
-    isLoading: isLoadingPostRentalImage,
+    isPending: isLoadingPostRentalImage,
   } = usePostRentalImage({
     onError: () => {
       showAlert(
@@ -127,7 +131,7 @@ const PostRentalScreen = ({
       equipment: string,
       rate: Rate
     ) => {
-      if (session && position) {
+      if (user && position) {
         const publicUrls = await Promise.all(
           base64.map(async (item) => {
             const { path } = await mutateAsyncPostRentalImage(item);
@@ -138,7 +142,7 @@ const PostRentalScreen = ({
         await mutateAsyncPostRental({
           name,
           description,
-          ownerId: session.user.id,
+          ownerId: user.userId,
           longitude: position.longitude,
           latitude: position.latitude,
           fee,
@@ -151,7 +155,7 @@ const PostRentalScreen = ({
         });
       }
     },
-    [session, position, base64]
+    [user, position, base64]
   );
 
   const goBackNavigationHandler = useCallback(() => {

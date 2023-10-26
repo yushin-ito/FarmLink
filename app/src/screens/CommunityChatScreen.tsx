@@ -1,48 +1,39 @@
 import React, { useCallback, useEffect } from "react";
 
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
 import CommunityChatTemplate from "../components/templates/CommunityChatTemplate";
-import {
-  useDeleteCommunity,
-  useUpdateCommunity,
-} from "../hooks/community/mutate";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
-import useAuth from "../hooks/auth/useAuth";
-import {
-  useInfiniteQueryCommunities,
-  useQueryCommuntiy,
-} from "../hooks/community/query";
-import useImage from "../hooks/sdk/useImage";
-import { useQueryUser } from "../hooks/user/query";
+import { showAlert } from "../functions";
 import {
   useDeleteChat,
   usePostChat,
   usePostChatImage,
 } from "../hooks/chat/mutate";
 import { useInfiniteQueryCommunityChats } from "../hooks/chat/query";
+import {
+  useDeleteCommunity,
+  useUpdateCommunity,
+} from "../hooks/community/mutate";
+import { useQueryCommuntiy } from "../hooks/community/query";
+import useImage from "../hooks/sdk/useImage";
+import { useQueryUser } from "../hooks/user/query";
 import { supabase } from "../supabase";
+import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
 
 const CommunityChatScreen = ({
   navigation,
 }: CommunityStackScreenProps<"CommunityChat">) => {
   const { t } = useTranslation("chat");
   const toast = useToast();
-  const { session } = useAuth();
-  const { data: user, isLoading: isLoadingUser } = useQueryUser(
-    session?.user.id
-  );
   const { params } =
     useRoute<RouteProp<CommunityStackParamList, "CommunityChat">>();
+
+  const { data: user, isLoading: isLoadingUser } = useQueryUser();
   const { data: community, isLoading: isLoadingCommunity } = useQueryCommuntiy(
     params.communityId
-  );
-  const { refetch: refetchCommunities } = useInfiniteQueryCommunities(
-    params.category,
-    session?.user.id
   );
   const {
     data: chats,
@@ -74,40 +65,12 @@ const CommunityChatScreen = ({
     };
   }, [params]);
 
-  const { mutateAsync: mutateAsyncPostChat, isLoading: isLoadingPostChat } =
-    usePostChat({
-      onError: () => {
-        showAlert(
-          toast,
-          <Alert
-            status="error"
-            onPressCloseButton={() => toast.closeAll()}
-            text={t("error")}
-          />
-        );
-      },
-    });
-
-  const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
-
   const {
     mutateAsync: mutateAsyncUpdateCommunity,
-    isLoading: isLoadingUpdateCommunity,
+    isPending: isLoadingUpdateCommunity,
   } = useUpdateCommunity({
     onSuccess: async (data) => {
-      await refetchCommunities();
-      if (session && data?.memberIds?.includes(session.user.id)) {
+      if (user && data?.memberIds?.includes(user.userId)) {
         data.imageUrl
           ? showAlert(
               toast,
@@ -141,11 +104,46 @@ const CommunityChatScreen = ({
 
   const {
     mutateAsync: mutateAsyncDeleteCommunity,
-    isLoading: isLoadingDeleteCommunity,
+    isPending: isLoadingDeleteCommunity,
   } = useDeleteCommunity({
     onSuccess: async () => {
-      await refetchCommunities();
+      navigation.goBack();
+      showAlert(
+        toast,
+        <Alert
+          status="success"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("deleted")}
+        />
+      );
     },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
+  const { mutateAsync: mutateAsyncPostChat, isPending: isLoadingPostChat } =
+    usePostChat({
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
+
+  const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
     onError: () => {
       showAlert(
         toast,
@@ -176,12 +174,12 @@ const CommunityChatScreen = ({
     pickImageByLibrary: pickChatImageByLibrary,
   } = useImage({
     onSuccess: async ({ base64, size }) => {
-      if (session && base64) {
+      if (user && base64) {
         const { path } = await mutateAsyncPostChatImage(base64);
         const { data } = supabase.storage.from("image").getPublicUrl(path);
         await mutateAsyncPostChat({
           communityId: params.communityId,
-          authorId: session.user.id,
+          authorId: user.userId,
           imageUrl: data.publicUrl,
           width: size.width,
           height: size.height,
@@ -215,7 +213,7 @@ const CommunityChatScreen = ({
     pickImageByLibrary: pickIconImageByLibrary,
   } = useImage({
     onSuccess: async ({ base64 }) => {
-      if (session && base64) {
+      if (user && base64) {
         const { path } = await mutateAsyncPostChatImage(base64);
         const { data } = supabase.storage.from("image").getPublicUrl(path);
         await mutateAsyncUpdateCommunity({
@@ -248,15 +246,15 @@ const CommunityChatScreen = ({
 
   const onSend = useCallback(
     async (message: string) => {
-      if (session) {
+      if (user) {
         await mutateAsyncPostChat({
           message,
           communityId: params.communityId,
-          authorId: session.user.id,
+          authorId: user.userId,
         });
       }
     },
-    [session]
+    [user]
   );
 
   const deleteChat = useCallback(async (chatId: number) => {
@@ -264,20 +262,19 @@ const CommunityChatScreen = ({
   }, []);
 
   const leaveCommunity = useCallback(async () => {
-    if (session && community) {
+    if (user && community) {
       await mutateAsyncUpdateCommunity({
         communityId: params.communityId,
         memberIds: community.memberIds?.filter(
-          (memberId) => memberId !== session.user.id
+          (memberId) => memberId !== user.userId
         ),
       });
       navigation.goBack();
     }
-  }, [session, community, params]);
+  }, [user, community, params]);
 
   const deleteCommunity = useCallback(async () => {
     await mutateAsyncDeleteCommunity(params.communityId);
-    navigation.goBack();
   }, [params]);
 
   const deleteImage = useCallback(async () => {
@@ -289,14 +286,15 @@ const CommunityChatScreen = ({
 
   const imagePreviewNavigationHandler = useCallback(
     (imageUrl: string, chatId?: number) => {
-      community?.name &&
+      if (community) {
         navigation.navigate("ImagePreview", {
           title: community.name,
           imageUrl,
           chatId,
         });
+      }
     },
-    [community, params]
+    [community]
   );
 
   const goBackNavigationHandler = useCallback(() => {
@@ -306,9 +304,9 @@ const CommunityChatScreen = ({
   return (
     <CommunityChatTemplate
       title={community?.name}
-      owned={session?.user.id === community?.ownerId}
+      owned={user?.userId === community?.ownerId}
       user={user}
-      chats={chats}
+      chats={chats?.pages[0]}
       leaveCommunity={leaveCommunity}
       deleteCommunity={deleteCommunity}
       deleteChat={deleteChat}

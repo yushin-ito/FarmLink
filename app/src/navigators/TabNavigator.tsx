@@ -1,61 +1,29 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
+import { Platform } from "react-native";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon, Text, useColorModeValue, useToast } from "native-base";
-import { TabParamList } from "../types";
-import MapNavigator from "./MapNavigator";
-import FarmNavigator from "./FarmNavigator";
-import SettingNavigator from "./SettingNavigator";
-import CommunityNavigator from "./CommunityNavigator";
 import { Route, getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import Fab from "../components/molecules/Fab";
-import TalkNavigator from "./TalkNavigator";
-import { useTranslation } from "react-i18next";
 import { Image } from "expo-image";
-import useNotification from "../hooks/sdk/useNotification";
-import { showAlert } from "../functions";
-import Alert from "../components/molecules/Alert";
-import useAuth from "../hooks/auth/useAuth";
-import { Platform } from "react-native";
+import { Icon, Text, useColorModeValue } from "native-base";
+import { useTranslation } from "react-i18next";
+
+import Fab from "../components/molecules/Fab";
+import { TabParamList } from "../types";
+
+import CommunityNavigator from "./CommunityNavigator";
+import FarmNavigator from "./FarmNavigator";
+import MapNavigator from "./MapNavigator";
+import SettingNavigator from "./SettingNavigator";
+import TalkNavigator from "./TalkNavigator";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
 const TabNavigator = () => {
-  const { t } = useTranslation(["app", "map", "community", "talk", "setting"]);
+  const { t } = useTranslation(["map", "community", "talk", "setting"]);
   const bgColor = useColorModeValue("white", "#262626");
   const borderColor = useColorModeValue("#d4d4d4", "#525252");
   const iconColor = useColorModeValue("muted.400", "muted.200");
-
-  const toast = useToast();
-  const { session } = useAuth();
-
-  useEffect(() => {
-    postToken(session?.user.id);
-  }, [session]);
-
-  const { postToken } = useNotification({
-    onDisable: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("app:permitRequestNoti")}
-        />
-      );
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("map:error")}
-        />
-      );
-    },
-  });
 
   const getTabStyle = useCallback(
     (route: Partial<Route<string, object | undefined>>) => {

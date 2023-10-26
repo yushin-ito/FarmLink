@@ -1,9 +1,11 @@
 import React, { useCallback } from "react";
-import WalkthroughTemplate from "../components/templates/WalkthroughTemplate";
-import { RootStackParamList } from "../types";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+import WalkthroughTemplate from "../components/templates/WalkthroughTemplate";
 import useAuth from "../hooks/auth/useAuth";
+import { RootStackParamList } from "../types";
 
 type WalkthroughNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -13,7 +15,7 @@ type WalkthroughNavigationProp = NativeStackNavigationProp<
 const WalkthroughScreen = () => {
   const navigation = useNavigation<WalkthroughNavigationProp>();
   const { session } = useAuth();
-  
+
   const tabNavigatorNavigationHandler = useCallback(() => {
     navigation.push("TabNavigator");
   }, []);

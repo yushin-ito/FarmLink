@@ -1,5 +1,7 @@
 import React, { memo } from "react";
-import { SearchFarmsResponse } from "../../hooks/farm/mutate";
+
+import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import {
   Divider,
   HStack,
@@ -10,8 +12,8 @@ import {
   Center,
   useColorModeValue,
 } from "native-base";
-import { Image } from "expo-image";
-import { Feather } from "@expo/vector-icons";
+
+import { SearchFarmsResponse } from "../../hooks/farm/mutate";
 import { SearchRentalsResponse } from "../../hooks/rental/mutate";
 
 type SearchMapItemProps = {

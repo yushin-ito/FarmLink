@@ -1,55 +1,52 @@
-import React, { useCallback, useEffect, useState } from "react";
-import LikeListTemplate from "../components/templates/LikeListTemplate";
-import { SettingStackScreenProps } from "../types";
-import useAuth from "../hooks/auth/useAuth";
-import { useQueryUserLikes } from "../hooks/like/query";
-import { showAlert } from "../functions";
-import { useDeleteFarmLike, useDeleteRentalLike } from "../hooks/like/mutate";
+import React, { useCallback, useRef, useState } from "react";
+
+import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
-import { supabase } from "../supabase";
+import LikeListTemplate from "../components/templates/LikeListTemplate";
+import { showAlert } from "../functions";
+import { useDeleteFarmLike, useDeleteRentalLike } from "../hooks/like/mutate";
+import { useQueryUserLikes } from "../hooks/like/query";
+import { useQueryUser } from "../hooks/user/query";
+import { SettingStackScreenProps } from "../types";
 
 const LikeListScreen = ({
   navigation,
 }: SettingStackScreenProps<"LikeList">) => {
   const { t } = useTranslation("farm");
   const toast = useToast();
-  const { session } = useAuth();
+
+  const focusRef = useRef(true);
+  const [isRefetchingLikes, setIsRefetchingRentals] = useState(false);
+  const [type, setType] = useState<"rental" | "farm">("rental");
+
+  const { data: user, isLoading: isLoadingUser } = useQueryUser();
   const {
     data: likes,
     refetch,
     isLoading: isLoadingUserLikes,
-  } = useQueryUserLikes(session?.user.id);
-  const [isRefetchingLikes, setIsRefetchingRentals] = useState(false);
-  const [type, setType] = useState<"rental" | "farm">("rental");
+  } = useQueryUserLikes();
 
-  useEffect(() => {
-    const channel = supabase
-      .channel("like_list")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "like",
-          filter: `userId=eq.${session?.user.id}`,
-        },
-        async () => {
-          await refetch();
-        }
-      )
-      .subscribe();
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [session]);
+      refetch();
+    }, [])
+  );
 
   const {
     mutateAsync: mutateAsyncDeleteRentalLike,
-    isLoading: isLoadingDeleteRentalLike,
+    isPending: isLoadingDeleteRentalLike,
   } = useDeleteRentalLike({
+    onSuccess: async () => {
+      await refetch();
+    },
     onError: () => {
       showAlert(
         toast,
@@ -64,8 +61,11 @@ const LikeListScreen = ({
 
   const {
     mutateAsync: mutateAsyncDeleteFarmLike,
-    isLoading: isLoadingDeleteFarmLike,
+    isPending: isLoadingDeleteFarmLike,
   } = useDeleteFarmLike({
+    onSuccess: async () => {
+      await refetch();
+    },
     onError: () => {
       showAlert(
         toast,
@@ -80,16 +80,16 @@ const LikeListScreen = ({
 
   const deleteRentalLike = useCallback(
     async (rentalId: number) => {
-      await mutateAsyncDeleteRentalLike({ rentalId, userId: session?.user.id });
+      await mutateAsyncDeleteRentalLike({ rentalId, userId: user?.userId });
     },
-    [session]
+    [user]
   );
 
   const deleteFarmLike = useCallback(
     async (farmId: number) => {
-      await mutateAsyncDeleteFarmLike({ farmId, userId: session?.user.id });
+      await mutateAsyncDeleteFarmLike({ farmId, userId: user?.userId });
     },
-    [session]
+    [user]
   );
 
   const refetchLikes = useCallback(async () => {
@@ -119,6 +119,7 @@ const LikeListScreen = ({
       deleteFarmLike={deleteFarmLike}
       refetchLikes={refetchLikes}
       isLoading={
+        isLoadingUser ||
         isLoadingUserLikes ||
         isLoadingDeleteRentalLike ||
         isLoadingDeleteFarmLike

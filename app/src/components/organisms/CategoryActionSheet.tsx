@@ -1,6 +1,8 @@
-import { Actionsheet, Text, Radio, Box, useColorModeValue } from "native-base";
 import React, { Dispatch, SetStateAction, memo } from "react";
+
+import { Actionsheet, Text, Radio, Box, useColorModeValue } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import { Category } from "../../types";
 
 type CategoryActionSheetProps = {

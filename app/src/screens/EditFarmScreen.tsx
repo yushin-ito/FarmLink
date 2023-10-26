@@ -1,32 +1,35 @@
 import React, { useCallback, useEffect, useState } from "react";
-import EditFarmTemplate from "../components/templates/EditFarmTemplate";
+
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
-import Alert from "../components/molecules/Alert";
-import { useDeleteFarm, useUpdateFarm } from "../hooks/farm/mutate";
 import { useTranslation } from "react-i18next";
+
+import Alert from "../components/molecules/Alert";
+import EditFarmTemplate from "../components/templates/EditFarmTemplate";
+import { showAlert } from "../functions";
 import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
+import { useDeleteFarm, useUpdateFarm } from "../hooks/farm/mutate";
 import { useQueryFarm } from "../hooks/farm/query";
 import useLocation from "../hooks/sdk/useLocation";
 import { RootStackParamList, RootStackScreenProps } from "../types";
 
 const EditFarmScreen = ({ navigation }: RootStackScreenProps) => {
-  const toast = useToast();
   const { t } = useTranslation("farm");
+  const toast = useToast();
   const { params } = useRoute<RouteProp<RootStackParamList, "EditFarm">>();
-  const { data: farm, refetch: refetchFarm } = useQueryFarm(params.farmId);
+
   const [searchResult, setSearchResult] =
     useState<SearchDeviceResponse[number]>();
+
+  const { data: farm } = useQueryFarm(params.farmId);
 
   useEffect(() => {
     getPosition();
   }, []);
 
-  const { mutateAsync: mutateAsyncUpdateFarm, isLoading: isLoadingUpdateFarm } =
+  const { mutateAsync: mutateAsyncUpdateFarm, isPending: isLoadingUpdateFarm } =
     useUpdateFarm({
       onSuccess: async () => {
-        await refetchFarm();
         navigation.goBack();
       },
       onError: () => {
@@ -41,12 +44,11 @@ const EditFarmScreen = ({ navigation }: RootStackScreenProps) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncDeleteFarm, isLoading: isLoadingDeleteFarm } =
+  const { mutateAsync: mutateAsyncDeleteFarm, isPending: isLoadingDeleteFarm } =
     useDeleteFarm({
       onSuccess: async () => {
         navigation.goBack();
         navigation.goBack();
-        await refetchFarm();
       },
       onError: () => {
         showAlert(

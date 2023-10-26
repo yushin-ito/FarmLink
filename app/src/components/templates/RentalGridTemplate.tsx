@@ -1,3 +1,7 @@
+import React, { Dispatch, SetStateAction, memo, useState } from "react";
+import { Alert, RefreshControl, useWindowDimensions } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   Icon,
@@ -11,16 +15,14 @@ import {
   Spinner,
   Pressable,
 } from "native-base";
-import React, { Dispatch, SetStateAction, memo, useState } from "react";
-import Fab from "../molecules/Fab";
-import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import SearchBar from "../organisms/SearchBar";
-import { GetRentalsResponse } from "../../hooks/rental/query";
-import RentalGridItem from "../organisms/RentalGridItem";
-import { Scene } from "../../types";
-import { Alert, RefreshControl, useWindowDimensions } from "react-native";
 import { TabBar, TabView } from "react-native-tab-view";
+
+import { GetRentalsResponse } from "../../hooks/rental/query";
+import { Scene } from "../../types";
+import Fab from "../molecules/Fab";
+import RentalGridItem from "../organisms/RentalGridItem";
+import SearchBar from "../organisms/SearchBar";
 import SkeletonRentalGrid from "../organisms/SkeletonRentalGrid";
 
 type RentalGridProps = {

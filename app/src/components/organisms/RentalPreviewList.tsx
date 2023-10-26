@@ -1,3 +1,16 @@
+import React, {
+  Dispatch,
+  SetStateAction,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
+import { FlatList as ReactNativeFlatList } from "react-native";
+import { useWindowDimensions } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import {
   HStack,
   Center,
@@ -9,21 +22,10 @@ import {
   Pressable,
   useColorModeValue,
 } from "native-base";
-import React, {
-  Dispatch,
-  SetStateAction,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
-import { FlatList as ReactNativeFlatList } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
-import { useWindowDimensions } from "react-native";
-import { GetRentalsResponse } from "../../hooks/rental/query";
+
 import { wait } from "../../functions";
+import { GetRentalsResponse } from "../../hooks/rental/query";
 import { Rate, Region } from "../../types";
 
 type RentalPreviewListProps = {

@@ -1,3 +1,14 @@
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Platform } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import {
   Box,
   HStack,
@@ -8,28 +19,19 @@ import {
   IconButton,
   Icon,
 } from "native-base";
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useTranslation } from "react-i18next";
 import MapView, { LatLng, Marker } from "react-native-maps";
-import SearchBar from "../organisms/SearchBar";
-import { GetUserResponse } from "../../hooks/user/query";
+
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { GetRentalsResponse } from "../../hooks/rental/query";
-import { useTranslation } from "react-i18next";
-import FarmPreviewList from "../organisms/FarmPreviewList";
-import RentalPreviewList from "../organisms/RentalPreviewList";
-import { Image } from "expo-image";
+import { GetUserResponse } from "../../hooks/user/query";
 import { Region } from "../../types";
-import { Feather } from "@expo/vector-icons";
-import { Platform } from "react-native";
 import Overlay from "../molecules/Overlay";
-import RentalMaker from "../organisms/RentalMaker";
 import FarmMaker from "../organisms/FarmMaker";
+import FarmPreviewList from "../organisms/FarmPreviewList";
+import RentalMaker from "../organisms/RentalMaker";
+import RentalPreviewList from "../organisms/RentalPreviewList";
+import SearchBar from "../organisms/SearchBar";
 
 const getOverlap = (a: LatLng, b: LatLng) => {
   return (
@@ -46,7 +48,7 @@ type MapTemplateProps = {
   region: Region | null;
   setRegion: Dispatch<SetStateAction<Region | null>>;
   position: LatLng | undefined;
-  user: GetUserResponse | null | undefined;
+  user: GetUserResponse | undefined;
   farms: GetFarmsResponse | undefined;
   rentals: GetRentalsResponse | undefined;
   refetch: () => Promise<void>;

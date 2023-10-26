@@ -1,8 +1,10 @@
 import React, { useCallback } from "react";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { supabase } from "../supabase";
+
 import { Session } from "@supabase/supabase-js";
 import * as Linking from "expo-linking";
+
+import { supabase } from "../supabase";
 
 type AuthContextProps = {
   session: Session | null;

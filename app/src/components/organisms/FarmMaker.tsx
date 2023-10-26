@@ -1,10 +1,13 @@
 import React, { useCallback } from "react";
-import { useColorModeValue, VStack, Text } from "native-base";
 import { Platform } from "react-native";
+
+import { Image } from "expo-image";
+import { useColorModeValue, VStack, Text } from "native-base";
+import { LatLng, Marker } from "react-native-maps";
+
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { Region } from "../../types";
-import { LatLng, Marker } from "react-native-maps";
-import { Image } from "expo-image";
+
 
 type FarmMaker = {
   region: Region | null;

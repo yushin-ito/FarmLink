@@ -1,40 +1,34 @@
 import React, { useCallback, useEffect } from "react";
 
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
 import TalkChatTemplate from "../components/templates/TalkChatTemplate";
-import { useDeleteTalk, useUpdateTalk } from "../hooks/talk/mutate";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { TalkStackParamList, TalkStackScreenProps } from "../types";
-import useAuth from "../hooks/auth/useAuth";
-import { useQueryTalk, useQueryTalks } from "../hooks/talk/query";
-import useImage from "../hooks/sdk/useImage";
-import { useQueryUser } from "../hooks/user/query";
+import { showAlert } from "../functions";
 import {
   useDeleteChat,
   usePostChat,
   usePostChatImage,
 } from "../hooks/chat/mutate";
 import { useInfiniteQueryTalkChats } from "../hooks/chat/query";
-import { supabase } from "../supabase";
-import useNotification from "../hooks/sdk/useNotification";
 import { usePostNotification } from "../hooks/notification/mutate";
+import useImage from "../hooks/sdk/useImage";
+import useNotification from "../hooks/sdk/useNotification";
+import { useDeleteTalk, useUpdateTalk } from "../hooks/talk/mutate";
+import { useQueryTalk } from "../hooks/talk/query";
+import { useQueryUser } from "../hooks/user/query";
+import { supabase } from "../supabase";
+import { TalkStackParamList, TalkStackScreenProps } from "../types";
 
 const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   const { t } = useTranslation("chat");
   const toast = useToast();
-  const { session } = useAuth();
-  const { data: user, isLoading: isLoadingUser } = useQueryUser(
-    session?.user.id
-  );
   const { params } = useRoute<RouteProp<TalkStackParamList, "TalkChat">>();
-  const { data: talk, isLoading: isLoadingTalk } = useQueryTalk(
-    params.talkId,
-    session?.user.id
-  );
-  const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
+
+  const { data: user, isLoading: isLoadingUser } = useQueryUser();
+  const { data: talk, isLoading: isLoadingTalk } = useQueryTalk(params.talkId);
   const {
     data: chats,
     isLoading: isLoadingChats,
@@ -66,9 +60,6 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   }, [params]);
 
   const { mutateAsync: mutateAsyncUpdateTalk } = useUpdateTalk({
-    onSuccess: async () => {
-      await refetchTalks();
-    },
     onError: () => {
       showAlert(
         toast,
@@ -81,10 +72,10 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncDeleteTalk, isLoading: isLoadingDeleteTalk } =
+  const { mutateAsync: mutateAsyncDeleteTalk, isPending: isLoadingDeleteTalk } =
     useDeleteTalk({
       onSuccess: async () => {
-        await refetchTalks();
+        navigation.goBack();
         showAlert(
           toast,
           <Alert
@@ -108,7 +99,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   const {
     mutateAsync: mutateAsyncPostNotification,
-    isLoading: isLoadingPostNotification,
+    isPending: isLoadingPostNotification,
   } = usePostNotification({
     onError: () => {
       showAlert(
@@ -122,7 +113,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
-  const { mutateAsync: mutateAsyncPostChat, isLoading: isLoadingPostChat } =
+  const { mutateAsync: mutateAsyncPostChat, isPending: isLoadingPostChat } =
     usePostChat({
       onSuccess: async ({ chatId, authorId, message, imageUrl }) => {
         if (talk?.to.token && user?.name) {
@@ -171,9 +162,6 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     });
 
   const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
-    onSuccess: async () => {
-      await refetchTalks();
-    },
     onError: () => {
       showAlert(
         toast,
@@ -187,9 +175,6 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
   });
 
   const { mutateAsync: mutateAsyncPostChatImage } = usePostChatImage({
-    onSuccess: async () => {
-      await refetchChats();
-    },
     onError: () => {
       showAlert(
         toast,
@@ -204,12 +189,12 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   const { pickImageByCamera, pickImageByLibrary } = useImage({
     onSuccess: async ({ base64, size }) => {
-      if (session && user && base64) {
+      if (user && base64) {
         const { path } = await mutateAsyncPostChatImage(base64);
         const { data } = supabase.storage.from("image").getPublicUrl(path);
         await mutateAsyncPostChat({
           talkId: params.talkId,
-          authorId: session.user.id,
+          authorId: user.userId,
           imageUrl: data.publicUrl,
           width: size.width,
           height: size.height,
@@ -263,15 +248,15 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   const onSend = useCallback(
     async (message: string) => {
-      if (session) {
+      if (user) {
         await mutateAsyncPostChat({
           message,
           talkId: params.talkId,
-          authorId: session.user.id,
+          authorId: user.userId,
         });
       }
     },
-    [session, params, user]
+    [user, params]
   );
 
   const deleteChat = useCallback(async (chatId: number) => {
@@ -280,18 +265,18 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
 
   const deleteTalk = useCallback(async () => {
     await mutateAsyncDeleteTalk(params.talkId);
-    navigation.goBack();
   }, []);
 
   const imagePreviewNavigationHandler = useCallback(
     (imageUrl: string, chatId?: number) => {
-      talk?.to.name &&
+      if (talk?.to.name) {
         navigation.navigate("ImagePreview", {
           title: talk.to.name,
           imageUrl,
           chatId,
           talkId: params.talkId,
         });
+      }
     },
     [talk, params]
   );
@@ -304,7 +289,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     <TalkChatTemplate
       title={talk?.to.name}
       user={user}
-      chats={chats}
+      chats={chats?.pages[0]}
       hasMore={hasMore}
       onSend={onSend}
       deleteChat={deleteChat}

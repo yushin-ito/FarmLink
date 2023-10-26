@@ -1,18 +1,19 @@
 import React, { useCallback, useState } from "react";
-import SearchCommunityTemplate from "../components/templates/SearchCommunityTemplate";
+
 import { RouteProp, useRoute } from "@react-navigation/native";
+import { useToast } from "native-base";
+import { useTranslation } from "react-i18next";
+
+import Alert from "../components/molecules/Alert";
+import SearchCommunityTemplate from "../components/templates/SearchCommunityTemplate";
+import { showAlert } from "../functions";
 import {
   SearchCommunitiesResponse,
   useSearchCommunities,
   useUpdateCommunity,
 } from "../hooks/community/mutate";
-import { showAlert } from "../functions";
-import { useToast } from "native-base";
-import { useTranslation } from "react-i18next";
-import Alert from "../components/molecules/Alert";
-import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
-import useAuth from "../hooks/auth/useAuth";
 import { useQueryUser } from "../hooks/user/query";
+import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
 
 const SearchCommunitieScreen = ({
   navigation,
@@ -21,13 +22,14 @@ const SearchCommunitieScreen = ({
   const toast = useToast();
   const { params } =
     useRoute<RouteProp<CommunityStackParamList, "SearchCommunity">>();
-  const { session } = useAuth();
-  const { data: user } = useQueryUser(session?.user.id);
+
   const [searchResult, setSearchResult] = useState<SearchCommunitiesResponse>();
+
+  const { data: user } = useQueryUser();
 
   const {
     mutateAsync: mutateAsyncUpdateCommunity,
-    isLoading: isLoadingUpdateCommunity,
+    isPending: isLoadingUpdateCommunity,
   } = useUpdateCommunity({
     onError: () => {
       showAlert(
@@ -43,7 +45,7 @@ const SearchCommunitieScreen = ({
 
   const {
     mutateAsync: mutateAsyncSearchCommunities,
-    isLoading: isLoadingSearchCommunities,
+    isPending: isLoadingSearchCommunities,
   } = useSearchCommunities({
     onSuccess: (data) => {
       setSearchResult(data);
@@ -62,8 +64,8 @@ const SearchCommunitieScreen = ({
 
   const joinCommunity = useCallback(
     async (communityId: number, memberIds: string[]) => {
-      if (session && !memberIds.includes(session.user.id)) {
-        memberIds.push(session.user.id);
+      if (user && !memberIds.includes(user.userId)) {
+        memberIds.push(user.userId);
         await mutateAsyncUpdateCommunity({
           communityId,
           memberIds,
@@ -74,7 +76,7 @@ const SearchCommunitieScreen = ({
         });
       }
     },
-    [session, params]
+    [user, params]
   );
 
   const searchCommunities = useCallback(async (query: string) => {

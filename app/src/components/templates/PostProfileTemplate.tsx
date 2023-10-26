@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { Feather } from "@expo/vector-icons";
 
+import { Feather } from "@expo/vector-icons";
 import {
   Button,
   Box,
@@ -16,11 +16,12 @@ import {
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import Input from "../molecules/Input";
+
 import { GetUserResponse } from "../../hooks/user/query";
+import Input from "../molecules/Input";
 
 type PostProfileTemplateProps = {
-  user: GetUserResponse | null | undefined;
+  user: GetUserResponse | undefined;
   isLoadingPostProfile: boolean;
   postProfile: (name: string, profile: string) => Promise<void>;
   goBackNavigationHandler: () => void;

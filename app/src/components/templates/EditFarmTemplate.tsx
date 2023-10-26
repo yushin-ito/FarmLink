@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Feather } from "@expo/vector-icons";
+import { Alert } from "react-native";
 
+import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { LocationGeocodedAddress } from "expo-location";
 import {
   Button,
   Box,
@@ -17,18 +20,16 @@ import {
   Spinner,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import MapView, { LatLng, Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
-import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import MapView, { LatLng, Marker } from "react-native-maps";
+
 import { SearchDeviceResponse } from "../../hooks/device/mutate";
-import { LocationGeocodedAddress } from "expo-location";
 import { GetFarmResponse } from "../../hooks/farm/query";
-import { Image } from "expo-image";
-import { Alert } from "react-native";
+import Input from "../molecules/Input";
 
 type EditFarmTemplateProps = {
-  farm: GetFarmResponse | null | undefined;
+  farm: GetFarmResponse | undefined;
   position: LatLng | undefined;
   address: LocationGeocodedAddress | undefined;
   getAddress: (latitude: number, longitude: number) => Promise<void>;

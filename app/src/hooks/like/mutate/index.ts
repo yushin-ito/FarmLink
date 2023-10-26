@@ -1,4 +1,5 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 import { Like, UseMutationResult } from "../../../types";
 
@@ -11,7 +12,7 @@ export type DeleteRentalLikeResponse = Awaited<
 
 const postFarmLike = async (like: Like["Insert"]) => {
   if (!like.farmId) {
-    return;
+    throw Error();
   }
 
   const { data, error } = await supabase
@@ -20,6 +21,7 @@ const postFarmLike = async (like: Like["Insert"]) => {
     .eq("farmId", like.farmId)
     .select()
     .single();
+
   if (error) {
     throw error;
   }
@@ -28,7 +30,7 @@ const postFarmLike = async (like: Like["Insert"]) => {
 
 const postRentalLike = async (like: Like["Insert"]) => {
   if (!like.rentalId) {
-    return;
+    throw Error();
   }
 
   const { data, error } = await supabase
@@ -37,6 +39,7 @@ const postRentalLike = async (like: Like["Insert"]) => {
     .eq("rentalId", like.rentalId)
     .select()
     .single();
+
   if (error) {
     throw error;
   }
@@ -51,14 +54,17 @@ const deleteFarmLike = async ({
   userId: string | undefined;
 }) => {
   if (!userId) {
-    return;
+    throw Error();
   }
 
   const { data, error } = await supabase
     .from("like")
     .delete()
     .eq("farmId", farmId)
-    .eq("userId", userId);
+    .eq("userId", userId)
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
@@ -73,14 +79,17 @@ const deleteRentalLike = async ({
   userId: string | undefined;
 }) => {
   if (!userId) {
-    return;
+    throw Error();
   }
 
   const { data, error } = await supabase
     .from("like")
     .delete()
     .eq("rentalId", rentalId)
-    .eq("userId", userId);
+    .eq("userId", userId)
+    .select()
+    .single();
+    
   if (error) {
     throw error;
   }

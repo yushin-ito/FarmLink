@@ -1,6 +1,7 @@
-import { Stagger as NativeBaseStagger, IconButton, Icon } from "native-base";
-import { Feather } from "@expo/vector-icons";
 import React, { memo } from "react";
+
+import { Feather } from "@expo/vector-icons";
+import { Stagger as NativeBaseStagger, IconButton, Icon } from "native-base";
 
 type StaggerProps = {
   isOpen: boolean;

@@ -1,19 +1,24 @@
 import React, { useCallback } from "react";
-import { useSignInWithProvider, useSignUpWithEmail } from "../hooks/auth/mutate";
+
 import * as Linking from "expo-linking";
-import SignUpTemplate from "../components/templates/SignUpTemplate";
-import { showAlert } from "../functions";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
+import SignUpTemplate from "../components/templates/SignUpTemplate";
+import { showAlert } from "../functions";
+import {
+  useSignInWithProvider,
+  useSignUpWithEmail,
+} from "../hooks/auth/mutate";
 import { usePostUser, useSearchUser } from "../hooks/user/mutate";
 import { AuthStackScreenProps } from "../types";
 
 const SignUpScreen = ({ navigation }: AuthStackScreenProps) => {
-  const toast = useToast();
   const { t } = useTranslation("auth");
+  const toast = useToast();
 
-  const { mutateAsync: mutateAsyncSearchUser, isLoading: isLoadingSearchUser } =
+  const { mutateAsync: mutateAsyncSearchUser, isPending: isLoadingSearchUser } =
     useSearchUser({
       onError: () => {
         showAlert(
@@ -27,7 +32,7 @@ const SignUpScreen = ({ navigation }: AuthStackScreenProps) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncPostUser, isLoading: isLoadingPostUser } =
+  const { mutateAsync: mutateAsyncPostUser, isPending: isLoadingPostUser } =
     usePostUser({
       onError: () => {
         showAlert(
@@ -43,7 +48,7 @@ const SignUpScreen = ({ navigation }: AuthStackScreenProps) => {
 
   const {
     mutateAsync: mutateAsyncSignUpWithEmail,
-    isLoading: isLoadingSignUpWithEmail,
+    isPending: isLoadingSignUpWithEmail,
   } = useSignUpWithEmail({
     onSuccess: async ({ user }) => {
       if (user && user.identities && user.identities.length > 0) {
@@ -108,9 +113,7 @@ const SignUpScreen = ({ navigation }: AuthStackScreenProps) => {
               "_normal",
               ""
             ), // for Twitter
-            color: `hsl(${Math.floor(
-              Math.random() * 360
-            )}, 60%, 60%)`,
+            color: `hsl(${Math.floor(Math.random() * 360)}, 60%, 60%)`,
           });
         }
       }

@@ -1,55 +1,50 @@
-import React, { useCallback, useEffect, useState } from "react";
-import NotificationTemplate from "../components/templates/NotificationTemplate";
-import { SettingStackScreenProps } from "../types";
-import useAuth from "../hooks/auth/useAuth";
-import { showAlert, wait } from "../functions";
+import React, { useCallback, useRef, useState } from "react";
+
+import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
-import { useQueryNotifications } from "../hooks/notification/query";
+import NotificationTemplate from "../components/templates/NotificationTemplate";
+import { showAlert, wait } from "../functions";
 import {
   useDeleteNotification,
   useUpdateNotification,
 } from "../hooks/notification/mutate";
-import { supabase } from "../supabase";
+import { useQueryNotifications } from "../hooks/notification/query";
+import { SettingStackScreenProps } from "../types";
 
 const NotificationScreen = ({
   navigation,
 }: SettingStackScreenProps<"Notification">) => {
   const { t } = useTranslation("setting");
   const toast = useToast();
-  const { session } = useAuth();
+
+  const focusRef = useRef(true);
+  const [isRefetchingNotifications, setIsRefetchingNotifications] =
+    useState(false);
+
   const {
     data: notifications,
     refetch,
     isLoading: isLoadingNotifications,
-  } = useQueryNotifications(session?.user.id);
-  const [isRefetchingNotifications, setIsRefetchingNotifications] =
-    useState(false);
+  } = useQueryNotifications();
 
-  useEffect(() => {
-    const channel = supabase
-      .channel("notification_list")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "notification",
-          filter: `recieverId=eq.${session?.user.id}`,
-        },
-        async () => {
-          await refetch();
-        }
-      )
-      .subscribe();
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [session]);
+      refetch();
+    }, [])
+  );
 
   const { mutateAsync: mutateAsyncUpdateNotification } = useUpdateNotification({
+    onSuccess: async () => {
+      await refetch();
+    },
     onError: () => {
       showAlert(
         toast,
@@ -64,8 +59,11 @@ const NotificationScreen = ({
 
   const {
     mutateAsync: mutateAsyncDeleteNotification,
-    isLoading: isLoadingDeleteNotification,
+    isPending: isLoadingDeleteNotification,
   } = useDeleteNotification({
+    onSuccess: async () => {
+      await refetch();
+    },
     onError: () => {
       showAlert(
         toast,

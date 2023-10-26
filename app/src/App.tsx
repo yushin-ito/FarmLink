@@ -1,49 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
+import { LogBox } from "react-native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
+  extendTheme,
   ColorMode,
   NativeBaseProvider,
   StorageManager,
 } from "native-base";
-import { AuthProvider } from "./contexts/AuthProvider";
-import { QueryClient, QueryClientProvider } from "react-query";
+
 import "./i18n";
-import { Appearance, LogBox } from "react-native";
+
 import RootComponent from "./components/RootComponent";
-import { extendTheme } from "native-base";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthProvider } from "./contexts/AuthProvider";
+import { useColorScheme } from "./hooks";
 
 LogBox.ignoreAllLogs();
-
-const useColorScheme = (delay = 250) => {
-  const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme());
-
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    const subscription = Appearance.addChangeListener(onColorSchemeChange);
-
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-      subscription.remove();
-    };
-  }, []);
-
-  const onColorSchemeChange = (
-    preferences: Appearance.AppearancePreferences
-  ) => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    timerRef.current = setTimeout(() => {
-      setColorScheme(preferences.colorScheme);
-    }, delay);
-  };
-
-  return colorScheme;
-};
 
 const App = () => {
   const theme = extendTheme({
@@ -77,7 +50,13 @@ const App = () => {
     },
   };
 
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity,
+      },
+    },
+  });
 
   return (
     <NativeBaseProvider theme={theme} colorModeManager={colorModeManager}>

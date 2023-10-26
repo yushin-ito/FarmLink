@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { useWindowDimensions } from "react-native";
+
 import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import {
   Box,
   Button,
@@ -11,8 +14,6 @@ import {
   Icon,
   useColorModeValue,
 } from "native-base";
-import { Image } from "expo-image";
-import { useWindowDimensions } from "react-native";
 import { useTranslation } from "react-i18next";
 
 type WalkthroughTemplateProps = {

@@ -1,22 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
+import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
-import useAuth from "../hooks/auth/useAuth";
-import { MapStackScreenProps, Scene } from "../types";
+
+import Alert from "../components/molecules/Alert";
 import RentalGridTemplate from "../components/templates/RentalGridTemplate";
 import { showAlert } from "../functions";
 import { useInfiniteQueryRentals } from "../hooks/rental/query";
 import useLocation from "../hooks/sdk/useLocation";
-import Alert from "../components/molecules/Alert";
-import { supabase } from "../supabase";
+import { MapStackScreenProps, Scene } from "../types";
+
+const scenes = ["near", "popular", "newest", "lowest"] as Scene[];
 
 const RentalGridScreen = ({
   navigation,
 }: MapStackScreenProps<"RentalGrid">) => {
-  const toast = useToast();
   const { t } = useTranslation("map");
-  const { session } = useAuth();
-  const scenes = ["near", "popular", "newest", "lowest"] as Scene[];
+  const toast = useToast();
+
+  const focusRef = useRef(true);
   const [sceneIndex, setSceneIndex] = useState(0);
   const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
 
@@ -42,6 +45,7 @@ const RentalGridScreen = ({
       );
     },
   });
+
   const {
     data: rentals,
     refetch,
@@ -50,26 +54,16 @@ const RentalGridScreen = ({
     fetchNextPage,
   } = useInfiniteQueryRentals(scenes[sceneIndex], position);
 
-  useEffect(() => {
-    const channel = supabase
-      .channel("rental_grid")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "rental",
-        },
-        () => {
-          refetch();
-        }
-      )
-      .subscribe();
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
+      refetch();
+    }, [])
+  );
 
   useEffect(() => {
     getPosition();
@@ -101,9 +95,7 @@ const RentalGridScreen = ({
     <RentalGridTemplate
       sceneIndex={sceneIndex}
       setSceneIndex={setSceneIndex}
-      rentals={rentals?.filter(
-        (item) => !item.privated || item.ownerId === session?.user.id
-      )}
+      rentals={rentals?.pages[0]}
       refetchRentals={refetchRentals}
       readMore={fetchNextPage}
       hasMore={hasNextPage}

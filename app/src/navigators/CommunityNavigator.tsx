@@ -2,11 +2,11 @@ import React from "react";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { CommunityStackParamList } from "../types";
-import CommunityListScreen from "../screens/CommunityListScreen";
 import CommunityChatScreen from "../screens/CommunityChatScreen";
+import CommunityListScreen from "../screens/CommunityListScreen";
 import PostCommunityScreen from "../screens/PostCommunityScreen";
 import SearchCommunityScreen from "../screens/SearchCommunityScreen";
+import { CommunityStackParamList } from "../types";
 
 const CommunityStack = createNativeStackNavigator<CommunityStackParamList>();
 

@@ -1,9 +1,10 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { PostgrestError } from "@supabase/supabase-js";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { LatLng } from "react-native-maps";
+
 import { supabase } from "../../../supabase";
 import { Rental, Scene, User } from "../../../types";
-import { LatLng } from "react-native-maps";
-import { PostgrestError } from "@supabase/supabase-js";
-import { useMemo } from "react";
+import useAuth from "../../auth/useAuth";
 
 export type GetRentalResponse = Awaited<ReturnType<typeof getRental>>;
 export type GetRentalsResponse = Awaited<ReturnType<typeof getRentals>>;
@@ -15,6 +16,7 @@ const getRental = async (rentalId: number) => {
     .select("*, owner:user(*)")
     .eq("rentalId", rentalId)
     .returns<(Rental["Row"] & { owner: User["Row"] })[]>();
+
   if (error) {
     throw error;
   }
@@ -23,9 +25,9 @@ const getRental = async (rentalId: number) => {
 
 const getRentals = async (
   scene: Scene,
+  location: LatLng | undefined,
   from: number,
-  to: number,
-  location?: LatLng
+  to: number
 ) => {
   if (scene === "near" && location) {
     const { data, error } = await supabase
@@ -35,10 +37,10 @@ const getRentals = async (
       })
       .range(from, to)
       .returns<Rental["Row"][]>();
+
     if (error) {
       throw error;
     }
-
     return data;
   } else if (scene === "newest") {
     const { data, error } = await supabase
@@ -46,10 +48,10 @@ const getRentals = async (
       .select("*")
       .order("updatedAt", { ascending: false })
       .range(from, to);
+
     if (error) {
       throw error;
     }
-
     return data;
   } else if (scene === "popular") {
     const { data, error } = await supabase
@@ -57,10 +59,10 @@ const getRentals = async (
       .select("*")
       .order("like_count", { ascending: false })
       .range(from, to);
+
     if (error) {
       throw error;
     }
-
     return data;
   } else {
     return [];
@@ -77,10 +79,10 @@ const getUserRentals = async (ownerId: string | undefined) => {
     .select("*")
     .eq("ownerId", ownerId)
     .order("createdAt", { ascending: false });
+
   if (error) {
     throw error;
   }
-
   return data;
 };
 
@@ -92,30 +94,42 @@ export const useQueryRental = (rentalId: number) =>
 
 export const useInfiniteQueryRentals = (scene: Scene, location?: LatLng) => {
   const PAGE_COUNT = 30;
-  const query = useInfiniteQuery<GetRentalsResponse, PostgrestError>({
-    queryKey: ["rental", scene, location],
-    queryFn: async ({ pageParam = 0 }) =>
-      await getRentals(scene, pageParam, pageParam + PAGE_COUNT - 1, location),
+  const { session } = useAuth();
+
+  return useInfiniteQuery<GetRentalsResponse, PostgrestError>({
+    queryKey: ["rental", scene, location, session?.user.id],
+    queryFn: async ({ pageParam }) =>
+      await getRentals(
+        scene,
+        location,
+        Number(pageParam),
+        Number(pageParam) + PAGE_COUNT - 1
+      ),
+    initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
-      if (lastPage && lastPage.length === PAGE_COUNT) {
-        return pages.map((page) => page).flat().length;
+      if (lastPage.length === PAGE_COUNT) {
+        return pages.flat().length;
       }
+      return undefined;
     },
+    select: ({ pages, pageParams }) => ({
+      pages: [
+        pages
+          .flat()
+          .filter(
+            (item) => !item.privated || item.ownerId === session?.user.id
+          ),
+      ],
+      pageParams,
+    }),
   });
-
-  const data = useMemo(
-    () =>
-      query.data?.pages
-        .flatMap((page) => page)
-        .filter((page): page is NonNullable<typeof page> => page !== null),
-    [query.data]
-  );
-
-  return { ...query, data };
 };
 
-export const useQueryUserRentals = (ownerId: string | undefined) =>
-  useQuery({
-    queryKey: ["rental", ownerId],
-    queryFn: async () => await getUserRentals(ownerId),
+export const useQueryUserRentals = () => {
+  const { session } = useAuth();
+
+  return useQuery({
+    queryKey: ["rental", session?.user.id],
+    queryFn: async () => await getUserRentals(session?.user.id),
   });
+};

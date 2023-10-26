@@ -1,5 +1,6 @@
 import React, { memo } from "react";
-import { SearchUsersResponse } from "../../hooks/user/mutate";
+
+import { Feather } from "@expo/vector-icons";
 import {
   Divider,
   HStack,
@@ -10,9 +11,11 @@ import {
   useColorModeValue,
   VStack,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
-import Avatar from "../molecules/Avatar";
 import { useTranslation } from "react-i18next";
+
+import { SearchUsersResponse } from "../../hooks/user/mutate";
+import Avatar from "../molecules/Avatar";
+
 
 type SearchUserItemProps = {
   item: SearchUsersResponse[number];

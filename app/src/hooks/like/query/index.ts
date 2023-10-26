@@ -1,6 +1,8 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 import { Device, Farm, Like, Rental } from "../../../types";
+import useAuth from "../../auth/useAuth";
 
 export type GetUserLikesResponse = Awaited<ReturnType<typeof getUserLikes>>;
 export type GetFarmLikesResponse = Awaited<ReturnType<typeof getFarmLikes>>;
@@ -21,10 +23,10 @@ const getUserLikes = async (userId: string | undefined) => {
         rental: Rental["Row"];
       })[]
     >();
+
   if (error) {
     throw error;
   }
-
   return data;
 };
 
@@ -33,10 +35,10 @@ const getFarmLikes = async (farmId: number) => {
     .from("like")
     .select("*")
     .eq("farmId", farmId);
+
   if (error) {
     throw error;
   }
-
   return data;
 };
 
@@ -45,18 +47,21 @@ const getRentalLikes = async (rentalId: number) => {
     .from("like")
     .select("*")
     .eq("rentalId", rentalId);
+
   if (error) {
     throw error;
   }
-
   return data;
 };
 
-export const useQueryUserLikes = (userId: string | undefined) =>
-  useQuery({
-    queryKey: ["like", userId],
-    queryFn: async () => await getUserLikes(userId),
+export const useQueryUserLikes = () => {
+  const { session } = useAuth();
+
+  return useQuery({
+    queryKey: ["like", session?.user.id],
+    queryFn: async () => await getUserLikes(session?.user.id),
   });
+};
 
 export const useQueryFarmLikes = (farmId: number) =>
   useQuery({

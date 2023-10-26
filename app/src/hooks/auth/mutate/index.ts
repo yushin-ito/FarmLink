@@ -3,10 +3,12 @@ import {
   SignInWithPasswordCredentials,
   AuthError,
 } from "@supabase/supabase-js";
-import { supabase, supabaseUrl } from "../../../supabase";
-import { useMutation } from "react-query";
-import { UseMutationResult } from "../../../types";
+import { useMutation } from "@tanstack/react-query";
 import { makeRedirectUri, startAsync } from "expo-auth-session";
+
+import { supabase, supabaseUrl } from "../../../supabase";
+import { UseMutationResult } from "../../../types";
+
 
 export type SignUpWithEmailResponse = Awaited<
   ReturnType<typeof signUpWithEmail>
@@ -52,6 +54,7 @@ const signInWithProvider = async (provider: string) => {
       access_token: authResponse.params.access_token,
       refresh_token: authResponse.params.refresh_token,
     });
+
     if (error) {
       throw error;
     }
@@ -65,6 +68,7 @@ const signInWithProvider = async (provider: string) => {
 
 const signOut = async () => {
   const { error } = await supabase.auth.signOut();
+  
   if (error) {
     throw error;
   }

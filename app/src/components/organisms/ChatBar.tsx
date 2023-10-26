@@ -1,3 +1,7 @@
+import React from "react";
+import { memo } from "react";
+import { InputAccessoryView } from "react-native";
+
 import { Feather, Ionicons } from "@expo/vector-icons";
 import {
   HStack,
@@ -11,10 +15,9 @@ import {
 } from "native-base";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import React from "react";
-import { InputAccessoryView } from "react-native";
+
 import Stagger from "./Stagger";
-import { memo } from "react";
+
 
 type FormValues = {
   message: string | undefined;

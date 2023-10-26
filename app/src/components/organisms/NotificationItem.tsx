@@ -1,4 +1,7 @@
 import React, { memo } from "react";
+
+import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import {
   Divider,
   HStack,
@@ -10,11 +13,10 @@ import {
   Box,
   useColorModeValue,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
-import { GetNotificationsResponse } from "../../hooks/notification/query";
-import { Image } from "expo-image";
-import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
+import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
+
+import { GetNotificationsResponse } from "../../hooks/notification/query";
 import Avatar from "../molecules/Avatar";
 
 type NotificationItemProps = {

@@ -1,5 +1,6 @@
+import { useMutation } from "@tanstack/react-query";
 import { decode } from "base64-arraybuffer";
-import { useMutation } from "react-query";
+
 import { supabase } from "../../../supabase";
 import { Chat, UseMutationResult } from "../../../types";
 
@@ -13,6 +14,7 @@ const postChat = async (chat: Chat["Insert"]) => {
     .upsert(chat)
     .select()
     .single();
+
   if (error) {
     throw error;
   }
@@ -27,6 +29,7 @@ const deleteChat = async (chatId: number) => {
     .eq("chatId", chatId)
     .select()
     .single();
+
   if (error) {
     throw error;
   }
@@ -40,10 +43,10 @@ const postChatImage = async (base64: string) => {
     .upload(filePath, decode(base64), {
       contentType: "image",
     });
+    
   if (error) {
     throw error;
   }
-
   return data;
 };
 

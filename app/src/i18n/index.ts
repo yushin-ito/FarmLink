@@ -1,11 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { format as formatDate, formatDistance } from "date-fns";
+import { ja as fnsJa, enUS as fnsEn } from "date-fns/locale";
 import { locale } from "expo-localization";
 import i18n, { LanguageDetectorAsyncModule } from "i18next";
 import { initReactI18next } from "react-i18next";
+
 import en from "./translations/en.json";
 import ja from "./translations/ja.json";
-import { format as formatDate, formatDistance } from "date-fns";
-import { ja as fnsJa, enUS as fnsEn } from "date-fns/locale";
 
 export const resources = {
   en,

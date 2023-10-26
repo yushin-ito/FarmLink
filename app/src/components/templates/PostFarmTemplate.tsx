@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { LocationGeocodedAddress } from "expo-location";
 import {
   Button,
   Box,
@@ -16,13 +19,12 @@ import {
   useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import MapView, { LatLng, Marker } from "react-native-maps";
 import { useTranslation } from "react-i18next";
-import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import MapView, { LatLng, Marker } from "react-native-maps";
+
 import { SearchDeviceResponse } from "../../hooks/device/mutate";
-import { LocationGeocodedAddress } from "expo-location";
-import { Image } from "expo-image";
+import Input from "../molecules/Input";
 
 type PostFarmTemplateProps = {
   searchResult: SearchDeviceResponse[0] | undefined;

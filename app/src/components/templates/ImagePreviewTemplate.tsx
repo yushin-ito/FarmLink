@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import React, { useEffect, useMemo, useState } from "react";
+import { Alert, Image, useWindowDimensions } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 import {
   Box,
   Center,
@@ -9,10 +14,7 @@ import {
   PresenceTransition,
   Spinner,
 } from "native-base";
-import React, { useEffect, useMemo, useState } from "react";
-import { Feather } from "@expo/vector-icons";
-
-import { Alert, Image, useWindowDimensions } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
@@ -21,30 +23,29 @@ import Animated, {
   withDecay,
   withTiming,
 } from "react-native-reanimated";
-import { StatusBar } from "expo-status-bar";
-import { useTranslation } from "react-i18next";
 
 export type ImagePreviewTemplateProps = {
   title: string;
   imageUrl: string;
-  isLoading: boolean;
   shareImage: () => Promise<void>;
   saveImage: () => Promise<void>;
   deleteImage?: () => Promise<void>;
+  isLoading: boolean;
   goBackNavigationHandler: () => void;
 };
 
 const ImagePreviewTemplate = ({
   title,
   imageUrl,
-  isLoading,
   saveImage,
   shareImage,
   deleteImage,
+  isLoading,
   goBackNavigationHandler,
 }: ImagePreviewTemplateProps) => {
   const { t } = useTranslation("chat");
   const dimensions = useWindowDimensions();
+
   const [visible, setVisible] = useState<boolean>(true);
   const [width, setWidth] = useState<number>();
   const [height, setHeight] = useState<number>();

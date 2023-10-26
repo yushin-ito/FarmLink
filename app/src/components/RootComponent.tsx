@@ -1,15 +1,18 @@
 import React from "react";
+
 import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
 } from "@react-navigation/native";
-import RootNavigator from "../navigators/RootNavigator";
-import { StatusBar } from "expo-status-bar";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useColorModeValue } from "native-base";
-import * as Notifications from "expo-notifications";
 import * as Linking from "expo-linking";
+import * as Notifications from "expo-notifications";
+import { StatusBar } from "expo-status-bar";
+import { useColorModeValue } from "native-base";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+import RootNavigator from "../navigators/RootNavigator";
+
 
 const RootComponent = () => {
   const lightTheme = {

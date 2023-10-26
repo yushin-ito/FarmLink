@@ -1,21 +1,23 @@
 import React, { useCallback } from "react";
+
+import { useToast } from "native-base";
+import { useTranslation } from "react-i18next";
+
+import Alert from "../components/molecules/Alert";
+import SignIn from "../components/templates/SignInTemplate";
+import { showAlert } from "../functions";
 import {
   useSignInWithEmail,
   useSignInWithProvider,
 } from "../hooks/auth/mutate";
-import SignIn from "../components/templates/SignInTemplate";
-import { showAlert } from "../functions";
-import { useToast } from "native-base";
-import { useTranslation } from "react-i18next";
-import Alert from "../components/molecules/Alert";
 import { usePostUser, useSearchUser } from "../hooks/user/mutate";
 import { AuthStackScreenProps } from "../types";
 
 const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
-  const toast = useToast();
   const { t } = useTranslation("auth");
+  const toast = useToast();
 
-  const { mutateAsync: mutateAsyncSearchUser, isLoading: isLoadingSearchUser } =
+  const { mutateAsync: mutateAsyncSearchUser, isPending: isLoadingSearchUser } =
     useSearchUser({
       onError: () => {
         showAlert(
@@ -29,7 +31,7 @@ const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncPostUser, isLoading: isLoadingPostUser } =
+  const { mutateAsync: mutateAsyncPostUser, isPending: isLoadingPostUser } =
     usePostUser({
       onError: () => {
         showAlert(
@@ -45,7 +47,7 @@ const SignInScreen = ({ navigation }: AuthStackScreenProps) => {
 
   const {
     mutateAsync: mutateAsyncSignInWithEmail,
-    isLoading: isLoadingSignInWithEmail,
+    isPending: isLoadingSignInWithEmail,
   } = useSignInWithEmail({
     onError: (error) => {
       if (error.status == 400) {

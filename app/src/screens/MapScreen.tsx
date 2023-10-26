@@ -1,32 +1,92 @@
-import React, { useCallback, useEffect, useState } from "react";
-import MapTemplate from "../components/templates/MapTemplate";
-import useLocation from "../hooks/sdk/useLocation";
-import { showAlert } from "../functions";
-import Alert from "../components/molecules/Alert";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
+import { useRoute, RouteProp, useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
-import { MapStackParamList, MapStackScreenProps, Region } from "../types";
+import { LatLng } from "react-native-maps";
+
+import Alert from "../components/molecules/Alert";
+import MapTemplate from "../components/templates/MapTemplate";
+import { showAlert } from "../functions";
 import { useInfiniteQueryFarms } from "../hooks/farm/query";
 import { useInfiniteQueryRentals } from "../hooks/rental/query";
-import { useRoute, RouteProp } from "@react-navigation/native";
+import useLocation from "../hooks/sdk/useLocation";
 import { useQueryUser } from "../hooks/user/query";
-import useAuth from "../hooks/auth/useAuth";
-import { supabase } from "../supabase";
-import { LatLng } from "react-native-maps";
+import { MapStackParamList, MapStackScreenProps, Region } from "../types";
 
 const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
   const { t } = useTranslation("map");
   const toast = useToast();
-  const { session } = useAuth();
-  const { data: user, isLoading: isLoadingUser } = useQueryUser(
-    session?.user.id
-  );
   const { params } = useRoute<RouteProp<MapStackParamList, "Map">>();
+
+  const focusRef = useRef(true);
   const [type, setType] = useState<"rental" | "farm">("rental");
   const [touch, setTouch] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
   const [location, setLocation] = useState<LatLng>();
   const [isRefetching, setIsRefetching] = useState<boolean>(false);
+
+  const { data: user, isLoading: isLoadingUser } = useQueryUser();
+  const {
+    data: rentals,
+    refetch: refetchRentals,
+    fetchNextPage: fetchNextPageRentals,
+    isLoading: isLoadingRentals,
+  } = useInfiniteQueryRentals("near", location);
+
+  const {
+    data: farms,
+    refetch: refetchFarms,
+    fetchNextPage: fetchNextPageFams,
+    isLoading: isLoadingFarms,
+  } = useInfiniteQueryFarms(location);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
+
+      refetchRentals();
+      refetchFarms();
+    }, [])
+  );
+
+  useEffect(() => {
+    if (params) {
+      setTouch(false);
+      setRegion({
+        regionId: params.regionId,
+        latitude: params.latitude,
+        longitude: params.longitude,
+      });
+      setLocation({
+        latitude: params.latitude,
+        longitude: params.longitude,
+      });
+      setType(params.type);
+    } else {
+      getPosition();
+    }
+  }, [params]);
+
+  useEffect(() => {
+    if (!region && type === "rental" && rentals?.pages[0].length) {
+      setRegion({
+        regionId: rentals?.pages[0][0].rentalId,
+        latitude: rentals?.pages[0][0].latitude,
+        longitude: rentals?.pages[0][0].longitude,
+      });
+    }
+    if (!region && type === "farm" && farms?.pages[0].length) {
+      setRegion({
+        regionId: farms?.pages[0][0].farmId,
+        latitude: farms?.pages[0][0].latitude,
+        longitude: farms?.pages[0][0].longitude,
+      });
+    }
+  }, [region, type, rentals, farms]);
 
   const { position, getPosition, isLoadingPosition } = useLocation({
     onDisable: () => {
@@ -50,99 +110,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       );
     },
   });
-
-  const {
-    data: rentals,
-    refetch: refetchRentals,
-    fetchNextPage: fetchNextPageRentals,
-    isLoading: isLoadingRentals,
-  } = useInfiniteQueryRentals("near", location);
-
-  useEffect(() => {
-    const channel = supabase
-      .channel("rental_map")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "rental",
-          filter: `ownerId=eq.${session?.user.id}`,
-        },
-        async () => {
-          await refetchRentals();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [session]);
-
-  const {
-    data: farms,
-    refetch: refetchFarms,
-    fetchNextPage: fetchNextPageFams,
-    isLoading: isLoadingFarms,
-  } = useInfiniteQueryFarms(location);
-
-  useEffect(() => {
-    const channel = supabase
-      .channel("farm_map")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "farm",
-          filter: `ownerId=eq.${session?.user.id}`,
-        },
-        async () => {
-          await refetchFarms();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [session]);
-
-  useEffect(() => {
-    if (params) {
-      setTouch(false);
-      setRegion({
-        regionId: params.regionId,
-        latitude: params.latitude,
-        longitude: params.longitude,
-      });
-      setLocation({
-        latitude: params.latitude,
-        longitude: params.longitude,
-      });
-      setType(params.type);
-    } else {
-      getPosition();
-    }
-  }, [params]);
-
-  useEffect(() => {
-    if (!region && type === "rental" && rentals?.length) {
-      setRegion({
-        regionId: rentals[0].rentalId,
-        latitude: rentals[0].latitude,
-        longitude: rentals[0].longitude,
-      });
-    }
-    if (!region && type === "farm" && farms?.length) {
-      setRegion({
-        regionId: farms[0].farmId,
-        latitude: farms[0].latitude,
-        longitude: farms[0].longitude,
-      });
-    }
-  }, [region, type, rentals, farms]);
 
   useEffect(() => {
     setTouch(false);
@@ -182,12 +149,8 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
       setRegion={setRegion}
       position={position}
       user={user}
-      rentals={rentals?.filter(
-        (item) => !item.privated || item.ownerId === session?.user.id
-      )}
-      farms={farms?.filter(
-        (item) => !item.privated || item.ownerId === session?.user.id
-      )}
+      rentals={rentals?.pages[0]}
+      farms={farms?.pages[0]}
       refetch={refetch}
       readMore={type === "rental" ? fetchNextPageRentals : fetchNextPageFams}
       isLoading={

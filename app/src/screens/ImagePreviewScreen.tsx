@@ -1,29 +1,26 @@
 import React, { useCallback } from "react";
-import ImagePreviewTemplate from "../components/templates/ImagePreviewTemplate";
-import { RootStackParamList } from "../types";
+
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
-import { useDeleteChat } from "../hooks/chat/mutate";
-import { useTranslation } from "react-i18next";
-import { showAlert } from "../functions";
-import { useToast } from "native-base";
-import Alert from "../components/molecules/Alert";
-import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import { useToast } from "native-base";
+import { useTranslation } from "react-i18next";
+
+import Alert from "../components/molecules/Alert";
+import ImagePreviewTemplate from "../components/templates/ImagePreviewTemplate";
+import { showAlert } from "../functions";
+import { useDeleteChat } from "../hooks/chat/mutate";
 import useMediaLibrary from "../hooks/sdk/useMediaLibrary";
-import { useQueryTalks } from "../hooks/talk/query";
-import useAuth from "../hooks/auth/useAuth";
+import { RootStackParamList } from "../types";
 
 const ImagePreviewScreen = () => {
   const { t } = useTranslation("app");
   const toast = useToast();
   const navigation = useNavigation();
   const { params } = useRoute<RouteProp<RootStackParamList, "ImagePreview">>();
-  const { session } = useAuth();
-  const { refetch: refetchTalks } = useQueryTalks(session?.user.id);
 
   const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({
     onSuccess: async () => {
-      await refetchTalks();
       navigation.goBack();
     },
     onError: () => {
@@ -121,10 +118,10 @@ const ImagePreviewScreen = () => {
     <ImagePreviewTemplate
       title={params.title}
       imageUrl={params.imageUrl}
-      isLoading={isLoading}
       shareImage={shareImage}
       saveImage={saveImage}
       deleteImage={params.chatId ? deleteImage : undefined}
+      isLoading={isLoading}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

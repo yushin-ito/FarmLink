@@ -1,9 +1,10 @@
 import React from "react";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { FarmStackParamList } from "../types";
+
 import FarmListScreen from "../screens/FarmListScreen";
 import PostFarmScreen from "../screens/PostFarmScreen";
+import { FarmStackParamList } from "../types";
 
 const FarmStack = createNativeStackNavigator<FarmStackParamList>();
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Feather } from "@expo/vector-icons";
 
+import { Feather } from "@expo/vector-icons";
 import {
   FlatList,
   Box,
@@ -17,9 +17,10 @@ import {
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import SearchUserItem from "../organisms/SearchUserItem";
+
 import { SearchUsersResponse } from "../../hooks/user/mutate";
 import SearchBar from "../organisms/SearchBar";
+import SearchUserItem from "../organisms/SearchUserItem";
 
 type PostTalkTemplateProps = {
   searchResult: SearchUsersResponse | undefined;

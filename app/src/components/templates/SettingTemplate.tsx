@@ -1,3 +1,7 @@
+import React from "react";
+import { Alert, RefreshControl } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   HStack,
@@ -13,18 +17,15 @@ import {
   useColorModeValue,
   ScrollView,
 } from "native-base";
-import { Feather } from "@expo/vector-icons";
-import React from "react";
-
 import { useTranslation } from "react-i18next";
-import Avatar from "../molecules/Avatar";
+
 import { GetUserResponse } from "../../hooks/user/query";
-import { Alert, RefreshControl } from "react-native";
+import Avatar from "../molecules/Avatar";
 import ImageActionSheet from "../organisms/ImageActionSheet";
 import SkeletonSetting from "../organisms/SkeletonSetting";
 
 type SettingTemplateProps = {
-  user: GetUserResponse | null | undefined;
+  user: GetUserResponse | undefined;
   unread: number;
   deleteAvatar: () => Promise<void>;
   signOut: () => Promise<void>;

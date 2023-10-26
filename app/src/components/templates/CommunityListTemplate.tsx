@@ -1,3 +1,7 @@
+import React, { Dispatch, SetStateAction, useState } from "react";
+import { RefreshControl } from "react-native";
+
+import { Feather, AntDesign } from "@expo/vector-icons";
 import {
   Box,
   Icon,
@@ -11,26 +15,26 @@ import {
   Pressable,
   useDisclose,
   useColorModeValue,
+  Modal,
+  Button,
 } from "native-base";
-import React, { Dispatch, SetStateAction } from "react";
-import Fab from "../molecules/Fab";
-import { Feather, AntDesign } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import CommunityListItem from "../organisms/CommunityListItem";
-import Avatar from "../molecules/Avatar";
-import SearchBar from "../organisms/SearchBar";
-import { GetUserResponse } from "../../hooks/user/query";
+
 import { GetCommunitiesResponse } from "../../hooks/community/query";
-import CategoryActionSheet from "../organisms/CategoryActionSheet";
-import SkeletonCommunityList from "../organisms/SkeletonCommunityList";
-import { RefreshControl } from "react-native";
+import { GetUserResponse } from "../../hooks/user/query";
 import { Category } from "../../types";
+import Avatar from "../molecules/Avatar";
+import Fab from "../molecules/Fab";
+import CategoryActionSheet from "../organisms/CategoryActionSheet";
+import CommunityListItem from "../organisms/CommunityListItem";
+import SearchBar from "../organisms/SearchBar";
+import SkeletonCommunityList from "../organisms/SkeletonCommunityList";
 
 type CommunityListTemplateProps = {
   categoryIndex: number;
   setCategoryIndex: Dispatch<SetStateAction<number>>;
-  user: GetUserResponse | null | undefined;
-  communities: GetCommunitiesResponse | null | undefined;
+  user: GetUserResponse | undefined;
+  communities: GetCommunitiesResponse | undefined;
   refetchCommunities: () => Promise<void>;
   joinCommunity: (communityId: number, memberIds: string[]) => Promise<void>;
   hasMore: boolean | undefined;
@@ -63,11 +67,22 @@ const CommunityListTemplate = ({
 }: CommunityListTemplateProps) => {
   const { t } = useTranslation("community");
   const bgColor = useColorModeValue("muted.200", "muted.700");
+  const modalColor = useColorModeValue("white", "muted.800");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
-  const { isOpen, onOpen, onClose } = useDisclose();
+  const {
+    isOpen: isOpenCategoryActionSheet,
+    onOpen: onOpenCategoryActionSheet,
+    onClose: onCloseCategoryActionSheet,
+  } = useDisclose();
+  const {
+    isOpen: isOpenModal,
+    onOpen: onOpenModal,
+    onClose: onCloseModal,
+  } = useDisclose();
+  const [content, setContent] = useState<GetCommunitiesResponse[number]>();
   const categories = [
     "all",
     "joining",
@@ -80,11 +95,61 @@ const CommunityListTemplate = ({
   return (
     <Box flex={1} safeAreaTop>
       <CategoryActionSheet
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isOpenCategoryActionSheet}
+        onClose={onCloseCategoryActionSheet}
         categoryIndex={categoryIndex}
         setCategoryIndex={setCategoryIndex}
       />
+      {content && (
+        <Modal isOpen={isOpenModal} onClose={onCloseModal} size="lg">
+          <VStack w="75%" px="4" pt="4" pb="2" bg={modalColor} rounded="2xl">
+            <Modal.CloseButton _pressed={{ bg: "transparent" }} />
+            <VStack mt="6" alignItems="center" space="3">
+              <Avatar
+                size="xl"
+                fontSize="5xl"
+                disabled
+                text={content.name?.charAt(0)}
+                uri={content.imageUrl}
+                color={content.color}
+                updatedAt={content.updatedAt}
+              />
+              <VStack alignItems="center" space="2">
+                <Text bold fontSize="lg">
+                  {content.name}
+                </Text>
+                <Text numberOfLines={3} ellipsizeMode="tail">
+                  {content.description}
+                </Text>
+              </VStack>
+            </VStack>
+            <Button
+              mt="8"
+              size="lg"
+              rounded="lg"
+              colorScheme="brand"
+              isLoading={isLoadingUpdateCommunity}
+              onPress={async () => {
+                content &&
+                  (await joinCommunity(
+                    content.communityId,
+                    content.memberIds ?? []
+                  ));
+                onCloseModal();
+              }}
+            >
+              <Text bold fontSize="md" color="white">
+                {t("join")}
+              </Text>
+            </Button>
+            <Button mt="2" variant="unstyled" onPress={onCloseModal}>
+              <Text bold fontSize="md" color="brand.600">
+                {t("cancel")}
+              </Text>
+            </Button>
+          </VStack>
+        </Modal>
+      )}
       <VStack space="3" px="8" pt="6" pb="4">
         <HStack alignItems="center" justifyContent="space-between">
           <Heading>{t("community")}</Heading>
@@ -105,7 +170,12 @@ const CommunityListTemplate = ({
           />
         </Pressable>
       </VStack>
-      <Pressable onPress={onOpen} alignSelf="flex-end" mr="8" mb="2">
+      <Pressable
+        onPress={onOpenCategoryActionSheet}
+        alignSelf="flex-end"
+        mr="8"
+        mb="2"
+      >
         <HStack
           alignItems="center"
           px="2"
@@ -149,16 +219,12 @@ const CommunityListTemplate = ({
           renderItem={({ item }) => (
             <CommunityListItem
               item={item}
-              joined={
-                user?.userId === item.ownerId ||
-                (item?.memberIds?.some(
-                  (memeberId) => user?.userId === memeberId
-                ) ??
-                  false)
-              }
-              joinCommunity={joinCommunity}
-              isLoading={isLoadingUpdateCommunity}
-              communityChatNavigationHandler={communityChatNavigationHandler}
+              onPress={() => {
+                setContent(item);
+                categories[categoryIndex] === "joining"
+                  ? communityChatNavigationHandler(item.communityId)
+                  : onOpenModal();
+              }}
             />
           )}
           keyExtractor={(item) => item.communityId.toString()}

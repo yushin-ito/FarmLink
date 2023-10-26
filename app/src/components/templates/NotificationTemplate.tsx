@@ -1,3 +1,7 @@
+import React, { useCallback } from "react";
+import { RefreshControl } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   HStack,
@@ -8,13 +12,12 @@ import {
   IconButton,
   useColorModeValue,
 } from "native-base";
-import React, { useCallback } from "react";
-import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import SkeletonNotification from "../organisms/SkeletonNotification";
-import NotificationItem from "../organisms/NotificationItem";
+
 import { GetNotificationsResponse } from "../../hooks/notification/query";
-import { RefreshControl } from "react-native";
+import NotificationItem from "../organisms/NotificationItem";
+import SkeletonNotification from "../organisms/SkeletonNotification";
+
 
 type NotificationTemplateProps = {
   notifications: GetNotificationsResponse | undefined;

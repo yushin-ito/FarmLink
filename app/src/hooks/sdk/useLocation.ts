@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
+import { Platform } from "react-native";
+
 import * as Location from "expo-location";
 import { LatLng } from "react-native-maps";
-import { Platform } from "react-native";
 
 type UseLocationType = {
   onError?: (error: Error) => void;

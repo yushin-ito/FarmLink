@@ -1,19 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
-import EnvironmentTemplate from "../components/templates/EnvironmentTemplate";
-import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useTranslation } from "react-i18next";
 import { ColorSchemeName, NativeModules, Platform } from "react-native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 import { useColorMode, useToast } from "native-base";
-import { Locale } from "../types";
-import { showAlert } from "../functions";
+import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
+import EnvironmentTemplate from "../components/templates/EnvironmentTemplate";
+import { showAlert } from "../functions";
+import { Locale } from "../types";
 
 const EnvironmentScreen = () => {
   const { i18n, t } = useTranslation("app");
   const toast = useToast();
   const navigation = useNavigation();
   const { setColorMode } = useColorMode();
+  
   const [theme, setTheme] = useState<ColorSchemeName>(null);
   const [locale, setLocale] = useState<Locale | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);

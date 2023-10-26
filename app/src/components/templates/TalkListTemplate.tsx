@@ -1,3 +1,7 @@
+import React from "react";
+import { Alert, RefreshControl } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   Icon,
@@ -9,25 +13,23 @@ import {
   useColorModeValue,
   Pressable,
 } from "native-base";
-import React from "react";
-import Fab from "../molecules/Fab";
-import { Feather } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import TalkListItem from "../organisms/TalkListItem";
-import { Alert, RefreshControl } from "react-native";
-import Avatar from "../molecules/Avatar";
-import SearchBar from "../organisms/SearchBar";
-import { GetUserResponse } from "../../hooks/user/query";
+
 import { GetTalksResponse } from "../../hooks/talk/query";
+import { GetUserResponse } from "../../hooks/user/query";
+import Avatar from "../molecules/Avatar";
+import Fab from "../molecules/Fab";
+import SearchBar from "../organisms/SearchBar";
 import SkeletonTalkList from "../organisms/SkeletonTalkList";
+import TalkListItem from "../organisms/TalkListItem";
 
 type TalkListTemplateProps = {
-  user: GetUserResponse | null | undefined;
-  talks: GetTalksResponse | null | undefined;
-  isLoading: boolean;
-  isRefetchingTalks: boolean;
+  user: GetUserResponse | undefined;
+  talks: GetTalksResponse | undefined;
   refetchTalks: () => Promise<void>;
   deleteTalk: (talkId: number) => Promise<void>;
+  isLoading: boolean;
+  isRefetchingTalks: boolean;
   talkChatNavigationHandler: (talkId: number) => void;
   postTalkNavigationHandler: () => void;
   settingNavigationHandler: () => void;
@@ -37,10 +39,10 @@ type TalkListTemplateProps = {
 const TalkListTemplate = ({
   user,
   talks,
-  isLoading,
-  isRefetchingTalks,
   refetchTalks,
   deleteTalk,
+  isLoading,
+  isRefetchingTalks,
   talkChatNavigationHandler,
   postTalkNavigationHandler,
   settingNavigationHandler,

@@ -1,3 +1,7 @@
+import React from "react";
+import { Alert, RefreshControl } from "react-native";
+
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   VStack,
@@ -8,27 +12,25 @@ import {
   Text,
   useColorModeValue,
 } from "native-base";
-import React from "react";
-import Fab from "../molecules/Fab";
-import FarmListItem from "../organisms/FarmListItem";
+import { useTranslation } from "react-i18next";
+
 import { GetUserFarmsResponse } from "../../hooks/farm/query";
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
-import { Feather } from "@expo/vector-icons";
-import { useTranslation } from "react-i18next";
+import Fab from "../molecules/Fab";
+import FarmListItem from "../organisms/FarmListItem";
 import SkeletonFarmList from "../organisms/SkeletonFarmList";
-import { Alert, RefreshControl } from "react-native";
 
 type FarmListTemplateProps = {
-  user: GetUserResponse | null | undefined;
-  farms: GetUserFarmsResponse | null | undefined;
-  isLoading: boolean;
-  isRefetchingFarms: boolean;
+  user: GetUserResponse | undefined;
+  farms: GetUserFarmsResponse | undefined;
   refetchFarms: () => Promise<void>;
   privateFarm: (farmId: number) => Promise<void>;
   publicFarm: (farmId: number) => Promise<void>;
   deleteFarm: (farmId: number) => Promise<void>;
   farmDetailNavigationHandler: (farmId: number) => void;
+  isLoading: boolean;
+  isRefetchingFarms: boolean;
   postFarmNavigationHandler: () => void;
   settingNavigationHandler: () => void;
 };
@@ -36,12 +38,12 @@ type FarmListTemplateProps = {
 const FarmListTemplate = ({
   user,
   farms,
-  isLoading,
-  isRefetchingFarms,
   refetchFarms,
   privateFarm,
   publicFarm,
   deleteFarm,
+  isLoading,
+  isRefetchingFarms,
   farmDetailNavigationHandler,
   postFarmNavigationHandler,
   settingNavigationHandler,

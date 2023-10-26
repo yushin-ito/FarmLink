@@ -1,55 +1,48 @@
-import React, { useCallback, useEffect, useState } from "react";
-import RentalListTemplate from "../components/templates/RentalListTemplate";
-import { SettingStackScreenProps } from "../types";
-import useAuth from "../hooks/auth/useAuth";
-import { useQueryUserRentals } from "../hooks/rental/query";
-import { showAlert } from "../functions";
-import { useDeleteRental, useUpdateRental } from "../hooks/rental/mutate";
+import React, { useCallback, useRef, useState } from "react";
+
+import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
-import { supabase } from "../supabase";
+import RentalListTemplate from "../components/templates/RentalListTemplate";
+import { showAlert } from "../functions";
+import { useDeleteRental, useUpdateRental } from "../hooks/rental/mutate";
+import { useQueryUserRentals } from "../hooks/rental/query";
+import { SettingStackScreenProps } from "../types";
 
 const RentalListScreen = ({
   navigation,
 }: SettingStackScreenProps<"RentalList">) => {
   const { t } = useTranslation("setting");
   const toast = useToast();
-  const { session } = useAuth();
+
+  const focusRef = useRef(true);
+  const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
+
   const {
     data: rentals,
     refetch,
     isLoading: isLoadingRentals,
-  } = useQueryUserRentals(session?.user.id);
-  const [isRefetchingRentals, setIsRefetchingRentals] = useState(false);
+  } = useQueryUserRentals();
 
-  useEffect(() => {
-    const channel = supabase
-      .channel("rental_list")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "rental",
-          filter: `ownerId=eq.${session?.user.id}`,
-        },
-        async () => {
-          await refetch();
-        }
-      )
-      .subscribe();
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [session]);
+      refetch();
+    }, [])
+  );
 
   const {
     mutateAsync: mutateAsyncUpdateRental,
-    isLoading: isLoadingUpdateRental,
+    isPending: isLoadingUpdateRental,
   } = useUpdateRental({
     onSuccess: async () => {
+      await refetch();
       showAlert(
         toast,
         <Alert
@@ -73,8 +66,11 @@ const RentalListScreen = ({
 
   const {
     mutateAsync: mutateAsyncDeleteRental,
-    isLoading: isLoadingDeleteRental,
+    isPending: isLoadingDeleteRental,
   } = useDeleteRental({
+    onSuccess: async () => {
+      await refetch();
+    },
     onError: () => {
       showAlert(
         toast,

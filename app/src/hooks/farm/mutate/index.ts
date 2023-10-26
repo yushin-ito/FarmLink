@@ -1,4 +1,5 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
+
 import { supabase } from "../../../supabase";
 import { Farm, UseMutationResult } from "../../../types";
 
@@ -8,7 +9,12 @@ export type DeleteFarmResponse = Awaited<ReturnType<typeof deleteFarm>>;
 export type SearchFarmsResponse = Awaited<ReturnType<typeof searchFarms>>;
 
 const postFarm = async (farm: Farm["Insert"]) => {
-  const { data, error } = await supabase.from("farm").insert(farm).select();
+  const { data, error } = await supabase
+    .from("farm")
+    .insert(farm)
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
@@ -17,14 +23,16 @@ const postFarm = async (farm: Farm["Insert"]) => {
 
 const updateFarm = async (farm: Farm["Update"]) => {
   if (!farm.farmId) {
-    return;
+    throw Error();
   }
 
   const { data, error } = await supabase
     .from("farm")
     .update(farm)
     .eq("farmId", farm.farmId)
-    .select();
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
@@ -37,19 +45,23 @@ const deleteFarm = async (farmId: number) => {
   const { data, error } = await supabase
     .from("farm")
     .delete()
-    .eq("farmId", farmId);
+    .eq("farmId", farmId)
+    .select()
+    .single();
+
   if (error) {
     throw error;
   }
   return data;
 };
 
-const searchFarms = async (text: string) => {
+const searchFarms = async (query: string) => {
   const { data, error } = await supabase
     .from("farm")
     .select("*, device(imageUrl)")
-    .ilike("name", `%${text}%`)
+    .ilike("name", `%${query}%`)
     .returns<(Farm["Row"] & { device: { imageUrl: string } })[]>();
+
   if (error) {
     throw error;
   }

@@ -1,42 +1,56 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+
+import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
-import { showAlert } from "../functions";
 import { useTranslation } from "react-i18next";
+
 import Alert from "../components/molecules/Alert";
-import { useSignOut } from "../hooks/auth/mutate";
-import { useQueryUser } from "../hooks/user/query";
-import useAuth from "../hooks/auth/useAuth";
 import SettingTemplate from "../components/templates/SettingTemplate";
+import { showAlert } from "../functions";
+import { useSignOut } from "../hooks/auth/mutate";
+import { useQueryNotifications } from "../hooks/notification/query";
 import useImage from "../hooks/sdk/useImage";
 import { usePostAvatar, usePostUser } from "../hooks/user/mutate";
-import { SettingStackScreenProps } from "../types";
+import { useQueryUser } from "../hooks/user/query";
 import { supabase } from "../supabase";
-import { useQueryNotifications } from "../hooks/notification/query";
+import { SettingStackScreenProps } from "../types";
 
 const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
   const toast = useToast();
   const { t } = useTranslation("setting");
-  const { session } = useAuth();
+
+  const focusRef = useRef(true);
+  const [isRefetching, setIsRefetching] = useState(false);
+
   const {
     data: user,
     isLoading: isLoadingUser,
     refetch: refetchUser,
-  } = useQueryUser(session?.user.id);
+  } = useQueryUser();
   const {
     data: notifications,
     isLoading: isLoadingNotifications,
     refetch: refetchNotifications,
-  } = useQueryNotifications(session?.user.id);
-  const [isRefetching, setIsRefetching] = useState(false);
+  } = useQueryNotifications();
 
-  const refetch = useCallback(async () => {
-    setIsRefetching(true);
-    await refetchUser();
-    await refetchNotifications();
-    setIsRefetching(false);
-  }, []);
+  const unread = useMemo(
+    () => notifications?.filter((item) => !item.clicked).length ?? 0,
+    [notifications]
+  );
 
-  const { mutateAsync: mutateAsyncSignOut, isLoading: isLoadingSignOut } =
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
+
+      refetchUser();
+      refetchNotifications();
+    }, [])
+  );
+
+  const { mutateAsync: mutateAsyncSignOut, isPending: isLoadingSignOut } =
     useSignOut({
       onError: () => {
         showAlert(
@@ -50,7 +64,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncPostUser, isLoading: isLoadingPostUser } =
+  const { mutateAsync: mutateAsyncPostUser, isPending: isLoadingPostUser } =
     usePostUser({
       onSuccess: async () => {
         await refetch();
@@ -67,13 +81,13 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncPostAvatar, isLoading: isLoadingPostAvatar } =
+  const { mutateAsync: mutateAsyncPostAvatar, isPending: isLoadingPostAvatar } =
     usePostAvatar({
       onSuccess: async ({ path }) => {
         const { data } = supabase.storage.from("image").getPublicUrl(path);
-        session?.user &&
+        user &&
           mutateAsyncPostUser({
-            userId: session.user.id,
+            userId: user.userId,
             avatarUrl: data.publicUrl,
           });
       },
@@ -91,7 +105,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
 
   const { pickImageByCamera, pickImageByLibrary } = useImage({
     onSuccess: async ({ base64 }) => {
-      if (session?.user && base64) {
+      if (base64) {
         await mutateAsyncPostAvatar(base64);
       }
     },
@@ -117,10 +131,18 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     },
   });
 
+  const refetch = useCallback(async () => {
+    setIsRefetching(true);
+    await refetchUser();
+    await refetchNotifications();
+    setIsRefetching(false);
+  }, []);
+
   const deleteAvatar = useCallback(async () => {
-    session?.user &&
-      (await mutateAsyncPostUser({ userId: session.user.id, avatarUrl: null }));
-  }, [session?.user]);
+    if (user) {
+      await mutateAsyncPostUser({ userId: user.userId, avatarUrl: null });
+    }
+  }, [user]);
 
   const signOut = useCallback(async () => {
     await mutateAsyncSignOut();
@@ -153,7 +175,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
   return (
     <SettingTemplate
       user={user}
-      unread={notifications?.filter((item) => !item.clicked).length ?? 0}
+      unread={unread}
       signOut={signOut}
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}

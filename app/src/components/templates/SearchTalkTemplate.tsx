@@ -1,6 +1,7 @@
 import React from "react";
-import { Feather } from "@expo/vector-icons";
+import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   VStack,
@@ -11,11 +12,12 @@ import {
   useColorModeValue,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import SearchBar from "../organisms/SearchBar";
-import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
-import SearchTalkItem from "../organisms/SearchTalkItem";
-import { GetTalksResponse } from "../../hooks/talk/query";
 import { useTranslation } from "react-i18next";
+
+import { GetTalksResponse } from "../../hooks/talk/query";
+import SearchBar from "../organisms/SearchBar";
+import SearchTalkItem from "../organisms/SearchTalkItem";
+
 
 type SearchTalkTemplateProps = {
   searchResult: GetTalksResponse | undefined;

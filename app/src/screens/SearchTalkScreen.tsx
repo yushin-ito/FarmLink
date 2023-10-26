@@ -1,29 +1,31 @@
 import React, { useCallback, useState } from "react";
+
 import SearchTalkTemplate from "../components/templates/SearchTalkTemplate";
-import { TalkStackScreenProps } from "../types";
 import { GetTalksResponse, useQueryTalks } from "../hooks/talk/query";
-import useAuth from "../hooks/auth/useAuth";
+import { TalkStackScreenProps } from "../types";
 
 const SearchTalkScreen = ({
   navigation,
 }: TalkStackScreenProps<"SearchTalk">) => {
   const [searchResult, setSearchResult] = useState<GetTalksResponse>();
-  const { session } = useAuth();
-  const { data } = useQueryTalks(session?.user.id);
+  const { data: talks } = useQueryTalks();
 
-  const searchTalks = useCallback(async (query: string) => {
-    if (query === "") {
-      setSearchResult([]);
-      return;
-    }
-    setSearchResult(
-      data?.filter(
-        (item) =>
-          item.to?.name?.toUpperCase().indexOf(query.trim().toUpperCase()) !==
-          -1
-      )
-    );
-  }, []);
+  const searchTalks = useCallback(
+    async (query: string) => {
+      if (query === "") {
+        setSearchResult([]);
+        return;
+      }
+      setSearchResult(
+        talks?.filter(
+          (item) =>
+            item.to?.name?.toUpperCase().indexOf(query.trim().toUpperCase()) !==
+            -1
+        )
+      );
+    },
+    [talks]
+  );
 
   const talkChatNavigationHandler = useCallback((talkId: number) => {
     navigation.goBack();

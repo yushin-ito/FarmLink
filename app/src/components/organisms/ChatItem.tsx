@@ -1,4 +1,7 @@
 import React, { memo } from "react";
+import { useWindowDimensions } from "react-native";
+
+import { Image } from "expo-image";
 import {
   Box,
   HStack,
@@ -7,14 +10,15 @@ import {
   VStack,
   useColorModeValue,
 } from "native-base";
-import Avatar from "../molecules/Avatar";
-import { Image } from "expo-image";
-import { useWindowDimensions } from "react-native";
+import { useTranslation } from "react-i18next";
+
 import {
   GetCommunityChatsResponse,
   GetTalkChatsResponse,
 } from "../../hooks/chat/query";
-import { useTranslation } from "react-i18next";
+import Avatar from "../molecules/Avatar";
+
+
 
 type ChatItemProps = {
   type: "community" | "talk";

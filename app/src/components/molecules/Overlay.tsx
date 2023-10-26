@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useRef } from "react";
-import { Center, Modal } from "native-base";
 import { Animated, Easing, useWindowDimensions } from "react-native";
+
+import { Center, Modal } from "native-base";
 
 type OverlayProps = {
   isOpen: boolean;
@@ -42,10 +43,10 @@ const Overlay = memo(({ isOpen, loadingEnabled }: OverlayProps) => {
             style={{
               borderColor: "transparent",
               borderTopColor: "white",
-              width: 50,
-              height: 50,
-              borderRadius: 25,
-              borderWidth: 3,
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              borderWidth: 2,
               transform: [
                 {
                   rotateZ: rotate.interpolate({

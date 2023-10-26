@@ -1,8 +1,9 @@
-import { supabase } from "../../../supabase";
-import { useInfiniteQuery, useQuery } from "react-query";
 import { PostgrestError } from "@supabase/supabase-js";
-import { useMemo } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+
+import { supabase } from "../../../supabase";
 import { Category } from "../../../types";
+import useAuth from "../../auth/useAuth";
 
 export type GetCommunityResponse = Awaited<ReturnType<typeof getCommunity>>;
 export type GetCommunitiesResponse = Awaited<ReturnType<typeof getCommunities>>;
@@ -17,26 +18,27 @@ const getCommunity = async (communityId: number) => {
   if (error) {
     throw error;
   }
-
   return data;
 };
 
 const getCommunities = async (
   category: Category,
+  userId: string | undefined,
   from: number,
-  to: number,
-  userId: string | undefined
+  to: number
 ) => {
   if (category === "all") {
     const { data, error } = await supabase
       .from("community")
       .select("*")
+      .neq("ownerId", userId)
+      .not("memberIds", "cs", `{"${userId}"}`)
       .order("updatedAt", { ascending: false })
       .range(from, to);
+
     if (error) {
       throw error;
     }
-
     return data;
   } else if (category === "joining") {
     const { data, error } = await supabase
@@ -45,22 +47,24 @@ const getCommunities = async (
       .or(`ownerId.eq.${userId}, memberIds.cs.{"${userId}"}`)
       .order("updatedAt", { ascending: false })
       .range(from, to);
+
     if (error) {
       throw error;
     }
-
     return data;
   } else {
     const { data, error } = await supabase
       .from("community")
       .select("*")
       .eq("category", category)
+      .neq("ownerId", userId)
+      .not("memberIds", "cs", `{"${userId}"}`)
       .order("updatedAt", { ascending: false })
       .range(from, to);
+
     if (error) {
       throw error;
     }
-
     return data;
   }
 };
@@ -71,34 +75,29 @@ export const useQueryCommuntiy = (communtiyId: number) =>
     queryFn: async () => await getCommunity(communtiyId),
   });
 
-export const useInfiniteQueryCommunities = (
-  category: Category,
-  userId: string | undefined
-) => {
+export const useInfiniteQueryCommunities = (category: Category) => {
   const PAGE_COUNT = 15;
-  const query = useInfiniteQuery<GetCommunitiesResponse, PostgrestError>({
-    queryKey: ["community", category, userId],
-    queryFn: async ({ pageParam = 0 }) =>
+  const { session } = useAuth();
+
+  return useInfiniteQuery<GetCommunitiesResponse, PostgrestError>({
+    queryKey: ["community", category, session?.user.id],
+    queryFn: async ({ pageParam }) =>
       await getCommunities(
         category,
-        pageParam,
-        pageParam + PAGE_COUNT - 1,
-        userId
+        session?.user.id,
+        Number(pageParam),
+        Number(pageParam) + PAGE_COUNT - 1
       ),
+    initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
-      if (lastPage && lastPage.length === PAGE_COUNT) {
-        return pages.map((page) => page).flat().length;
+      if (lastPage.length === PAGE_COUNT) {
+        return pages.flat().length;
       }
+      return undefined;
     },
+    select: ({ pages, pageParams }) => ({
+      pages: [pages.flat()],
+      pageParams: pageParams,
+    }),
   });
-
-  const data = useMemo(
-    () =>
-      query.data?.pages
-        .flatMap((page) => page)
-        .filter((page): page is NonNullable<typeof page> => page !== null),
-    [query.data]
-  );
-
-  return { ...query, data };
 };

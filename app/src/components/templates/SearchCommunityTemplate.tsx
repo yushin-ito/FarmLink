@@ -1,6 +1,7 @@
 import React from "react";
-import { Feather } from "@expo/vector-icons";
+import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   VStack,
@@ -13,15 +14,15 @@ import {
   KeyboardAvoidingView,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import SearchBar from "../organisms/SearchBar";
-import { GetCommunitiesResponse } from "../../hooks/community/query";
-import { TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
-import SearchCommunityItem from "../organisms/SearchCommunityItem";
 import { useTranslation } from "react-i18next";
+
+import { GetCommunitiesResponse } from "../../hooks/community/query";
 import { GetUserResponse } from "../../hooks/user/query";
+import SearchBar from "../organisms/SearchBar";
+import SearchCommunityItem from "../organisms/SearchCommunityItem";
 
 type SearchCommunityTemplateProps = {
-  user: GetUserResponse | null | undefined;
+  user: GetUserResponse | undefined;
   searchResult: GetCommunitiesResponse | undefined;
   searchCommunities: (query: string) => Promise<void>;
   isLoadingSearchCommunities: boolean;

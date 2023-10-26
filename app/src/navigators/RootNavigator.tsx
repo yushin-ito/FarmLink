@@ -1,24 +1,57 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Center, Spinner, useToast } from "native-base";
+import { useTranslation } from "react-i18next";
 
+import Alert from "../components/molecules/Alert";
+import { showAlert } from "../functions";
 import useAuth from "../hooks/auth/useAuth";
-import TabNavigator from "./TabNavigator";
-import AuthNavigator from "./AuthNavigator";
-import { Center, Spinner } from "native-base";
-
-import { RootStackParamList } from "../types";
-import WalkthroughScreen from "../screens/WalkthroughScreen";
-import ImagePreviewScreen from "../screens/ImagePreviewScreen";
+import useNotification from "../hooks/sdk/useNotification";
 import EditFarmScreen from "../screens/EditFarmScreen";
-import FarmDetailScreen from "../screens/FarmDetailScreen";
 import EditRentalScreen from "../screens/EditRentalScreen";
+import FarmDetailScreen from "../screens/FarmDetailScreen";
+import ImagePreviewScreen from "../screens/ImagePreviewScreen";
 import RentalDetailScreen from "../screens/RentalDetailScreen";
+import WalkthroughScreen from "../screens/WalkthroughScreen";
+import { RootStackParamList } from "../types";
+
+import AuthNavigator from "./AuthNavigator";
+import TabNavigator from "./TabNavigator";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
+  const { t } = useTranslation("app");
+  const toast = useToast();
   const { session, isLoading } = useAuth();
+
+  useEffect(() => {
+    session && postToken(session.user.id);
+  }, [session]);
+
+  const { postToken } = useNotification({
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestNoti")}
+        />
+      );
+    },
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
 
   if (isLoading) {
     return (

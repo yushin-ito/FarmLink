@@ -1,6 +1,14 @@
 import React, { useState } from "react";
-import { Feather, AntDesign } from "@expo/vector-icons";
+import {
+  Alert,
+  Platform,
+  RefreshControl,
+  useWindowDimensions,
+} from "react-native";
 
+import { Feather, AntDesign } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { LocationGeocodedAddress } from "expo-location";
 import {
   Box,
   HStack,
@@ -17,25 +25,18 @@ import {
   useColorModeValue,
   Pressable,
 } from "native-base";
-import { Image } from "expo-image";
-import { GetRentalResponse } from "../../hooks/rental/query";
-import {
-  Alert,
-  Platform,
-  RefreshControl,
-  useWindowDimensions,
-} from "react-native";
 import { useTranslation } from "react-i18next";
-import { LocationGeocodedAddress } from "expo-location";
+
 import { GetRentalLikesResponse } from "../../hooks/like/query";
-import Avatar from "../molecules/Avatar";
+import { GetRentalResponse } from "../../hooks/rental/query";
 import { Rate } from "../../types";
+import Avatar from "../molecules/Avatar";
 
 type RentalDetailTemplateProps = {
   owned: boolean;
   liked: boolean;
-  likes: GetRentalLikesResponse | undefined;
   rental: GetRentalResponse | undefined;
+  likes: GetRentalLikesResponse | undefined;
   address: LocationGeocodedAddress | undefined;
   postLike: () => Promise<void>;
   deleteLike: () => Promise<void>;

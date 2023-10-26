@@ -1,55 +1,46 @@
-import React, { useCallback, useEffect, useState } from "react";
-import FarmListTemplate from "../components/templates/FarmListTemplate";
-import { useQueryUserFarms } from "../hooks/farm/query";
+import React, { useCallback, useRef, useState } from "react";
+
+import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
-import useAuth from "../hooks/auth/useAuth";
+
+import Alert from "../components/molecules/Alert";
+import FarmListTemplate from "../components/templates/FarmListTemplate";
+import { showAlert } from "../functions";
+import { useDeleteFarm, useUpdateFarm } from "../hooks/farm/mutate";
+import { useQueryUserFarms } from "../hooks/farm/query";
 import { useQueryUser } from "../hooks/user/query";
 import { FarmStackScreenProps } from "../types";
-import { showAlert } from "../functions";
-import Alert from "../components/molecules/Alert";
-import { useDeleteFarm, useUpdateFarm } from "../hooks/farm/mutate";
-import { supabase } from "../supabase";
 
 const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
-  const toast = useToast();
   const { t } = useTranslation("farm");
-  const { session } = useAuth();
-  const { data: user, isLoading: isLoadingUser } = useQueryUser(
-    session?.user.id
-  );
+  const toast = useToast();
+
+  const focusRef = useRef(true);
+  const [isRefetchingFarms, setIsRefetchingFarms] = useState(false);
+
+  const { data: user, isLoading: isLoadingUser } = useQueryUser();
   const {
     data: farms,
     refetch,
     isLoading: isLoadingFarms,
-  } = useQueryUserFarms(session?.user.id);
-  const [isRefetchingFarms, setIsRefetchingFarms] = useState(false);
+  } = useQueryUserFarms();
 
-  useEffect(() => {
-    const channel = supabase
-      .channel("farm_list")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "farm",
-          filter: `ownerId=eq.${session?.user.id}`,
-        },
-        async () => {
-          await refetch();
-        }
-      )
-      .subscribe();
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [session]);
+      refetch();
+    }, [])
+  );
 
-  const { mutateAsync: mutateAsyncUpdateFarm, isLoading: isLoadingUpdateFarm } =
+  const { mutateAsync: mutateAsyncUpdateFarm, isPending: isLoadingUpdateFarm } =
     useUpdateFarm({
-      onSuccess: () => {
+      onSuccess: async () => {
+        await refetch();
         showAlert(
           toast,
           <Alert
@@ -71,8 +62,11 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncDeleteFarm, isLoading: isLoadingDeleteFarm } =
+  const { mutateAsync: mutateAsyncDeleteFarm, isPending: isLoadingDeleteFarm } =
     useDeleteFarm({
+      onSuccess: async () => {
+        await refetch();
+      },
       onError: () => {
         showAlert(
           toast,
@@ -124,6 +118,10 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
     <FarmListTemplate
       user={user}
       farms={farms}
+      refetchFarms={refetchFarms}
+      deleteFarm={deleteFarm}
+      privateFarm={privateFarm}
+      publicFarm={publicFarm}
       isLoading={
         isLoadingUser ||
         isLoadingFarms ||
@@ -131,10 +129,6 @@ const FarmListScreen = ({ navigation }: FarmStackScreenProps<"FarmList">) => {
         isLoadingDeleteFarm
       }
       isRefetchingFarms={isRefetchingFarms}
-      refetchFarms={refetchFarms}
-      deleteFarm={deleteFarm}
-      privateFarm={privateFarm}
-      publicFarm={publicFarm}
       farmDetailNavigationHandler={farmDetailNavigationHandler}
       postFarmNavigationHandler={postFarmNavigationHandler}
       settingNavigationHandler={settingNavigationHandler}

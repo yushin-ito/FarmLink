@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Feather } from "@expo/vector-icons";
 
+import { Feather } from "@expo/vector-icons";
 import {
   Button,
   Box,
@@ -16,12 +16,13 @@ import {
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import Input from "../molecules/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import { Category } from "../../types";
+import Input from "../molecules/Input";
 
 type PostCommunityTemplateProps = {
-  isLoading: boolean;
+  isLoadingPostCommunity: boolean;
   postCommunity: (
     name: string,
     description: string,
@@ -37,7 +38,7 @@ type FormValues = {
 };
 
 const PostCommunityTemplate = ({
-  isLoading,
+  isLoadingPostCommunity,
   postCommunity,
   goBackNavigationHandler,
 }: PostCommunityTemplateProps) => {
@@ -215,7 +216,7 @@ const PostCommunityTemplate = ({
             size="lg"
             rounded="xl"
             colorScheme="brand"
-            isLoading={isLoading}
+            isLoading={isLoadingPostCommunity}
             onPress={handleSubmit((data) => {
               postCommunity(data.name, data.description, data.category);
             })}

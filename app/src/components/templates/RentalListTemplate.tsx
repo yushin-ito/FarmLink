@@ -1,6 +1,7 @@
 import React from "react";
-import { Feather } from "@expo/vector-icons";
+import { Alert, RefreshControl } from "react-native";
 
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   Heading,
@@ -12,11 +13,11 @@ import {
   useColorModeValue,
 } from "native-base";
 import { useTranslation } from "react-i18next";
+
 import { GetRentalsResponse } from "../../hooks/rental/query";
-import RentalListItem from "../organisms/RentalListItem";
-import { Alert, RefreshControl } from "react-native";
-import SkeletonRentalList from "../organisms/SkeletonRentalList";
 import Fab from "../molecules/Fab";
+import RentalListItem from "../organisms/RentalListItem";
+import SkeletonRentalList from "../organisms/SkeletonRentalList";
 
 type RentalListTemplateProps = {
   rentals: GetRentalsResponse | undefined;

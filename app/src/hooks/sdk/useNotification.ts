@@ -1,7 +1,10 @@
 import { useState, useCallback } from "react";
-import * as Notifications from "expo-notifications";
-import { supabase } from "../../supabase";
 import { Platform } from "react-native";
+
+import * as Notifications from "expo-notifications";
+
+import { supabase } from "../../supabase";
+import useAuth from "../auth/useAuth";
 
 type UseNotificationType = {
   onError?: (error: Error) => void;
@@ -16,9 +19,10 @@ type Notification = {
 };
 
 const useNotification = ({ onError, onDisable }: UseNotificationType) => {
+  const { session } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
-  const postToken = useCallback(async (userId: string | undefined) => {
+  const postToken = useCallback(async () => {
     setIsLoading(true);
     try {
       if (Platform.OS === "android") {
@@ -38,16 +42,15 @@ const useNotification = ({ onError, onDisable }: UseNotificationType) => {
 
       const token = await Notifications.getExpoPushTokenAsync();
 
-      if (userId) {
+      if (session) {
         const { error } = await supabase
           .from("user")
-          .upsert({ userId, token: token.data });
+          .upsert({ userId: session.user.id, token: token.data });
         if (error) {
           throw error;
         }
-      } else {
-        throw Error("userId does not exists.");
       }
+      
     } catch (error) {
       if (error instanceof Error) {
         onError && onError(error);
