@@ -82,7 +82,7 @@ const RentalDetailTemplate = ({
 
   const { width } = useWindowDimensions();
 
-  if (!isLoading && !rental) {
+  if (!(isLoading && rental)) {
     Alert.alert(t("fetchError"), t("tryAgain"), [
       {
         text: t("close"),
@@ -90,6 +90,8 @@ const RentalDetailTemplate = ({
         onPress: goBackNavigationHandler,
       },
     ]);
+
+    return null;
   }
 
   return (

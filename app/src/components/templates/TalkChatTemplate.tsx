@@ -61,7 +61,7 @@ const ChatTemplate = ({
   goBackNavigationHandler,
 }: ChatTemplateProps) => {
   const { t } = useTranslation(["chat", "talk"]);
-  
+
   const bgColor = useColorModeValue("muted.100", "muted.800");
   const headerColor = useColorModeValue("white", "muted.900");
   const menuColor = useColorModeValue("white", "muted.700");
@@ -78,7 +78,7 @@ const ChatTemplate = ({
 
   return (
     <Box flex={1} bg={bgColor}>
-      <Overlay isOpen={isLoadingDeleteTalk} loadingEnabled />
+      <Overlay isOpen={isLoadingDeleteTalk} />
       <ChatActionSheet
         isOpen={isChatActionSheetOpen}
         onClose={onChatActionSheetClose}

@@ -63,7 +63,7 @@ const FarmDetailTemplate = ({
   goBackNavigationHandler,
 }: FarmDetailTemplateProps) => {
   const { t } = useTranslation("map");
-  
+
   const bgColor = useColorModeValue("white", "muted.800");
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const borderColor = useColorModeValue("muted.300", "muted.600");
@@ -72,7 +72,7 @@ const FarmDetailTemplate = ({
 
   const { width } = useWindowDimensions();
 
-  if (!isLoading && !farm) {
+  if (!(isLoading && farm)) {
     Alert.alert(t("fetchError"), t("tryAgain"), [
       {
         text: t("close"),
@@ -80,6 +80,8 @@ const FarmDetailTemplate = ({
         onPress: goBackNavigationHandler,
       },
     ]);
+
+    return null;
   }
 
   return (

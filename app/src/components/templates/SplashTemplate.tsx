@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 
 import { Image } from "expo-image";
-import { Box, Center, HStack, Heading, Spinner } from "native-base";
+import { Center, HStack, Heading } from "native-base";
 
 type SplashTemplateProps = { onLayout: () => Promise<void> };
 
@@ -24,9 +24,6 @@ const SplashTemplate = memo(({ onLayout }: SplashTemplateProps) => {
           FarmLink
         </Heading>
       </HStack>
-      <Box position="absolute" bottom="24">
-        <Spinner color="white" />
-      </Box>
     </Center>
   );
 });

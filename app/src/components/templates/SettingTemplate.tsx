@@ -73,7 +73,7 @@ const SettingTemplate = ({
 
   return (
     <Box flex={1} pt="7" px="8" safeAreaTop>
-      <Overlay isOpen={isLoadingSignOut} loadingEnabled />
+      <Overlay isOpen={isLoadingSignOut} />
       <ImageActionSheet
         isOpen={isOpen}
         onClose={onClose}

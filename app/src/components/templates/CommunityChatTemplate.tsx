@@ -96,10 +96,7 @@ const CommunityChatTemplate = ({
 
   return (
     <Box flex={1} bg={bgColor}>
-      <Overlay
-        isOpen={isLoadingUpdateCommunity || isLoadingDeleteCommunity}
-        loadingEnabled
-      />
+      <Overlay isOpen={isLoadingUpdateCommunity || isLoadingDeleteCommunity} />
       {deleteImage && pickIconImageByCamera && pickIconImageByLibrary && (
         <ImageActionSheet
           isOpen={isImageActionSheetOpen}

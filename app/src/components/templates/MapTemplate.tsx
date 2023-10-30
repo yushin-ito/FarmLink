@@ -103,7 +103,7 @@ const MapTemplate = ({
 
   return (
     <Box flex={1}>
-      <Overlay isOpen={isRefetching} loadingEnabled />
+      <Overlay isOpen={isRefetching} />
       <MapView
         ref={mapRef}
         userInterfaceStyle={mapColor}
