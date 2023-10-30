@@ -14,12 +14,21 @@ npx expo start
 
 ## 機能
 
-<div>
-<img src="./assets/rental.png">
-<img src="./assets/community.png">
-<img src="./assets/farm.png">
-<img src="./assets/setting.png">
-</div>
+### ・ レンタル
+<img src="./assets/rental.png" width="640">
+<br>
+
+### ・ コミュニティ
+<img src="./assets/community.png" width="640">
+<br>
+
+### ・ ファーム
+<img src="./assets/farm.png" width="640">>
+<br>
+
+### ・ ユーザー
+<img src="./assets/setting.png" width="640">>
+<br>
 
 ## 技術スタック
 
