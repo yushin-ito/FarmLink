@@ -15,8 +15,10 @@ npx expo start
 ## 機能
 
 <div>
-<img src="./assets/feature1.png">
-<img src="./assets/feature2.png">
+<img src="./assets/rental.png">
+<img src="./assets/community.png">
+<img src="./assets/farm.png">
+<img src="./assets/setting.png">
 </div>
 
 ## 技術スタック
