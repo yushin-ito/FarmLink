@@ -10,13 +10,7 @@
 [![iOS](https://img.shields.io/badge/iOS-999999.svg?logo=apple&labelColor=999999&logoColor=fff)](https://github.com/expo/expo)
 [![Android](https://img.shields.io/badge/Android-A4C639.svg?logo=android&labelColor=A4C639&logoColor=fff)](https://github.com/expo/expo)
 
-## 使い方
-
-```
-git clone https://github.com/yushin-ito/farmlink.git
-cd app
-npx expo start
-```
+<img src="./assets/install.png" width="640">
 
 ## 機能
 
@@ -45,4 +39,9 @@ npx expo start
 <img src="./assets/technology.png" width="640">
 <br>
 
+## システム構成
+
+<img src="./assets/system.png" width="640">
+
 ## ライセンス
+
