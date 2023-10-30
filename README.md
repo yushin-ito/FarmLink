@@ -1,4 +1,4 @@
-<img src="./assets/header.png">
+<img src="./assets/header.png" >
 
 ![stars](https://img.shields.io/github/stars/yushin-ito/farmlink)
 ![commits](https://img.shields.io/github/commit-activity/t/yushin-ito/farmlink)
@@ -19,7 +19,7 @@ npx expo start
 <img src="./assets/feature2.png">
 </div>
 
-## 🛠️ 技術スタック
+## 技術スタック
 
 [![Expo](https://img.shields.io/badge/Expo-000.svg?logo=expo&labelColor=000&logoColor=fff)](https://github.com/expo/expo)
 [![iOS](https://img.shields.io/badge/iOS-999999.svg?logo=apple&labelColor=999999&logoColor=fff)](https://github.com/expo/expo)
