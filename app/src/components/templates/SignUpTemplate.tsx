@@ -25,8 +25,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 import Input from "../molecules/Input";
 
-
-export type SignUpTemplateProps = {
+type SignUpTemplateProps = {
   isLoading: boolean;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithGoogle: () => Promise<void>;
@@ -54,10 +53,12 @@ const SignUpTemplate = memo(
     goBackNavigationHandler,
   }: SignUpTemplateProps) => {
     const { t } = useTranslation("auth");
+
     const textColor = useColorModeValue("muted.500", "muted.300");
     const iconColor = useColorModeValue("black", "white");
 
     const [showPassword, setShowPassword] = useState(false);
+
     const {
       control,
       handleSubmit,

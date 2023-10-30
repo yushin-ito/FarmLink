@@ -49,14 +49,16 @@ const FarmPreviewList = memo(
     farmDetailNavigationHandler,
   }: FarmPreviewListProps) => {
     const { t } = useTranslation("map");
+
     const bgColor = useColorModeValue("white", "muted.800");
     const pressedColor = useColorModeValue("muted.100", "muted.900");
     const imageColor = useColorModeValue("muted.200", "muted.600");
     const textColor = useColorModeValue("muted.600", "muted.300");
     const iconColor = useColorModeValue("muted.600", "muted.100");
 
-    const { width } = useWindowDimensions();
     const previewRef = useRef<ReactNativeFlatList>(null);
+
+    const { width } = useWindowDimensions();
 
     const scrollToOffset = useCallback(
       async (index: number) => {
@@ -103,6 +105,7 @@ const FarmPreviewList = memo(
                 p="4"
                 space="4"
                 rounded="xl"
+                alignItems="center"
                 bg={isPressed ? pressedColor : bgColor}
                 shadow="1"
                 style={{
@@ -149,7 +152,7 @@ const FarmPreviewList = memo(
                   >
                     {item.description ?? t("noDescription")}
                   </Text>
-                  <HStack mt="2" space="6">
+                  <HStack mt="3" space="6">
                     <VStack>
                       <Text color="muted.400" bold fontSize="xs">
                         {t("temperture")}

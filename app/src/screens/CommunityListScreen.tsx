@@ -15,10 +15,10 @@ import { Category, CommunityStackScreenProps } from "../types";
 const categories = [
   "all",
   "joining",
-  "vegetable",
+  "veggie",
   "fruit",
-  "fertilizer",
-  "disease",
+  "compost",
+  "ill",
 ] as Category[];
 
 const CommunityListScreen = ({
@@ -90,20 +90,16 @@ const CommunityListScreen = ({
           communityId,
           memberIds,
         });
-        navigation.navigate("CommunityChat", {
-          communityId,
-          category: categories[categoryIndex],
-        });
+        navigation.navigate("CommunityChat", { communityId });
       }
     },
-    [user, categoryIndex]
+    [user]
   );
 
   const communityChatNavigationHandler = useCallback(
     (communityId: number) => {
       navigation.navigate("CommunityChat", {
         communityId,
-        category: categories[categoryIndex],
       });
     },
     [categoryIndex]
@@ -123,10 +119,8 @@ const CommunityListScreen = ({
   }, []);
 
   const searchCommunityNavigationHandler = useCallback(() => {
-    navigation.navigate("SearchCommunity", {
-      category: categories[categoryIndex],
-    });
-  }, [categoryIndex]);
+    navigation.navigate("SearchCommunity");
+  }, []);
 
   return (
     <CommunityListTemplate

@@ -49,6 +49,7 @@ const TalkListTemplate = ({
   searchTalkNavigationHandler,
 }: TalkListTemplateProps) => {
   const { t } = useTranslation("talk");
+  
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");
 

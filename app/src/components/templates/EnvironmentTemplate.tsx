@@ -40,6 +40,7 @@ const EnvironmentTemplate = ({
   goBackNavigationHandler,
 }: EnvironmentTemplateProps) => {
   const { t } = useTranslation("setting");
+  
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
   return (

@@ -23,6 +23,7 @@ type SearchTalkItemProps = {
 
 const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
   const { t } = useTranslation("talk");
+  
   const pressedColor = useColorModeValue("muted.100", "muted.800");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
@@ -36,7 +37,7 @@ const SearchTalkItem = memo(({ item, onPress }: SearchTalkItemProps) => {
       <HStack
         w="100%"
         px="6"
-        py="5"
+        py="4"
         alignItems="center"
         justifyContent="space-between"
       >

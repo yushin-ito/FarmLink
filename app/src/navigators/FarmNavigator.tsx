@@ -17,7 +17,7 @@ const FarmNavigator = () => {
       <FarmStack.Group
         screenOptions={{
           animation: "fade_from_bottom",
-          animationDuration: 100,
+          animationDuration: 150,
         }}
       >
         <FarmStack.Screen name="PostFarm" component={PostFarmScreen} />

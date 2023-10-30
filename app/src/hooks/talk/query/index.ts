@@ -62,7 +62,7 @@ export const useQueryTalks = () => {
   const { session } = useAuth();
 
   return useQuery({
-    queryKey: ["talk", session?.user.id],
+    queryKey: ["talks", session?.user.id],
     queryFn: async () => await getTalks(session?.user.id),
     select: (data) =>
       data.map((item) =>

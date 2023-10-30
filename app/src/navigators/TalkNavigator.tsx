@@ -20,7 +20,7 @@ const TalkNavigator = () => {
       <TalkStack.Group
         screenOptions={{
           animation: "fade_from_bottom",
-          animationDuration: 100,
+          animationDuration: 150,
         }}
       >
         <TalkStack.Screen name="PostTalk" component={PostTalkScreen} />

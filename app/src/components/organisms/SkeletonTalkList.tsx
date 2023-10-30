@@ -1,6 +1,13 @@
 import React, { memo } from "react";
 
-import { Box, Divider, HStack, Skeleton, VStack, useColorModeValue } from "native-base";
+import {
+  Box,
+  Divider,
+  HStack,
+  Skeleton,
+  VStack,
+  useColorModeValue,
+} from "native-base";
 
 type SkeletonTalkListProps = {
   rows: number;
@@ -13,9 +20,8 @@ const SkeletonTalkList = memo(({ rows }: SkeletonTalkListProps) => {
       {[...Array(rows)].map((_, index) => (
         <VStack key={index} alignItems="center">
           <HStack
-            h="20"
             px="9"
-            py="3"
+            py="4"
             alignItems="center"
             justifyContent="space-between"
           >

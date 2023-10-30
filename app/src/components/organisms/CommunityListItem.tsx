@@ -22,8 +22,10 @@ type CommunityListItemProps = {
 
 const CommunityListItem = memo(({ item, onPress }: CommunityListItemProps) => {
   const { t } = useTranslation("community");
+  
   const pressedColor = useColorModeValue("muted.100", "muted.800");
   const textColor = useColorModeValue("muted.600", "muted.300");
+
   return (
     <Pressable onPress={onPress} _pressed={{ bg: pressedColor }} rounded="md">
       <HStack px="9" py="3" h="32">

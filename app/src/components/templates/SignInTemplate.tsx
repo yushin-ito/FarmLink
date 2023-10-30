@@ -54,10 +54,12 @@ const SignInTemplate = memo(
     goBackNavigationHandler,
   }: SignInTemplateProps) => {
     const { t } = useTranslation("auth");
+
     const textColor = useColorModeValue("muted.500", "muted.300");
     const iconColor = useColorModeValue("black", "white");
 
     const [showPassword, setShowPassword] = useState(false);
+    
     const {
       control,
       handleSubmit,

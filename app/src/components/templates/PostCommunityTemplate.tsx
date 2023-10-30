@@ -37,22 +37,20 @@ type FormValues = {
   category: Category;
 };
 
+const categories = ["none", "veggie", "fruit", "compost", "ill"] as Category[];
+
 const PostCommunityTemplate = ({
   isLoadingPostCommunity,
   postCommunity,
   goBackNavigationHandler,
 }: PostCommunityTemplateProps) => {
   const { t } = useTranslation("community");
+
   const bgColor = useColorModeValue("muted.300", "muted.700");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
-  const categories = [
-    "none",
-    "vegetable",
-    "fruit",
-    "fertilizer",
-    "disease",
-  ] as Category[];
+
+  const [categoryIndex, setCategoryIndex] = useState(0);
 
   const {
     control,
@@ -60,7 +58,6 @@ const PostCommunityTemplate = ({
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const [categoryIndex, setCategoryIndex] = useState(0);
 
   useEffect(() => {
     setValue("category", categories[categoryIndex]);
@@ -80,7 +77,7 @@ const PostCommunityTemplate = ({
           }
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("createCommunity")}</Heading>
+        <Heading>{t("createCommunity")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}

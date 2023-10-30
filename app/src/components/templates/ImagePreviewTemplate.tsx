@@ -24,7 +24,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-export type ImagePreviewTemplateProps = {
+type ImagePreviewTemplateProps = {
   title: string;
   imageUrl: string;
   shareImage: () => Promise<void>;
@@ -44,6 +44,7 @@ const ImagePreviewTemplate = ({
   goBackNavigationHandler,
 }: ImagePreviewTemplateProps) => {
   const { t } = useTranslation("chat");
+
   const dimensions = useWindowDimensions();
 
   const [visible, setVisible] = useState<boolean>(true);

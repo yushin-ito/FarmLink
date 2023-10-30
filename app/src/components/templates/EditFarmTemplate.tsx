@@ -69,8 +69,13 @@ const EditFarmTemplate = ({
   goBackNavigationHandler,
 }: EditFarmTemplateProps) => {
   const { t } = useTranslation("farm");
+
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
+
+  const mapRef = useRef<MapView>(null);
+  const [isReady, setIsReady] = useState(false);
+  const [privated, setPrivated] = useState(true);
 
   const {
     control,
@@ -78,9 +83,6 @@ const EditFarmTemplate = ({
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const [ready, setReady] = useState(false);
-  const [privated, setPrivated] = useState(true);
-  const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
     if (farm) {
@@ -93,7 +95,7 @@ const EditFarmTemplate = ({
   }, [farm]);
 
   useEffect(() => {
-    if (mapRef.current && position && ready) {
+    if (mapRef.current && position && isReady) {
       mapRef.current.animateToRegion({
         latitude: position.latitude,
         longitude: position.longitude,
@@ -102,7 +104,7 @@ const EditFarmTemplate = ({
       });
       getAddress(position.latitude, position.longitude);
     }
-  }, [mapRef.current, position, ready]);
+  }, [mapRef.current, position, isReady]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -118,7 +120,7 @@ const EditFarmTemplate = ({
           }
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("editFarm")}</Heading>
+        <Heading>{t("editFarm")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
@@ -281,7 +283,7 @@ const EditFarmTemplate = ({
                 <Box w="100%" h="40" rounded="xl" overflow="hidden">
                   <MapView
                     ref={mapRef}
-                    onMapReady={() => setReady(true)}
+                    onMapReady={() => setIsReady(true)}
                     userInterfaceStyle={useColorModeValue("light", "dark")}
                     showsCompass={false}
                     style={{ flex: 1 }}

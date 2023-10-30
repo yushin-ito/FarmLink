@@ -61,18 +61,20 @@ const ChatTemplate = ({
   goBackNavigationHandler,
 }: ChatTemplateProps) => {
   const { t } = useTranslation(["chat", "talk"]);
+  
   const bgColor = useColorModeValue("muted.100", "muted.800");
   const headerColor = useColorModeValue("white", "muted.900");
   const menuColor = useColorModeValue("white", "muted.700");
   const pressedColor = useColorModeValue("muted.100", "muted.900");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
+  const [chatId, setChatId] = useState<number | null>(null);
+
   const {
     isOpen: isChatActionSheetOpen,
     onOpen: onChatActionSheetOpen,
     onClose: onChatActionSheetClose,
   } = useDisclose();
-  const [chatId, setChatId] = useState<number | null>(null);
 
   return (
     <Box flex={1} bg={bgColor}>

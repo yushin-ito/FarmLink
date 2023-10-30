@@ -47,7 +47,7 @@ const LikeListTemplate = ({
   goBackNavigationHandler,
 }: LikeListTemplateProps) => {
   const { t } = useTranslation("setting");
-  
+
   const bgColor = useColorModeValue("muted.200", "muted.700");
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");
@@ -67,7 +67,7 @@ const LikeListTemplate = ({
           }
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("likeList")}</Heading>
+        <Heading>{t("likeList")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}

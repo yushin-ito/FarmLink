@@ -27,7 +27,7 @@ const RootNavigator = () => {
   const { session, isLoading } = useAuth();
 
   useEffect(() => {
-    session && postToken(session.user.id);
+    session && postToken();
   }, [session]);
 
   const { postToken } = useNotification({
@@ -90,7 +90,7 @@ const RootNavigator = () => {
           <RootStack.Group
             screenOptions={{
               animation: "fade_from_bottom",
-              animationDuration: 100,
+              animationDuration: 150,
             }}
           >
             <RootStack.Screen name="EditRental" component={EditRentalScreen} />

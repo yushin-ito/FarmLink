@@ -74,7 +74,13 @@ const deleteRental = async (rentalId: number) => {
   return data;
 };
 
-const searchRentals = async (query: string) => {
+const searchRentals = async ({
+  query,
+  userId,
+}: {
+  query: string;
+  userId: string | undefined;
+}) => {
   const { data, error } = await supabase
     .from("rental")
     .select()
@@ -83,10 +89,12 @@ const searchRentals = async (query: string) => {
   if (error) {
     throw error;
   }
-  return data.map((item) => ({
-    ...item,
-    imageUrl: item.imageUrls && item.imageUrls[0],
-  }));
+  return data
+    .map((item) => ({
+      ...item,
+      imageUrl: item.imageUrls && item.imageUrls[0],
+    }))
+    .filter((item) => !item.privated || item.ownerId === userId);
 };
 
 export const usePostRental = ({

@@ -11,7 +11,6 @@ import {
   VStack,
   Pressable,
   Center,
-  Spinner,
   useDisclose,
   Skeleton,
   useColorModeValue,
@@ -21,6 +20,7 @@ import { useTranslation } from "react-i18next";
 
 import { GetUserResponse } from "../../hooks/user/query";
 import Avatar from "../molecules/Avatar";
+import Overlay from "../molecules/Overlay";
 import ImageActionSheet from "../organisms/ImageActionSheet";
 import SkeletonSetting from "../organisms/SkeletonSetting";
 
@@ -64,22 +64,16 @@ const SettingTemplate = ({
   environmentNavigationHandler,
 }: SettingTemplateProps) => {
   const { t } = useTranslation("setting");
+
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
 
   const { isOpen, onOpen, onClose } = useDisclose();
 
-  if (isLoadingSignOut) {
-    return (
-      <Center flex={1}>
-        <Spinner color="muted.400" />
-      </Center>
-    );
-  }
-
   return (
     <Box flex={1} pt="7" px="8" safeAreaTop>
+      <Overlay isOpen={isLoadingSignOut} loadingEnabled />
       <ImageActionSheet
         isOpen={isOpen}
         onClose={onClose}

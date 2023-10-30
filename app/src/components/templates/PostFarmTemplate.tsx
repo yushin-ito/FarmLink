@@ -61,8 +61,13 @@ const PostFarmTemplate = ({
   goBackNavigationHandler,
 }: PostFarmTemplateProps) => {
   const { t } = useTranslation("farm");
+
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
+
+  const mapRef = useRef<MapView>(null);
+  const [isReady, setIsReady] = useState(false);
+  const [privated, setPrivated] = useState(false);
 
   const {
     control,
@@ -70,12 +75,9 @@ const PostFarmTemplate = ({
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const [ready, setReady] = useState(false);
-  const [privated, setPrivated] = useState(false);
-  const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
-    if (mapRef.current && position && ready) {
+    if (mapRef.current && position && isReady) {
       mapRef.current.animateToRegion({
         latitude: position.latitude,
         longitude: position.longitude,
@@ -84,7 +86,7 @@ const PostFarmTemplate = ({
       });
       getAddress(position.latitude, position.longitude);
     }
-  }, [mapRef.current, position, ready]);
+  }, [mapRef.current, position, isReady]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -265,7 +267,7 @@ const PostFarmTemplate = ({
                     ref={mapRef}
                     userInterfaceStyle={useColorModeValue("light", "dark")}
                     showsCompass={false}
-                    onMapReady={() => setReady(true)}
+                    onMapReady={() => setIsReady(true)}
                     style={{ flex: 1 }}
                   >
                     {position && (

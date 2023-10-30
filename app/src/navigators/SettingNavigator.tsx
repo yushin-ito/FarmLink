@@ -22,7 +22,7 @@ const SettingNavigator = () => {
       <SettingStack.Group
         screenOptions={{
           animation: "fade_from_bottom",
-          animationDuration: 100,
+          animationDuration: 150,
         }}
       >
         <SettingStack.Screen name="PostProfile" component={PostProfileScreen} />

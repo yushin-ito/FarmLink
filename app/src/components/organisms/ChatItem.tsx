@@ -18,8 +18,6 @@ import {
 } from "../../hooks/chat/query";
 import Avatar from "../molecules/Avatar";
 
-
-
 type ChatItemProps = {
   type: "community" | "talk";
   item: GetCommunityChatsResponse[number] | GetTalkChatsResponse[number];
@@ -27,6 +25,8 @@ type ChatItemProps = {
   onLongPress: () => void;
   imagePreviewNavigationHandler: (imageUrl: string, chatId?: number) => void;
 };
+
+const ASPECT = 0.7;
 
 const ChatItem = memo(
   ({
@@ -37,10 +37,11 @@ const ChatItem = memo(
     imagePreviewNavigationHandler,
   }: ChatItemProps) => {
     const { t } = useTranslation("chat");
+
     const bgColor = useColorModeValue("white", "muted.600");
     const imageColor = useColorModeValue("muted.300", "muted.700");
     const textColor = useColorModeValue("muted.600", "muted.200");
-    const ASPECT = 0.7;
+
     const { width } = useWindowDimensions();
 
     return (

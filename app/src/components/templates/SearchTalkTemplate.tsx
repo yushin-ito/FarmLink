@@ -18,7 +18,6 @@ import { GetTalksResponse } from "../../hooks/talk/query";
 import SearchBar from "../organisms/SearchBar";
 import SearchTalkItem from "../organisms/SearchTalkItem";
 
-
 type SearchTalkTemplateProps = {
   searchResult: GetTalksResponse | undefined;
   searchTalks: (query: string) => Promise<void>;
@@ -42,6 +41,7 @@ const SearchTalkTemplate = ({
   goBackNavigationHandler,
 }: SearchTalkTemplateProps) => {
   const { t } = useTranslation("talk");
+
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
   const { control, reset } = useForm<FormValues>();

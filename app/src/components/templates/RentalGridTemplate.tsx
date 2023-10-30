@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, memo, useState } from "react";
-import { Alert, RefreshControl, useWindowDimensions } from "react-native";
+import { RefreshControl, useWindowDimensions } from "react-native";
 
 import { Feather } from "@expo/vector-icons";
 import {
@@ -37,6 +37,8 @@ type RentalGridProps = {
   rentalDetailNavigationHandler: (rentalId: number) => void;
 };
 
+const scenes = ["near", "popular", "newest"] as Scene[];
+
 const RentalGrid = memo(
   ({
     rentals,
@@ -51,8 +53,8 @@ const RentalGrid = memo(
     ...props
   }: RentalGridProps & IScrollViewProps) => {
     const spinnerColor = useColorModeValue("muted.600", "muted.100");
+
     const { width } = useWindowDimensions();
-    const scenes = ["near", "popular", "newest"] as Scene[];
 
     return isLoading ||
       scene === scenes[sceneIndex + 1] ||
@@ -105,6 +107,7 @@ type RentalGridTemplateProps = {
   rentalDetailNavigationHandler: (rentalId: number) => void;
   searchMapNavigationHandler: () => void;
   postRentalNavigationHandler: () => void;
+  rentalFilterNavigationHandler: () => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -119,20 +122,21 @@ const RentalGridTemplate = ({
   isRefetchingRentals,
   searchMapNavigationHandler,
   postRentalNavigationHandler,
-  goBackNavigationHandler,
   rentalDetailNavigationHandler,
+  rentalFilterNavigationHandler,
+  goBackNavigationHandler,
 }: RentalGridTemplateProps) => {
   const { t } = useTranslation("map");
+
   const bgColor = useColorModeValue("white", "#171717");
   const borderColor = useColorModeValue("#d4d4d4", "#525252");
   const textColor = useColorModeValue("#525252", "white");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
-  const scenes = ["near", "popular", "newest"] as Scene[];
+  const { width } = useWindowDimensions();
   const [routes] = useState(
     scenes.map((scene) => ({ key: scene, title: t(scene) }))
   );
-  const { width } = useWindowDimensions();
 
   const renderScene = ({
     route,
@@ -184,7 +188,7 @@ const RentalGridTemplate = ({
           />
         </Pressable>
         <IconButton
-          onPress={() => Alert.alert(t("dev"))}
+          onPress={rentalFilterNavigationHandler}
           icon={
             <Icon as={<Feather />} name="sliders" size="lg" color={iconColor} />
           }

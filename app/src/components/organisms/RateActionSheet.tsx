@@ -12,12 +12,13 @@ type RateActionSheetProps = {
   setRate: Dispatch<SetStateAction<Rate>>;
 };
 
+const rates = ["year", "month", "week", "day", "once"] as Rate[];
+
 const RateActionSheet = memo(
   ({ isOpen, onClose, rate, setRate }: RateActionSheetProps) => {
     const { t } = useTranslation("setting");
-    const textColor = useColorModeValue("muted.600", "muted.200");
 
-    const rates = ["year", "month", "week", "day", "once"] as Rate[];
+    const textColor = useColorModeValue("muted.600", "muted.200");
 
     return (
       <Actionsheet isOpen={isOpen} onClose={onClose}>

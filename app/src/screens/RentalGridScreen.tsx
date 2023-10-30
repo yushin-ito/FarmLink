@@ -87,6 +87,10 @@ const RentalGridScreen = ({
     navigation.navigate("RentalDetail", { rentalId });
   }, []);
 
+  const rentalFilterNavigationHandler = useCallback(() => {
+    navigation.navigate("RentalFilter");
+  }, []);
+
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -104,6 +108,7 @@ const RentalGridScreen = ({
       postRentalNavigationHandler={postRentalNavigationHandler}
       searchMapNavigationHandler={searchMapNavigationHandler}
       rentalDetailNavigationHandler={rentalDetailNavigationHandler}
+      rentalFilterNavigationHandler={rentalFilterNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

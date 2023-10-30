@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 
 import Alert from "../components/molecules/Alert";
 import RentalDetailTemplate from "../components/templates/RentalDetailTemplate";
-import { showAlert } from "../functions";
+import { showAlert, wait } from "../functions";
 import { useDeleteRentalLike, usePostRentalLike } from "../hooks/like/mutate";
 import { useQueryRentalLikes } from "../hooks/like/query";
 import { usePostNotification } from "../hooks/notification/mutate";
@@ -176,6 +176,13 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
         navigation.navigate("TabNavigator", {
           screen: "TalkNavigator",
           params: {
+            screen: "TalkList",
+          },
+        });
+        await wait(0.1);
+        navigation.navigate("TabNavigator", {
+          screen: "TalkNavigator",
+          params: {
             screen: "TalkChat",
             params: {
               talkId,
@@ -239,6 +246,13 @@ const RentalDetailScreen = ({ navigation }: RootStackScreenProps) => {
   const talkChatNavigationHandler = useCallback(async () => {
     const talk = talks?.find((item) => item.to.userId === rental?.ownerId);
     if (talk) {
+      navigation.navigate("TabNavigator", {
+        screen: "TalkNavigator",
+        params: {
+          screen: "TalkList",
+        },
+      });
+      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "TalkNavigator",
         params: {

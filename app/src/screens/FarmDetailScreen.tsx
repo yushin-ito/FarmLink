@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import Alert from "../components/molecules/Alert";
 import FarmDetailTemplate from "../components/templates/FarmDetailTemplate";
-import { showAlert } from "../functions";
+import { showAlert, wait } from "../functions";
 import { useQueryFarm } from "../hooks/farm/query";
 import { usePostFarmLike, useDeleteFarmLike } from "../hooks/like/mutate";
 import { useQueryFarmLikes } from "../hooks/like/query";
@@ -163,6 +163,13 @@ const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
         navigation.navigate("TabNavigator", {
           screen: "TalkNavigator",
           params: {
+            screen: "TalkList",
+          },
+        });
+        await wait(0.1);
+        navigation.navigate("TabNavigator", {
+          screen: "TalkNavigator",
+          params: {
             screen: "TalkChat",
             params: {
               talkId,
@@ -233,6 +240,13 @@ const FarmDetailScreen = ({ navigation }: RootStackScreenProps) => {
   const talkChatNavigationHandler = useCallback(async () => {
     const talk = talks?.find((item) => item.to.userId === farm?.ownerId);
     if (talk) {
+      navigation.navigate("TabNavigator", {
+        screen: "TalkNavigator",
+        params: {
+          screen: "TalkList",
+        },
+      });
+      await wait(0.1);
       navigation.navigate("TabNavigator", {
         screen: "TalkNavigator",
         params: {

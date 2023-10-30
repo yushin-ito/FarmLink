@@ -97,7 +97,7 @@ export const useInfiniteQueryRentals = (scene: Scene, location?: LatLng) => {
   const { session } = useAuth();
 
   return useInfiniteQuery<GetRentalsResponse, PostgrestError>({
-    queryKey: ["rental", scene, location, session?.user.id],
+    queryKey: ["rentals", scene, location, session?.user.id],
     queryFn: async ({ pageParam }) =>
       await getRentals(
         scene,
@@ -129,7 +129,7 @@ export const useQueryUserRentals = () => {
   const { session } = useAuth();
 
   return useQuery({
-    queryKey: ["rental", session?.user.id],
+    queryKey: ["rentals", session?.user.id],
     queryFn: async () => await getUserRentals(session?.user.id),
   });
 };

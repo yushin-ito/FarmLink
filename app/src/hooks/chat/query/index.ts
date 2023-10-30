@@ -44,7 +44,7 @@ export const useInfiniteQueryCommunityChats = (communityId: number) => {
   const PAGE_COUNT = 15;
 
   return useInfiniteQuery<GetCommunityChatsResponse, PostgrestError>({
-    queryKey: ["chat", communityId.toString()],
+    queryKey: ["chats", communityId.toString()],
     queryFn: async ({ pageParam }) => {
       return await getCommunityChats(
         communityId,
@@ -70,7 +70,7 @@ export const useInfiniteQueryTalkChats = (talkId: number) => {
   const PAGE_COUNT = 15;
 
   return useInfiniteQuery<GetTalkChatsResponse, PostgrestError>({
-    queryKey: ["chat", talkId.toString()],
+    queryKey: ["chats", talkId.toString()],
     queryFn: async ({ pageParam }) => {
       return await getTalkChats(
         talkId,

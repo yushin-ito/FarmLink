@@ -12,6 +12,15 @@ type CategoryActionSheetProps = {
   setCategoryIndex: Dispatch<SetStateAction<number>>;
 };
 
+const categories = [
+  "all",
+  "joining",
+  "veggie",
+  "fruit",
+  "compost",
+  "ill",
+] as Category[];
+
 const CategoryActionSheet = memo(
   ({
     isOpen,
@@ -20,16 +29,8 @@ const CategoryActionSheet = memo(
     setCategoryIndex,
   }: CategoryActionSheetProps) => {
     const { t } = useTranslation("community");
-    const textColor = useColorModeValue("muted.600", "muted.200");
 
-    const categories = [
-      "all",
-      "joining",
-      "vegetable",
-      "fruit",
-      "fertilizer",
-      "disease",
-    ] as Category[];
+    const textColor = useColorModeValue("muted.600", "muted.200");
 
     return (
       <Actionsheet isOpen={isOpen} onClose={onClose}>

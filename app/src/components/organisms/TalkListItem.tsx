@@ -16,7 +16,6 @@ import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 import { GetTalksResponse } from "../../hooks/talk/query";
 import Avatar from "../molecules/Avatar";
 
-
 type TalkListItemProps = {
   item: GetTalksResponse[number];
   onPress: () => void;
@@ -24,8 +23,9 @@ type TalkListItemProps = {
 };
 
 const TalkListItem = memo(
-  ({ item,  onPressRight, onPress }: TalkListItemProps) => {
+  ({ item, onPressRight, onPress }: TalkListItemProps) => {
     const { t } = useTranslation("talk");
+    
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
     const textColor = useColorModeValue("muted.600", "muted.300");
@@ -53,7 +53,7 @@ const TalkListItem = memo(
           underlayColor={pressedColor}
         >
           <VStack>
-            <HStack h="20" px="9" py="3">
+            <HStack px="9" py="4">
               <Box w="20%">
                 <Avatar
                   size="md"

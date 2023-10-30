@@ -13,7 +13,7 @@ const SearchTalkScreen = ({
   const searchTalks = useCallback(
     async (query: string) => {
       if (query === "") {
-        setSearchResult([]);
+        setSearchResult(undefined);
         return;
       }
       setSearchResult(

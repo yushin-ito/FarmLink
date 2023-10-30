@@ -77,7 +77,7 @@ export const useInfiniteQueryFarms = (location?: LatLng) => {
   const { session } = useAuth();
 
   return useInfiniteQuery<GetFarmsResponse, PostgrestError>({
-    queryKey: ["farm", location, session?.user.id],
+    queryKey: ["farms", location, session?.user.id],
     queryFn: async ({ pageParam }) =>
       await getFarms(
         location,
@@ -108,7 +108,7 @@ export const useQueryUserFarms = () => {
   const { session } = useAuth();
 
   return useQuery({
-    queryKey: ["farm", session?.user.id],
+    queryKey: ["farms", session?.user.id],
     queryFn: async () => await getUserFarms(session?.user.id),
   });
 };

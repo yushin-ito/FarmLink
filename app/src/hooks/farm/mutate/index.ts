@@ -55,7 +55,13 @@ const deleteFarm = async (farmId: number) => {
   return data;
 };
 
-const searchFarms = async (query: string) => {
+const searchFarms = async ({
+  query,
+  userId,
+}: {
+  query: string;
+  userId: string | undefined;
+}) => {
   const { data, error } = await supabase
     .from("farm")
     .select("*, device(imageUrl)")
@@ -65,10 +71,12 @@ const searchFarms = async (query: string) => {
   if (error) {
     throw error;
   }
-  return data.map((item) => ({
-    ...item,
-    imageUrl: item.device.imageUrl,
-  }));
+  return data
+    .map((item) => ({
+      ...item,
+      imageUrl: item.device.imageUrl,
+    }))
+    .filter((item) => !item.privated || item.ownerId === userId);
 };
 
 export const usePostFarm = ({

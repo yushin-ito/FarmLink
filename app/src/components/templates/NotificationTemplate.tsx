@@ -18,7 +18,6 @@ import { GetNotificationsResponse } from "../../hooks/notification/query";
 import NotificationItem from "../organisms/NotificationItem";
 import SkeletonNotification from "../organisms/SkeletonNotification";
 
-
 type NotificationTemplateProps = {
   notifications: GetNotificationsResponse | undefined;
   deleteNotification: (notificationId: number) => Promise<void>;
@@ -47,6 +46,7 @@ const NotificationTemplate = ({
   goBackNavigationHandler,
 }: NotificationTemplateProps) => {
   const { t } = useTranslation("setting");
+
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
@@ -80,7 +80,7 @@ const NotificationTemplate = ({
           }
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("notification")}</Heading>
+        <Heading>{t("notification")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}

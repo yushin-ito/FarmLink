@@ -21,7 +21,6 @@ import { SearchRentalsResponse } from "../../hooks/rental/mutate";
 import SearchBar from "../organisms/SearchBar";
 import SearchMapItem from "../organisms/SearchMapItem";
 
-
 type SearchMapTemplateProps = {
   type: "rental" | "farm";
   searchRentalsResult: SearchRentalsResponse | undefined;
@@ -54,6 +53,7 @@ const SearchMapTemplate = ({
   goBackNavigationHandler,
 }: SearchMapTemplateProps) => {
   const { t } = useTranslation("map");
+  
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
   const { control, reset } = useForm<FormValues>();

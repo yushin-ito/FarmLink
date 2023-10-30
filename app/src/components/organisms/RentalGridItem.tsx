@@ -23,6 +23,7 @@ type RentalGridItemProps = {
 
 const RentalGridItem = memo(({ item, onPress }: RentalGridItemProps) => {
   const { t } = useTranslation("map");
+  
   const iconColor = useColorModeValue("muted.600", "muted.100");
   const imageColor = useColorModeValue("muted.200", "muted.600");
 

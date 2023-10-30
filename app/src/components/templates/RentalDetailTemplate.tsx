@@ -78,8 +78,9 @@ const RentalDetailTemplate = ({
   const imageColor = useColorModeValue("muted.200", "muted.600");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
-  const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const { width } = useWindowDimensions();
 
   if (!isLoading && !rental) {
     Alert.alert(t("fetchError"), t("tryAgain"), [

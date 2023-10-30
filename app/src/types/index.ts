@@ -13,14 +13,16 @@ export type Scene = "near" | "newest" | "popular";
 
 export type Rate = "year" | "month" | "week" | "day" | "once";
 
+export type Equipment = "water" | "parking" | "hut" | "tool";
+
 export type Category =
   | "all"
   | "joining"
   | "none"
-  | "vegetable"
+  | "veggie"
   | "fruit"
-  | "fertilizer"
-  | "disease";
+  | "compost"
+  | "ill";
 
 export type Region = {
   regionId: number;
@@ -87,22 +89,19 @@ export type MapStackParamList = {
   };
   SearchMap: { type: "rental" | "farm" };
   RentalGrid: undefined;
+  RentalFilter: undefined;
   PostRental: undefined;
 };
 
 export type CommunityStackParamList = {
   CommunityList: undefined;
-  CommunityChat: {
-    communityId: number;
-    category: Category;
-  };
+  CommunityChat: { communityId: number };
   PostCommunity: undefined;
-  SearchCommunity: { category: Category };
+  SearchCommunity: undefined;
 };
 
 export type FarmStackParamList = {
   FarmList: undefined;
-  FarmDetail: { farmId: number };
   PostFarm: undefined;
 };
 

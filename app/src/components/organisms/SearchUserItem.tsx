@@ -16,7 +16,6 @@ import { useTranslation } from "react-i18next";
 import { SearchUsersResponse } from "../../hooks/user/mutate";
 import Avatar from "../molecules/Avatar";
 
-
 type SearchUserItemProps = {
   item: SearchUsersResponse[number];
   onPress: () => void;
@@ -26,6 +25,7 @@ type SearchUserItemProps = {
 const SearchUserItem = memo(
   ({ item, onPress, selected }: SearchUserItemProps) => {
     const { t } = useTranslation("setting");
+
     const pressedColor = useColorModeValue("muted.100", "muted.800");
     const textColor = useColorModeValue("muted.600", "muted.300");
 
@@ -38,7 +38,7 @@ const SearchUserItem = memo(
         <HStack
           w="100%"
           px="6"
-          py="5"
+          py="4"
           alignItems="center"
           justifyContent="space-between"
         >

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { TouchableWithoutFeedback, Keyboard } from "react-native";
 
 import { Feather } from "@expo/vector-icons";
 import {
@@ -13,7 +14,7 @@ import {
   Text,
   Button,
   useColorModeValue,
-  ScrollView,
+  Center,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -24,10 +25,12 @@ import SearchUserItem from "../organisms/SearchUserItem";
 
 type PostTalkTemplateProps = {
   searchResult: SearchUsersResponse | undefined;
-  isLoadingSearchUsers: boolean;
-  isLoadingPostTalk: boolean;
+  hasMore: boolean | undefined;
+  readMore: () => void;
   searchUsers: (query: string) => Promise<void>;
   postTalk: (recieverId: string) => Promise<void>;
+  isLoading: boolean;
+  isLoadingPostTalk: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -37,24 +40,28 @@ type FormValues = {
 
 const PostTalkTemplate = ({
   searchResult,
-  isLoadingSearchUsers,
-  isLoadingPostTalk,
+  hasMore,
+  readMore,
   searchUsers,
   postTalk,
+  isLoading,
+  isLoadingPostTalk,
   goBackNavigationHandler,
 }: PostTalkTemplateProps) => {
   const { t } = useTranslation("talk");
+
   const iconColor = useColorModeValue("muted.600", "muted.100");
   const textColor = useColorModeValue("muted.600", "muted.300");
 
-  const { control, reset } = useForm<FormValues>();
   const [recieverId, setRecieverId] = useState<string>("");
 
+  const { control, reset } = useForm<FormValues>();
+
   return (
-    <Box flex={1} pb="10" justifyContent="space-between" safeAreaTop>
-      <VStack>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Box flex={1} safeAreaTop>
         <HStack
-          mb="6"
+          mb="2"
           px="2"
           alignItems="center"
           justifyContent="space-between"
@@ -70,7 +77,7 @@ const PostTalkTemplate = ({
             }
             variant="unstyled"
           />
-          <Heading textAlign="center">{t("createTalk")}</Heading>
+          <Heading>{t("createTalk")}</Heading>
           <IconButton
             onPress={goBackNavigationHandler}
             icon={
@@ -85,8 +92,7 @@ const PostTalkTemplate = ({
             control={control}
             render={({ field: { value, onChange } }) => (
               <SearchBar
-                mx="10"
-                autoFocus
+                mx="8"
                 returnKeyType="search"
                 placeholder={t("searchUser")}
                 InputRightElement={
@@ -113,12 +119,15 @@ const PostTalkTemplate = ({
               />
             )}
           />
-          {isLoadingSearchUsers ? (
+          {isLoading ? (
             <Spinner color="muted.400" />
           ) : (
             <FlatList
+              contentContainerStyle={{ paddingBottom: 160 }}
               keyboardShouldPersistTaps="handled"
               data={searchResult}
+              onEndReached={readMore}
+              onEndReachedThreshold={0.3}
               renderItem={({ item }) => (
                 <SearchUserItem
                   item={item}
@@ -128,48 +137,40 @@ const PostTalkTemplate = ({
                   selected={item.userId === recieverId}
                 />
               )}
+              ListFooterComponent={
+                <Center mt={hasMore ? "4" : "12"}>
+                  {hasMore && <Spinner color="muted.400" />}
+                </Center>
+              }
               ListEmptyComponent={
-                <Text
-                  bold
-                  lineHeight="2xl"
-                  fontSize="md"
-                  textAlign="center"
-                  color={textColor}
-                >
-                  {t("selectUser")}
+                <Text bold textAlign="center" color={textColor}>
+                  {t("notExistUser")}
                 </Text>
               }
               keyExtractor={(item) => item.userId.toString()}
             />
           )}
         </VStack>
-      </VStack>
-      <ScrollView
-        scrollEnabled={false}
-        contentContainerStyle={{
-          flex: 1,
-          paddingBottom: 24,
-          justifyContent: "flex-end",
-        }}
-        automaticallyAdjustKeyboardInsets
-      >
-        <Button
-          mx="10"
-          size="lg"
-          rounded="xl"
-          colorScheme="brand"
-          isLoading={isLoadingPostTalk}
-          isDisabled={!recieverId}
-          onPress={async () => {
-            await postTalk(recieverId);
-          }}
-        >
-          <Text bold color="white" fontSize="md">
-            {t("create")}
-          </Text>
-        </Button>
-      </ScrollView>
-    </Box>
+        {recieverId && (
+          <Box w="100%" position="absolute" bottom="12">
+            <Button
+              mx="10"
+              size="lg"
+              rounded="xl"
+              colorScheme="brand"
+              isLoading={isLoadingPostTalk}
+              onPress={async () => {
+                await postTalk(recieverId);
+              }}
+            >
+              <Text bold color="white" fontSize="md">
+                {t("create")}
+              </Text>
+            </Button>
+          </Box>
+        )}
+      </Box>
+    </TouchableWithoutFeedback>
   );
 };
 

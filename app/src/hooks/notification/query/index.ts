@@ -36,7 +36,7 @@ export const useQueryNotifications = () => {
   const { session } = useAuth();
 
   return useQuery({
-    queryKey: ["notification", session?.user.id],
+    queryKey: ["notifications", session?.user.id],
     queryFn: async () => await getNotifications(session?.user.id),
   });
 };

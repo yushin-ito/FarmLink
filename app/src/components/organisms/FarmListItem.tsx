@@ -28,6 +28,7 @@ type FarmListItemProps = {
 const FarmListItem = memo(
   ({ item, onPress, onPressRight, onPressLeft }: FarmListItemProps) => {
     const { t } = useTranslation("farm");
+    
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
     const imageColor = useColorModeValue("muted.200", "muted.600");

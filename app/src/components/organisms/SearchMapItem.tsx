@@ -36,7 +36,7 @@ const SearchMapItem = memo(({ item, onPress }: SearchMapItemProps) => {
       <HStack
         w="100%"
         px="6"
-        py="5"
+        py="4"
         alignItems="center"
         justifyContent="space-between"
       >

@@ -49,6 +49,7 @@ const FarmListTemplate = ({
   settingNavigationHandler,
 }: FarmListTemplateProps) => {
   const { t } = useTranslation("farm");
+  
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const textColor = useColorModeValue("muted.600", "muted.300");
 

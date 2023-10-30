@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { Box, Button, Heading, Text, VStack } from "native-base";
 import { useTranslation } from "react-i18next";
 
-export type WelcomeTemplateProps = {
+type WelcomeTemplateProps = {
   signInNavigationHandler: () => void;
   signUpNavigationHandler: () => void;
 };

@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 
-import { RouteProp, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 
@@ -13,15 +12,13 @@ import {
   useUpdateCommunity,
 } from "../hooks/community/mutate";
 import { useQueryUser } from "../hooks/user/query";
-import { CommunityStackParamList, CommunityStackScreenProps } from "../types";
+import { CommunityStackScreenProps } from "../types";
 
 const SearchCommunitieScreen = ({
   navigation,
 }: CommunityStackScreenProps<"SearchCommunity">) => {
   const { t } = useTranslation("community");
   const toast = useToast();
-  const { params } =
-    useRoute<RouteProp<CommunityStackParamList, "SearchCommunity">>();
 
   const [searchResult, setSearchResult] = useState<SearchCommunitiesResponse>();
 
@@ -31,6 +28,14 @@ const SearchCommunitieScreen = ({
     mutateAsync: mutateAsyncUpdateCommunity,
     isPending: isLoadingUpdateCommunity,
   } = useUpdateCommunity({
+    onSuccess: (data) => {
+      if (data) {
+        navigation.goBack();
+        navigation.navigate("CommunityChat", {
+          communityId: data.communityId,
+        });
+      }
+    },
     onError: () => {
       showAlert(
         toast,
@@ -70,33 +75,18 @@ const SearchCommunitieScreen = ({
           communityId,
           memberIds,
         });
-        navigation.navigate("CommunityChat", {
-          communityId,
-          category: params.category,
-        });
       }
     },
-    [user, params]
+    [user]
   );
 
   const searchCommunities = useCallback(async (query: string) => {
     if (query === "") {
-      setSearchResult([]);
+      setSearchResult(undefined);
       return;
     }
-    await mutateAsyncSearchCommunities(query);
+    await mutateAsyncSearchCommunities({ query, userId: user?.userId });
   }, []);
-
-  const communityChatNavigationHandler = useCallback(
-    (communityId: number) => {
-      navigation.goBack();
-      navigation.navigate("CommunityChat", {
-        communityId,
-        category: params.category,
-      });
-    },
-    [params]
-  );
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
@@ -104,13 +94,11 @@ const SearchCommunitieScreen = ({
 
   return (
     <SearchCommunityTemplate
-      user={user}
       searchResult={searchResult}
       searchCommunities={searchCommunities}
       joinCommunity={joinCommunity}
       isLoadingUpdateCommunity={isLoadingUpdateCommunity}
       isLoadingSearchCommunities={isLoadingSearchCommunities}
-      communityChatNavigationHandler={communityChatNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

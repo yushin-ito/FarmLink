@@ -21,7 +21,7 @@ declare module "i18next" {
 }
 
 const getTimeDistance = (value: string, lng: string | undefined) => {
-  if (lng === "ja") {
+  if (lng === "ja" || lng?.startsWith("ja-")) {
     const distance = formatDistance(new Date(), new Date(value), {
       locale: fnsJa,
     });

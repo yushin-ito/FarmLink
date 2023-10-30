@@ -26,7 +26,7 @@ const CommunityNavigator = () => {
       <CommunityStack.Group
         screenOptions={{
           animation: "fade_from_bottom",
-          animationDuration: 100,
+          animationDuration: 150,
         }}
       >
         <CommunityStack.Screen

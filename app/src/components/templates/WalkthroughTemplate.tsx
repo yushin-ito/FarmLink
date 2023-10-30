@@ -26,10 +26,12 @@ const WalkthroughTemplate = ({
   tabNavigatorNavigationHandler,
 }: WalkthroughTemplateProps) => {
   const { t } = useTranslation("app");
+
   const bgColor = useColorModeValue("white", "muted.900");
   const textColor = useColorModeValue("muted.600", "muted.300");
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  
   const { width } = useWindowDimensions();
 
   const walkthrough = [

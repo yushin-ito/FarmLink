@@ -48,6 +48,15 @@ type CommunityListTemplateProps = {
   searchCommunityNavigationHandler: () => void;
 };
 
+const categories = [
+  "all",
+  "joining",
+  "veggie",
+  "fruit",
+  "compost",
+  "ill",
+] as Category[];
+
 const CommunityListTemplate = ({
   categoryIndex,
   setCategoryIndex,
@@ -66,11 +75,14 @@ const CommunityListTemplate = ({
   searchCommunityNavigationHandler,
 }: CommunityListTemplateProps) => {
   const { t } = useTranslation("community");
+
   const bgColor = useColorModeValue("muted.200", "muted.700");
   const modalColor = useColorModeValue("white", "muted.800");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
   const iconColor = useColorModeValue("muted.600", "muted.100");
+
+  const [content, setContent] = useState<GetCommunitiesResponse[number]>();
 
   const {
     isOpen: isOpenCategoryActionSheet,
@@ -82,15 +94,6 @@ const CommunityListTemplate = ({
     onOpen: onOpenModal,
     onClose: onCloseModal,
   } = useDisclose();
-  const [content, setContent] = useState<GetCommunitiesResponse[number]>();
-  const categories = [
-    "all",
-    "joining",
-    "vegetable",
-    "fruit",
-    "fertilizer",
-    "disease",
-  ] as Category[];
 
   return (
     <Box flex={1} safeAreaTop>

@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 
@@ -10,30 +10,40 @@ import { showAlert } from "../functions";
 import { usePostTalk } from "../hooks/talk/mutate";
 import { useQueryTalks } from "../hooks/talk/query";
 import { SearchUsersResponse, useSearchUsers } from "../hooks/user/mutate";
-import { useQueryUser } from "../hooks/user/query";
+import { useInfiniteQueryUsers, useQueryUser } from "../hooks/user/query";
 
 const PostTalkScreen = () => {
   const { t } = useTranslation("talk");
   const toast = useToast();
   const navigation = useNavigation();
 
+  const focusRef = useRef(true);
   const [searchResult, setSearchResult] = useState<SearchUsersResponse>();
 
-  const { data: user } = useQueryUser();
-  const { data: talks } = useQueryTalks();
+  const { data: user, isLoading: isLoadingUser } = useQueryUser();
+  const { data: talks, isLoading: isLoadingTalks } = useQueryTalks();
+  const {
+    data: users,
+    hasNextPage,
+    fetchNextPage,
+    isLoading: isLoadingUsers,
+  } = useInfiniteQueryUsers();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
+    }, [])
+  );
 
   const {
     mutateAsync: mutateAsyncSearchUsers,
     isPending: isLoadingSearchUsers,
   } = useSearchUsers({
     onSuccess: (data) => {
-      setSearchResult(
-        data.filter(
-          (item) =>
-            !talks?.some((talk) => talk.to.userId === item.userId) &&
-            user?.userId !== item.userId
-        )
-      );
+      setSearchResult(data);
     },
     onError: () => {
       showAlert(
@@ -67,7 +77,7 @@ const PostTalkScreen = () => {
   const searchUsers = useCallback(
     async (query: string) => {
       if (query === "") {
-        setSearchResult([]);
+        setSearchResult(undefined);
         return;
       }
       await mutateAsyncSearchUsers(query);
@@ -91,13 +101,28 @@ const PostTalkScreen = () => {
     navigation.goBack();
   }, []);
 
+  const searchUsersResult = useMemo(
+    () =>
+      (searchResult ?? users?.pages[0])?.filter(
+        (item) => !talks?.some((talk) => talk.to.userId === item.userId)
+      ),
+    [searchResult, talks, users]
+  );
+
   return (
     <PostTalkTemplate
-      searchResult={searchResult}
+      searchResult={searchUsersResult}
+      hasMore={hasNextPage}
+      readMore={fetchNextPage}
       searchUsers={searchUsers}
-      isLoadingPostTalk={isLoadingPostTalk}
-      isLoadingSearchUsers={isLoadingSearchUsers}
       postTalk={postTalk}
+      isLoading={
+        isLoadingUser ||
+        isLoadingTalks ||
+        isLoadingUsers ||
+        isLoadingSearchUsers
+      }
+      isLoadingPostTalk={isLoadingPostTalk}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

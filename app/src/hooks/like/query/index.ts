@@ -58,19 +58,19 @@ export const useQueryUserLikes = () => {
   const { session } = useAuth();
 
   return useQuery({
-    queryKey: ["like", session?.user.id],
+    queryKey: ["likes", session?.user.id],
     queryFn: async () => await getUserLikes(session?.user.id),
   });
 };
 
 export const useQueryFarmLikes = (farmId: number) =>
   useQuery({
-    queryKey: ["like", farmId],
+    queryKey: ["likes", farmId],
     queryFn: async () => await getFarmLikes(farmId),
   });
 
 export const useQueryRentalLikes = (rentalId: number) =>
   useQuery({
-    queryKey: ["like", rentalId],
+    queryKey: ["likes", rentalId],
     queryFn: async () => await getRentalLikes(rentalId),
   });

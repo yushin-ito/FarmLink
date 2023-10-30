@@ -80,7 +80,7 @@ export const useInfiniteQueryCommunities = (category: Category) => {
   const { session } = useAuth();
 
   return useInfiniteQuery<GetCommunitiesResponse, PostgrestError>({
-    queryKey: ["community", category, session?.user.id],
+    queryKey: ["communities", category, session?.user.id],
     queryFn: async ({ pageParam }) =>
       await getCommunities(
         category,

@@ -27,6 +27,7 @@ type RentalListItemProps = {
 const RentalListItem = memo(
   ({ item, onPress, onPressLeft, onPressRight }: RentalListItemProps) => {
     const { t } = useTranslation("setting");
+
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
     const imageColor = useColorModeValue("muted.200", "muted.600");

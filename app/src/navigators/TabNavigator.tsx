@@ -30,24 +30,20 @@ const TabNavigator = () => {
       const routeName = getFocusedRouteNameFromRoute(route);
       if (
         routeName === "SearchMap" ||
-        routeName === "RentalDetail" ||
+        routeName === "RentalFilter" ||
         routeName === "CommunityChat" ||
         routeName === "PostCommunity" ||
         routeName === "SearchCommunity" ||
+        routeName === "PostFarm" ||
         routeName === "TalkChat" ||
         routeName === "PostTalk" ||
         routeName === "SearchTalk" ||
-        routeName === "FarmDetail" ||
-        routeName === "PostFarm" ||
-        routeName === "EditFarm" ||
         routeName === "PostProfile" ||
         routeName === "PostRental" ||
-        routeName === "EditRental" ||
         routeName === "LikeList" ||
         routeName === "Notification" ||
         routeName === "RentalList" ||
-        routeName === "Environment" ||
-        routeName === "ImagePreview"
+        routeName === "Environment"
       )
         return false;
 

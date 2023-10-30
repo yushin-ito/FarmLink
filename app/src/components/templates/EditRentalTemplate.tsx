@@ -76,23 +76,25 @@ const EditRentalTemplate = ({
   goBackNavigationHandler,
 }: EditRentalTemplateProps) => {
   const { t } = useTranslation("setting");
+
   const imageColor = useColorModeValue("muted.200", "muted.600");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
   const borderColor = useColorModeValue("muted.400", "muted.200");
 
+  const mapRef = useRef<MapView>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [rate, setRate] = useState<Rate>("year");
+  const [isReady, setIsReady] = useState(false);
+
+  const { width } = useWindowDimensions();
+  const { isOpen, onOpen, onClose } = useDisclose();
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const mapRef = useRef<MapView>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [rate, setRate] = useState<Rate>("year");
-  const [ready, setReady] = useState(false);
-  const { width } = useWindowDimensions();
-  const { isOpen, onOpen, onClose } = useDisclose();
 
   useEffect(() => {
     if (rental) {
@@ -106,7 +108,7 @@ const EditRentalTemplate = ({
   }, [rental]);
 
   useEffect(() => {
-    if (mapRef.current && position && ready) {
+    if (mapRef.current && position && isReady) {
       mapRef.current.animateToRegion({
         latitude: position.latitude,
         longitude: position.longitude,
@@ -115,7 +117,7 @@ const EditRentalTemplate = ({
       });
       getAddress(position.latitude, position.longitude);
     }
-  }, [mapRef.current, position, ready]);
+  }, [mapRef.current, position, isReady]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -137,7 +139,7 @@ const EditRentalTemplate = ({
           }
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("editRental")}</Heading>
+        <Heading>{t("editRental")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
@@ -493,7 +495,7 @@ const EditRentalTemplate = ({
                 <Box w="100%" h="40" rounded="xl" overflow="hidden">
                   <MapView
                     ref={mapRef}
-                    onMapReady={() => setReady(true)}
+                    onMapReady={() => setIsReady(true)}
                     userInterfaceStyle={useColorModeValue("light", "dark")}
                     showsCompass={false}
                     style={{ flex: 1 }}

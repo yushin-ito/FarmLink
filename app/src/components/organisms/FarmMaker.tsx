@@ -8,7 +8,6 @@ import { LatLng, Marker } from "react-native-maps";
 import { GetFarmsResponse } from "../../hooks/farm/query";
 import { Region } from "../../types";
 
-
 type FarmMaker = {
   region: Region | null;
   farms: GetFarmsResponse;
@@ -20,8 +19,8 @@ const FarmMaker = ({ region, farms, onPress }: FarmMaker) => {
 
   const getOverlap = useCallback((a: LatLng, b: LatLng) => {
     return (
-      Math.floor(a.latitude * 1000000) === Math.floor(b.latitude * 1000000) &&
-      Math.floor(a.longitude * 1000000) === Math.floor(b.longitude * 1000000)
+      Math.floor(a.latitude * 10000) === Math.floor(b.latitude * 10000) &&
+      Math.floor(a.longitude * 10000) === Math.floor(b.longitude * 10000)
     );
   }, []);
 

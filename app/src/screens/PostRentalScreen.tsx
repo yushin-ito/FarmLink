@@ -54,8 +54,15 @@ const PostRentalScreen = ({
 
   const { mutateAsync: mutateAsyncPostRental, isPending: isLoadingPostRental } =
     usePostRental({
-      onSuccess: async () => {
+      onSuccess: async ({ rentalId, latitude, longitude }) => {
         navigation.goBack();
+        navigation.navigate("TabNavigator", {
+          screen: "MapNavigator",
+          params: {
+            screen: "Map",
+            params: { regionId: rentalId, latitude, longitude, type: "rental" },
+          },
+        });
       },
       onError: () => {
         showAlert(

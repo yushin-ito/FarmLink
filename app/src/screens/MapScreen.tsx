@@ -47,7 +47,6 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
         focusRef.current = false;
         return;
       }
-
       refetchRentals();
       refetchFarms();
     }, [])

@@ -10,14 +10,12 @@ import {
   Input,
   useDisclose,
   Box,
-  Center,
   useColorModeValue,
 } from "native-base";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import Stagger from "./Stagger";
-
 
 type FormValues = {
   message: string | undefined;
@@ -40,16 +38,30 @@ const ChatBar = memo(
     pickImageByLibrary,
   }: ChatBarProps) => {
     const { t } = useTranslation("chat");
+
     const bgColor = useColorModeValue("white", "muted.900");
     const inputColor = useColorModeValue("muted.300", "muted.700");
     const textColor = useColorModeValue("muted.600", "white");
     const iconColor = useColorModeValue("muted.600", "muted.100");
 
-    const { control, handleSubmit, reset } = useForm<FormValues>();
     const { isOpen, onToggle } = useDisclose();
+    const { control, handleSubmit, reset } = useForm<FormValues>();
 
     return (
       <Box h="20" bg={bgColor} safeAreaBottom>
+        <Box position="absolute" bottom="20" left="3">
+          <Stagger
+            isOpen={isOpen}
+            pickImageByCamera={async () => {
+              await pickImageByCamera();
+              onToggle();
+            }}
+            pickImageByLibrary={async () => {
+              await pickImageByLibrary();
+              onToggle();
+            }}
+          />
+        </Box>
         {visible && (
           <InputAccessoryView>
             <HStack
@@ -60,34 +72,19 @@ const ChatBar = memo(
               justifyContent="space-between"
               bg={bgColor}
             >
-              <Center>
-                <Box position="absolute" bottom="12">
-                  <Stagger
-                    isOpen={isOpen}
-                    pickImageByCamera={async () => {
-                      await pickImageByCamera();
-                      onToggle();
-                    }}
-                    pickImageByLibrary={async () => {
-                      await pickImageByLibrary();
-                      onToggle();
-                    }}
+              <IconButton
+                icon={
+                  <Icon
+                    as={<Feather />}
+                    name={isOpen ? "x" : "plus"}
+                    mb="1"
+                    size="6"
+                    color={iconColor}
                   />
-                </Box>
-                <IconButton
-                  icon={
-                    <Icon
-                      as={<Feather />}
-                      name={isOpen ? "x" : "plus"}
-                      mb="1"
-                      size="6"
-                      color={iconColor}
-                    />
-                  }
-                  variant="unstyled"
-                  onPress={onToggle}
-                />
-              </Center>
+                }
+                variant="unstyled"
+                onPress={onToggle}
+              />
               <Box w="70%" alignItems="center">
                 <Controller
                   name="message"

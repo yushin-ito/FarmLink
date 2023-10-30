@@ -21,6 +21,7 @@ const ImageActionSheet = memo(
     pickImageByLibrary,
   }: ImageActionSheetProps) => {
     const { t } = useTranslation("setting");
+
     const pressedColor = useColorModeValue("muted.300", "muted.700");
     const iconColor = useColorModeValue("muted.500", "muted.300");
 

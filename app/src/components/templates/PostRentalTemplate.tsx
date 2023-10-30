@@ -69,26 +69,28 @@ const PostRentalTemplate = ({
   goBackNavigationHandler,
 }: PostRentalTemplateProps) => {
   const { t } = useTranslation("setting");
+
   const imageColor = useColorModeValue("muted.200", "muted.600");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
   const borderColor = useColorModeValue("muted.400", "muted.200");
 
+  const mapRef = useRef<MapView>(null);
+  const [isReady, setIsReady] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [rate, setRate] = useState<Rate>("year");
+
+  const { width } = useWindowDimensions();
+  const { isOpen, onOpen, onClose } = useDisclose();
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-  const mapRef = useRef<MapView>(null);
-  const { width } = useWindowDimensions();
-  const { isOpen, onOpen, onClose } = useDisclose();
-  const [ready, setReady] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [rate, setRate] = useState<Rate>("year");
 
   useEffect(() => {
-    if (mapRef.current && position && ready) {
+    if (mapRef.current && position && isReady) {
       mapRef.current.animateToRegion({
         latitude: position.latitude,
         longitude: position.longitude,
@@ -97,7 +99,7 @@ const PostRentalTemplate = ({
       });
       getAddress(position.latitude, position.longitude);
     }
-  }, [mapRef.current, position, ready]);
+  }, [mapRef.current, position, isReady]);
 
   return (
     <Box flex={1} safeAreaTop>
@@ -119,7 +121,7 @@ const PostRentalTemplate = ({
           }
           variant="unstyled"
         />
-        <Heading textAlign="center">{t("createRental")}</Heading>
+        <Heading>{t("createRental")}</Heading>
         <IconButton
           onPress={goBackNavigationHandler}
           icon={<Icon as={<Feather name="x" />} size="xl" color={iconColor} />}
@@ -406,6 +408,23 @@ const PostRentalTemplate = ({
                 }}
               />
             </FormControl>
+            <Pressable onPressIn={onOpen}>
+              <FormControl.Label>{t("rate")}</FormControl.Label>
+              <Input
+                isReadOnly
+                value={t(rate)}
+                InputRightElement={
+                  <Icon
+                    as={<AntDesign name="caretdown" />}
+                    size="3"
+                    mr="3"
+                    color="muted.400"
+                  />
+                }
+                borderColor={isOpen ? "brand.600" : borderColor}
+                onPressIn={onOpen}
+              />
+            </Pressable>
             <FormControl isInvalid={"equipment" in errors}>
               <FormControl.Label>{t("equipment")}</FormControl.Label>
               <Controller
@@ -472,7 +491,7 @@ const PostRentalTemplate = ({
                     ref={mapRef}
                     userInterfaceStyle={useColorModeValue("light", "dark")}
                     showsCompass={false}
-                    onMapReady={() => setReady(true)}
+                    onMapReady={() => setIsReady(true)}
                     style={{ flex: 1 }}
                   >
                     {position && (

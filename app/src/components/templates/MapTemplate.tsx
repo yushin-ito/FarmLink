@@ -35,8 +35,8 @@ import SearchBar from "../organisms/SearchBar";
 
 const getOverlap = (a: LatLng, b: LatLng) => {
   return (
-    Math.floor(a.latitude * 1000000) === Math.floor(b.latitude * 1000000) &&
-    Math.floor(a.longitude * 1000000) === Math.floor(b.longitude * 1000000)
+    Math.floor(a.latitude * 10000) === Math.floor(b.latitude * 10000) &&
+    Math.floor(a.longitude * 10000) === Math.floor(b.longitude * 10000)
   );
 };
 
@@ -80,6 +80,7 @@ const MapTemplate = ({
   rentalGridNavigationHandler,
 }: MapTemplateProps) => {
   const { t } = useTranslation("map");
+
   const mapColor = useColorModeValue("light", "dark");
   const bgColor = useColorModeValue("white", "muted.800");
   const textColor = useColorModeValue("black", "white");
@@ -87,10 +88,10 @@ const MapTemplate = ({
   const pressedColor = useColorModeValue("muted.200", "muted.700");
 
   const mapRef = useRef<MapView>(null);
-  const [ready, setReady] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (region && mapRef.current && ready) {
+    if (region && mapRef.current && isReady) {
       mapRef.current.animateToRegion({
         latitude: region.latitude,
         longitude: region.longitude,
@@ -98,7 +99,7 @@ const MapTemplate = ({
         longitudeDelta: 0.0001,
       });
     }
-  }, [mapRef.current, region, ready]);
+  }, [mapRef.current, region, isReady]);
 
   return (
     <Box flex={1}>
@@ -106,14 +107,8 @@ const MapTemplate = ({
       <MapView
         ref={mapRef}
         userInterfaceStyle={mapColor}
-        onMapReady={() => setReady(true)}
+        onMapReady={() => setIsReady(true)}
         showsCompass={false}
-        initialRegion={{
-          latitude: 35,
-          longitude: 135,
-          latitudeDelta: 0.0001,
-          longitudeDelta: 0.0001,
-        }}
         style={{ flex: 1 }}
       >
         {position &&

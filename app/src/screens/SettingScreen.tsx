@@ -67,7 +67,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
   const { mutateAsync: mutateAsyncPostUser, isPending: isLoadingPostUser } =
     usePostUser({
       onSuccess: async () => {
-        await refetch();
+        await refetchUser();
       },
       onError: () => {
         showAlert(
@@ -85,11 +85,12 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     usePostAvatar({
       onSuccess: async ({ path }) => {
         const { data } = supabase.storage.from("image").getPublicUrl(path);
-        user &&
+        if (user) {
           mutateAsyncPostUser({
             userId: user.userId,
             avatarUrl: data.publicUrl,
           });
+        }
       },
       onError: () => {
         showAlert(
@@ -180,8 +181,8 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       pickImageByCamera={pickImageByCamera}
       pickImageByLibrary={pickImageByLibrary}
       deleteAvatar={deleteAvatar}
-      isLoading={isLoadingUser || isLoadingNotifications}
       refetch={refetch}
+      isLoading={isLoadingUser || isLoadingNotifications}
       isRefetching={isRefetching}
       isLoadingAvatar={
         isLoadingUser ||

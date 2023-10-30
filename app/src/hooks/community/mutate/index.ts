@@ -59,12 +59,21 @@ const deleteCommunity = async (communityId: number) => {
   return data;
 };
 
-const searchCommunities = async (query: string) => {
+const searchCommunities = async ({
+  query,
+  userId,
+}: {
+  query: string;
+  userId: string | undefined;
+}) => {
   const { data, error } = await supabase
     .from("community")
     .select()
-    .ilike("name", `%${query}%`);
-    
+    .ilike("name", `%${query}%`)
+    .neq("ownerId", userId)
+    .not("memberIds", "cs", `{"${userId}"}`)
+    .order("updatedAt", { ascending: false });
+
   if (error) {
     throw error;
   }

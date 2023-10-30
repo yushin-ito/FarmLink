@@ -39,6 +39,7 @@ const PostProfileTemplate = ({
   goBackNavigationHandler,
 }: PostProfileTemplateProps) => {
   const { t } = useTranslation("setting");
+
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
@@ -74,7 +75,7 @@ const PostProfileTemplate = ({
             }
             variant="unstyled"
           />
-          <Heading textAlign="center">{t("editProfile")}</Heading>
+          <Heading>{t("editProfile")}</Heading>
           <IconButton
             onPress={goBackNavigationHandler}
             icon={

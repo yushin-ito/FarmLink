@@ -12,13 +12,15 @@ import {
   SearchRentalsResponse,
   useSearchRentals,
 } from "../hooks/rental/mutate";
+import { useQueryUser } from "../hooks/user/query";
 import { MapStackParamList, MapStackScreenProps } from "../types";
 
 const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
   const { t } = useTranslation("map");
   const toast = useToast();
   const { params } = useRoute<RouteProp<MapStackParamList, "SearchMap">>();
-  
+
+  const { data: user } = useQueryUser();
   const [searchRentalsResult, setSearchRentalsResult] =
     useState<SearchRentalsResponse>();
   const [searchFarmsResult, setSearchFarmsResult] =
@@ -43,13 +45,16 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
     },
   });
 
-  const searchRentals = useCallback(async (query: string) => {
-    if (query === "") {
-      setSearchRentalsResult([]);
-      return;
-    }
-    await mutateAsyncSearchRentals(query);
-  }, []);
+  const searchRentals = useCallback(
+    async (query: string) => {
+      if (query === "") {
+        setSearchRentalsResult([]);
+        return;
+      }
+      await mutateAsyncSearchRentals({ query, userId: user?.userId });
+    },
+    [user]
+  );
 
   const {
     mutateAsync: mutateAsyncSearchFarms,
@@ -71,13 +76,16 @@ const SearchMapScreen = ({ navigation }: MapStackScreenProps<"SearchMap">) => {
     },
   });
 
-  const searchFarms = useCallback(async (query: string) => {
-    if (query === "") {
-      setSearchFarmsResult([]);
-      return;
-    }
-    await mutateAsyncSearchFarms(query);
-  }, []);
+  const searchFarms = useCallback(
+    async (query: string) => {
+      if (query === "") {
+        setSearchFarmsResult(undefined);
+        return;
+      }
+      await mutateAsyncSearchFarms({ query, userId: user?.userId });
+    },
+    [user]
+  );
 
   const mapNavigationHandler = useCallback(
     async (regionId: number, latitude: number, longitude: number) => {
