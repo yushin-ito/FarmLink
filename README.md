@@ -72,7 +72,7 @@ npx expo start
 <br>
 
 <h2>🌐 システム構成</h2>
-<div align="center"></div>
+<div align="center">
   <img src="./assets/light/system.png#gh-light-mode-only" width="80%">
   <img src="./assets/dark/system.png#gh-dark-mode-only" width="80%">
 </div>
