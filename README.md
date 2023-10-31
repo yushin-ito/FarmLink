@@ -16,28 +16,15 @@
 <br>
 
 <h2>👀 メンバー</h2>
-<a href="https://github.com/yushin-ito">
-  <img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px">
-</a>
-<a href="https://github.com/chibana-kit">
-  <img src="https://avatars.githubusercontent.com/u/108317630?v=4" width="64px">
-</a>
-<a href="https://github.com/r02i31">
-  <img src="https://avatars.githubusercontent.com/u/108317588?v=4" width="64px">
-</a>
-<a href="https://github.com/HipsMaro">
-  <img src="https://avatars.githubusercontent.com/u/108317599?v=4" width="64px">
-</a>
-<a href="https://github.com/ihsikawa">
-  <img src="https://avatars.githubusercontent.com/u/108317813?v=4" width="64px">
-</a>
-<a href="https://github.com/Keisuke373">
-  <img src="https://avatars.githubusercontent.com/u/108318002?v=4" width="64px">
-</a>
-<a href="https://github.com/rikuma77">
-  <img src="https://avatars.githubusercontent.com/u/108317556?v=4" width="64px">
-</a>
+<a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
+<a href="https://github.com/chibana-kit"><img src="https://avatars.githubusercontent.com/u/108317630?v=4" width="64px"></a>
+<a href="https://github.com/r02i31"><img src="https://avatars.githubusercontent.com/u/108317588?v=4" width="64px"></a>
+<a href="https://github.com/HipsMaro"><img src="https://avatars.githubusercontent.com/u/108317599?v=4" width="64px"></a>
+<a href="https://github.com/ihsikawa"><img src="https://avatars.githubusercontent.com/u/108317813?v=4" width="64px"></a>
+<a href="https://github.com/Keisuke373"><img src="https://avatars.githubusercontent.com/u/108318002?v=4" width="64px"></a>
+<a href="https://github.com/rikuma77"><img src="https://avatars.githubusercontent.com/u/108317556?v=4" width="64px"></a>
 
+<br>
 <br>
 
 <h2>📱 インストール</h2>
@@ -47,12 +34,14 @@
 <br>
 
 <h2>🔧 ビルド</h2>
+
 ```
 git clone https://github.com/yushin-ito/farmlink.git
 cd app
 npx expo start
 ```
 
+<br>
 <br>
 
 <h2>🚀 機能</h2>
@@ -75,14 +64,18 @@ npx expo start
 <br>
 
 <h2>🛠️ 技術スタック</h2>
-<img src="./assets/light/technology.png#gh-light-mode-only" >
-<img src="./assets/dark/technology.png#gh-dark-mode-only" >
+<div align="center">
+  <img src="./assets/light/technology.png#gh-light-mode-only" width="80%">
+  <img src="./assets/dark/technology.png#gh-dark-mode-only" width="80%">
+</div>
 
 <br>
 
 <h2>🌐 システム構成</h2>
-<img src="./assets/light/system.png#gh-light-mode-only" >
-<img src="./assets/dark/system.png#gh-dark-mode-only" >
+<div align="center"></div>
+  <img src="./assets/light/system.png#gh-light-mode-only" width="80%">
+  <img src="./assets/dark/system.png#gh-dark-mode-only" width="80%">
+</div>
 
 <br>
 
@@ -92,7 +85,7 @@ npx expo start
 
 <br>
 
-<h2>Todo</h2>
+<h2>✅ Todo</h2>
 <ul>
   <li>Victoryを用いたグラフ表示</li>
   <li>レンタルの絞り込み機能</li>
