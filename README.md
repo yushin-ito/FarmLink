@@ -1,7 +1,8 @@
 <img src="./assets/header.png" >
 
 <div align="center">
-  <img src="https://img.shields.io/badge/platform-ios%20|%20android-red.svg">
+  <img src="https://img.shields.io/badge/version-1.0.0-red.svg">
+  <img src="https://img.shields.io/badge/platform-ios%20|%20android-orange.svg">
   <img src="https://img.shields.io/github/stars/yushin-ito/farmlink?color=yellow">
   <img src="https://img.shields.io/github/commit-activity/t/yushin-ito/farmlink">
   <img src="https://img.shields.io/badge/license-MIT-green">
@@ -22,6 +23,18 @@
 </a>
 <a href="https://github.com/r02i31">
   <img src="https://avatars.githubusercontent.com/u/108317588?v=4" width="64px">
+</a>
+<a href="https://github.com/HipsMaro">
+  <img src="https://avatars.githubusercontent.com/u/108317599?v=4" width="64px">
+</a>
+<a href="https://github.com/ihsikawa">
+  <img src="https://avatars.githubusercontent.com/u/108317813?v=4" width="64px">
+</a>
+<a href="https://github.com/Keisuke373">
+  <img src="https://avatars.githubusercontent.com/u/108318002?v=4" width="64px">
+</a>
+<a href="https://github.com/rikuma77">
+  <img src="https://avatars.githubusercontent.com/u/108317556?v=4" width="64px">
 </a>
 
 <h2>📱 インストール</h2>
@@ -55,14 +68,19 @@ npx expo start
 <br>
 
 <h2>🛠️ 技術スタック</h2>
-<img src="./assets/technology.png">
+<img src="./assets/light/technology.png#gh-light-mode-only" >
+<img src="./assets/dark/technology.png#gh-dark-mode-only" >
 <br>
 
 <h2>🌐 システム構成</h2>
-<img src="./assets/system.png">
+<img src="./assets/light/system.png#gh-light-mode-only" >
+<img src="./assets/dark/system.png#gh-dark-mode-only" >
 <br>
 
 <h2>📊 ER図</h2>
+<img src="./assets/light/scheme.png#gh-light-mode-only" >
+<img src="./assets/dark/scheme.png#gh-dark-mode-only" >
+<br>
 
 <h2>📜 ライセンス</h2>
 <a href="https://github.com/yushin-ito/farmlink">MIT License<a>
