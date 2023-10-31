@@ -6,43 +6,45 @@
 <img src="https://img.shields.io/badge/license-MIT-green">
 </div>
 
-## 概要
 
-## メンバー
 
-## インストール
+<h2>FarmLink とは</h2>
 
-<img src="./assets/install.png" width="800">
+<h2>メンバー</h2>
+<img src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="32px">
 
-## 機能
+<h2>インストール</h2>
+<img src="./assets/light/install.png#gh-light-mode-only">
+<img src="./assets/dark/install.png#gh-dark-mode-only">
 
-### ・ レンタル
+<h2>機能</h2>
 
-<img src="./assets/rental.png" >
+<h3>・ レンタル</h3>
+<img src="./assets/light/rental.png#gh-light-mode-only" >
+<img src="./assets/dark/rental.png#gh-dark-mode-only" >
 <br>
 
-### ・ コミュニティ
-
-<img src="./assets/community.png" width="800">
+<h3>・ コミュニティ</h3>
+<img src="./assets/light/community.png#gh-light-mode-only" >
+<img src="./assets/dark/community.png#gh-dark-mode-only" >
 <br>
 
-### ・ ファーム
-
-<img src="./assets/farm.png" width="800">
+<h3>・ ファーム</h3>
+<img src="./assets/light/farm.png#gh-light-mode-only" >
+<img src="./assets/dark/farm.png#gh-dark-mode-only" >
 <br>
 
-### ・ ユーザー
-
-<img src="./assets/setting.png" width="800">
+<h3>・ 設定</h3>
+<img src="./assets/light/setting.png#gh-light-mode-only" >
+<img src="./assets/dark/setting.png#gh-dark-mode-only" >
 <br>
 
-## 技術スタック
-
-<img src="./assets/technology.png" width="800">
+<h2>技術スタック</h2>
+<img src="./assets/technology.png">
 <br>
 
-## システム構成
-
+<h2>システム構成</h2>
 <img src="./assets/system.png">
+<br>
 
-## ライセンス
+<h2>ライセンス</h2>
