@@ -7,16 +7,20 @@
   <img src="https://img.shields.io/badge/license-MIT-green">
 </div>
 
+<br>
+<br>
+
 <h2>📝 FarmLinkとは</h2>
+<P>FarmLinkは農業を安心して始められる環境を提供するIoTシステムです。私たちが実際に農業を始める際にどんな問題に直面し、その問題を解決するにはどんな機能が必要かを考えて開発しました。</p>
 
 <h2>👀 メンバー</h2>
-<a href="https://github.com/yushin-ito" style="padding-right: 3px">
+<a href="https://github.com/yushin-ito">
   <img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px">
 </a>
-<a href="https://github.com/chibana-kit" style="padding-right: 3px">
+<a href="https://github.com/chibana-kit">
   <img src="https://avatars.githubusercontent.com/u/108317630?v=4" width="64px">
 </a>
-<a href="https://github.com/r02i31" style="padding-right: 3px">
+<a href="https://github.com/r02i31">
   <img src="https://avatars.githubusercontent.com/u/108317588?v=4" width="64px">
 </a>
 
@@ -24,7 +28,8 @@
 <img src="./assets/light/install.png#gh-light-mode-only">
 <img src="./assets/dark/install.png#gh-dark-mode-only">
 
-<h2>ビルド</h2>
+<h2>🔧 ビルド</h2>
+
 ```
 git clone https://github.com/yushin-ito/farmlink.git
 cd app
