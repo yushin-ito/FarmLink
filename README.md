@@ -38,7 +38,6 @@
 
 <h2>📱 Install</h2>
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/b265e496-c588-4617-a376-f4f78029b5b3">
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/8bab7fab-f0e5-4dad-8e91-6738855590bb">
   <img src="https://github.com/yushin-ito/farmlink/assets/75526539/b265e496-c588-4617-a376-f4f78029b5b3">
 </picture>
@@ -62,30 +61,26 @@ npx expo start</code></pre>
 <h2>🚀 Features</h2>
 <h3>・ Rental</h3>
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/ee65d4b8-4463-4433-8e1c-f97e1aaba354">
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/6af59630-4ed3-4ecc-819a-74b5500ecf49">
   <img src="https://github.com/yushin-ito/farmlink/assets/75526539/ee65d4b8-4463-4433-8e1c-f97e1aaba354">
 </picture>
 <br>
 <h3>・ Community</h3>
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/4ea780b5-72ad-4fc3-a1e1-72f18a99bd33">
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/dde2f50d-b591-4f28-a5b4-4b37cbdd254a">
   <img src="https://github.com/yushin-ito/farmlink/assets/75526539/4ea780b5-72ad-4fc3-a1e1-72f18a99bd33">
 </picture>
 <br>
 <h3>・ Farm</h3>
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/d1f3aca4-34f0-4bf8-9e95-8dd72defb67a">
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/4ac46685-13c8-4165-a3c9-bc5f5a488975">
   <img src="https://github.com/yushin-ito/farmlink/assets/75526539/d1f3aca4-34f0-4bf8-9e95-8dd72defb67a">
 </picture>
 <br>
 <h3>・ Settings</h3>
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/8c421732-756a-4fd8-9cfc-70b96090edb0">
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/8a8ab25a-0aa0-4ce5-a427-739b928440c1">
-  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/8c421732-756a-4fd8-9cfc-70b96090edb0">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/691215f6-80f9-4a34-a4f7-251600888134">
+  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/f0d648cd-280d-4085-8b3a-38f3c0e00e94">
 </picture>
 
 <br>
@@ -93,7 +88,6 @@ npx expo start</code></pre>
 <h2>🛠️ Technology</h2>
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/c75a5571-ca09-4200-b549-0a65cc8ab1a8">
     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/8d62bdb5-3e04-4306-9a1f-d49bd10787b5">
     <img src="https://github.com/yushin-ito/farmlink/assets/75526539/c75a5571-ca09-4200-b549-0a65cc8ab1a8" width="80%">
   </picture>
@@ -104,7 +98,6 @@ npx expo start</code></pre>
 <h2>🌐 System</h2>
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/eeeb3974-0ee6-4b34-8c74-d441644ab222">
     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/b8bd4f2a-d797-4b4e-82e2-f7ad2265266d">
     <img src="https://github.com/yushin-ito/farmlink/assets/75526539/eeeb3974-0ee6-4b34-8c74-d441644ab222" width="80%">
   </picture>
@@ -114,7 +107,6 @@ npx expo start</code></pre>
 
 <h2>📊 ERD</h2>
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/b1ee2622-bcdf-48ea-9ab0-e6bbd97f96df">
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/505475dd-5043-40de-911b-8aefeddd3b9b">
   <img src="https://github.com/yushin-ito/farmlink/assets/75526539/b1ee2622-bcdf-48ea-9ab0-e6bbd97f96df">
 </picture>
