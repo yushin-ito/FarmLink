@@ -66,7 +66,7 @@ npx expo start
 
 <h2>🛠️ 技術スタック</h2>
 <div align="center">
-  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/f74a10c6-6f6f-4c54-87d4-5fbb030cdf89#gh-light-mode-only" width="80%">
+  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/c75a5571-ca09-4200-b549-0a65cc8ab1a8#gh-light-mode-only" width="80%">
   <img src="https://github.com/yushin-ito/farmlink/assets/75526539/8d62bdb5-3e04-4306-9a1f-d49bd10787b5#gh-dark-mode-only" width="80%">
 </div>
 

@@ -15,7 +15,7 @@
 
 <br>
 
-<h2>👀 メンバー</h2>
+<h2>👀 Members</h2>
 <a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
 <a href="https://github.com/chibana-kit"><img src="https://avatars.githubusercontent.com/u/108317630?v=4" width="64px"></a>
 <a href="https://github.com/r02i31"><img src="https://avatars.githubusercontent.com/u/108317588?v=4" width="64px"></a>
@@ -27,14 +27,14 @@
 <br>
 <br>
 
-<h2>📱 インストール</h2>
-<img src="./assets/light/install.png#gh-light-mode-only">
-<img src="./assets/dark/install.png#gh-dark-mode-only">
+<h2>📱 Install</h2>
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/2482583f-869b-4cb2-8c6d-28799b5cbb97#gh-light-mode-only">
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/92b2177d-5f70-4428-a5c1-1adeb232f074#gh-dark-mode-only">
 
 <br>
 
-<h2>🔧 ビルド</h2>
-ビルドには.envを作成する必要があります。
+<h2>🔧 Build</h2>
+
 ```
 git clone https://github.com/yushin-ito/farmlink.git
 cd app
@@ -45,55 +45,55 @@ npx expo start
 <br>
 <br>
 
-<h2>🚀 機能</h2>
-<h3>・ レンタル</h3>
-<img src="./assets/light/rental.png#gh-light-mode-only" >
-<img src="./assets/dark/rental.png#gh-dark-mode-only" >
+<h2>🚀 Features</h2>
+<h3>・ Rental</h3>
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/ee65d4b8-4463-4433-8e1c-f97e1aaba354#gh-light-mode-only" >
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/6af59630-4ed3-4ecc-819a-74b5500ecf49#gh-dark-mode-only" >
 <br>
-<h3>・ コミュニティ</h3>
-<img src="./assets/light/community.png#gh-light-mode-only" >
-<img src="./assets/dark/community.png#gh-dark-mode-only" >
+<h3>・ Community</h3>
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/4ea780b5-72ad-4fc3-a1e1-72f18a99bd33#gh-light-mode-only" >
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/dde2f50d-b591-4f28-a5b4-4b37cbdd254a#gh-dark-mode-only" >
 <br>
-<h3>・ ファーム</h3>
-<img src="./assets/light/farm.png#gh-light-mode-only" >
-<img src="./assets/dark/farm.png#gh-dark-mode-only" >
+<h3>・ Farm</h3>
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/d1f3aca4-34f0-4bf8-9e95-8dd72defb67a#gh-light-mode-only" >
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/4ac46685-13c8-4165-a3c9-bc5f5a488975#gh-dark-mode-only" >
 <br>
-<h3>・ 設定</h3>
-<img src="./assets/light/setting.png#gh-light-mode-only" >
-<img src="./assets/dark/setting.png#gh-dark-mode-only" >
+<h3>・ Settings</h3>
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/8c421732-756a-4fd8-9cfc-70b96090edb0#gh-light-mode-only" >
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/8a8ab25a-0aa0-4ce5-a427-739b928440c1#gh-dark-mode-only" >
 
 <br>
 
-<h2>🛠️ 技術スタック</h2>
+<h2>🛠️ Technology</h2>
 <div align="center">
-  <img src="./assets/light/technology.png#gh-light-mode-only" width="80%">
-  <img src="./assets/dark/technology.png#gh-dark-mode-only" width="80%">
+  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/c75a5571-ca09-4200-b549-0a65cc8ab1a8#gh-light-mode-only" width="80%">
+  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/8d62bdb5-3e04-4306-9a1f-d49bd10787b5#gh-dark-mode-only" width="80%">
 </div>
 
 <br>
 
-<h2>🌐 システム構成</h2>
+<h2>🌐 System</h2>
 <div align="center">
-  <img src="./assets/light/system.png#gh-light-mode-only" width="80%">
-  <img src="./assets/dark/system.png#gh-dark-mode-only" width="80%">
+  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/eeeb3974-0ee6-4b34-8c74-d441644ab222#gh-light-mode-only" width="80%">
+  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/b8bd4f2a-d797-4b4e-82e2-f7ad2265266d#gh-dark-mode-only" width="80%">
 </div>
 
 <br>
 
-<h2>📊 ER図</h2>
-<img src="./assets/light/scheme.png#gh-light-mode-only" >
-<img src="./assets/dark/scheme.png#gh-dark-mode-only" >
+<h2>📊 ERD</h2>
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/b1ee2622-bcdf-48ea-9ab0-e6bbd97f96df#gh-light-mode-only" >
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/505475dd-5043-40de-911b-8aefeddd3b9b#gh-dark-mode-only" >
 
 <br>
 
 <h2>✅ Todo</h2>
 <ul>
-  <li>Victoryを用いたグラフ表示</li>
-  <li>レンタルの絞り込み機能</li>
-  <li>パスワードリセット機能</li>
+  <li>Graphical display using Victory</li>
+  <li>Rental Filter</li>
+  <li>Password Reset</li>
 </ul>
 
 <br>
 
-<h2>📜 ライセンス</h2>
+<h2>📜 License</h2>
 <a href="https://github.com/yushin-ito/farmlink/blob/main/LICENSE">MIT License<a>
