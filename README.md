@@ -1,17 +1,17 @@
 <img src="https://github.com/yushin-ito/farmlink/assets/75526539/4223d233-95f3-4d54-8424-b5f6d42c176a" >
 
 <div align="center">
-  <a href="https://github.com/yushin-ito/farmlink/blob/main/README.ja.md">日本語<a>
-</div>
-
-<br>
-
-<div align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-red.svg">
   <img src="https://img.shields.io/badge/platform-ios%20|%20android-orange.svg">
   <img src="https://img.shields.io/github/stars/yushin-ito/farmlink?color=yellow">
   <img src="https://img.shields.io/github/commit-activity/t/yushin-ito/farmlink">
   <img src="https://img.shields.io/badge/license-MIT-green">
+</div>
+
+<br>
+
+<div align="center">
+  <a href="https://github.com/yushin-ito/farmlink/blob/main/README.ja.md">日本語<a>
 </div>
 
 <br>
