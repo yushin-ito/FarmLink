@@ -72,7 +72,7 @@ const FarmDetailTemplate = ({
 
   const { width } = useWindowDimensions();
 
-  if (!(isLoading && farm)) {
+  if (!isLoading && !farm) {
     Alert.alert(t("fetchError"), t("tryAgain"), [
       {
         text: t("close"),
