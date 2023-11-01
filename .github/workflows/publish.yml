@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: app
+        working-directory: ./app
     steps:
       - name: 🔧 Setup repo
         uses: actions/checkout@v3
@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 18.x
           cache: npm
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: ./app/package-lock.json
 
       - name: 🔧 Setup EAS
         uses: expo/expo-github-action@v8
