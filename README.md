@@ -2,6 +2,7 @@
 
 <div align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-red.svg">
+  <img src="https://img.shields.io/github/actions/workflow/status/yushin-ito/farmlink/publish.yml">
   <img src="https://img.shields.io/badge/platform-ios%20|%20android-orange.svg">
   <img src="https://img.shields.io/github/stars/yushin-ito/farmlink?color=yellow">
   <img src="https://img.shields.io/github/commit-activity/t/yushin-ito/farmlink">
@@ -11,7 +12,7 @@
 <br>
 
 <div align="center">
-  <a href="https://github.com/yushin-ito/farmlink/blob/main/README.ja.md">日本語<a>
+  <img height="20px" src="https://img.shields.io/badge/日本語-flag.svg?color=555555&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNjAwIj4NCjxwYXRoIGZpbGw9IiNmZmYiIGQ9Im0wLDBoOTAwdjYwMGgtOTAweiIvPg0KPGNpcmNsZSBmaWxsPSIjYmUwMDI2IiBjeD0iNDUwIiBjeT0iMzAwIiByPSIxODAiLz4NCjwvc3ZnPg0K">
 </div>
 
 <br>
