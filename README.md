@@ -12,7 +12,9 @@
 <br>
 
 <div align="center">
-  <img height="20px" src="https://img.shields.io/badge/日本語-flag.svg?color=555555&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNjAwIj4NCjxwYXRoIGZpbGw9IiNmZmYiIGQ9Im0wLDBoOTAwdjYwMGgtOTAweiIvPg0KPGNpcmNsZSBmaWxsPSIjYmUwMDI2IiBjeD0iNDUwIiBjeT0iMzAwIiByPSIxODAiLz4NCjwvc3ZnPg0K">
+  <a href="https://github.com/yushin-ito/farmlink/blob/main/README.ja.md">
+    <img src="https://img.shields.io/badge/日本語-flag.svg?color=555555&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNjAwIj4NCjxwYXRoIGZpbGw9IiNmZmYiIGQ9Im0wLDBoOTAwdjYwMGgtOTAweiIvPg0KPGNpcmNsZSBmaWxsPSIjYmUwMDI2IiBjeD0iNDUwIiBjeT0iMzAwIiByPSIxODAiLz4NCjwvc3ZnPg0K">
+  <a>
 </div>
 
 <br>
@@ -44,6 +46,10 @@
 <br>
 
 <h2>🔧 Build</h2>
+<a href="https://open.vscode.dev/yushin-ito/farmlink">
+  <img src="https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc">
+</a>
+<br>
 <p>The build requires the creation of an .env.</p>
 <pre><code>git clone https://github.com/yushin-ito/farmlink.git
 cd app

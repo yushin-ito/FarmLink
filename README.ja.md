@@ -38,6 +38,10 @@
 <br>
 
 <h2>🔧 ビルド</h2>
+<a href="https://open.vscode.dev/yushin-ito/farmlink">
+  <img src="https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc">
+</a>
+<br>
 <p>ビルドには.envを作成する必要があります。</p>
 <pre><code>git clone https://github.com/yushin-ito/farmlink.git
 cd app
