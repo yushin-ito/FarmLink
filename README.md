@@ -28,8 +28,12 @@
 <br>
 
 <h2>📱 Install</h2>
-<img src="https://github.com/yushin-ito/farmlink/assets/75526539/2482583f-869b-4cb2-8c6d-28799b5cbb97#gh-light-mode-only">
-<img src="https://github.com/yushin-ito/farmlink/assets/75526539/92b2177d-5f70-4428-a5c1-1adeb232f074#gh-dark-mode-only">
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/2482583f-869b-4cb2-8c6d-28799b5cbb97">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/92b2177d-5f70-4428-a5c1-1adeb232f074">
+  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/2482583f-869b-4cb2-8c6d-28799b5cbb97">
+</picture>
+
 
 <br>
 
