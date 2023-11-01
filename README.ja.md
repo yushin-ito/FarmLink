@@ -38,6 +38,7 @@
 
 <h2>🔧 ビルド</h2>
 ビルドには.envを作成する必要があります。
+
 ```
 git clone https://github.com/yushin-ito/farmlink.git
 cd app
