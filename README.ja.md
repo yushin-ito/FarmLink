@@ -37,14 +37,9 @@
 <br>
 
 <h2>🔧 ビルド</h2>
-ビルドには.envを作成する必要があります。
+<p>ビルドには.envを作成する必要があります。</p>
+<pre><code>git clone https://github.com/yushin-ito/farmlink.git<br>cd app<br>npm install<br>npx expo start</code></pre>
 
-```
-git clone https://github.com/yushin-ito/farmlink.git
-cd app
-npm install
-npx expo start
-```
 
 <br>
 <br>

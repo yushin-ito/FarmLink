@@ -38,14 +38,7 @@
 
 <h2>🔧 Build</h2>
 <p>The build requires the creation of an .env.</p>
-<pre>
-  <code>
-    git clone https://github.com/yushin-ito/farmlink.git
-    cd app
-    npm install
-    npx expo start
-  </code>
-</pre>
+<pre><code>git clone https://github.com/yushin-ito/farmlink.git<br>cd app<br>npm install<br>npx expo start</code></pre>
 
 <br>
 <br>
