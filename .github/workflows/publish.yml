@@ -5,6 +5,9 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     steps:
       - name: 🔧 Setup repo
         uses: actions/checkout@v3
@@ -22,7 +25,6 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📦 Install dependencies
-        run: cd app
         run: npm install
 
       - name: 🚀 Publish app
