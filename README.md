@@ -1,4 +1,4 @@
-<img src="./assets/header.png" >
+<img src="https://github.com/yushin-ito/farmlink/assets/75526539/60f4a42f-068e-4ae8-b594-c44caccf0fc8" >
 
 <div align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-red.svg">
@@ -10,8 +10,8 @@
 
 <br>
 
-<h2>📝 FarmLinkとは</h2>
-<P>FarmLinkは農業を安心して始められる環境を提供するIoTシステムです。私たちが実際に農業を始める際にどんな問題に直面し、その問題を解決するにはどんな機能が必要かを考えて開発しました。</p>
+<h2>📝 Overview</h2>
+<P>FarmLink is an IoT system that provides a safe environment to start farming. We developed FarmLink after considering what problems we faced when we actually started farming and what features we needed to solve those problems.</p>
 
 <br>
 
