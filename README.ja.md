@@ -1,6 +1,12 @@
 <img src="https://github.com/yushin-ito/farmlink/assets/75526539/071d3fdf-371b-4469-bc4e-3b4d757c57e6" >
 
 <div align="center">
+  <a href="https://github.com/yushin-ito/farmlink/blob/main/README.md">English<a>
+</div>
+
+<br>
+
+<div align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-red.svg">
   <img src="https://img.shields.io/badge/platform-ios%20|%20android-orange.svg">
   <img src="https://img.shields.io/github/stars/yushin-ito/farmlink?color=yellow">
@@ -29,16 +35,19 @@
 
 <h2>📱 インストール</h2>
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/20f1749a-be0c-4baf-8814-642a7dcf9545">
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/e7cbaab0-9ea5-42ee-9bca-2c9f25b71253">
-  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/20f1749a-be0c-4baf-8814-642a7dcf9545">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/b232774e-43cf-4a33-ad3d-d7af60a6b8a0">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/71b05f45-f47e-4570-a976-424cc0af78c8">
+  <img src="https://github.com/yushin-ito/farmlink/assets/75526539/b232774e-43cf-4a33-ad3d-d7af60a6b8a0">
 </picture>
 
 <br>
 
 <h2>🔧 ビルド</h2>
 <p>ビルドには.envを作成する必要があります。</p>
-<pre><code>git clone https://github.com/yushin-ito/farmlink.git<br>cd app<br>npm install<br>npx expo start</code></pre>
+<pre><code>git clone https://github.com/yushin-ito/farmlink.git
+cd app
+npm install
+npx expo start</code></pre>
 
 
 <br>
