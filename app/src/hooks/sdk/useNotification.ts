@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Platform } from "react-native";
 
+import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 
 import { supabase } from "../../supabase";
@@ -40,19 +41,22 @@ const useNotification = ({ onError, onDisable }: UseNotificationType) => {
         return;
       }
 
-      const token = await Notifications.getExpoPushTokenAsync();
+      const token = await Notifications.getExpoPushTokenAsync({
+        projectId: Constants.expoConfig?.extra?.eas.projectId,
+      });
 
       if (session) {
         const { error } = await supabase
           .from("user")
           .upsert({ userId: session.user.id, token: token.data });
         if (error) {
+          console.log(error)
           throw error;
         }
       }
-      
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
         onError && onError(error);
       }
     } finally {

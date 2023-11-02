@@ -54,6 +54,9 @@ const SignUpTemplate = memo(
   }: SignUpTemplateProps) => {
     const { t } = useTranslation("auth");
 
+    const bgColor = useColorModeValue("white", "muted.700");
+    const borderColor = useColorModeValue("muted.200", "muted.800");
+    const pressedColor = useColorModeValue("muted.200", "muted.800");
     const textColor = useColorModeValue("muted.500", "muted.300");
     const iconColor = useColorModeValue("black", "white");
 
@@ -219,10 +222,10 @@ const SignUpTemplate = memo(
                 py="3"
                 rounded="full"
                 borderWidth="1"
-                borderColor="muted.200"
+                borderColor={borderColor}
                 alignItems="center"
-                bg="white"
-                _pressed={{ bg: "muted.200" }}
+                bg={bgColor}
+                _pressed={{ bg: pressedColor }}
                 onPress={signUpWithGoogle}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -232,16 +235,16 @@ const SignUpTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text color="black">{t("signUpWithGoogle")}</Text>
+                <Text>{t("signUpWithGoogle")}</Text>
               </Pressable>
               <Pressable
                 py="3"
                 rounded="full"
                 borderWidth="1"
-                borderColor="muted.200"
+                borderColor={borderColor}
                 alignItems="center"
-                bg="white"
-                _pressed={{ bg: "muted.200" }}
+                bg={bgColor}
+                _pressed={{ bg: pressedColor }}
                 onPress={signUpWithApple}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -251,16 +254,16 @@ const SignUpTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text color="black">{t("signUpWithApple")}</Text>
+                <Text>{t("signUpWithApple")}</Text>
               </Pressable>
               <Pressable
                 py="3"
                 rounded="full"
                 borderWidth="1"
-                borderColor="muted.200"
+                borderColor={borderColor}
                 alignItems="center"
-                bg="white"
-                _pressed={{ bg: "muted.200" }}
+                bg={bgColor}
+                _pressed={{ bg: pressedColor }}
                 onPress={signUpWithTwitter}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -270,16 +273,16 @@ const SignUpTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text color="black">{t("signUpWithTwitter")}</Text>
+                <Text>{t("signUpWithTwitter")}</Text>
               </Pressable>
               <Pressable
                 py="3"
                 rounded="full"
                 borderWidth="1"
-                borderColor="muted.200"
+                borderColor={borderColor}
                 alignItems="center"
-                bg="white"
-                _pressed={{ bg: "muted.200" }}
+                bg={bgColor}
+                _pressed={{ bg: pressedColor }}
                 onPress={signUpWithFacebook}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -289,7 +292,7 @@ const SignUpTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text color="black">{t("signUpWithFacebook")}</Text>
+                <Text>{t("signUpWithFacebook")}</Text>
               </Pressable>
             </VStack>
           </VStack>

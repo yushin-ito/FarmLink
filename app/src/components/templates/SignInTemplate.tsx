@@ -25,7 +25,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 import Input from "../molecules/Input";
 
-
 type SignInTemplateProps = {
   isLoading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
@@ -55,11 +54,14 @@ const SignInTemplate = memo(
   }: SignInTemplateProps) => {
     const { t } = useTranslation("auth");
 
+    const bgColor = useColorModeValue("white", "muted.700");
+    const borderColor = useColorModeValue("muted.200", "muted.800");
+    const pressedColor = useColorModeValue("muted.200", "muted.800");
     const textColor = useColorModeValue("muted.500", "muted.300");
     const iconColor = useColorModeValue("black", "white");
 
     const [showPassword, setShowPassword] = useState(false);
-    
+
     const {
       control,
       handleSubmit,
@@ -121,9 +123,7 @@ const SignInTemplate = memo(
               <FormControl.ErrorMessage
                 leftIcon={<Icon as={<Feather name="alert-circle" />} />}
               >
-                {errors.email && (
-                  <Text color="black">{errors.email.message}</Text>
-                )}
+                {errors.email && <Text>{errors.email.message}</Text>}
               </FormControl.ErrorMessage>
             </FormControl>
             <FormControl isRequired isInvalid={"password" in errors}>
@@ -168,9 +168,7 @@ const SignInTemplate = memo(
               <FormControl.ErrorMessage
                 leftIcon={<Icon as={<Feather name="alert-circle" />} />}
               >
-                {errors.password && (
-                  <Text color="black">{errors.password.message}</Text>
-                )}
+                {errors.password && <Text>{errors.password.message}</Text>}
               </FormControl.ErrorMessage>
             </FormControl>
             <VStack alignItems="center">
@@ -214,10 +212,10 @@ const SignInTemplate = memo(
                 py="3"
                 rounded="full"
                 borderWidth="1"
-                borderColor="muted.200"
+                borderColor={borderColor}
                 alignItems="center"
-                bg="white"
-                _pressed={{ bg: "muted.200" }}
+                bg={bgColor}
+                _pressed={{ bg: pressedColor }}
                 onPress={signInWithGoogle}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -227,16 +225,16 @@ const SignInTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text color="black">{t("signInWithGoogle")}</Text>
+                <Text>{t("signInWithGoogle")}</Text>
               </Pressable>
               <Pressable
                 py="3"
                 rounded="full"
                 borderWidth="1"
-                borderColor="muted.200"
+                borderColor={borderColor}
                 alignItems="center"
-                bg="white"
-                _pressed={{ bg: "muted.200" }}
+                bg={bgColor}
+                _pressed={{ bg: pressedColor }}
                 onPress={signInWithApple}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -246,16 +244,16 @@ const SignInTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text color="black">{t("signInWithApple")}</Text>
+                <Text>{t("signInWithApple")}</Text>
               </Pressable>
               <Pressable
                 py="3"
                 rounded="full"
                 borderWidth="1"
-                borderColor="muted.200"
+                borderColor={borderColor}
                 alignItems="center"
-                bg="white"
-                _pressed={{ bg: "muted.200" }}
+                bg={bgColor}
+                _pressed={{ bg: pressedColor }}
                 onPress={signInWithTwitter}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -265,16 +263,16 @@ const SignInTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text color="black">{t("signInWithTwitter")}</Text>
+                <Text>{t("signInWithTwitter")}</Text>
               </Pressable>
               <Pressable
                 py="3"
                 rounded="full"
                 borderWidth="1"
-                borderColor="muted.200"
+                borderColor={borderColor}
                 alignItems="center"
-                bg="white"
-                _pressed={{ bg: "muted.200" }}
+                bg={bgColor}
+                _pressed={{ bg: pressedColor }}
                 onPress={signInWithFacebook}
               >
                 <Center h="100%" position="absolute" top="3" left="3">
@@ -284,7 +282,7 @@ const SignInTemplate = memo(
                     contentFit="contain"
                   />
                 </Center>
-                <Text color="black">{t("signInWithFacebook")}</Text>
+                <Text>{t("signInWithFacebook")}</Text>
               </Pressable>
             </VStack>
           </VStack>
