@@ -89,7 +89,7 @@ npx expo start</code></pre>
 <h2>🛠️ Technology</h2>
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/8d62bdb5-3e04-4306-9a1f-d49bd10787b5">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/c7e81b67-6003-4dbe-9b1c-652813fcfbea">
     <img src="https://github.com/yushin-ito/farmlink/assets/75526539/c75a5571-ca09-4200-b549-0a65cc8ab1a8" width="80%">
   </picture>
 </div>
@@ -99,7 +99,7 @@ npx expo start</code></pre>
 <h2>🌐 System</h2>
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/b8bd4f2a-d797-4b4e-82e2-f7ad2265266d">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/yushin-ito/farmlink/assets/75526539/03d20413-1877-4d12-a132-d6167b7dd20a">
     <img src="https://github.com/yushin-ito/farmlink/assets/75526539/eeeb3974-0ee6-4b34-8c74-d441644ab222" width="80%">
   </picture>
 </div>
