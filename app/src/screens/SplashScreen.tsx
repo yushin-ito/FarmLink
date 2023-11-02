@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 
+import { Asset } from "expo-asset";
 import * as Splash from "expo-splash-screen";
 
 import SplashTemplate from "../components/templates/SplashTemplate";
@@ -10,7 +11,11 @@ type SplashScreenProps = {
 };
 
 const SplashScreen = ({ setIsReady }: SplashScreenProps) => {
-  const prefetch = useCallback(async () => {}, []);
+  const prefetch = useCallback(async () => {
+    await Asset.fromModule(
+      require("../../assets/app/seedling.png")
+    ).downloadAsync();
+  }, []);
 
   useEffect(() => {
     prefetch();

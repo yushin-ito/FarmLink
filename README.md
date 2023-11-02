@@ -2,8 +2,8 @@
 
 <div align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-red.svg">
-  <img src="https://img.shields.io/github/actions/workflow/status/yushin-ito/farmlink/publish.yml?label=build(app)">
-  <img src="https://img.shields.io/github/actions/workflow/status/yushin-ito/farmlink/build.yml?label=build(firmware)">
+  <img src="https://img.shields.io/github/actions/workflow/status/yushin-ito/farmlink/app.yml?label=build(app)">
+  <img src="https://img.shields.io/github/actions/workflow/status/yushin-ito/farmlink/firmware.yml?label=build(firmware)">
   <img src="https://img.shields.io/badge/platform-ios%20|%20android-orange.svg">
   <img src="https://img.shields.io/github/stars/yushin-ito/farmlink?color=yellow">
   <img src="https://img.shields.io/github/commit-activity/t/yushin-ito/farmlink">

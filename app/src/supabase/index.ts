@@ -5,8 +5,8 @@ import Constants from "expo-constants";
 
 import { Database } from "../types/schema";
 
-export const supabaseUrl = Constants.manifest?.extra?.SUPABASE_URL;
-export const supabaseKey = Constants.manifest?.extra?.SUPABASE_KEY;
+export const supabaseUrl = Constants.expoConfig?.extra?.SUPABASE_URL;
+export const supabaseKey = Constants.expoConfig?.extra?.SUPABASE_KEY;
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
   auth: {

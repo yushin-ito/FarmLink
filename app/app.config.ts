@@ -25,6 +25,7 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
   userInterfaceStyle: "automatic",
   assetBundlePatterns: ["**/*"],
   updates: {
+    useClassicUpdates: true,
     fallbackToCacheTimeout: 0,
   },
   ios: {

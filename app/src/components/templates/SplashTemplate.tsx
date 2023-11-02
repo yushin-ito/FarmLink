@@ -8,7 +8,7 @@ type SplashTemplateProps = { onLayout: () => Promise<void> };
 const SplashTemplate = memo(({ onLayout }: SplashTemplateProps) => {
   return (
     <Center flex={1} bg="brand.600" onLayout={onLayout}>
-      <HStack mt="-16" alignItems="center">
+      <HStack alignItems="center">
         <Image
           style={{ width: 52, height: 52 }}
           source={require("../../../assets/app/seedling.png")}
