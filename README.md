@@ -50,11 +50,22 @@
   <img src="https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc">
 </a>
 <br>
-<p>The build requires the creation of an .env.</p>
-<pre><code>git clone https://github.com/yushin-ito/farmlink.git
-cd app
-npm install
-npx expo start</code></pre>
+<br>
+<ol>
+  <li>Clone the repository</li>
+  <p><pre><code>git clone https://github.com/yushin-ito/farmlink.git</code></pre></p>
+  <li>Go to the app directory</li>
+  <p><pre><code>cd app</code></pre></p>
+  <li>Create the .env</li>
+  <p><pre><code>SUPABASE_URL=
+SUPABASE_KEY=
+GOOGLE_MAP_API_KEY_IOS=
+GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
+  <li>Install all the necessary dependencies</li>
+  <p><pre><code>npm install</code></pre></p>
+  <li>Start the dev server</li>
+  <p><pre><code>npx expo start</code></pre></p>
+</ol>
 
 <br>
 <br>
