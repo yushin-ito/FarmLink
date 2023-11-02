@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useToast } from "native-base";
+import { Center, Spinner, useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 
 import Alert from "../components/molecules/Alert";
@@ -24,7 +24,7 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = () => {
   const { t } = useTranslation("app");
   const toast = useToast();
-  const { session } = useAuth();
+  const { session, isLoading } = useAuth();
 
   useEffect(() => {
     if (session) {
@@ -54,6 +54,14 @@ const RootNavigator = () => {
       );
     },
   });
+
+  if (isLoading) {
+    return (
+      <Center flex={1}>
+        <Spinner color="muted.400" />
+      </Center>
+    );
+  }
 
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
