@@ -4,11 +4,9 @@ import { Platform } from "react-native";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Route, getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import { Image } from "expo-image";
 import { Icon, Text, useColorModeValue } from "native-base";
 import { useTranslation } from "react-i18next";
 
-import Fab from "../components/molecules/Fab";
 import { TabParamList } from "../types";
 
 import CommunityNavigator from "./CommunityNavigator";
@@ -120,13 +118,22 @@ const TabNavigator = () => {
         name="FarmNavigator"
         component={FarmNavigator}
         options={{
-          tabBarButton: ({ onPress }) => (
-            <Fab top="-30" onPress={onPress}>
-              <Image
-                source={require("../../assets/app/seedling.png")}
-                style={{ width: 40, height: 40 }}
-              />
-            </Fab>
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              as={<Feather />}
+              name="edit"
+              size={focused ? "lg" : "md"}
+              color={focused ? "brand.600" : iconColor}
+              mt="1"
+            />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text
+              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
+              color={focused ? "brand.600" : iconColor}
+            >
+              {t("farm:record")}
+            </Text>
           ),
         }}
       />

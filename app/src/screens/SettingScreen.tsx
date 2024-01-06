@@ -169,6 +169,10 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     navigation.navigate("LikeList");
   }, []);
 
+  const transferNavigationHandler = useCallback(() => {
+    navigation.navigate("Transfer");
+  }, []);
+
   const environmentNavigationHandler = useCallback(() => {
     navigation.navigate("Environment");
   }, []);
@@ -196,6 +200,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       postProfileNavigationHandler={postProfileNavigationHandler}
       rentalListNavigationHandler={rentalListNavigationHandler}
       likeListNavigationHandler={likeListNavigationHandler}
+      transferNavigationHandler={transferNavigationHandler}
       environmentNavigationHandler={environmentNavigationHandler}
     />
   );

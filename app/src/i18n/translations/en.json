@@ -159,6 +159,7 @@
   },
   "farm": {
     "farm": "farm",
+    "record": "rec",
     "myFarm": "My farm",
     "temperture": "Temp",
     "humidity": "Humi",
@@ -298,6 +299,7 @@
     "descriptionMaxLength": "Description must be 100 or less",
     "create": "Create",
     "editRental": "Edit rental",
+    "transfer": "Transfer",
     "time": "{{ date, time }}",
     "error": "An error occurred",
     "dev": "This function is currently under development."

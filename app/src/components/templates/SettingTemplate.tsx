@@ -41,6 +41,7 @@ type SettingTemplateProps = {
   postProfileNavigationHandler: () => void;
   rentalListNavigationHandler: () => void;
   likeListNavigationHandler: () => void;
+  transferNavigationHandler: () => void;
   environmentNavigationHandler: () => void;
 };
 
@@ -61,6 +62,7 @@ const SettingTemplate = ({
   postProfileNavigationHandler,
   rentalListNavigationHandler,
   likeListNavigationHandler,
+  transferNavigationHandler,
   environmentNavigationHandler,
 }: SettingTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -244,6 +246,30 @@ const SettingTemplate = ({
                     color={iconColor}
                   />
                   <Text fontSize="md">{t("editProfile")}</Text>
+                </HStack>
+                <Icon
+                  as={<Feather />}
+                  name="chevron-right"
+                  size="md"
+                  color={iconColor}
+                />
+              </HStack>
+            </Pressable>
+            <Pressable
+              _pressed={{
+                opacity: 0.5,
+              }}
+              onPress={transferNavigationHandler}
+            >
+              <HStack alignItems="center" justifyContent="space-between">
+                <HStack p="2" space="2" alignItems="center" rounded="md">
+                  <Icon
+                    as={<Feather />}
+                    name="dollar-sign"
+                    size="md"
+                    color={iconColor}
+                  />
+                  <Text fontSize="md">{t("transfer")}</Text>
                 </HStack>
                 <Icon
                   as={<Feather />}

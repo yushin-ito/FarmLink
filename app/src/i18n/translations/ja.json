@@ -159,6 +159,7 @@
   },
   "farm": {
     "farm": "ファーム",
+    "record": "記録",
     "myFarm": "自分のファーム",
     "temperture": "温度",
     "humidity": "湿度",
@@ -297,6 +298,7 @@
     "descriptionMaxLength": "詳細は100文字以内で入力してください",
     "create": "作成",
     "editRental": "レンタルを編集",
+    "transfer": "振込申請",
     "time": "{{ date, time }}",
     "error": "エラーが発生しました",
     "dev": "この機能は開発中です。\n実装までお待ちください。"

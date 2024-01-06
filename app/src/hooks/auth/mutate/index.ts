@@ -9,7 +9,6 @@ import { makeRedirectUri, startAsync } from "expo-auth-session";
 import { supabase, supabaseUrl } from "../../../supabase";
 import { UseMutationResult } from "../../../types";
 
-
 export type SignUpWithEmailResponse = Awaited<
   ReturnType<typeof signUpWithEmail>
 >;
@@ -68,7 +67,7 @@ const signInWithProvider = async (provider: string) => {
 
 const signOut = async () => {
   const { error } = await supabase.auth.signOut();
-  
+
   if (error) {
     throw error;
   }

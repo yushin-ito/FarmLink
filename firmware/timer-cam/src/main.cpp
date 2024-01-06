@@ -7,7 +7,7 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 
-#include "env.sample.h"
+#include "env.h"
 
 #define SLEEP_TIME 1 * 60 // X分
 

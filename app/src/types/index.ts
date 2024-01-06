@@ -118,6 +118,7 @@ export type SettingStackParamList = {
   PostRental: undefined;
   PostProfile: undefined;
   LikeList: undefined;
+  Transfer: undefined;
   Notification: undefined;
   Environment: undefined;
 };

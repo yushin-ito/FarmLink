@@ -5,6 +5,8 @@ export type Extra = {
   eas: { projectId: string };
   SUPABASE_URL: string;
   SUPABASE_KEY: string;
+  STRIPE_KEY_LIVE: string;
+  STRIPE_KEY_TEST: string;
 };
 
 export interface ExtendedExpoConfig extends ExpoConfig {
@@ -34,7 +36,7 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
       "com.apple.developer.applesignin": ["Default"],
     },
     config: {
-      googleMapsApiKey: process.env.GOOGLE_MAP_API_KEY_IOS,
+      googleMapsApiKey: process.env.GOOGLE_MAP_KEY_IOS,
     },
     splash: {
       backgroundColor: "#ffffff",
@@ -58,7 +60,7 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
     ],
     config: {
       googleMaps: {
-        apiKey: process.env.GOOGLE_MAP_API_KEY_ANDROID,
+        apiKey: process.env.GOOGLE_MAP_KEY_ANDROID,
       },
     },
     splash: {
@@ -73,6 +75,13 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
     "expo-image-picker",
     "expo-location",
     "expo-media-library",
+    [
+      "@stripe/stripe-react-native",
+      {
+        merchantIdentifier: "merchant.com.farmlink.app",
+        enableGooglePay: true,
+      },
+    ],
   ],
   extra: {
     eas: {
@@ -80,5 +89,7 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
     },
     SUPABASE_URL: process.env.SUPABASE_URL as string,
     SUPABASE_KEY: process.env.SUPABASE_KEY as string,
+    STRIPE_KEY_LIVE: process.env.STRIPE_KEY_LIVE as string,
+    STRIPE_KEY_TEST: process.env.STRIPE_KEY_TEST as string,
   },
 });
