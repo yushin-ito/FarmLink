@@ -7,7 +7,7 @@ import { LatLng } from "react-native-maps";
 
 import Alert from "../components/molecules/Alert";
 import MapTemplate from "../components/templates/MapTemplate";
-import { showAlert } from "../functions";
+import { showAlert, wait } from "../functions";
 import { useInfiniteQueryFarms } from "../hooks/farm/query";
 import { useInfiniteQueryRentals } from "../hooks/rental/query";
 import useLocation from "../hooks/sdk/useLocation";
@@ -118,6 +118,7 @@ const MapScreen = ({ navigation }: MapStackScreenProps<"Map">) => {
 
   const refetch = useCallback(async () => {
     setIsRefetching(true);
+    await wait(2);
     await getPosition();
     setIsRefetching(false);
   }, []);

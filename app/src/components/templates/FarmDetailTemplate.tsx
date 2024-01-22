@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 
 import { GetFarmResponse } from "../../hooks/farm/query";
 import { GetFarmLikesResponse } from "../../hooks/like/query";
+import { Crop } from "../../types";
 import Avatar from "../molecules/Avatar";
 
 type FarmDetailTemplateProps = {
@@ -62,7 +63,7 @@ const FarmDetailTemplate = ({
   editFarmNavigationHandler,
   goBackNavigationHandler,
 }: FarmDetailTemplateProps) => {
-  const { t } = useTranslation("map");
+  const { t } = useTranslation(["map", "crop"]);
 
   const bgColor = useColorModeValue("white", "muted.800");
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
@@ -126,11 +127,11 @@ const FarmDetailTemplate = ({
           <Skeleton w={width} h="64" />
         ) : (
           <Box bg={imageColor}>
-            {farm?.device.imageUrl ? (
+            {farm?.imageUrls?.length ? (
               <Box h="64">
                 <Image
                   source={{
-                    uri: farm.device.imageUrl + "?=" + farm.device.updatedAt,
+                    uri: farm.imageUrls[0] + "?=" + farm.updatedAt,
                   }}
                   style={{ flex: 1 }}
                 />
@@ -186,30 +187,18 @@ const FarmDetailTemplate = ({
             <HStack mt="6" alignItems="center" justifyContent="space-between">
               <VStack>
                 <Text color="muted.400" bold>
-                  {t("temperture")}
+                  {t("crop")}
                 </Text>
                 <Text bold textAlign="center">
-                  {farm?.device?.temperture
-                    ? Math.floor(farm.device.temperture) + "℃"
-                    : t("unknown")}
+                  {t(`crop:${farm?.crop as Crop}`)}
                 </Text>
               </VStack>
               <VStack>
                 <Text color="muted.400" bold>
-                  {t("humidity")}
+                  {t("update")}
                 </Text>
                 <Text bold textAlign="center">
-                  {farm?.device?.humidity
-                    ? Math.floor(farm.device.humidity) + "%"
-                    : t("unknown")}
-                </Text>
-              </VStack>
-              <VStack>
-                <Text color="muted.400" bold>
-                  {t("moisture")}
-                </Text>
-                <Text bold textAlign="center">
-                  {farm?.device?.moisture ? farm.device.moisture : t("unknown")}
+                  {t("time", { date: farm?.createdAt })}
                 </Text>
               </VStack>
               <VStack>

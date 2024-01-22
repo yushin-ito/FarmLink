@@ -70,10 +70,10 @@ const PostRentalTemplate = ({
 }: PostRentalTemplateProps) => {
   const { t } = useTranslation("setting");
 
-  const imageColor = useColorModeValue("muted.200", "muted.600");
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
   const borderColor = useColorModeValue("muted.400", "muted.200");
+  const imageColor = useColorModeValue("muted.200", "muted.600");
 
   const mapRef = useRef<MapView>(null);
   const [isReady, setIsReady] = useState(false);

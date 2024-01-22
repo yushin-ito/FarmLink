@@ -13,7 +13,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import RootNavigator from "../navigators/RootNavigator";
 
-
 const RootComponent = () => {
   const lightTheme = {
     ...DefaultTheme,

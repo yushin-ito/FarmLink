@@ -105,7 +105,7 @@ const CommunityListTemplate = ({
       />
       {content && (
         <Modal isOpen={isOpenModal} onClose={onCloseModal} size="lg">
-          <VStack w="75%" px="4" pt="4" pb="2" bg={modalColor} rounded="2xl">
+          <VStack w="75%" px="6" pt="4" pb="2" bg={modalColor} rounded="2xl">
             <Modal.CloseButton _pressed={{ bg: "transparent" }} />
             <VStack mt="6" alignItems="center" space="3">
               <Avatar
@@ -189,7 +189,8 @@ const CommunityListTemplate = ({
         >
           <Text>{t(categories[categoryIndex])}</Text>
           <Icon
-            as={<AntDesign name="caretdown" />}
+            as={<AntDesign />}
+            name="caretdown"
             size="2"
             color={iconColor}
           />

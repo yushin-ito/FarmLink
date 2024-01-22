@@ -68,16 +68,16 @@ const RootNavigator = () => {
       {session && session?.user.id ? (
         <RootStack.Group>
           <RootStack.Screen name="TabNavigator" component={TabNavigator} />
-          <RootStack.Screen
-            name="RentalDetail"
-            component={RentalDetailScreen}
-          />
-          <RootStack.Screen name="FarmDetail" component={FarmDetailScreen} />
           <RootStack.Group screenOptions={{ gestureEnabled: false }}>
             <RootStack.Screen
               name="Walkthrough"
               component={WalkthroughScreen}
             />
+            <RootStack.Screen
+              name="RentalDetail"
+              component={RentalDetailScreen}
+            />
+            <RootStack.Screen name="FarmDetail" component={FarmDetailScreen} />
           </RootStack.Group>
           <RootStack.Group
             screenOptions={{

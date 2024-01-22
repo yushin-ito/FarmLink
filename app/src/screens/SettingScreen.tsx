@@ -10,7 +10,7 @@ import { showAlert } from "../functions";
 import { useSignOut } from "../hooks/auth/mutate";
 import { useQueryNotifications } from "../hooks/notification/query";
 import useImage from "../hooks/sdk/useImage";
-import { usePostAvatar, usePostUser } from "../hooks/user/mutate";
+import { usePostAvatar, useUpdateUser } from "../hooks/user/mutate";
 import { useQueryUser } from "../hooks/user/query";
 import { supabase } from "../supabase";
 import { SettingStackScreenProps } from "../types";
@@ -64,8 +64,8 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncPostUser, isPending: isLoadingPostUser } =
-    usePostUser({
+  const { mutateAsync: mutateAsyncUpdateUser, isPending: isLoadingUpdateUser } =
+    useUpdateUser({
       onSuccess: async () => {
         await refetchUser();
       },
@@ -86,7 +86,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       onSuccess: async ({ path }) => {
         const { data } = supabase.storage.from("image").getPublicUrl(path);
         if (user) {
-          mutateAsyncPostUser({
+          mutateAsyncUpdateUser({
             userId: user.userId,
             avatarUrl: data.publicUrl,
           });
@@ -141,7 +141,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
 
   const deleteAvatar = useCallback(async () => {
     if (user) {
-      await mutateAsyncPostUser({ userId: user.userId, avatarUrl: null });
+      await mutateAsyncUpdateUser({ userId: user.userId, avatarUrl: null });
     }
   }, [user]);
 
@@ -169,8 +169,8 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     navigation.navigate("LikeList");
   }, []);
 
-  const transferNavigationHandler = useCallback(() => {
-    navigation.navigate("Transfer");
+  const paymentNavigationHandler = useCallback(() => {
+    navigation.navigate("Payment");
   }, []);
 
   const environmentNavigationHandler = useCallback(() => {
@@ -191,7 +191,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       isLoadingAvatar={
         isLoadingUser ||
         isLoadingNotifications ||
-        isLoadingPostUser ||
+        isLoadingUpdateUser ||
         isLoadingPostAvatar
       }
       isLoadingSignOut={isLoadingSignOut}
@@ -200,7 +200,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       postProfileNavigationHandler={postProfileNavigationHandler}
       rentalListNavigationHandler={rentalListNavigationHandler}
       likeListNavigationHandler={likeListNavigationHandler}
-      transferNavigationHandler={transferNavigationHandler}
+      paymentNavigationHandler={paymentNavigationHandler}
       environmentNavigationHandler={environmentNavigationHandler}
     />
   );

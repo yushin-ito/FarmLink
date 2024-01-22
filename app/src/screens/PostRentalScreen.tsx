@@ -162,7 +162,7 @@ const PostRentalScreen = ({
         });
       }
     },
-    [user, position, base64]
+    [user, base64, position]
   );
 
   const goBackNavigationHandler = useCallback(() => {

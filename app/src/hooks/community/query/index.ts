@@ -71,7 +71,7 @@ const getCommunities = async (
 
 export const useQueryCommuntiy = (communtiyId: number) =>
   useQuery({
-    queryKey: ["communtiy", communtiyId.toString()],
+    queryKey: ["communtiy", communtiyId],
     queryFn: async () => await getCommunity(communtiyId),
   });
 

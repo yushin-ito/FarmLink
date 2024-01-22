@@ -33,7 +33,7 @@ type CommunityChatTemplateProps = {
   chats: GetCommunityChatsResponse | undefined;
   hasMore: boolean | undefined;
   onSend: (message: string) => Promise<void>;
-  leaveCommunity: () => Promise<void>;
+  quitCommunity: () => Promise<void>;
   deleteCommunity: () => Promise<void>;
   deleteChat: (chatId: number) => Promise<void>;
   deleteImage: () => Promise<void>;
@@ -43,6 +43,7 @@ type CommunityChatTemplateProps = {
   pickChatImageByLibrary: () => Promise<void>;
   readMore: () => void;
   isLoading: boolean;
+  isLoadingPickImage: boolean;
   isLoadingPostChat: boolean;
   isLoadingUpdateCommunity: boolean;
   isLoadingDeleteCommunity: boolean;
@@ -57,7 +58,7 @@ const CommunityChatTemplate = ({
   chats,
   hasMore,
   onSend,
-  leaveCommunity,
+  quitCommunity,
   deleteCommunity,
   deleteChat,
   deleteImage,
@@ -67,6 +68,7 @@ const CommunityChatTemplate = ({
   pickChatImageByLibrary,
   readMore,
   isLoading,
+  isLoadingPickImage,
   isLoadingPostChat,
   isLoadingUpdateCommunity,
   isLoadingDeleteCommunity,
@@ -183,21 +185,21 @@ const CommunityChatTemplate = ({
               Alert.alert(
                 owned
                   ? t("community:deleteCommunity")
-                  : t("community:leaveCommunity"),
+                  : t("community:quitCommunity"),
                 owned
-                  ? t("community:askLeaveCommunity")
-                  : t("community:askLeaveCommunity"),
+                  ? t("community:askQuitCommunity")
+                  : t("community:askQuitCommunity"),
                 [
                   {
                     text: t("chat:cancel"),
                     style: "cancel",
                   },
                   {
-                    text: owned ? t("chat:delete") : t("community:leave"),
+                    text: owned ? t("chat:delete") : t("community:quit"),
                     onPress: async () =>
                       owned
                         ? await deleteCommunity()
-                        : leaveCommunity && (await leaveCommunity()),
+                        : quitCommunity && (await quitCommunity()),
                     style: "destructive",
                   },
                 ]
@@ -208,7 +210,7 @@ const CommunityChatTemplate = ({
             <Text fontSize="md">
               {owned
                 ? t("community:deleteCommunity")
-                : t("community:leaveCommunity")}
+                : t("community:quitCommunity")}
             </Text>
           </Menu.Item>
         </Menu>
@@ -247,6 +249,7 @@ const CommunityChatTemplate = ({
       <ChatBar
         visible={
           !(
+            isLoadingPickImage ||
             isLoadingUpdateCommunity ||
             isLoadingDeleteCommunity ||
             isChatActionSheetOpen ||

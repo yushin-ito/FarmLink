@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { Swipeable, TouchableHighlight } from "react-native-gesture-handler";
 
 import { GetUserFarmsResponse } from "../../hooks/farm/query";
+import { Crop } from "../../types";
 
 type FarmListItemProps = {
   item: GetUserFarmsResponse[number];
@@ -27,13 +28,13 @@ type FarmListItemProps = {
 
 const FarmListItem = memo(
   ({ item, onPress, onPressRight, onPressLeft }: FarmListItemProps) => {
-    const { t } = useTranslation("farm");
-    
+    const { t } = useTranslation(["farm", "crop"]);
+
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
     const imageColor = useColorModeValue("muted.200", "muted.600");
     const textColor = useColorModeValue("muted.600", "muted.300");
-    const iconColor = useColorModeValue("muted.600", "muted.100");
+    const iconColor = useColorModeValue("muted.500", "muted.300");
 
     const swipeableRef = useRef<Swipeable>(null);
 
@@ -53,7 +54,7 @@ const FarmListItem = memo(
             >
               <Center h="100%" w="24" bg="blue.500">
                 <Text color="white" bold fontSize="md">
-                  {item.privated ? t("public") : t("private")}
+                  {t("edit")}
                 </Text>
               </Center>
             </Pressable>
@@ -78,7 +79,7 @@ const FarmListItem = memo(
           underlayColor={pressedColor}
         >
           <VStack>
-            <HStack h="20" px="9" py="3">
+            <HStack h="20" px="9" py="4">
               <Box w="20%">
                 <Center
                   size="12"
@@ -86,12 +87,11 @@ const FarmListItem = memo(
                   bg={imageColor}
                   overflow="hidden"
                 >
-                  {item.device?.imageUrl ? (
+                  {item.imageUrls?.length ? (
                     <Image
                       style={{ width: 48, height: 48 }}
                       source={{
-                        uri:
-                          item.device.imageUrl + "?=" + item.device.updatedAt,
+                        uri: item.imageUrls[0] + "?=" + item.updatedAt,
                       }}
                     />
                   ) : (
@@ -104,8 +104,8 @@ const FarmListItem = memo(
                   )}
                 </Center>
               </Box>
-              <HStack w="80%" pr="4" space="2">
-                <VStack w="40%" space="1">
+              <VStack w="80%" pr="4" space="2">
+                <HStack alignItems="center" space="3">
                   <Text bold fontSize="md">
                     {item.name}
                   </Text>
@@ -117,40 +117,32 @@ const FarmListItem = memo(
                   >
                     {item.description}
                   </Text>
-                </VStack>
-                <HStack mt="1" space="6" justifyContent="center">
-                  <VStack>
-                    <Text color="muted.400" bold fontSize="xs">
-                      {t("temperture")}
-                    </Text>
-                    <Text color={textColor} bold fontSize="sm">
-                      {item?.device?.temperture
-                        ? Math.floor(item.device.temperture) + "℃"
-                        : t("unknown")}
-                    </Text>
-                  </VStack>
-                  <VStack>
-                    <Text color="muted.400" bold fontSize="xs">
-                      {t("humidity")}
-                    </Text>
-                    <Text color={textColor} bold fontSize="sm">
-                      {item?.device?.humidity
-                        ? Math.floor(item.device.humidity) + "%"
-                        : t("unknown")}
-                    </Text>
-                  </VStack>
-                  <VStack>
-                    <Text color="muted.400" bold fontSize="xs">
-                      {t("moisture")}
-                    </Text>
-                    <Text color={textColor} bold fontSize="sm">
-                      {item?.device?.moisture
-                        ? item.device.moisture
-                        : t("unknown")}
-                    </Text>
-                  </VStack>
                 </HStack>
-              </HStack>
+                <HStack space="5">
+                  <HStack alignItems="center" space="1">
+                    <Icon
+                      as={<Feather />}
+                      name="check"
+                      size="3"
+                      color={iconColor}
+                    />
+                    <Text color={iconColor} fontSize="xs">
+                      {t(`crop:${item.crop as Crop}`)}
+                    </Text>
+                  </HStack>
+                  <HStack alignItems="center" space="1">
+                    <Icon
+                      as={<Feather />}
+                      name="clock"
+                      size="3"
+                      color={iconColor}
+                    />
+                    <Text color={iconColor} fontSize="xs">
+                      {t("time", { date: item.createdAt })}
+                    </Text>
+                  </HStack>
+                </HStack>
+              </VStack>
             </HStack>
             <Divider w="80%" alignSelf="center" bg="muted.200" />
           </VStack>

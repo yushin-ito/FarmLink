@@ -26,7 +26,7 @@ import { useTranslation } from "react-i18next";
 
 import { wait } from "../../functions";
 import { GetFarmsResponse } from "../../hooks/farm/query";
-import { Region } from "../../types";
+import { Region, Crop } from "../../types";
 
 type FarmPreviewListProps = {
   farms: GetFarmsResponse | undefined;
@@ -48,13 +48,13 @@ const FarmPreviewList = memo(
     readMore,
     farmDetailNavigationHandler,
   }: FarmPreviewListProps) => {
-    const { t } = useTranslation("map");
+    const { t } = useTranslation(["map", "crop"]);
 
     const bgColor = useColorModeValue("white", "muted.800");
     const pressedColor = useColorModeValue("muted.100", "muted.900");
     const imageColor = useColorModeValue("muted.200", "muted.600");
     const textColor = useColorModeValue("muted.600", "muted.300");
-    const iconColor = useColorModeValue("muted.600", "muted.100");
+    const iconColor = useColorModeValue("muted.500", "muted.300");
 
     const previewRef = useRef<ReactNativeFlatList>(null);
 
@@ -123,11 +123,10 @@ const FarmPreviewList = memo(
                   bg={imageColor}
                   overflow="hidden"
                 >
-                  {item.device.imageUrl ? (
+                  {item.imageUrls?.length ? (
                     <Image
                       source={{
-                        uri:
-                          item.device.imageUrl + "?=" + item.device.updatedAt,
+                        uri: item.imageUrls[0] + "?=" + item.updatedAt,
                       }}
                       style={{ width: 96, height: 96 }}
                     />
@@ -153,34 +152,20 @@ const FarmPreviewList = memo(
                     {item.description ?? t("noDescription")}
                   </Text>
                   <HStack mt="3" space="6">
-                    <VStack>
+                    <VStack alignItems="center" justifyContent="center">
                       <Text color="muted.400" bold fontSize="xs">
-                        {t("temperture")}
+                        {t("crop")}
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
-                        {item.device.temperture
-                          ? Math.floor(item.device.temperture) + "℃"
-                          : t("unknown")}
+                        {t(`crop:${item.crop as Crop}`)}
                       </Text>
                     </VStack>
-                    <VStack>
+                    <VStack alignItems="center" justifyContent="center">
                       <Text color="muted.400" bold fontSize="xs">
-                        {t("humidity")}
+                        {t("update")}
                       </Text>
                       <Text color={textColor} bold fontSize="sm">
-                        {item.device.humidity
-                          ? Math.floor(item.device.humidity) + "%"
-                          : t("unknown")}
-                      </Text>
-                    </VStack>
-                    <VStack>
-                      <Text color="muted.400" bold fontSize="xs">
-                        {t("moisture")}
-                      </Text>
-                      <Text color={textColor} bold fontSize="sm">
-                        {item.device.moisture
-                          ? item.device.moisture
-                          : t("unknown")}
+                        {t("time", { date: item.createdAt })}
                       </Text>
                     </VStack>
                   </HStack>

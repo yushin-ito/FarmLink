@@ -1,17 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
-import * as Liking from "expo-linking";
+import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
 
 import { supabase } from "../../../supabase";
-import { UseMutationResult } from "../../../types";
+import { Payment, UseMutationResult } from "../../../types";
 
 export type SignUpToStripeResponse = Awaited<ReturnType<typeof signUpToStripe>>;
 export type SignInToStripeResponse = Awaited<ReturnType<typeof signInToStripe>>;
-export type DestinationPaymentResponse = Awaited<
-  ReturnType<typeof destinationPayment>
+export type PaymentByStripeResponse = Awaited<
+  ReturnType<typeof paymentByStripe>
 >;
 
 const signUpToStripe = async (userId: string) => {
-  const redirectUrl = Liking.createURL("/redirect");
+  const redirectUrl = Linking.createURL("/");
 
   const { data, error } = await supabase.functions.invoke("get-account-link", {
     body: { user_id: userId, redirect_url: redirectUrl },
@@ -21,7 +22,7 @@ const signUpToStripe = async (userId: string) => {
     throw error;
   }
 
-  Liking.openURL(data.url);
+  await Linking.openURL(data.url);
 };
 
 const signInToStripe = async (stripeId: string) => {
@@ -33,19 +34,25 @@ const signInToStripe = async (stripeId: string) => {
     throw error;
   }
 
-  Liking.openURL(data.url);
+  await WebBrowser.openBrowserAsync(data.url);
 };
 
-const destinationPayment = async (stripeId: string) => {
+const paymentByStripe = async ({
+  type,
+  stripeId,
+}: {
+  type: Payment;
+  stripeId: string;
+}) => {
   const { data, error } = await supabase.functions.invoke("get-payment-link", {
-    body: { account_id: stripeId },
+    body: { type: type, account_id: stripeId },
   });
 
   if (error) {
     throw error;
   }
 
-  Liking.openURL(data.url);
+  await WebBrowser.openBrowserAsync(data.url);
 };
 
 export const useSignUpToStripe = ({
@@ -68,12 +75,12 @@ export const useSignInToStripe = ({
     onError,
   });
 
-export const useDestinationPayment = ({
+export const usePaymentByStripe = ({
   onSuccess,
   onError,
-}: UseMutationResult<DestinationPaymentResponse, Error>) =>
+}: UseMutationResult<PaymentByStripeResponse, Error>) =>
   useMutation({
-    mutationFn: destinationPayment,
+    mutationFn: paymentByStripe,
     onSuccess,
     onError,
   });

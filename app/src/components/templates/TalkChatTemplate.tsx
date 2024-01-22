@@ -37,6 +37,7 @@ type ChatTemplateProps = {
   pickChatImageByLibrary: () => Promise<void>;
   readMore: () => void;
   isLoading: boolean;
+  isLoadingPickImage: boolean;
   isLoadingPostChat: boolean;
   isLoadingDeleteTalk: boolean;
   imagePreviewNavigationHandler: (imageUrl: string, chatId?: number) => void;
@@ -55,6 +56,7 @@ const ChatTemplate = ({
   pickChatImageByLibrary,
   readMore,
   isLoading,
+  isLoadingPickImage,
   isLoadingPostChat,
   isLoadingDeleteTalk,
   imagePreviewNavigationHandler,
@@ -198,7 +200,9 @@ const ChatTemplate = ({
         />
       )}
       <ChatBar
-        visible={!(isLoadingDeleteTalk || isChatActionSheetOpen)}
+        visible={
+          !(isLoadingPickImage || isLoadingDeleteTalk || isChatActionSheetOpen)
+        }
         onSend={onSend}
         isLoading={isLoadingPostChat}
         pickImageByCamera={pickChatImageByCamera}

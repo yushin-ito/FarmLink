@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "../../../supabase";
-import { Device, Farm, Like, Rental } from "../../../types";
+import { Farm, Like, Rental } from "../../../types";
 import useAuth from "../../auth/useAuth";
 
 export type GetUserLikesResponse = Awaited<ReturnType<typeof getUserLikes>>;
@@ -15,11 +15,11 @@ const getUserLikes = async (userId: string | undefined) => {
 
   const { data, error } = await supabase
     .from("like")
-    .select("*, farm(*, device(*)), rental(*)")
+    .select("*, farm(*), rental(*)")
     .eq("userId", userId)
     .returns<
       (Like["Row"] & {
-        farm: Farm["Row"] & { device: Device["Row"] };
+        farm: Farm["Row"];
         rental: Rental["Row"];
       })[]
     >();

@@ -6,18 +6,18 @@ import { useTranslation } from "react-i18next";
 import Alert from "../components/molecules/Alert";
 import PostFarmTemplate from "../components/templates/PostFarmTemplate";
 import { showAlert } from "../functions";
-import { SearchDeviceResponse, useSearchDevice } from "../hooks/device/mutate";
-import { usePostFarm } from "../hooks/farm/mutate";
+import { usePostFarm, usePostFarmImage } from "../hooks/farm/mutate";
+import useImage from "../hooks/sdk/useImage";
 import useLocation from "../hooks/sdk/useLocation";
 import { useQueryUser } from "../hooks/user/query";
+import { supabase } from "../supabase";
 import { FarmStackScreenProps } from "../types";
 
 const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
   const { t } = useTranslation("farm");
   const toast = useToast();
 
-  const [searchResult, setSearchResult] =
-    useState<SearchDeviceResponse[number]>();
+  const [base64, setBase64] = useState<string[]>([]);
 
   const { data: user } = useQueryUser();
 
@@ -66,9 +66,46 @@ const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
       },
     });
 
-  const { mutateAsync: mutateAsyncSearchDevice } = useSearchDevice({
-    onSuccess: (data) => {
-      setSearchResult(data[0]);
+  const {
+    mutateAsync: mutateAsyncPostFarmImage,
+    isPending: isLoadingPostFarmImage,
+  } = usePostFarmImage({
+    onError: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("error")}
+        />
+      );
+    },
+  });
+
+  const { pickImageByLibrary } = useImage({
+    onSuccess: async ({ base64 }) => {
+      if (base64) {
+        setBase64((prev) => [...prev, base64]);
+      } else {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      }
+    },
+    onDisable: () => {
+      showAlert(
+        toast,
+        <Alert
+          status="error"
+          onPressCloseButton={() => toast.closeAll()}
+          text={t("permitRequestCam")}
+        />
+      );
     },
     onError: () => {
       showAlert(
@@ -82,27 +119,27 @@ const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
     },
   });
 
-  const searchDevice = useCallback(async (query: string) => {
-    if (query === "") {
-      setSearchResult(undefined);
-      return;
-    }
-    await mutateAsyncSearchDevice(query);
-  }, []);
-
   const postFarm = useCallback(
     async (
       name: string,
-      deviceId: string,
+      crop: string,
       description: string,
       privated: boolean
     ) => {
       if (user && position) {
+        const publicUrls = await Promise.all(
+          base64.map(async (item) => {
+            const { path } = await mutateAsyncPostFarmImage(item);
+            const { data } = supabase.storage.from("image").getPublicUrl(path);
+            return data.publicUrl;
+          })
+        );
         await mutateAsyncPostFarm({
           name,
-          deviceId,
+          crop,
           description,
           ownerId: user.userId,
+          imageUrls: publicUrls,
           privated,
           longitude: position.longitude,
           latitude: position.latitude,
@@ -110,7 +147,7 @@ const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
         });
       }
     },
-    [user, position]
+    [user, base64, position]
   );
 
   const goBackNavigationHandler = useCallback(() => {
@@ -119,13 +156,13 @@ const PostFarmScreen = ({ navigation }: FarmStackScreenProps<"PostFarm">) => {
 
   return (
     <PostFarmTemplate
+      base64={base64}
       position={position}
       address={address}
+      pickImageByLibrary={pickImageByLibrary}
       getAddress={getAddress}
-      searchResult={searchResult}
       postFarm={postFarm}
-      searchDevice={searchDevice}
-      isLoadingPostFarm={isLoadingPostFarm}
+      isLoadingPostFarm={isLoadingPostFarm || isLoadingPostFarmImage}
       isLoadingPosition={isLoadingPosition}
       goBackNavigationHandler={goBackNavigationHandler}
     />

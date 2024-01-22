@@ -31,7 +31,7 @@ const WalkthroughTemplate = ({
   const textColor = useColorModeValue("muted.600", "muted.300");
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  
+
   const { width } = useWindowDimensions();
 
   const walkthrough = [
@@ -47,14 +47,9 @@ const WalkthroughTemplate = ({
     },
 
     {
-      title: t("farm"),
-      text: t("farmText"),
-      path: require("../../../assets/screens/farm.png"),
-    },
-    {
-      title: t("monitor"),
-      text: t("monitorText"),
-      path: require("../../../assets/screens/monitor.png"),
+      title: t("record"),
+      text: t("recordText"),
+      path: require("../../../assets/screens/record.png"),
     },
   ];
 
@@ -80,7 +75,7 @@ const WalkthroughTemplate = ({
               style={{ width: 250, height: 450 }}
               contentFit="contain"
             />
-            {index === 3 && (
+            {index === 2 && (
               <VStack mt="10" w="70%" h="32" bg={bgColor} zIndex="1" space="2">
                 <Button
                   size="lg"

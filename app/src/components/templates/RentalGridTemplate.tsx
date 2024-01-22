@@ -25,6 +25,8 @@ import RentalGridItem from "../organisms/RentalGridItem";
 import SearchBar from "../organisms/SearchBar";
 import SkeletonRentalGrid from "../organisms/SkeletonRentalGrid";
 
+const scenes = ["near", "popular", "newest"] as Scene[];
+
 type RentalGridProps = {
   rentals: GetRentalsResponse | undefined;
   scene: Scene;
@@ -36,8 +38,6 @@ type RentalGridProps = {
   isRefetchingRentals: boolean;
   rentalDetailNavigationHandler: (rentalId: number) => void;
 };
-
-const scenes = ["near", "popular", "newest"] as Scene[];
 
 const RentalGrid = memo(
   ({
@@ -107,7 +107,7 @@ type RentalGridTemplateProps = {
   rentalDetailNavigationHandler: (rentalId: number) => void;
   searchMapNavigationHandler: () => void;
   postRentalNavigationHandler: () => void;
-  rentalFilterNavigationHandler: () => void;
+  FilterRentalNavigationHandler: () => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -123,7 +123,7 @@ const RentalGridTemplate = ({
   searchMapNavigationHandler,
   postRentalNavigationHandler,
   rentalDetailNavigationHandler,
-  rentalFilterNavigationHandler,
+  FilterRentalNavigationHandler,
   goBackNavigationHandler,
 }: RentalGridTemplateProps) => {
   const { t } = useTranslation("map");
@@ -158,6 +158,7 @@ const RentalGridTemplate = ({
       rentalDetailNavigationHandler={rentalDetailNavigationHandler}
     />
   );
+
   return (
     <Box flex={1} safeAreaTop>
       <HStack
@@ -188,7 +189,7 @@ const RentalGridTemplate = ({
           />
         </Pressable>
         <IconButton
-          onPress={rentalFilterNavigationHandler}
+          onPress={FilterRentalNavigationHandler}
           icon={
             <Icon as={<Feather />} name="sliders" size="lg" color={iconColor} />
           }
@@ -196,6 +197,7 @@ const RentalGridTemplate = ({
         />
       </HStack>
       <TabView
+        lazy
         renderTabBar={(props) => (
           <TabBar
             {...props}

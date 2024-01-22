@@ -67,7 +67,7 @@ const SearchCommunityTemplate = ({
             <Modal isOpen={isOpen} onClose={onClose} size="lg">
               <VStack
                 w="75%"
-                px="4"
+                px="6"
                 pt="4"
                 pb="2"
                 bg={modalColor}

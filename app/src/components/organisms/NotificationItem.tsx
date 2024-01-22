@@ -29,12 +29,12 @@ type NotificationItemProps = {
 const NotificationItem = memo(
   ({ type, item, onPress, onPressRight }: NotificationItemProps) => {
     const { t } = useTranslation("setting");
-    
+
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
     const imageColor = useColorModeValue("muted.200", "muted.600");
     const textColor = useColorModeValue("muted.600", "muted.300");
-    const iconColor = useColorModeValue("muted.600", "muted.100");
+    const iconColor = useColorModeValue("muted.500", "muted.300");
 
     return (
       <Swipeable
@@ -63,7 +63,7 @@ const NotificationItem = memo(
               w="100%"
               pl="3"
               pr="6"
-              py="5"
+              py="3"
               alignItems="center"
               justifyContent="space-between"
             >
@@ -125,14 +125,14 @@ const NotificationItem = memo(
                       bg={imageColor}
                       overflow="hidden"
                     >
-                      {item.farm.device.imageUrl ? (
+                      {item.farm.imageUrls?.length ? (
                         <Image
                           style={{ width: 48, height: 48 }}
                           source={{
                             uri:
-                              item.farm.device.imageUrl +
+                              item.farm.imageUrls[0] +
                               "?=" +
-                              item.farm.device.updatedAt,
+                              item.farm.updatedAt,
                           }}
                         />
                       ) : (

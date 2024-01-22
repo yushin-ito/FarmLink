@@ -4,7 +4,7 @@ import Stripe from "https://esm.sh/stripe@11.16.0?target=deno";
 serve(async (req: Request) => {
   try {
     const { account_id } = await req.json();
-    const stripe = new Stripe(Deno.env.get("STRIPE_KEY_LIVE") as string, {
+    const stripe = new Stripe(Deno.env.get("STRIPE_KEY_TEST") as string, {
       apiVersion: "2023-10-16",
       httpClient: Stripe.createFetchHttpClient(),
     });

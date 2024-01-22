@@ -31,6 +31,13 @@ LogBox.ignoreAllLogs();
 
 const App = () => {
   const theme = extendTheme({
+    components: {
+      Text: {
+        baseStyle: {
+          color: "muted.700",
+        },
+      },
+    },
     colors: {
       brand: {
         50: "#e3eecd",

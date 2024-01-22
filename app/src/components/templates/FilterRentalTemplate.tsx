@@ -11,15 +11,15 @@ import {
 } from "native-base";
 import { useTranslation } from "react-i18next";
 
-type RentalFilterProps = {
+type FilterRentalProps = {
   goBackNavigationHandler: () => void;
 };
 
-const RentalFilterTemplate = memo(
-  ({ goBackNavigationHandler }: RentalFilterProps) => {
+const FilterRentalTemplate = memo(
+  ({ goBackNavigationHandler }: FilterRentalProps) => {
     const { t } = useTranslation("map");
 
-    const iconColor = useColorModeValue("muted.600", "muted.100");
+    const iconColor = useColorModeValue("muted.500", "muted.300");
 
     return (
       <Box flex={1} safeAreaTop>
@@ -54,4 +54,4 @@ const RentalFilterTemplate = memo(
   }
 );
 
-export default RentalFilterTemplate;
+export default FilterRentalTemplate;

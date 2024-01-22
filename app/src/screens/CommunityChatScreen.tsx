@@ -170,6 +170,7 @@ const CommunityChatScreen = ({
   });
 
   const {
+    isLoading: isLoadingPickImage,
     pickImageByCamera: pickChatImageByCamera,
     pickImageByLibrary: pickChatImageByLibrary,
   } = useImage({
@@ -261,7 +262,7 @@ const CommunityChatScreen = ({
     await mutateAsyncDeleteChat(chatId);
   }, []);
 
-  const leaveCommunity = useCallback(async () => {
+  const quitCommunity = useCallback(async () => {
     if (user && community) {
       await mutateAsyncUpdateCommunity({
         communityId: params.communityId,
@@ -307,7 +308,7 @@ const CommunityChatScreen = ({
       owned={user?.userId === community?.ownerId}
       user={user}
       chats={chats?.pages[0]}
-      leaveCommunity={leaveCommunity}
+      quitCommunity={quitCommunity}
       deleteCommunity={deleteCommunity}
       deleteChat={deleteChat}
       deleteImage={deleteImage}
@@ -318,6 +319,7 @@ const CommunityChatScreen = ({
       onSend={onSend}
       readMore={fetchNextPage}
       isLoading={isLoadingUser || isLoadingCommunity || isLoadingChats}
+      isLoadingPickImage={isLoadingPickImage}
       isLoadingPostChat={isLoadingPostChat}
       isLoadingUpdateCommunity={isLoadingUpdateCommunity}
       isLoadingDeleteCommunity={isLoadingDeleteCommunity}

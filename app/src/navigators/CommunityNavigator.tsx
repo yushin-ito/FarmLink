@@ -19,10 +19,12 @@ const CommunityNavigator = () => {
         name="CommunityList"
         component={CommunityListScreen}
       />
-      <CommunityStack.Screen
-        name="CommunityChat"
-        component={CommunityChatScreen}
-      />
+      <CommunityStack.Group screenOptions={{ gestureEnabled: false }}>
+        <CommunityStack.Screen
+          name="CommunityChat"
+          component={CommunityChatScreen}
+        />
+      </CommunityStack.Group>
       <CommunityStack.Group
         screenOptions={{
           animation: "fade_from_bottom",

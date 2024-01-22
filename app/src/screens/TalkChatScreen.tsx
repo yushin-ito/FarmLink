@@ -187,7 +187,11 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
     },
   });
 
-  const { pickImageByCamera, pickImageByLibrary } = useImage({
+  const {
+    isLoading: isLoadingPickImage,
+    pickImageByCamera,
+    pickImageByLibrary,
+  } = useImage({
     onSuccess: async ({ base64, size }) => {
       if (user && base64) {
         const { path } = await mutateAsyncPostChatImage(base64);
@@ -298,6 +302,7 @@ const TalkChatScreen = ({ navigation }: TalkStackScreenProps<"TalkChat">) => {
       pickChatImageByLibrary={pickImageByLibrary}
       readMore={fetchNextPage}
       isLoading={isLoadingUser || isLoadingTalk || isLoadingChats}
+      isLoadingPickImage={isLoadingPickImage}
       isLoadingPostChat={isLoadingPostChat || isLoadingPostNotification}
       isLoadingDeleteTalk={isLoadingDeleteTalk}
       imagePreviewNavigationHandler={imagePreviewNavigationHandler}

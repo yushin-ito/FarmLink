@@ -1,9 +1,11 @@
 import React, { memo } from "react";
 
+import { Feather } from "@expo/vector-icons";
 import {
   Box,
   Divider,
   HStack,
+  Icon,
   Pressable,
   Text,
   VStack,
@@ -22,9 +24,10 @@ type CommunityListItemProps = {
 
 const CommunityListItem = memo(({ item, onPress }: CommunityListItemProps) => {
   const { t } = useTranslation("community");
-  
+
   const pressedColor = useColorModeValue("muted.100", "muted.800");
   const textColor = useColorModeValue("muted.600", "muted.300");
+  const iconColor = useColorModeValue("muted.500", "muted.300");
 
   return (
     <Pressable onPress={onPress} _pressed={{ bg: pressedColor }} rounded="md">
@@ -54,13 +57,26 @@ const CommunityListItem = memo(({ item, onPress }: CommunityListItemProps) => {
               {item.description}
             </Text>
           </VStack>
-          <HStack pt="2" space="4">
-            <Text fontSize="xs">
-              {t("member")}:{" " + ((item.memberIds?.length ?? 0) + 1)}
-            </Text>
-            <Text fontSize="xs">
-              {t("category")}:{" " + t(item.category as Category)}
-            </Text>
+          <HStack space="4">
+            <HStack alignItems="center" space="1">
+              <Icon as={<Feather />} name="database" size="3" color={iconColor} />
+              <Text color={iconColor} fontSize="xs">
+                {t(item.category as Category)}
+              </Text>
+            </HStack>
+            <HStack alignItems="center" space="1">
+              <Icon as={<Feather />} name="users" size="3" color={iconColor} />
+              <Text color={iconColor} fontSize="xs">
+                {(item.memberIds?.length ?? 0) + 1 + t("ppl")}
+              </Text>
+            </HStack>
+
+            <HStack alignItems="center" space="1">
+              <Icon as={<Feather />} name="clock" size="3" color={iconColor} />
+              <Text color={iconColor} fontSize="xs">
+                {t("time", { date: item.createdAt })}
+              </Text>
+            </HStack>
           </HStack>
         </VStack>
       </HStack>

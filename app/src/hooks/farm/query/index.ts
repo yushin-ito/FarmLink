@@ -3,7 +3,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { LatLng } from "react-native-maps";
 
 import { supabase } from "../../../supabase";
-import { Device, Farm, User } from "../../../types";
+import { Farm, User } from "../../../types";
 import useAuth from "../../auth/useAuth";
 
 export type GetFarmResponse = Awaited<ReturnType<typeof getFarm>>;
@@ -13,9 +13,9 @@ export type GetUserFarmsResponse = Awaited<ReturnType<typeof getUserFarms>>;
 const getFarm = async (farmId: number) => {
   const { data, error } = await supabase
     .from("farm")
-    .select("*, owner:user(*), device(*)")
+    .select("*, owner:user(*)")
     .eq("farmId", farmId)
-    .returns<(Farm["Row"] & { owner: User["Row"]; device: Device["Row"] })[]>();
+    .returns<(Farm["Row"] & { owner: User["Row"] })[]>();
 
   if (error) {
     throw error;
@@ -38,13 +38,12 @@ const getFarms = async (
       long: location.longitude,
     })
     .range(from, to)
-    .returns<
-      (Farm["Row"] & { owner: { name: string }; device: Device["Row"] })[]
-    >();
+    .returns<(Farm["Row"] & { owner: { name: string } })[]>();
 
   if (error) {
     throw error;
   }
+
   return data;
 };
 
@@ -55,10 +54,9 @@ const getUserFarms = async (ownerId: string | undefined) => {
 
   const { data, error } = await supabase
     .from("farm")
-    .select("*, device(*)")
+    .select("*")
     .eq("ownerId", ownerId)
-    .order("createdAt", { ascending: false })
-    .returns<(Farm["Row"] & { device: Device["Row"] })[]>();
+    .order("createdAt", { ascending: false });
 
   if (error) {
     throw error;

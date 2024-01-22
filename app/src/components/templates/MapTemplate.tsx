@@ -80,7 +80,7 @@ const MapTemplate = ({
   rentalGridNavigationHandler,
 }: MapTemplateProps) => {
   const { t } = useTranslation("map");
-
+  
   const mapColor = useColorModeValue("light", "dark");
   const bgColor = useColorModeValue("white", "muted.800");
   const textColor = useColorModeValue("black", "white");

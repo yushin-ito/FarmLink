@@ -40,15 +40,12 @@ const EnvironmentTemplate = ({
   goBackNavigationHandler,
 }: EnvironmentTemplateProps) => {
   const { t } = useTranslation("setting");
-  
+
   const iconColor = useColorModeValue("muted.600", "muted.100");
 
   return (
     <Box flex={1} safeAreaTop>
-      <Overlay
-        isOpen={isLoadingChangeLanguage || isLoadingChangeTheme}
-        loadingEnabled
-      />
+      <Overlay isOpen={isLoadingChangeLanguage || isLoadingChangeTheme} />
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}

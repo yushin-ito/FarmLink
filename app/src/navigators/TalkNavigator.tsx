@@ -16,7 +16,9 @@ const TalkNavigator = () => {
       screenOptions={{ headerShown: false, gestureEnabled: true }}
     >
       <TalkStack.Screen name="TalkList" component={TalkListScreen} />
-      <TalkStack.Screen name="TalkChat" component={TalkChatScreen} />
+      <TalkStack.Group screenOptions={{ gestureEnabled: false }}>
+        <TalkStack.Screen name="TalkChat" component={TalkChatScreen} />
+      </TalkStack.Group>
       <TalkStack.Group
         screenOptions={{
           animation: "fade_from_bottom",

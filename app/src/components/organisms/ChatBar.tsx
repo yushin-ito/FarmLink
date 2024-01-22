@@ -14,6 +14,10 @@ import {
 } from "native-base";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import Animated, {
+  useAnimatedKeyboard,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 
 import Stagger from "./Stagger";
 
@@ -42,25 +46,33 @@ const ChatBar = memo(
     const bgColor = useColorModeValue("white", "muted.900");
     const inputColor = useColorModeValue("muted.300", "muted.700");
     const textColor = useColorModeValue("muted.600", "white");
-    const iconColor = useColorModeValue("muted.600", "muted.100");
+    const iconColor = useColorModeValue("muted.500", "muted.300");
 
     const { isOpen, onToggle } = useDisclose();
     const { control, handleSubmit, reset } = useForm<FormValues>();
+    const keyboard = useAnimatedKeyboard();
+    const translateStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ translateY: -keyboard.height.value }],
+      };
+    });
 
     return (
-      <Box h="20" bg={bgColor} safeAreaBottom>
-        <Box position="absolute" bottom="20" left="3">
-          <Stagger
-            isOpen={isOpen}
-            pickImageByCamera={async () => {
-              await pickImageByCamera();
-              onToggle();
-            }}
-            pickImageByLibrary={async () => {
-              await pickImageByLibrary();
-              onToggle();
-            }}
-          />
+      <Box h="20" bg={bgColor}>
+        <Box position="absolute" bottom="0" left="3">
+          <Animated.View style={translateStyle}>
+            <Stagger
+              isOpen={isOpen}
+              pickImageByCamera={async () => {
+                onToggle();
+                await pickImageByCamera();
+              }}
+              pickImageByLibrary={async () => {
+                onToggle();
+                await pickImageByLibrary();
+              }}
+            />
+          </Animated.View>
         </Box>
         {visible && (
           <InputAccessoryView>

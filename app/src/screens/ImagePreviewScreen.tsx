@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import { useRoute, RouteProp } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { useToast } from "native-base";
@@ -11,12 +11,11 @@ import ImagePreviewTemplate from "../components/templates/ImagePreviewTemplate";
 import { showAlert } from "../functions";
 import { useDeleteChat } from "../hooks/chat/mutate";
 import useMediaLibrary from "../hooks/sdk/useMediaLibrary";
-import { RootStackParamList } from "../types";
+import { RootStackParamList, RootStackScreenProps } from "../types";
 
-const ImagePreviewScreen = () => {
+const ImagePreviewScreen = ({ navigation }: RootStackScreenProps) => {
   const { t } = useTranslation("app");
   const toast = useToast();
-  const navigation = useNavigation();
   const { params } = useRoute<RouteProp<RootStackParamList, "ImagePreview">>();
 
   const { mutateAsync: mutateAsyncDeleteChat } = useDeleteChat({

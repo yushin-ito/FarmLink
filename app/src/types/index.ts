@@ -11,9 +11,24 @@ export type Locale = "en" | "ja";
 
 export type Scene = "near" | "newest" | "popular";
 
+export type Order = "asc" | "desc";
+
+export type Weather = "sunny" | "cloudy" | "rainy" | "snowy";
+
 export type Rate = "year" | "month" | "week" | "day" | "once";
 
 export type Equipment = "water" | "parking" | "hut" | "tool";
+
+export type Payment = "destination" | "subscription";
+
+export type Crop =
+  | "tomato"
+  | "cucumber"
+  | "pumpkin"
+  | "corn"
+  | "potato"
+  | "carrot"
+  | "onion";
 
 export type Category =
   | "all"
@@ -47,7 +62,7 @@ export type Farm = Database["public"]["Tables"]["farm"];
 export type Talk = Database["public"]["Tables"]["talk"];
 export type Rental = Database["public"]["Tables"]["rental"];
 export type Like = Database["public"]["Tables"]["like"];
-export type Device = Database["public"]["Tables"]["device"];
+export type Record = Database["public"]["Tables"]["record"];
 export type Notification = Database["public"]["Tables"]["notification"];
 
 export type RootStackParamList = {
@@ -89,7 +104,7 @@ export type MapStackParamList = {
   };
   SearchMap: { type: "rental" | "farm" };
   RentalGrid: undefined;
-  RentalFilter: undefined;
+  FilterRental: undefined;
   PostRental: undefined;
 };
 
@@ -101,8 +116,10 @@ export type CommunityStackParamList = {
 };
 
 export type FarmStackParamList = {
-  FarmList: undefined;
+  Record: undefined;
+  RecordList: { farmId: number };
   PostFarm: undefined;
+  PostRecord: undefined;
 };
 
 export type TalkStackParamList = {
@@ -118,7 +135,7 @@ export type SettingStackParamList = {
   PostRental: undefined;
   PostProfile: undefined;
   LikeList: undefined;
-  Transfer: undefined;
+  Payment: undefined;
   Notification: undefined;
   Environment: undefined;
 };

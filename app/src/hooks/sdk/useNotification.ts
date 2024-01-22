@@ -44,19 +44,18 @@ const useNotification = ({ onError, onDisable }: UseNotificationType) => {
       const token = await Notifications.getExpoPushTokenAsync({
         projectId: Constants.expoConfig?.extra?.eas.projectId,
       });
-
+      
       if (session) {
         const { error } = await supabase
           .from("user")
-          .upsert({ userId: session.user.id, token: token.data });
+          .update({ token: token.data })
+          .eq("userId", session.user.id);
         if (error) {
-          console.log(error)
           throw error;
         }
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error);
         onError && onError(error);
       }
     } finally {

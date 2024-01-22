@@ -84,11 +84,11 @@ const CommunityListScreen = ({
 
   const joinCommunity = useCallback(
     async (communityId: number, memberIds: string[]) => {
-      if (user && !memberIds.includes(user.userId)) {
+      if (user) {
         memberIds.push(user.userId);
         await mutateAsyncUpdateCommunity({
           communityId,
-          memberIds,
+          memberIds: [...new Set(memberIds)],
         });
         navigation.navigate("CommunityChat", { communityId });
       }

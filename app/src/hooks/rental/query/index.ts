@@ -88,7 +88,7 @@ const getUserRentals = async (ownerId: string | undefined) => {
 
 export const useQueryRental = (rentalId: number) =>
   useQuery({
-    queryKey: ["rental", rentalId.toString()],
+    queryKey: ["rental", rentalId],
     queryFn: async () => await getRental(rentalId),
   });
 

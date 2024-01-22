@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert } from "react-native";
+import { Alert, useWindowDimensions } from "react-native";
 
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LocationGeocodedAddress } from "expo-location";
 import {
   Button,
   Box,
+  FlatList,
   VStack,
   Heading,
   Text,
@@ -18,30 +19,33 @@ import {
   useColorModeValue,
   Center,
   Spinner,
+  Pressable,
+  useDisclose,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import MapView, { LatLng, Marker } from "react-native-maps";
 
-import { SearchDeviceResponse } from "../../hooks/device/mutate";
 import { GetFarmResponse } from "../../hooks/farm/query";
+import { Crop } from "../../types";
 import Input from "../molecules/Input";
+import CropActionSheet from "../organisms/CropActionSheet";
 
 type EditFarmTemplateProps = {
   farm: GetFarmResponse | undefined;
+  images: string[];
   position: LatLng | undefined;
   address: LocationGeocodedAddress | undefined;
+  pickImageByLibrary: () => Promise<void>;
   getAddress: (latitude: number, longitude: number) => Promise<void>;
   updateFarm: (
     name: string,
-    deviceId: string,
+    crop: string,
     description: string,
     privated: boolean
   ) => Promise<void>;
   deleteFarm: () => Promise<void>;
-  searchResult: SearchDeviceResponse[0] | undefined;
-  searchDevice: (query: string) => Promise<void>;
   isLoadingUpdateFarm: boolean;
   isLoadingDeleteFarm: boolean;
   isLoadingPosition: boolean;
@@ -50,32 +54,39 @@ type EditFarmTemplateProps = {
 
 type FormValues = {
   name: string;
-  deviceId: string;
+  crop: string;
   description: string;
 };
 
 const EditFarmTemplate = ({
   farm,
+  images,
   position,
   address,
+  pickImageByLibrary,
   getAddress,
-  searchResult,
   updateFarm,
   deleteFarm,
-  searchDevice,
   isLoadingUpdateFarm,
   isLoadingDeleteFarm,
   isLoadingPosition,
   goBackNavigationHandler,
 }: EditFarmTemplateProps) => {
-  const { t } = useTranslation("farm");
+  const { t } = useTranslation(["farm", "crop"]);
 
   const textColor = useColorModeValue("muted.600", "muted.300");
   const iconColor = useColorModeValue("muted.600", "muted.100");
+  const borderColor = useColorModeValue("muted.400", "muted.200");
+  const imageColor = useColorModeValue("muted.200", "muted.600");
 
   const mapRef = useRef<MapView>(null);
   const [isReady, setIsReady] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [privated, setPrivated] = useState(true);
+  const [crop, setCrop] = useState<Crop>("carrot");
+
+  const { width } = useWindowDimensions();
+  const { isOpen, onOpen, onClose } = useDisclose();
 
   const {
     control,
@@ -87,8 +98,7 @@ const EditFarmTemplate = ({
   useEffect(() => {
     if (farm) {
       setValue("name", farm.name);
-      setValue("deviceId", farm.deviceId);
-      searchDevice(farm.deviceId);
+      setValue("crop", farm.crop);
       setValue("description", farm.description);
       setPrivated(farm.privated);
     }
@@ -108,6 +118,12 @@ const EditFarmTemplate = ({
 
   return (
     <Box flex={1} safeAreaTop>
+      <CropActionSheet
+        isOpen={isOpen}
+        onClose={onClose}
+        crop={crop}
+        setCrop={setCrop}
+      />
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
@@ -134,7 +150,73 @@ const EditFarmTemplate = ({
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} pb="16" justifyContent="space-between">
-          <VStack px="10" space="6">
+          <VStack px="10" space="4">
+            <VStack space="2">
+              <FlatList
+                w={width - 80}
+                h="180"
+                rounded="lg"
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                pagingEnabled
+                data={images}
+                ListFooterComponent={
+                  <Pressable onPress={pickImageByLibrary}>
+                    <Center w={width - 80} h="100%" bg={imageColor}>
+                      <Icon
+                        as={<Feather />}
+                        name="camera"
+                        size="2xl"
+                        color={iconColor}
+                      />
+                    </Center>
+                  </Pressable>
+                }
+                renderItem={({ item }) => (
+                  <Box w={width - 80} h="100%" bg={imageColor}>
+                    <Image
+                      source={{
+                        uri:
+                          item.indexOf("http") !== -1
+                            ? item
+                            : "data:image/png;base64," + item,
+                      }}
+                      style={{ flex: 1 }}
+                      contentFit="contain"
+                    />
+                  </Box>
+                )}
+                onMomentumScrollEnd={(event) => {
+                  const currentIndex = Math.floor(
+                    event.nativeEvent.contentOffset.x /
+                      event.nativeEvent.layoutMeasurement.width
+                  );
+                  setCurrentIndex(currentIndex);
+                }}
+              />
+              <HStack w="100%" alignItems="center" justifyContent="center">
+                {images.map((_item, index) => (
+                  <Box
+                    key={index}
+                    mr="1"
+                    rounded="full"
+                    size={Number(index) === currentIndex ? "1.5" : "1"}
+                    bg={
+                      Number(index) === currentIndex ? "info.500" : "muted.400"
+                    }
+                  />
+                ))}
+                <Box
+                  rounded="full"
+                  size={(images.length ?? 0) === currentIndex ? "1.5" : "1"}
+                  bg={
+                    (images.length ?? 0) === currentIndex
+                      ? "info.500"
+                      : "muted.400"
+                  }
+                />
+              </HStack>
+            </VStack>
             <FormControl isRequired isInvalid={"name" in errors}>
               <FormControl.Label>{t("farmName")}</FormControl.Label>
               <Controller
@@ -186,50 +268,23 @@ const EditFarmTemplate = ({
                 }}
               />
             </FormControl>
-            <FormControl isRequired isInvalid={"deviceId" in errors}>
-              <FormControl.Label>{t("deviceId")}</FormControl.Label>
-              <Controller
-                name="deviceId"
-                control={control}
-                render={({ field: { value, onChange } }) => {
-                  return (
-                    <Input
-                      returnKeyType="done"
-                      InputRightElement={
-                        <IconButton
-                          onPress={() => setValue("deviceId", "")}
-                          icon={
-                            <Icon
-                              as={<Feather name="x" />}
-                              size="4"
-                              color="muted.400"
-                            />
-                          }
-                          variant="unstyled"
-                          _pressed={{
-                            opacity: 0.5,
-                          }}
-                        />
-                      }
-                      value={value}
-                      onChangeText={async (text) => {
-                        onChange(text);
-                        await searchDevice(text);
-                      }}
-                    />
-                  );
-                }}
-                rules={{
-                  validate: () =>
-                    searchResult ? undefined : t("invalidDeviceId"),
-                }}
+            <Pressable onPressIn={onOpen}>
+              <FormControl.Label>{t("crop")}</FormControl.Label>
+              <Input
+                isReadOnly
+                value={t(`crop:${crop}`)}
+                InputRightElement={
+                  <Icon
+                    as={<AntDesign name="caretdown" />}
+                    size="3"
+                    mr="3"
+                    color="muted.400"
+                  />
+                }
+                borderColor={isOpen ? "brand.600" : borderColor}
+                onPressIn={onOpen}
               />
-              <FormControl.ErrorMessage
-                leftIcon={<Icon as={<Feather name="alert-circle" />} />}
-              >
-                {errors.deviceId && <Text>{errors.deviceId.message}</Text>}
-              </FormControl.ErrorMessage>
-            </FormControl>
+            </Pressable>
             <FormControl isRequired isInvalid={"description" in errors}>
               <FormControl.Label>{t("description")}</FormControl.Label>
               <Controller
@@ -328,7 +383,7 @@ const EditFarmTemplate = ({
               onPress={handleSubmit(async (data) => {
                 await updateFarm(
                   data.name,
-                  data.deviceId,
+                  data.crop,
                   data.description,
                   privated
                 );

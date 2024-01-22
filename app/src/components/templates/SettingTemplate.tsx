@@ -41,7 +41,7 @@ type SettingTemplateProps = {
   postProfileNavigationHandler: () => void;
   rentalListNavigationHandler: () => void;
   likeListNavigationHandler: () => void;
-  transferNavigationHandler: () => void;
+  paymentNavigationHandler: () => void;
   environmentNavigationHandler: () => void;
 };
 
@@ -62,7 +62,7 @@ const SettingTemplate = ({
   postProfileNavigationHandler,
   rentalListNavigationHandler,
   likeListNavigationHandler,
-  transferNavigationHandler,
+  paymentNavigationHandler,
   environmentNavigationHandler,
 }: SettingTemplateProps) => {
   const { t } = useTranslation("setting");
@@ -123,7 +123,7 @@ const SettingTemplate = ({
           )}
         </HStack>
         {isLoading ? (
-          <SkeletonSetting rows={7} />
+          <SkeletonSetting rows={8} />
         ) : (
           <VStack space="4">
             <Pressable
@@ -259,7 +259,7 @@ const SettingTemplate = ({
               _pressed={{
                 opacity: 0.5,
               }}
-              onPress={transferNavigationHandler}
+              onPress={paymentNavigationHandler}
             >
               <HStack alignItems="center" justifyContent="space-between">
                 <HStack p="2" space="2" alignItems="center" rounded="md">
@@ -269,7 +269,7 @@ const SettingTemplate = ({
                     size="md"
                     color={iconColor}
                   />
-                  <Text fontSize="md">{t("transfer")}</Text>
+                  <Text fontSize="md">{t("payment")}</Text>
                 </HStack>
                 <Icon
                   as={<Feather />}

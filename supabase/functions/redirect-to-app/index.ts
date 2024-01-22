@@ -14,7 +14,7 @@ serve(async (req: Request) => {
       Deno.env.get("SUPABASE_ANON_KEY") as string
     );
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_KEY_LIVE") as string, {
+    const stripe = new Stripe(Deno.env.get("STRIPE_KEY_TEST") as string, {
       apiVersion: "2023-10-16",
       httpClient: Stripe.createFetchHttpClient(),
     });

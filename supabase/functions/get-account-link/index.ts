@@ -5,7 +5,7 @@ serve(async (req: Request) => {
   try {
     const { user_id, redirect_url } = await req.json();
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_KEY_LIVE") as string, {
+    const stripe = new Stripe(Deno.env.get("STRIPE_KEY_TEST") as string, {
       apiVersion: "2023-10-16",
       httpClient: Stripe.createFetchHttpClient(),
     });
@@ -25,23 +25,16 @@ serve(async (req: Request) => {
       business_profile: {
         mcc: "6513",
         url: "facebook.com/profile?id=61555230751523",
-        product_description:
-          "FarmLink is an application that provides a safe environment to start farming.",
+        product_description: "lease or rent unused farm.",
       },
     });
 
+    const endpoint = `${Deno.env.get("SUPABASE_URL")}/functions/v1`;
+
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: `${Deno.env.get(
-        "SUPABASE_URL"
-      )}/functions/v1/redirect-to-app?user_id=${user_id}&account_id=${
-        account.id
-      }&redirect_url=${redirect_url}`,
-      return_url: `${Deno.env.get(
-        "SUPABASE_URL"
-      )}/functions/v1/redirect-to-app?user_id=${user_id}&account_id=${
-        account.id
-      }&redirect_url=${redirect_url}`,
+      refresh_url: `${endpoint}/redirect-to-app?user_id=${user_id}&account_id=${account.id}&redirect_url=${redirect_url}`,
+      return_url: `${endpoint}/redirect-to-app?user_id=${user_id}&account_id=${account.id}&redirect_url=${redirect_url}`,
       type: "account_onboarding",
     });
 

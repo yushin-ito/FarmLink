@@ -5,11 +5,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import EnvironmentScreen from "../screens/EnvironmentScreen";
 import LikeListScreen from "../screens/LikeListScreen";
 import NotificationScreen from "../screens/NotificationScreen";
+import PaymentScreen from "../screens/PaymentScreen";
 import PostProfileScreen from "../screens/PostProfileScreen";
 import PostRentalScreen from "../screens/PostRentalScreen";
 import RentalListScreen from "../screens/RentalListScreen";
 import SettingScreen from "../screens/SettingScreen";
-import TransferScreen from "../screens/TransferScreen";
 import { SettingStackParamList } from "../types";
 
 const SettingStack = createNativeStackNavigator<SettingStackParamList>();
@@ -34,7 +34,7 @@ const SettingNavigator = () => {
           name="Notification"
           component={NotificationScreen}
         />
-        <SettingStack.Screen name="Transfer" component={TransferScreen} />
+        <SettingStack.Screen name="Payment" component={PaymentScreen} />
         <SettingStack.Screen name="Environment" component={EnvironmentScreen} />
       </SettingStack.Group>
     </SettingStack.Navigator>

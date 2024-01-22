@@ -28,11 +28,12 @@ const TabNavigator = () => {
       const routeName = getFocusedRouteNameFromRoute(route);
       if (
         routeName === "SearchMap" ||
-        routeName === "RentalFilter" ||
+        routeName === "FilterRental" ||
         routeName === "CommunityChat" ||
         routeName === "PostCommunity" ||
         routeName === "SearchCommunity" ||
         routeName === "PostFarm" ||
+        routeName === "RecordList" ||
         routeName === "TalkChat" ||
         routeName === "PostTalk" ||
         routeName === "SearchTalk" ||
@@ -41,6 +42,8 @@ const TabNavigator = () => {
         routeName === "LikeList" ||
         routeName === "Notification" ||
         routeName === "RentalList" ||
+        routeName === "Payment" ||
+        routeName === "PostRecord" ||
         routeName === "Environment"
       )
         return false;
@@ -121,7 +124,7 @@ const TabNavigator = () => {
           tabBarIcon: ({ focused }) => (
             <Icon
               as={<Feather />}
-              name="edit"
+              name="clipboard"
               size={focused ? "lg" : "md"}
               color={focused ? "brand.600" : iconColor}
               mt="1"
@@ -143,7 +146,6 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
-              style={{ transform: [{ rotate: "-95deg" }] }}
               as={<Feather />}
               name="message-circle"
               size={focused ? "lg" : "md"}
