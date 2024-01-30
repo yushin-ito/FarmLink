@@ -25,7 +25,7 @@ type TalkListItemProps = {
 const TalkListItem = memo(
   ({ item, onPressRight, onPress }: TalkListItemProps) => {
     const { t } = useTranslation("talk");
-    
+
     const bgColor = useColorModeValue("white", "#171717");
     const pressedColor = useColorModeValue("#f5f5f5", "#262626");
     const textColor = useColorModeValue("muted.600", "muted.300");
@@ -53,7 +53,7 @@ const TalkListItem = memo(
           underlayColor={pressedColor}
         >
           <VStack>
-            <HStack px="9" py="4">
+            <HStack px="10" py="4">
               <Box w="20%">
                 <Avatar
                   size="md"
@@ -70,7 +70,7 @@ const TalkListItem = memo(
                   <Text bold fontSize="md">
                     {item.to.name}
                   </Text>
-                  <Text fontSize="sm">
+                  <Text color={textColor} fontSize="sm">
                     {t("time", { date: item.updatedAt })}
                   </Text>
                 </HStack>

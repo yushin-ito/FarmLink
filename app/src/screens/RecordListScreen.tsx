@@ -1,14 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useFocusEffect, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 
 import Alert from "../components/molecules/Alert";
 import RecordListTemplate from "../components/templates/RecordListTemplate";
 import { showAlert } from "../functions";
-import { useDeleteFarm } from "../hooks/farm/mutate";
 import { useQueryFarm } from "../hooks/farm/query";
+import { useDeleteRecord } from "../hooks/record/mutate";
 import { useInfiniteQueryRecords } from "../hooks/record/query";
 import { supabase } from "../supabase";
 import { FarmStackScreenProps, FarmStackParamList } from "../types";
@@ -18,6 +18,7 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"RecordList">) => {
   const toast = useToast();
   const { params } = useRoute<RouteProp<FarmStackParamList, "RecordList">>();
 
+  const focusRef = useRef(true);
   const [asc, setAsc] = useState<boolean>(true);
 
   const {
@@ -35,10 +36,21 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"RecordList">) => {
 
   const [isRefetching, setIsRefetching] = useState(false);
 
+  useFocusEffect(
+    useCallback(() => {
+      if (focusRef.current) {
+        focusRef.current = false;
+        return;
+      }
+
+      refetchRecords();
+    }, [])
+  );
+
   const {
     mutateAsync: mutateAsyncDeleteRecord,
     isPending: isLoadingDeleteRecord,
-  } = useDeleteFarm({
+  } = useDeleteRecord({
     onSuccess: async () => {
       await refetchRecords();
     },
@@ -46,7 +58,7 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"RecordList">) => {
       showAlert(
         toast,
         <Alert
-          status="success"
+          status="error"
           onPressCloseButton={() => toast.closeAll()}
           text={t("error")}
         />
@@ -71,8 +83,15 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"RecordList">) => {
   }, []);
 
   const postRecordNavigationHandler = useCallback(() => {
-    navigation.navigate("PostRecord");
-  }, []);
+    navigation.navigate("PostRecord", { farmId: params.farmId });
+  }, [params]);
+
+  const editRecordNavigationHandler = useCallback(
+    (recordId: number) => {
+      navigation.navigate("EditRecord", { recordId });
+    },
+    [navigation]
+  );
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
@@ -93,6 +112,7 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"RecordList">) => {
       isLoadingDeleteRecord={isLoadingDeleteRecord}
       isRefetching={isRefetching}
       postRecordNavigationHandler={postRecordNavigationHandler}
+      editRecordNavigationHandler={editRecordNavigationHandler}
       goBackNavigationHandler={goBackNavigationHandler}
     />
   );

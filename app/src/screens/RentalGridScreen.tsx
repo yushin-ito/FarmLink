@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { useFocusEffect } from "@react-navigation/native";
+import { RouteProp, useFocusEffect, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 
@@ -9,7 +9,7 @@ import RentalGridTemplate from "../components/templates/RentalGridTemplate";
 import { showAlert } from "../functions";
 import { useInfiniteQueryRentals } from "../hooks/rental/query";
 import useLocation from "../hooks/sdk/useLocation";
-import { MapStackScreenProps, Scene } from "../types";
+import { MapStackParamList, MapStackScreenProps, Scene } from "../types";
 
 const scenes = ["near", "popular", "newest", "lowest"] as Scene[];
 
@@ -18,6 +18,7 @@ const RentalGridScreen = ({
 }: MapStackScreenProps<"RentalGrid">) => {
   const { t } = useTranslation("map");
   const toast = useToast();
+  const { params } = useRoute<RouteProp<MapStackParamList, "RentalGrid">>();
 
   const focusRef = useRef(true);
   const [sceneIndex, setSceneIndex] = useState(0);
@@ -52,7 +53,7 @@ const RentalGridScreen = ({
     isLoading: isLoadingRentals,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQueryRentals(scenes[sceneIndex], position);
+  } = useInfiniteQueryRentals(scenes[sceneIndex], position, params?.option);
 
   useFocusEffect(
     useCallback(() => {

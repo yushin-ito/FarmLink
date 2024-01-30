@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, useWindowDimensions } from "react-native";
+import { Alert, Keyboard, useWindowDimensions } from "react-native";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -30,6 +30,7 @@ import MapView, { LatLng, Marker } from "react-native-maps";
 import { GetFarmResponse } from "../../hooks/farm/query";
 import { Crop } from "../../types";
 import Input from "../molecules/Input";
+import Overlay from "../molecules/Overlay";
 import CropActionSheet from "../organisms/CropActionSheet";
 
 type EditFarmTemplateProps = {
@@ -46,6 +47,7 @@ type EditFarmTemplateProps = {
     privated: boolean
   ) => Promise<void>;
   deleteFarm: () => Promise<void>;
+  isLoading: boolean;
   isLoadingUpdateFarm: boolean;
   isLoadingDeleteFarm: boolean;
   isLoadingPosition: boolean;
@@ -67,6 +69,7 @@ const EditFarmTemplate = ({
   getAddress,
   updateFarm,
   deleteFarm,
+  isLoading,
   isLoadingUpdateFarm,
   isLoadingDeleteFarm,
   isLoadingPosition,
@@ -118,6 +121,7 @@ const EditFarmTemplate = ({
 
   return (
     <Box flex={1} safeAreaTop>
+      <Overlay isOpen={isLoading} />
       <CropActionSheet
         isOpen={isOpen}
         onClose={onClose}
@@ -268,7 +272,12 @@ const EditFarmTemplate = ({
                 }}
               />
             </FormControl>
-            <Pressable onPressIn={onOpen}>
+            <Pressable
+              onPressIn={() => {
+                onOpen();
+                Keyboard.dismiss();
+              }}
+            >
               <FormControl.Label>{t("crop")}</FormControl.Label>
               <Input
                 isReadOnly
@@ -282,7 +291,10 @@ const EditFarmTemplate = ({
                   />
                 }
                 borderColor={isOpen ? "brand.600" : borderColor}
-                onPressIn={onOpen}
+                onPressIn={() => {
+                  onOpen();
+                  Keyboard.dismiss();
+                }}
               />
             </Pressable>
             <FormControl isRequired isInvalid={"description" in errors}>

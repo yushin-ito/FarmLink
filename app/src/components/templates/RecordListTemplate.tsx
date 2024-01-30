@@ -38,6 +38,7 @@ type RecordListTemplateProps = {
   isLoadingDeleteRecord: boolean;
   isRefetching: boolean;
   postRecordNavigationHandler: () => void;
+  editRecordNavigationHandler: (recordId: number) => void;
   goBackNavigationHandler: () => void;
 };
 
@@ -55,6 +56,7 @@ const RecordListTemplate = ({
   isLoadingDeleteRecord,
   isRefetching,
   postRecordNavigationHandler,
+  editRecordNavigationHandler,
   goBackNavigationHandler,
 }: RecordListTemplateProps) => {
   const { t } = useTranslation("farm");
@@ -142,8 +144,8 @@ const RecordListTemplate = ({
             <RecordListItem
               item={item}
               onPress={() => {}}
-              onPressLeft={() => {}}
-              onPressRight={() =>
+              onPressLeft={() => editRecordNavigationHandler(item.recordId)}
+              onPressRight={() => {
                 Alert.alert(t("deleteRecord"), t("askDeleteRecord"), [
                   {
                     text: t("cancel"),
@@ -154,8 +156,8 @@ const RecordListTemplate = ({
                     onPress: async () => await deleteRecord(item.recordId),
                     style: "destructive",
                   },
-                ])
-              }
+                ]);
+              }}
             />
           )}
           keyExtractor={(item) => item.recordId.toString()}

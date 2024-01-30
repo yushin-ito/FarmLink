@@ -44,7 +44,8 @@ const TabNavigator = () => {
         routeName === "RentalList" ||
         routeName === "Payment" ||
         routeName === "PostRecord" ||
-        routeName === "Environment"
+        routeName === "Environment" ||
+        routeName === "TermsList"
       )
         return false;
 
@@ -85,10 +86,7 @@ const TabNavigator = () => {
             />
           ),
           tabBarLabel: ({ focused }) => (
-            <Text
-              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
-              color={focused ? "brand.600" : iconColor}
-            >
+            <Text bold fontSize="2xs" color={focused ? "brand.600" : iconColor}>
               {t("map:search")}
             </Text>
           ),
@@ -108,10 +106,7 @@ const TabNavigator = () => {
             />
           ),
           tabBarLabel: ({ focused }) => (
-            <Text
-              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
-              color={focused ? "brand.600" : iconColor}
-            >
+            <Text bold fontSize="2xs" color={focused ? "brand.600" : iconColor}>
               {t("community:community")}
             </Text>
           ),
@@ -131,10 +126,7 @@ const TabNavigator = () => {
             />
           ),
           tabBarLabel: ({ focused }) => (
-            <Text
-              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
-              color={focused ? "brand.600" : iconColor}
-            >
+            <Text bold fontSize="2xs" color={focused ? "brand.600" : iconColor}>
               {t("farm:record")}
             </Text>
           ),
@@ -154,10 +146,7 @@ const TabNavigator = () => {
             />
           ),
           tabBarLabel: ({ focused }) => (
-            <Text
-              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
-              color={focused ? "brand.600" : iconColor}
-            >
+            <Text bold fontSize="2xs" color={focused ? "brand.600" : iconColor}>
               {t("talk:talk")}
             </Text>
           ),
@@ -177,10 +166,7 @@ const TabNavigator = () => {
             />
           ),
           tabBarLabel: ({ focused }) => (
-            <Text
-              fontSize={Platform.OS === "android" ? "2xs" : "xs"}
-              color={focused ? "brand.600" : iconColor}
-            >
+            <Text bold fontSize="2xs" color={focused ? "brand.600" : iconColor}>
               {t("setting:setting")}
             </Text>
           ),

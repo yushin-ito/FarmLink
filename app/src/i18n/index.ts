@@ -79,7 +79,7 @@ i18n
       }
       return "en";
     },
-    ns: ["app", "auth", "map", "chat", "community", "farm", "setting"],
+    ns: ["app", "auth", "map", "chat", "community", "farm", "setting", "crop"],
     resources,
     interpolation: {
       escapeValue: false,

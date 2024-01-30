@@ -352,7 +352,7 @@ const ImagePreviewTemplate = ({
         >
           <IconButton
             onPress={goBackNavigationHandler}
-            icon={<Icon as={<Feather name="x" />} size="lg" color="white" />}
+            icon={<Icon as={<Feather name="chevron-left" />} size="lg" color="white" />}
             variant="unstyled"
           />
           <Heading fontSize="xl" color="white">

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { useNavigation } from "@react-navigation/native";
+import { useRoute, RouteProp } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 
@@ -8,31 +8,31 @@ import Alert from "../components/molecules/Alert";
 import PostRecordTemplate from "../components/templates/PostRecordTemplate";
 import { showAlert } from "../functions";
 import { usePostRecord } from "../hooks/record/mutate";
-import { Weather } from "../types";
+import { FarmStackParamList, FarmStackScreenProps, Weather } from "../types";
 
-const PostProfileScreen = () => {
+const PostRecordScreen = ({
+  navigation,
+}: FarmStackScreenProps<"PostRecord">) => {
   const { t } = useTranslation("farm");
   const toast = useToast();
-  const navigation = useNavigation();
+  const { params } = useRoute<RouteProp<FarmStackParamList, "PostRecord">>();
 
-  const {
-    mutateAsync: mutateAsyncPostProfile,
-    isPending: isLoadingPostRecord,
-  } = usePostRecord({
-    onSuccess: () => {
-      navigation.goBack();
-    },
-    onError: () => {
-      showAlert(
-        toast,
-        <Alert
-          status="error"
-          onPressCloseButton={() => toast.closeAll()}
-          text={t("error")}
-        />
-      );
-    },
-  });
+  const { mutateAsync: mutateAsyncPostRecord, isPending: isLoadingPostRecord } =
+    usePostRecord({
+      onSuccess: () => {
+        navigation.goBack();
+      },
+      onError: () => {
+        showAlert(
+          toast,
+          <Alert
+            status="error"
+            onPressCloseButton={() => toast.closeAll()}
+            text={t("error")}
+          />
+        );
+      },
+    });
 
   const postRecord = useCallback(
     async (
@@ -43,7 +43,8 @@ const PostProfileScreen = () => {
       ratio: number,
       amount: string
     ) => {
-      await mutateAsyncPostProfile({
+      await mutateAsyncPostRecord({
+        farmId: params.farmId,
         weather,
         work,
         note,
@@ -52,7 +53,7 @@ const PostProfileScreen = () => {
         amount,
       });
     },
-    []
+    [params]
   );
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();
@@ -67,4 +68,4 @@ const PostProfileScreen = () => {
   );
 };
 
-export default PostProfileScreen;
+export default PostRecordScreen;

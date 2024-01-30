@@ -56,7 +56,7 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"Record">) => {
         showAlert(
           toast,
           <Alert
-            status="success"
+            status="error"
             onPressCloseButton={() => toast.closeAll()}
             text={t("error")}
           />
@@ -75,7 +75,7 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"Record">) => {
       showAlert(
         toast,
         <Alert
-          status="success"
+          status="error"
           onPressCloseButton={() => toast.closeAll()}
           text={t("error")}
         />
@@ -104,6 +104,10 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"Record">) => {
 
   const editFarmNavigationHandler = useCallback((farmId: number) => {
     navigation.navigate("EditFarm", { farmId });
+  }, []);
+
+  const editRecordNavigationHandler = useCallback((recordId: number) => {
+    navigation.navigate("EditRecord", { recordId });
   }, []);
 
   const recordListNavigationHandler = useCallback((farmId: number) => {
@@ -140,6 +144,7 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"Record">) => {
       recordListNavigationHandler={recordListNavigationHandler}
       postFarmNavigationHandler={postFarmNavigationHandler}
       editFarmNavigationHandler={editFarmNavigationHandler}
+      editRecordNavigationHandler={editRecordNavigationHandler}
       settingNavigationHandler={settingNavigationHandler}
     />
   );

@@ -14,7 +14,6 @@ import {
 import { useTranslation } from "react-i18next";
 
 import { GetCommunitiesResponse } from "../../hooks/community/query";
-import { Category } from "../../types";
 import Avatar from "../molecules/Avatar";
 
 type CommunityListItemProps = {
@@ -31,8 +30,8 @@ const CommunityListItem = memo(({ item, onPress }: CommunityListItemProps) => {
 
   return (
     <Pressable onPress={onPress} _pressed={{ bg: pressedColor }} rounded="md">
-      <HStack px="9" py="3" h="32">
-        <Box w="25%">
+      <HStack px="10" py="3">
+        <Box w="20%">
           <Avatar
             size="md"
             fontSize="2xl"
@@ -43,15 +42,15 @@ const CommunityListItem = memo(({ item, onPress }: CommunityListItemProps) => {
             updatedAt={item.updatedAt}
           />
         </Box>
-        <VStack w="75%" justifyContent="space-between">
+        <VStack w="80%" space="3">
           <VStack>
-            <Text bold fontSize="md">
+            <Text bold fontSize="md" numberOfLines={1} ellipsizeMode="tail">
               {item.name}
             </Text>
             <Text
               color={textColor}
               fontSize="xs"
-              numberOfLines={3}
+              numberOfLines={1}
               ellipsizeMode="tail"
             >
               {item.description}
@@ -59,18 +58,11 @@ const CommunityListItem = memo(({ item, onPress }: CommunityListItemProps) => {
           </VStack>
           <HStack space="4">
             <HStack alignItems="center" space="1">
-              <Icon as={<Feather />} name="database" size="3" color={iconColor} />
-              <Text color={iconColor} fontSize="xs">
-                {t(item.category as Category)}
-              </Text>
-            </HStack>
-            <HStack alignItems="center" space="1">
               <Icon as={<Feather />} name="users" size="3" color={iconColor} />
               <Text color={iconColor} fontSize="xs">
                 {(item.memberIds?.length ?? 0) + 1 + t("ppl")}
               </Text>
             </HStack>
-
             <HStack alignItems="center" space="1">
               <Icon as={<Feather />} name="clock" size="3" color={iconColor} />
               <Text color={iconColor} fontSize="xs">

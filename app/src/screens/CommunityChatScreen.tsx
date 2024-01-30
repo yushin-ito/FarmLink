@@ -170,7 +170,7 @@ const CommunityChatScreen = ({
   });
 
   const {
-    isLoading: isLoadingPickImage,
+    isLoading: isLoadingPickChatImage,
     pickImageByCamera: pickChatImageByCamera,
     pickImageByLibrary: pickChatImageByLibrary,
   } = useImage({
@@ -210,6 +210,7 @@ const CommunityChatScreen = ({
   });
 
   const {
+    isLoading: isLoadingPickIconImage,
     pickImageByCamera: pickIconImageByCamera,
     pickImageByLibrary: pickIconImageByLibrary,
   } = useImage({
@@ -319,7 +320,7 @@ const CommunityChatScreen = ({
       onSend={onSend}
       readMore={fetchNextPage}
       isLoading={isLoadingUser || isLoadingCommunity || isLoadingChats}
-      isLoadingPickImage={isLoadingPickImage}
+      isLoadingPickImage={isLoadingPickChatImage || isLoadingPickIconImage}
       isLoadingPostChat={isLoadingPostChat}
       isLoadingUpdateCommunity={isLoadingUpdateCommunity}
       isLoadingDeleteCommunity={isLoadingDeleteCommunity}

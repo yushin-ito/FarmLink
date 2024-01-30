@@ -1,19 +1,9 @@
 import React, { useCallback } from "react";
 
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 import WelcomeTemplate from "../components/templates/WelcomeTemplate";
-import { AuthStackParamList } from "../types";
+import { AuthStackScreenProps } from "../types";
 
-type WelcomeNavigationProp = NativeStackNavigationProp<
-  AuthStackParamList,
-  "Welcome"
->;
-
-const WelcomeScreen = () => {
-  const navigation = useNavigation<WelcomeNavigationProp>();
-
+const WelcomeScreen = ({ navigation }: AuthStackScreenProps) => {
   const signUpNavigationHandler = useCallback(() => {
     navigation.navigate("SignUp");
   }, []);

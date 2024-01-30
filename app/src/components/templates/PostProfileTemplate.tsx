@@ -190,14 +190,14 @@ const PostProfileTemplate = ({
       <ScrollView
         scrollEnabled={false}
         contentContainerStyle={{
-          flex: 1,
-          paddingBottom: 24,
+          flexGrow: 1,
           justifyContent: "flex-end",
         }}
         automaticallyAdjustKeyboardInsets
       >
         <Button
           mx="10"
+          mb="5"
           size="lg"
           rounded="xl"
           colorScheme="brand"

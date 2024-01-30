@@ -15,7 +15,7 @@ export type Order = "asc" | "desc";
 
 export type Weather = "sunny" | "cloudy" | "rainy" | "snowy";
 
-export type Rate = "year" | "month" | "week" | "day" | "once";
+export type Rate = "all" | "year" | "month" | "week" | "day" | "once";
 
 export type Equipment = "water" | "parking" | "hut" | "tool";
 
@@ -69,6 +69,8 @@ export type RootStackParamList = {
   AuthNavigator: NavigatorScreenParams<AuthStackParamList> | undefined;
   TabNavigator: NavigatorScreenParams<TabParamList> | undefined;
   Walkthrough: undefined;
+  TermsOfUse: undefined;
+  PrivacyPolicy: undefined;
   ImagePreview: {
     title: string;
     imageUrl: string;
@@ -79,6 +81,7 @@ export type RootStackParamList = {
   RentalDetail: { rentalId: number };
   EditFarm: { farmId: number };
   EditRental: { rentalId: number };
+  EditRecord: { recordId: number };
 };
 
 export type AuthStackParamList = {
@@ -103,7 +106,16 @@ export type MapStackParamList = {
     type: "rental" | "farm";
   };
   SearchMap: { type: "rental" | "farm" };
-  RentalGrid: undefined;
+  RentalGrid?: {
+    option?: {
+      fee?: { min: string; max: string };
+      area?: { min: string; max: string };
+      rate?: Rate;
+      equipment?: Equipment[];
+      prefecture?: string;
+      city?: string;
+    };
+  };
   FilterRental: undefined;
   PostRental: undefined;
 };
@@ -119,7 +131,7 @@ export type FarmStackParamList = {
   Record: undefined;
   RecordList: { farmId: number };
   PostFarm: undefined;
-  PostRecord: undefined;
+  PostRecord: { farmId: number };
 };
 
 export type TalkStackParamList = {
@@ -138,6 +150,7 @@ export type SettingStackParamList = {
   Payment: undefined;
   Notification: undefined;
   Environment: undefined;
+  TermsList: undefined;
 };
 
 export type RootStackScreenProps = NativeStackScreenProps<RootStackParamList>;

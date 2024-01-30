@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 
-import { useNavigation } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 
@@ -9,12 +8,13 @@ import PostCommunityTemplate from "../components/templates/PostCommunityTemplate
 import { showAlert } from "../functions";
 import { usePostCommunity } from "../hooks/community/mutate";
 import { useQueryUser } from "../hooks/user/query";
-import { Category } from "../types";
+import { Category, CommunityStackScreenProps } from "../types";
 
-const PostCommunityScreen = () => {
+const PostCommunityScreen = ({
+  navigation,
+}: CommunityStackScreenProps<"PostCommunity">) => {
   const { t } = useTranslation("community");
   const toast = useToast();
-  const navigation = useNavigation();
 
   const { data: user } = useQueryUser();
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
@@ -21,12 +21,15 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import { GetRecordResponse } from "../../hooks/record/query";
 import { Weather } from "../../types";
 import Input from "../molecules/Input";
+import Overlay from "../molecules/Overlay";
 import WeatherActionSheet from "../organisms/WeatherActionSheet";
 
-type PostRecordTemplateProps = {
-  postRecord: (
+type EditRecordTemplateProps = {
+  record: GetRecordResponse | undefined;
+  updateRecord: (
     weather: Weather,
     work: string,
     note: string,
@@ -34,7 +37,8 @@ type PostRecordTemplateProps = {
     ratio: number,
     amount: string
   ) => Promise<void>;
-  isLoadingPostRecord: boolean;
+  isLoading: boolean;
+  isLoadingUpdateRecord: boolean;
   goBackNavigationHandler: () => void;
 };
 
@@ -47,11 +51,13 @@ type FormValues = {
   amount: string;
 };
 
-const PostRecordTemplate = ({
-  postRecord,
-  isLoadingPostRecord,
+const EditRecordTemplate = ({
+  record,
+  updateRecord,
+  isLoading,
+  isLoadingUpdateRecord,
   goBackNavigationHandler,
-}: PostRecordTemplateProps) => {
+}: EditRecordTemplateProps) => {
   const { t } = useTranslation("farm");
 
   const textColor = useColorModeValue("muted.600", "muted.300");
@@ -68,8 +74,20 @@ const PostRecordTemplate = ({
     formState: { errors },
   } = useForm<FormValues>();
 
+  useEffect(() => {
+    if (record) {
+      setValue("work", record.work);
+      setValue("pesticide", record.pesticide);
+      setValue("ratio", record.ratio.toString());
+      setValue("amount", record.amount);
+      setWeather(record.weather as Weather);
+      record.note && setValue("note", record.note);
+    }
+  }, [record]);
+
   return (
     <Box flex={1} safeAreaTop>
+      <Overlay isOpen={isLoading} />
       <WeatherActionSheet
         isOpen={isOpen}
         onClose={onClose}
@@ -107,8 +125,8 @@ const PostRecordTemplate = ({
               <Pressable
                 w="46%"
                 onPressIn={() => {
-                  Keyboard.dismiss();
                   onOpen();
+                  Keyboard.dismiss();
                 }}
               >
                 <FormControl.Label>{t("date")}</FormControl.Label>
@@ -120,8 +138,8 @@ const PostRecordTemplate = ({
               <Pressable
                 w="46%"
                 onPressIn={() => {
-                  Keyboard.dismiss();
                   onOpen();
+                  Keyboard.dismiss();
                 }}
               >
                 <FormControl.Label>{t("weather")}</FormControl.Label>
@@ -138,8 +156,8 @@ const PostRecordTemplate = ({
                   }
                   borderColor={isOpen ? "brand.600" : borderColor}
                   onPressIn={() => {
-                    Keyboard.dismiss();
                     onOpen();
+                    Keyboard.dismiss();
                   }}
                 />
               </Pressable>
@@ -153,7 +171,6 @@ const PostRecordTemplate = ({
                   return (
                     <VStack>
                       <Input
-                        autoFocus
                         returnKeyType="done"
                         InputRightElement={
                           <IconButton
@@ -357,9 +374,9 @@ const PostRecordTemplate = ({
             size="lg"
             rounded="xl"
             colorScheme="brand"
-            isLoading={isLoadingPostRecord}
+            isLoading={isLoadingUpdateRecord}
             onPress={handleSubmit(async (data) => {
-              await postRecord(
+              await updateRecord(
                 weather,
                 data.work,
                 data.note,
@@ -379,4 +396,4 @@ const PostRecordTemplate = ({
   );
 };
 
-export default PostRecordTemplate;
+export default EditRecordTemplate;

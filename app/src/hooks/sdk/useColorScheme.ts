@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Appearance } from "react-native";
 
-export const useColorScheme = (delay = 250) => {
+const useColorScheme = (delay = 250) => {
   const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme());
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -31,3 +31,5 @@ export const useColorScheme = (delay = 250) => {
 
   return colorScheme;
 };
+
+export default useColorScheme;

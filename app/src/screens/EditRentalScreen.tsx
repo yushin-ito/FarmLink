@@ -25,7 +25,9 @@ const EditRentalScreen = ({ navigation }: RootStackScreenProps) => {
 
   const [images, setImages] = useState<string[]>([]);
 
-  const { data: rental } = useQueryRental(params.rentalId);
+  const { data: rental, isLoading: isLoadingRental } = useQueryRental(
+    params.rentalId
+  );
 
   useEffect(() => {
     getPosition();
@@ -207,6 +209,7 @@ const EditRentalScreen = ({ navigation }: RootStackScreenProps) => {
       getAddress={getAddress}
       updateRental={updateRental}
       deleteRental={deleteRental}
+      isLoading={isLoadingRental}
       isLoadingUpdateRental={isLoadingUpdateRental || isLoadingPostRentalImage}
       isLoadingDeleteRental={isLoadingDeleteRental}
       isLoadingPosition={isLoadingPosition}

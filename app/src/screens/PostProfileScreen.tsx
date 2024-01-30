@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 
-import { useNavigation } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 
@@ -9,12 +8,13 @@ import PostProfileTemplate from "../components/templates/PostProfileTemplate";
 import { showAlert } from "../functions";
 import { usePostUser } from "../hooks/user/mutate";
 import { useQueryUser } from "../hooks/user/query";
+import { SettingStackScreenProps } from "../types";
 
-const PostProfileScreen = () => {
+const PostProfileScreen = ({
+  navigation,
+}: SettingStackScreenProps<"PostProfile">) => {
   const { t } = useTranslation("setting");
   const toast = useToast();
-  const navigation = useNavigation();
-
   const { data: user } = useQueryUser();
 
   const {

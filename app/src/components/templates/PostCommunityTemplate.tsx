@@ -194,7 +194,7 @@ const PostCommunityTemplate = ({
                     mr="3"
                     key={index}
                     variant="unstyled"
-                    _pressed={{ bg: "brand.600" }}
+                    _pressed={{ bg: "brand.600", _text: { color: "white" } }}
                     bg={index === categoryIndex ? "brand.600" : bgColor}
                     _text={{
                       color: index === categoryIndex ? "white" : textColor,

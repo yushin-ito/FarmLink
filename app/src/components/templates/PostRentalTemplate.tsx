@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useWindowDimensions } from "react-native";
+import { Keyboard, useWindowDimensions } from "react-native";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -104,6 +104,7 @@ const PostRentalTemplate = ({
   return (
     <Box flex={1} safeAreaTop>
       <RateActionSheet
+        pop
         isOpen={isOpen}
         onClose={onClose}
         rate={rate}
@@ -339,7 +340,13 @@ const PostRentalTemplate = ({
                   }}
                 />
               </FormControl>
-              <Pressable w="40%" onPressIn={onOpen}>
+              <Pressable
+                w="40%"
+                onPressIn={() => {
+                  Keyboard.dismiss();
+                  onOpen();
+                }}
+              >
                 <FormControl.Label>{t("rate")}</FormControl.Label>
                 <Input
                   isReadOnly
@@ -353,7 +360,10 @@ const PostRentalTemplate = ({
                     />
                   }
                   borderColor={isOpen ? "brand.600" : borderColor}
-                  onPressIn={onOpen}
+                  onPressIn={() => {
+                    Keyboard.dismiss();
+                    onOpen();
+                  }}
                 />
               </Pressable>
             </HStack>

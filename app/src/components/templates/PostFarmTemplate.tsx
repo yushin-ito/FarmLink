@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useWindowDimensions } from "react-native";
+import { Keyboard, useWindowDimensions } from "react-native";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -246,7 +246,12 @@ const PostFarmTemplate = ({
                 }}
               />
             </FormControl>
-            <Pressable onPressIn={onOpen}>
+            <Pressable
+              onPressIn={() => {
+                Keyboard.dismiss();
+                onOpen();
+              }}
+            >
               <FormControl.Label>{t("crop")}</FormControl.Label>
               <Input
                 isReadOnly
@@ -260,7 +265,10 @@ const PostFarmTemplate = ({
                   />
                 }
                 borderColor={isOpen ? "brand.600" : borderColor}
-                onPressIn={onOpen}
+                onPressIn={() => {
+                  Keyboard.dismiss();
+                  onOpen();
+                }}
               />
             </Pressable>
             <FormControl isRequired isInvalid={"description" in errors}>

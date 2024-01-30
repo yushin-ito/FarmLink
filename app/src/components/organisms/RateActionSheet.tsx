@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, memo } from "react";
+import React, { Dispatch, SetStateAction, memo, useEffect } from "react";
 
 import { Actionsheet, Text, Radio, Box, useColorModeValue } from "native-base";
 import { useTranslation } from "react-i18next";
@@ -10,25 +10,30 @@ type RateActionSheetProps = {
   onClose: () => void;
   rate: Rate;
   setRate: Dispatch<SetStateAction<Rate>>;
+  pop?: boolean;
 };
 
-const rates = ["year", "month", "week", "day", "once"] as Rate[];
+const rates = ["all", "year", "month", "week", "day", "once"] as Rate[];
 
 const RateActionSheet = memo(
-  ({ isOpen, onClose, rate, setRate }: RateActionSheetProps) => {
+  ({ isOpen, onClose, rate, setRate, pop }: RateActionSheetProps) => {
     const { t } = useTranslation("setting");
 
     const textColor = useColorModeValue("muted.600", "muted.200");
+
+    useEffect(() => {
+      if (pop) {
+        rates.splice(rates.indexOf("all"), 1);
+      }
+    }, [pop]);
 
     return (
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
           <Radio.Group
-            name="rates"
-            defaultValue="0"
+            name="rate"
             onChange={(value) => {
               setRate(value as Rate);
-              onClose();
             }}
             value={rate.toString()}
           >

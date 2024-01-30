@@ -79,7 +79,7 @@ const FarmListItem = memo(
           underlayColor={pressedColor}
         >
           <VStack>
-            <HStack h="20" px="9" py="4">
+            <HStack px="10" py="4">
               <Box w="20%">
                 <Center
                   size="12"
@@ -106,10 +106,17 @@ const FarmListItem = memo(
               </Box>
               <VStack w="80%" pr="4" space="2">
                 <HStack alignItems="center" space="3">
-                  <Text bold fontSize="md">
+                  <Text
+                    maxW="50%"
+                    bold
+                    fontSize="md"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
                     {item.name}
                   </Text>
                   <Text
+                    maxW="50%"
                     color={textColor}
                     fontSize="xs"
                     numberOfLines={1}

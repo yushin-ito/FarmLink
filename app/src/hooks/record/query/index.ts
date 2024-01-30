@@ -68,8 +68,8 @@ const getAgenda = async (
     .from("record")
     .select("*, farm(*)")
     .filter("farmId", "in", `(${farmId.join(",")})`)
-    .lt("createdAt", subDays(new Date(), from).toISOString())
-    .gt("createdAt", subDays(new Date(), to).toISOString())
+    .lte("createdAt", subDays(new Date(), from).toISOString())
+    .gte("createdAt", subDays(new Date(), to).toISOString())
     .order("createdAt", { ascending: false });
 
   if (error) {
@@ -90,7 +90,7 @@ const getAgenda = async (
   });
 };
 
-export const useQueryRecrord = (recordId: number) =>
+export const useQueryRecord = (recordId: number) =>
   useQuery({
     queryKey: ["record", recordId],
     queryFn: async () => await getRecord(recordId),

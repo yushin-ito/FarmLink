@@ -21,10 +21,10 @@ import Overlay from "../molecules/Overlay";
 type EnvironmentTemplateProps = {
   locale: Locale | null;
   theme: ColorSchemeName;
-  changeLanguage: (language: Locale | null) => Promise<void>;
+  changeLocale: (language: Locale | null) => Promise<void>;
   changeTheme: (theme: ColorSchemeName) => Promise<void>;
   isLoading: boolean;
-  isLoadingChangeLanguage: boolean;
+  isLoadingChangeLocale: boolean;
   isLoadingChangeTheme: boolean;
   goBackNavigationHandler: () => void;
 };
@@ -32,10 +32,10 @@ type EnvironmentTemplateProps = {
 const EnvironmentTemplate = ({
   locale,
   theme,
-  changeLanguage,
+  changeLocale,
   changeTheme,
   isLoading,
-  isLoadingChangeLanguage,
+  isLoadingChangeLocale,
   isLoadingChangeTheme,
   goBackNavigationHandler,
 }: EnvironmentTemplateProps) => {
@@ -45,7 +45,7 @@ const EnvironmentTemplate = ({
 
   return (
     <Box flex={1} safeAreaTop>
-      <Overlay isOpen={isLoadingChangeLanguage || isLoadingChangeTheme} />
+      <Overlay isOpen={isLoadingChangeLocale || isLoadingChangeTheme} />
       <HStack mb="2" px="2" alignItems="center" justifyContent="space-between">
         <IconButton
           onPress={goBackNavigationHandler}
@@ -80,7 +80,7 @@ const EnvironmentTemplate = ({
                   .toString()}
                 onChange={(value) => {
                   const languages = [null, "ja", "en"] as Locale[];
-                  changeLanguage(languages[Number(value)]);
+                  changeLocale(languages[Number(value)]);
                 }}
               >
                 <VStack space="3">

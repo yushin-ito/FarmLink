@@ -9,10 +9,13 @@ import { showAlert } from "../functions";
 import useAuth from "../hooks/auth/useAuth";
 import useNotification from "../hooks/sdk/useNotification";
 import EditFarmScreen from "../screens/EditFarmScreen";
+import EditRecordScreen from "../screens/EditRecordScreen";
 import EditRentalScreen from "../screens/EditRentalScreen";
 import FarmDetailScreen from "../screens/FarmDetailScreen";
 import ImagePreviewScreen from "../screens/ImagePreviewScreen";
+import PrivacyPolicyScreen from "../screens/PrivacyPolicyScreen";
 import RentalDetailScreen from "../screens/RentalDetailScreen";
+import TermsOfUseScreen from "../screens/TermsOfUseScreen";
 import WalkthroughScreen from "../screens/WalkthroughScreen";
 import { RootStackParamList } from "../types";
 
@@ -73,17 +76,18 @@ const RootNavigator = () => {
               name="Walkthrough"
               component={WalkthroughScreen}
             />
+            <RootStack.Screen name="TermsOfUse" component={TermsOfUseScreen} />
+            <RootStack.Screen
+              name="PrivacyPolicy"
+              component={PrivacyPolicyScreen}
+            />
             <RootStack.Screen
               name="RentalDetail"
               component={RentalDetailScreen}
             />
             <RootStack.Screen name="FarmDetail" component={FarmDetailScreen} />
           </RootStack.Group>
-          <RootStack.Group
-            screenOptions={{
-              gestureDirection: "vertical",
-            }}
-          >
+          <RootStack.Group>
             <RootStack.Screen
               name="ImagePreview"
               component={ImagePreviewScreen}
@@ -97,6 +101,7 @@ const RootNavigator = () => {
           >
             <RootStack.Screen name="EditRental" component={EditRentalScreen} />
             <RootStack.Screen name="EditFarm" component={EditFarmScreen} />
+            <RootStack.Screen name="EditRecord" component={EditRecordScreen} />
           </RootStack.Group>
         </RootStack.Group>
       ) : (

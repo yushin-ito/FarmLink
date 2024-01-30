@@ -23,25 +23,29 @@ const WeatherActionSheet = memo(
     return (
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
-          {weathers.map((item, index) => (
-            <Radio.Group
-              key={index}
-              name="weather"
-              onChange={(value) => {
-                setWeather(value as Weather);
-                onClose();
-              }}
-              value={weather}
-            >
-              <Radio value={item} ml="20" my="2" colorScheme="brand">
+          <Radio.Group
+            name="weather"
+            onChange={(value) => {
+              setWeather(value as Weather);
+            }}
+            value={weather}
+          >
+            {weathers.map((item, index) => (
+              <Radio
+                key={index}
+                value={item}
+                ml="20"
+                my="2"
+                colorScheme="brand"
+              >
                 <Box ml="1" w="100%">
                   <Text color={textColor} bold>
                     {t(item)}
                   </Text>
                 </Box>
               </Radio>
-            </Radio.Group>
-          ))}
+            ))}
+          </Radio.Group>
         </Actionsheet.Content>
       </Actionsheet>
     );

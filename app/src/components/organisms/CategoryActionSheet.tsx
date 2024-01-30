@@ -37,10 +37,8 @@ const CategoryActionSheet = memo(
         <Actionsheet.Content>
           <Radio.Group
             name="categories"
-            defaultValue="0"
             onChange={(value) => {
               setCategoryIndex(Number(value));
-              onClose();
             }}
             value={categoryIndex.toString()}
           >

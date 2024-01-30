@@ -3,8 +3,17 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { LatLng } from "react-native-maps";
 
 import { supabase } from "../../../supabase";
-import { Rental, Scene, User } from "../../../types";
+import { Equipment, Rate, Rental, Scene, User } from "../../../types";
 import useAuth from "../../auth/useAuth";
+
+type Option = {
+  fee?: { min: string; max: string };
+  area?: { min: string; max: string };
+  rate?: Rate;
+  equipment?: Equipment[];
+  prefecture?: string;
+  city?: string;
+};
 
 export type GetRentalResponse = Awaited<ReturnType<typeof getRental>>;
 export type GetRentalsResponse = Awaited<ReturnType<typeof getRentals>>;
@@ -26,10 +35,106 @@ const getRental = async (rentalId: number) => {
 const getRentals = async (
   scene: Scene,
   location: LatLng | undefined,
+  option: Option | undefined,
   from: number,
   to: number
 ) => {
-  if (scene === "near" && location) {
+  if (option) {
+    if (option.rate && option.prefecture && option.city) {
+      const { data, error } = await supabase
+        .from("rental")
+        .select("*")
+        .lte("fee", option.fee?.max)
+        .gte("fee", option.fee?.min)
+        .lte("area", option.area?.max)
+        .gte("area", option.area?.min)
+        .eq("rate", option.rate)
+        .eq("prefecture", option.prefecture)
+        .eq("city", option.city)
+        .range(from, to);
+
+      if (error) {
+        throw error;
+      }
+      return data;
+    } else if (option.prefecture && option.rate) {
+      const { data, error } = await supabase
+        .from("rental")
+        .select("*")
+        .lte("fee", option.fee?.max)
+        .gte("fee", option.fee?.min)
+        .lte("area", option.area?.max)
+        .gte("area", option.area?.min)
+        .eq("prefecture", option.prefecture)
+        .eq("rate", option.rate)
+        .range(from, to);
+
+      if (error) {
+        throw error;
+      }
+      return data;
+    } else if (option.rate) {
+      const { data, error } = await supabase
+        .from("rental")
+        .select("*")
+        .lte("fee", option.fee?.max)
+        .gte("fee", option.fee?.min)
+        .lte("area", option.area?.max)
+        .gte("area", option.area?.min)
+        .eq("rate", option.rate)
+        .range(from, to);
+
+      if (error) {
+        throw error;
+      }
+      return data;
+    } else if (option.prefecture && option.city) {
+      const { data, error } = await supabase
+        .from("rental")
+        .select("*")
+        .lte("fee", option.fee?.max)
+        .gte("fee", option.fee?.min)
+        .lte("area", option.area?.max)
+        .gte("area", option.area?.min)
+        .eq("prefecture", option.prefecture)
+        .eq("city", option.city)
+        .range(from, to);
+
+      if (error) {
+        throw error;
+      }
+      return data;
+    } else if (option.prefecture) {
+      const { data, error } = await supabase
+        .from("rental")
+        .select("*")
+        .lte("fee", option.fee?.max)
+        .gte("fee", option.fee?.min)
+        .lte("area", option.area?.max)
+        .gte("area", option.area?.min)
+        .eq("prefecture", option.prefecture)
+        .range(from, to);
+
+      if (error) {
+        throw error;
+      }
+      return data;
+    } else {
+      const { data, error } = await supabase
+        .from("rental")
+        .select("*")
+        .lte("fee", option.fee?.max)
+        .gte("fee", option.fee?.min)
+        .lte("area", option.area?.max)
+        .gte("area", option.area?.min)
+        .range(from, to);
+
+      if (error) {
+        throw error;
+      }
+      return data;
+    }
+  } else if (scene === "near" && location) {
     const { data, error } = await supabase
       .rpc("sort_by_location_rental", {
         lat: location.latitude,
@@ -92,16 +197,21 @@ export const useQueryRental = (rentalId: number) =>
     queryFn: async () => await getRental(rentalId),
   });
 
-export const useInfiniteQueryRentals = (scene: Scene, location?: LatLng) => {
+export const useInfiniteQueryRentals = (
+  scene: Scene,
+  location?: LatLng,
+  option?: Option
+) => {
   const PAGE_COUNT = 30;
   const { session } = useAuth();
 
   return useInfiniteQuery<GetRentalsResponse, PostgrestError>({
-    queryKey: ["rentals", scene, location, session?.user.id],
+    queryKey: ["rentals", scene, location, option, session?.user.id],
     queryFn: async ({ pageParam }) =>
       await getRentals(
         scene,
         location,
+        option,
         Number(pageParam),
         Number(pageParam) + PAGE_COUNT - 1
       ),

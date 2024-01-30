@@ -9,7 +9,7 @@ import {
 
 import { Feather } from "@expo/vector-icons";
 import { format } from "date-fns";
-import { ja } from "date-fns/locale";
+import { enUS, ja } from "date-fns/locale";
 import {
   Box,
   Icon,
@@ -55,6 +55,7 @@ type FarmListProps = {
   isLoading: boolean;
   isRefetching: boolean;
   recordListNavigationHandler: (farmId: number) => void;
+  postFarmNavigationHandler: () => void;
   editFarmNavigationHandler: (farmId: number) => void;
 };
 
@@ -65,6 +66,7 @@ const FarmList = ({
   isLoading,
   isRefetching,
   recordListNavigationHandler,
+  postFarmNavigationHandler,
   editFarmNavigationHandler,
 }: FarmListProps) => {
   const { t } = useTranslation("farm");
@@ -75,48 +77,58 @@ const FarmList = ({
   return isLoading ? (
     <SkeletonFarmList rows={3} />
   ) : (
-    <FlatList
-      mb="20"
-      data={farms}
-      renderItem={({ item }) => (
-        <FarmListItem
-          item={item}
-          onPress={() => recordListNavigationHandler(item.farmId)}
-          onPressLeft={() => editFarmNavigationHandler(item.farmId)}
-          onPressRight={() =>
-            Alert.alert(t("deleteFarm"), t("askDeleteFarm"), [
-              {
-                text: t("cancel"),
-                style: "cancel",
-              },
-              {
-                text: t("delete"),
-                onPress: () => deleteFarm(item.farmId),
-                style: "destructive",
-              },
-            ])
-          }
-        />
-      )}
-      ListEmptyComponent={
-        <Text
-          bold
-          lineHeight="2xl"
-          fontSize="md"
-          textAlign="center"
-          color={textColor}
-        >
-          {t("notExistFarm")}
-        </Text>
-      }
-      refreshControl={
-        <RefreshControl
-          refreshing={isRefetching}
-          onRefresh={refetch}
-          tintColor={spinnerColor}
-        />
-      }
-    />
+    <Box flex={1}>
+      <FlatList
+        mb="20"
+        data={farms}
+        renderItem={({ item }) => (
+          <FarmListItem
+            item={item}
+            onPress={() => recordListNavigationHandler(item.farmId)}
+            onPressLeft={() => editFarmNavigationHandler(item.farmId)}
+            onPressRight={() =>
+              Alert.alert(t("deleteFarm"), t("askDeleteFarm"), [
+                {
+                  text: t("cancel"),
+                  style: "cancel",
+                },
+                {
+                  text: t("delete"),
+                  onPress: () => deleteFarm(item.farmId),
+                  style: "destructive",
+                },
+              ])
+            }
+          />
+        )}
+        ListEmptyComponent={
+          <Text
+            bold
+            lineHeight="2xl"
+            fontSize="md"
+            textAlign="center"
+            color={textColor}
+          >
+            {t("notExistFarm")}
+          </Text>
+        }
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={refetch}
+            tintColor={spinnerColor}
+          />
+        }
+      />
+      <Fab
+        position="absolute"
+        bottom="24"
+        right="6"
+        onPress={postFarmNavigationHandler}
+      >
+        <Icon as={<Feather name="plus" />} size="4xl" color="white" />
+      </Fab>
+    </Box>
   );
 };
 
@@ -126,6 +138,7 @@ type CalendarProps = {
   hasMore: boolean | undefined;
   readMore: () => void;
   isLoading: boolean;
+  editRecordNavigationHandler: (recordId: number) => void;
 };
 
 const Calendar = ({
@@ -134,6 +147,7 @@ const Calendar = ({
   hasMore,
   readMore,
   isLoading,
+  editRecordNavigationHandler,
 }: CalendarProps) => {
   const { t } = useTranslation(["farm", "app"]);
 
@@ -159,7 +173,7 @@ const Calendar = ({
               key={index}
               item={item}
               onPress={() => {}}
-              onPressLeft={() => {}}
+              onPressLeft={() => editRecordNavigationHandler(item.recordId)}
               onPressRight={() =>
                 Alert.alert(t("deleteRecord"), t("askDeleteRecord"), [
                   {
@@ -233,15 +247,14 @@ const Calendar = ({
   return (
     <CalendarProvider date={new Date().toDateString()}>
       <ExpandableCalendar
+        key={colorScheme}
         markedDates={agenda?.reduce((accum, value) => {
           return { ...accum, [value.title]: { marked: value.data[0] != null } };
         }, {})}
         markingType="dot"
-        key={colorScheme}
         hideArrows
         allowShadow={false}
         closeOnDayPress={false}
-        initialPosition={ExpandableCalendar.positions.OPEN}
         firstDay={1}
         theme={{
           textDayFontWeight: "500",
@@ -258,7 +271,9 @@ const Calendar = ({
       <AgendaList
         markToday={false}
         dayFormatter={(date) =>
-          format(new Date(date), "PPP (E)", { locale: ja })
+          format(new Date(date), "PPP (E)", {
+            locale: t("app:locale") === "en" ? enUS : ja,
+          })
         }
         renderItem={renderItem}
         onEndReached={readMore}
@@ -289,6 +304,7 @@ type RecordTemplateProps = {
   recordListNavigationHandler: (farmId: number) => void;
   postFarmNavigationHandler: () => void;
   editFarmNavigationHandler: (farmId: number) => void;
+  editRecordNavigationHandler: (recordId: number) => void;
   settingNavigationHandler: () => void;
 };
 
@@ -306,6 +322,7 @@ const RecordTemplate = ({
   recordListNavigationHandler,
   postFarmNavigationHandler,
   editFarmNavigationHandler,
+  editRecordNavigationHandler,
   settingNavigationHandler,
 }: RecordTemplateProps) => {
   const { t } = useTranslation("farm");
@@ -337,6 +354,7 @@ const RecordTemplate = ({
         isLoading={isLoading}
         isRefetching={isRefetching}
         recordListNavigationHandler={recordListNavigationHandler}
+        postFarmNavigationHandler={postFarmNavigationHandler}
         editFarmNavigationHandler={editFarmNavigationHandler}
       />
     ) : (
@@ -346,6 +364,7 @@ const RecordTemplate = ({
         readMore={readMore}
         deleteRecord={deleteRecord}
         isLoading={isLoading}
+        editRecordNavigationHandler={editRecordNavigationHandler}
       />
     );
 
@@ -401,16 +420,6 @@ const RecordTemplate = ({
         onIndexChange={setSceneIndex}
         initialLayout={{ height: 0, width }}
       />
-      {
-        <Fab
-          position="absolute"
-          bottom="24"
-          right="6"
-          onPress={postFarmNavigationHandler}
-        >
-          <Icon as={<Feather name="plus" />} size="4xl" color="white" />
-        </Fab>
-      }
     </Box>
   );
 };

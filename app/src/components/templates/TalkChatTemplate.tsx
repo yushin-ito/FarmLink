@@ -200,9 +200,8 @@ const ChatTemplate = ({
         />
       )}
       <ChatBar
-        visible={
-          !(isLoadingPickImage || isLoadingDeleteTalk || isChatActionSheetOpen)
-        }
+        isOpenModal={isLoadingPickImage || isLoadingDeleteTalk}
+        isOpenActionSheet={isChatActionSheetOpen}
         onSend={onSend}
         isLoading={isLoadingPostChat}
         pickImageByCamera={pickChatImageByCamera}

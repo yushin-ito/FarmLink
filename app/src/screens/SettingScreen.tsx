@@ -177,6 +177,10 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     navigation.navigate("Environment");
   }, []);
 
+  const termsListNavigationHandler = useCallback(() => {
+    navigation.navigate("TermsList");
+  }, []);
+
   return (
     <SettingTemplate
       user={user}
@@ -202,6 +206,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       likeListNavigationHandler={likeListNavigationHandler}
       paymentNavigationHandler={paymentNavigationHandler}
       environmentNavigationHandler={environmentNavigationHandler}
+      termsListNavigationHandler={termsListNavigationHandler}
     />
   );
 };

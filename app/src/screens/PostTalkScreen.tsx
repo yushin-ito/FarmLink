@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "native-base";
 import { useTranslation } from "react-i18next";
 
@@ -11,11 +11,11 @@ import { usePostTalk } from "../hooks/talk/mutate";
 import { useQueryTalks } from "../hooks/talk/query";
 import { SearchUsersResponse, useSearchUsers } from "../hooks/user/mutate";
 import { useInfiniteQueryUsers, useQueryUser } from "../hooks/user/query";
+import { TalkStackScreenProps } from "../types";
 
-const PostTalkScreen = () => {
+const PostTalkScreen = ({ navigation }: TalkStackScreenProps<"PostTalk">) => {
   const { t } = useTranslation("talk");
   const toast = useToast();
-  const navigation = useNavigation();
 
   const focusRef = useRef(true);
   const [searchResult, setSearchResult] = useState<SearchUsersResponse>();

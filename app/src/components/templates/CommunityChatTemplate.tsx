@@ -247,15 +247,12 @@ const CommunityChatTemplate = ({
         />
       )}
       <ChatBar
-        visible={
-          !(
-            isLoadingPickImage ||
-            isLoadingUpdateCommunity ||
-            isLoadingDeleteCommunity ||
-            isChatActionSheetOpen ||
-            isImageActionSheetOpen
-          )
+        isOpenModal={
+          isLoadingPickImage ||
+          isLoadingUpdateCommunity ||
+          isLoadingDeleteCommunity
         }
+        isOpenActionSheet={isChatActionSheetOpen || isImageActionSheetOpen}
         onSend={onSend}
         isLoading={isLoadingPostChat}
         pickImageByCamera={pickChatImageByCamera}

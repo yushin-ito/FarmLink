@@ -43,6 +43,7 @@ type SettingTemplateProps = {
   likeListNavigationHandler: () => void;
   paymentNavigationHandler: () => void;
   environmentNavigationHandler: () => void;
+  termsListNavigationHandler: () => void;
 };
 
 const SettingTemplate = ({
@@ -64,11 +65,12 @@ const SettingTemplate = ({
   likeListNavigationHandler,
   paymentNavigationHandler,
   environmentNavigationHandler,
+  termsListNavigationHandler,
 }: SettingTemplateProps) => {
   const { t } = useTranslation("setting");
 
   const textColor = useColorModeValue("muted.600", "muted.300");
-  const iconColor = useColorModeValue("muted.600", "muted.100");
+  const iconColor = useColorModeValue("muted.500", "muted.100");
   const spinnerColor = useColorModeValue("#a3a3a3", "white");
 
   const { isOpen, onOpen, onClose } = useDisclose();
@@ -294,6 +296,30 @@ const SettingTemplate = ({
                     color={iconColor}
                   />
                   <Text fontSize="md">{t("environment")}</Text>
+                </HStack>
+                <Icon
+                  as={<Feather />}
+                  name="chevron-right"
+                  size="md"
+                  color={iconColor}
+                />
+              </HStack>
+            </Pressable>
+            <Pressable
+              _pressed={{
+                opacity: 0.5,
+              }}
+              onPress={termsListNavigationHandler}
+            >
+              <HStack alignItems="center" justifyContent="space-between">
+                <HStack p="2" space="2" alignItems="center" rounded="md">
+                  <Icon
+                    as={<Feather />}
+                    name="file-text"
+                    size="md"
+                    color={iconColor}
+                  />
+                  <Text fontSize="md">{t("termsList")}</Text>
                 </HStack>
                 <Icon
                   as={<Feather />}

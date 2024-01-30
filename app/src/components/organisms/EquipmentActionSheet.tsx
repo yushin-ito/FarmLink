@@ -15,12 +15,7 @@ type EquipmentActionSheetProps = {
 const equipments = ["water", "parking", "hut", "tool"] as Equipment[];
 
 const EquipmentActionSheet = memo(
-  ({
-    isOpen,
-    onClose,
-    equipment,
-    setEquipment,
-  }: EquipmentActionSheetProps) => {
+  ({ isOpen, onClose, equipment, setEquipment }: EquipmentActionSheetProps) => {
     const { t } = useTranslation("setting");
 
     const textColor = useColorModeValue("muted.600", "muted.200");
@@ -34,7 +29,6 @@ const EquipmentActionSheet = memo(
               name="equipment"
               onChange={(value) => {
                 setEquipment([...equipment, value as Equipment]);
-                onClose();
               }}
               value={equipment[index].toString()}
             >

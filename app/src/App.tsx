@@ -14,7 +14,7 @@ import "./i18n";
 
 import RootComponent from "./components/RootComponent";
 import { AuthProvider } from "./contexts/AuthProvider";
-import { useColorScheme } from "./hooks";
+import useColorScheme from "./hooks/sdk/useColorScheme";
 
 LogBox.ignoreAllLogs();
 // Splash.preventAutoHideAsync();
@@ -32,6 +32,11 @@ LogBox.ignoreAllLogs();
 const App = () => {
   const theme = extendTheme({
     components: {
+      Heading: {
+        baseStyle: {
+          color: "muted.700",
+        },
+      },
       Text: {
         baseStyle: {
           color: "muted.700",

@@ -40,10 +40,8 @@ const CropActionSheet = memo(
         <Actionsheet.Content mb="-10">
           <Radio.Group
             name="crop"
-            defaultValue="0"
             onChange={(value) => {
               setCrop(value as Crop);
-              onClose();
             }}
             value={crop}
           >

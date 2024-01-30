@@ -10,6 +10,7 @@ import PostProfileScreen from "../screens/PostProfileScreen";
 import PostRentalScreen from "../screens/PostRentalScreen";
 import RentalListScreen from "../screens/RentalListScreen";
 import SettingScreen from "../screens/SettingScreen";
+import TermsListScreen from "../screens/TermsListScreen";
 import { SettingStackParamList } from "../types";
 
 const SettingStack = createNativeStackNavigator<SettingStackParamList>();
@@ -36,6 +37,7 @@ const SettingNavigator = () => {
         />
         <SettingStack.Screen name="Payment" component={PaymentScreen} />
         <SettingStack.Screen name="Environment" component={EnvironmentScreen} />
+        <SettingStack.Screen name="TermsList" component={TermsListScreen} />
       </SettingStack.Group>
     </SettingStack.Navigator>
   );

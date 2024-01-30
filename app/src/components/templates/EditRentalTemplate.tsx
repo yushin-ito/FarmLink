@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, useWindowDimensions } from "react-native";
+import { Alert, Keyboard, useWindowDimensions } from "react-native";
 
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -29,6 +29,7 @@ import MapView, { LatLng, Marker } from "react-native-maps";
 import { GetRentalResponse } from "../../hooks/rental/query";
 import { Rate } from "../../types";
 import Input from "../molecules/Input";
+import Overlay from "../molecules/Overlay";
 import RateActionSheet from "../organisms/RateActionSheet";
 
 type EditRentalTemplateProps = {
@@ -47,6 +48,7 @@ type EditRentalTemplateProps = {
     rate: Rate
   ) => Promise<void>;
   deleteRental: () => Promise<void>;
+  isLoading: boolean;
   isLoadingUpdateRental: boolean;
   isLoadingDeleteRental: boolean;
   isLoadingPosition: boolean;
@@ -70,6 +72,7 @@ const EditRentalTemplate = ({
   getAddress,
   updateRental,
   deleteRental,
+  isLoading,
   isLoadingUpdateRental,
   isLoadingDeleteRental,
   isLoadingPosition,
@@ -121,7 +124,9 @@ const EditRentalTemplate = ({
 
   return (
     <Box flex={1} safeAreaTop>
+      <Overlay isOpen={isLoading} />
       <RateActionSheet
+        pop
         isOpen={isOpen}
         onClose={onClose}
         rate={rate}
@@ -362,7 +367,13 @@ const EditRentalTemplate = ({
                   }}
                 />
               </FormControl>
-              <Pressable w="40%" onPressIn={onOpen}>
+              <Pressable
+                w="40%"
+                onPressIn={() => {
+                  onOpen();
+                  Keyboard.dismiss();
+                }}
+              >
                 <FormControl.Label>{t("rate")}</FormControl.Label>
                 <Input
                   isReadOnly
@@ -376,7 +387,10 @@ const EditRentalTemplate = ({
                     />
                   }
                   borderColor={isOpen ? "brand.600" : borderColor}
-                  onPressIn={onOpen}
+                  onPressIn={() => {
+                    onOpen();
+                    Keyboard.dismiss();
+                  }}
                 />
               </Pressable>
             </HStack>
