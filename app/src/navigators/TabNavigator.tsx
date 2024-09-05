@@ -37,7 +37,7 @@ const TabNavigator = () => {
         routeName === "TalkChat" ||
         routeName === "PostTalk" ||
         routeName === "SearchTalk" ||
-        routeName === "PostProfile" ||
+        routeName === "EditProfile" ||
         routeName === "PostRental" ||
         routeName === "LikeList" ||
         routeName === "Notification" ||

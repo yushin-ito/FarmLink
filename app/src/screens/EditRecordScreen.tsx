@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import { useRoute, RouteProp } from "@react-navigation/native";
 import { useToast } from "native-base";
@@ -16,9 +16,15 @@ const EditRecordScreen = ({ navigation }: RootStackScreenProps) => {
   const toast = useToast();
   const { params } = useRoute<RouteProp<RootStackParamList, "EditRecord">>();
 
-  const { data: record, isLoading: isLoadingRecord } = useQueryRecord(
-    params.recordId
-  );
+  const {
+    data: record,
+    isLoading: isLoadingRecord,
+    refetch: refetchRecord,
+  } = useQueryRecord(params.recordId);
+
+  useEffect(() => {
+    refetchRecord();
+  }, []);
 
   const {
     mutateAsync: mutateAsyncEditRecord,
@@ -48,16 +54,19 @@ const EditRecordScreen = ({ navigation }: RootStackScreenProps) => {
       ratio: number,
       amount: string
     ) => {
-      await mutateAsyncEditRecord({
-        weather,
-        work,
-        note,
-        pesticide,
-        ratio,
-        amount,
-      });
+      if (record) {
+        await mutateAsyncEditRecord({
+          recordId: record.recordId,
+          weather,
+          work,
+          note,
+          pesticide,
+          ratio,
+          amount,
+        });
+      }
     },
-    []
+    [record]
   );
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

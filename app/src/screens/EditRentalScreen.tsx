@@ -25,9 +25,15 @@ const EditRentalScreen = ({ navigation }: RootStackScreenProps) => {
 
   const [images, setImages] = useState<string[]>([]);
 
-  const { data: rental, isLoading: isLoadingRental } = useQueryRental(
-    params.rentalId
-  );
+  const {
+    data: rental,
+    isLoading: isLoadingRental,
+    refetch: refetchRental,
+  } = useQueryRental(params.rentalId);
+
+  useEffect(() => {
+    refetchRental();
+  }, []);
 
   useEffect(() => {
     getPosition();
@@ -179,7 +185,7 @@ const EditRentalScreen = ({ navigation }: RootStackScreenProps) => {
           description,
           fee,
           area,
-          equipment,
+          equipment: [equipment],
           imageUrls: publicUrls,
           rate,
           latitude: position.latitude,

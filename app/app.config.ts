@@ -27,8 +27,10 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
   userInterfaceStyle: "automatic",
   assetBundlePatterns: ["**/*"],
   updates: {
-    useClassicUpdates: true,
-    fallbackToCacheTimeout: 0,
+    url: "https://u.expo.dev/df9e736c-f430-41d3-9968-20058477c49c",
+  },
+  runtimeVersion: {
+    policy: "appVersion",
   },
   ios: {
     bundleIdentifier: "com.farmlink.app",

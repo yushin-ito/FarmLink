@@ -154,7 +154,7 @@ const PostRentalScreen = ({
           latitude: position.latitude,
           fee,
           area,
-          equipment,
+          equipment: [equipment],
           imageUrls: publicUrls,
           privated: false,
           rate,

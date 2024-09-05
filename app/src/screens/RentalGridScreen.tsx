@@ -98,6 +98,7 @@ const RentalGridScreen = ({
 
   return (
     <RentalGridTemplate
+      filter={!!params?.option}
       sceneIndex={sceneIndex}
       setSceneIndex={setSceneIndex}
       rentals={rentals?.pages[0]}

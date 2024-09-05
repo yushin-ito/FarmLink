@@ -2,11 +2,11 @@ import React from "react";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import EditProfileScreen from "../screens/EditProfileScreen";
 import EnvironmentScreen from "../screens/EnvironmentScreen";
 import LikeListScreen from "../screens/LikeListScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import PaymentScreen from "../screens/PaymentScreen";
-import PostProfileScreen from "../screens/PostProfileScreen";
 import PostRentalScreen from "../screens/PostRentalScreen";
 import RentalListScreen from "../screens/RentalListScreen";
 import SettingScreen from "../screens/SettingScreen";
@@ -27,7 +27,7 @@ const SettingNavigator = () => {
           animationDuration: 150,
         }}
       >
-        <SettingStack.Screen name="PostProfile" component={PostProfileScreen} />
+        <SettingStack.Screen name="EditProfile" component={EditProfileScreen} />
         <SettingStack.Screen name="PostRental" component={PostRentalScreen} />
         <SettingStack.Screen name="RentalList" component={RentalListScreen} />
         <SettingStack.Screen name="LikeList" component={LikeListScreen} />

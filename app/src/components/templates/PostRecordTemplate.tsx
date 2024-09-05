@@ -98,6 +98,7 @@ const PostRecordTemplate = ({
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         extraScrollHeight={24}
+        keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
         enableResetScrollToCoords={false}
         keyboardShouldPersistTaps="handled"
       >
@@ -301,6 +302,7 @@ const PostRecordTemplate = ({
                       return (
                         <Input
                           returnKeyType="done"
+                          inputMode="numeric"
                           value={value}
                           onChangeText={onChange}
                         />

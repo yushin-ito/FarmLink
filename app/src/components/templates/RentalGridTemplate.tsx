@@ -14,6 +14,7 @@ import {
   Center,
   Spinner,
   Pressable,
+  Divider,
 } from "native-base";
 import { useTranslation } from "react-i18next";
 import { TabBar, TabView } from "react-native-tab-view";
@@ -29,14 +30,14 @@ const scenes = ["near", "popular", "newest"] as Scene[];
 
 type RentalGridProps = {
   rentals: GetRentalsResponse | undefined;
-  scene: Scene;
-  sceneIndex: number;
   refetchRentals: () => Promise<void>;
   readMore: () => void;
   hasMore: boolean | undefined;
   isLoading: boolean;
   isRefetchingRentals: boolean;
   rentalDetailNavigationHandler: (rentalId: number) => void;
+  scene?: Scene;
+  sceneIndex?: number;
 };
 
 const RentalGrid = memo(
@@ -57,8 +58,9 @@ const RentalGrid = memo(
     const { width } = useWindowDimensions();
 
     return isLoading ||
-      scene === scenes[sceneIndex + 1] ||
-      scene === scenes[sceneIndex - 1] ? (
+      (sceneIndex &&
+        (scene === scenes[sceneIndex + 1] ||
+          scene === scenes[sceneIndex - 1])) ? (
       <SkeletonRentalGrid rows={8} />
     ) : (
       <FlatList
@@ -96,6 +98,7 @@ const RentalGrid = memo(
 );
 
 type RentalGridTemplateProps = {
+  filter: boolean;
   sceneIndex: number;
   setSceneIndex: Dispatch<SetStateAction<number>>;
   rentals: GetRentalsResponse | undefined;
@@ -112,6 +115,7 @@ type RentalGridTemplateProps = {
 };
 
 const RentalGridTemplate = ({
+  filter,
   rentals,
   sceneIndex,
   setSceneIndex,
@@ -196,38 +200,53 @@ const RentalGridTemplate = ({
           variant="unstyled"
         />
       </HStack>
-      <TabView
-        lazy
-        renderTabBar={(props) => (
-          <TabBar
-            {...props}
-            indicatorStyle={{
-              borderBottomWidth: 3,
-              borderBottomColor: "#75a43b",
-              borderRadius: 2,
-            }}
-            renderLabel={({ route, color }) => (
-              <Text style={{ color, fontWeight: "bold" }}>{route.title}</Text>
-            )}
-            style={{
-              backgroundColor: bgColor,
-            }}
-            tabStyle={{
-              minHeight: 40,
-              paddingBottom: 12,
-              borderBottomWidth: 0.5,
-              borderBottomColor: borderColor,
-            }}
-            activeColor="#75a43b"
-            inactiveColor={textColor}
-            pressColor="transparent"
+      {filter ? (
+        <Box>
+          <Divider mt="1" />
+          <RentalGrid
+            rentals={rentals}
+            refetchRentals={refetchRentals}
+            hasMore={hasMore}
+            readMore={readMore}
+            isLoading={isLoading}
+            isRefetchingRentals={isRefetchingRentals}
+            rentalDetailNavigationHandler={rentalDetailNavigationHandler}
           />
-        )}
-        navigationState={{ index: sceneIndex, routes }}
-        renderScene={renderScene}
-        onIndexChange={setSceneIndex}
-        initialLayout={{ height: 0, width }}
-      />
+        </Box>
+      ) : (
+        <TabView
+          lazy
+          renderTabBar={(props) => (
+            <TabBar
+              {...props}
+              indicatorStyle={{
+                borderBottomWidth: 3,
+                borderBottomColor: "#75a43b",
+                borderRadius: 2,
+              }}
+              renderLabel={({ route, color }) => (
+                <Text style={{ color, fontWeight: "bold" }}>{route.title}</Text>
+              )}
+              style={{
+                backgroundColor: bgColor,
+              }}
+              tabStyle={{
+                minHeight: 40,
+                paddingBottom: 12,
+                borderBottomWidth: 0.5,
+                borderBottomColor: borderColor,
+              }}
+              activeColor="#75a43b"
+              inactiveColor={textColor}
+              pressColor="transparent"
+            />
+          )}
+          navigationState={{ index: sceneIndex, routes }}
+          renderScene={renderScene}
+          onIndexChange={setSceneIndex}
+          initialLayout={{ height: 0, width }}
+        />
+      )}
       <Fab
         position="absolute"
         bottom="24"

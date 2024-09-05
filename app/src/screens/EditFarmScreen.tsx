@@ -25,7 +25,15 @@ const EditFarmScreen = ({ navigation }: RootStackScreenProps) => {
 
   const [images, setImages] = useState<string[]>([]);
 
-  const { data: farm, isLoading: isLoadingFarm } = useQueryFarm(params.farmId);
+  const {
+    data: farm,
+    isLoading: isLoadingFarm,
+    refetch: refetchFarm,
+  } = useQueryFarm(params.farmId);
+
+  useEffect(() => {
+    refetchFarm();
+  }, []);
 
   useEffect(() => {
     getPosition();

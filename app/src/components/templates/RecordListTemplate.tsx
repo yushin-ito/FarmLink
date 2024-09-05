@@ -49,7 +49,6 @@ const RecordListTemplate = ({
   records,
   refetchRecords,
   deleteRecord,
-  getExcelSheet,
   readMore,
   hasMore,
   isLoading,
@@ -86,7 +85,8 @@ const RecordListTemplate = ({
         </HStack>
         <Pressable
           onPress={() => {
-            getExcelSheet();
+            Alert.alert(t("dev"));
+            // getExcelSheet();
           }}
         >
           <Text mr="4" fontSize="md" bold>

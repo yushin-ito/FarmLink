@@ -58,6 +58,7 @@ const postFarmImage = async (base64: string) => {
 };
 
 const deleteFarm = async (farmId: number) => {
+  await supabase.from("record").delete().eq("farmId", farmId);
   await supabase.from("like").delete().eq("farmId", farmId);
   await supabase.from("notification").delete().eq("farmId", farmId);
   const { data, error } = await supabase

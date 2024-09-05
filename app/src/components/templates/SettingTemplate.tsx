@@ -38,7 +38,7 @@ type SettingTemplateProps = {
   isLoadingSignOut: boolean;
   notificationNavigationHandler: () => void;
   postRentalNavigationHandler: () => void;
-  postProfileNavigationHandler: () => void;
+  editProfileNavigationHandler: () => void;
   rentalListNavigationHandler: () => void;
   likeListNavigationHandler: () => void;
   paymentNavigationHandler: () => void;
@@ -60,7 +60,7 @@ const SettingTemplate = ({
   isLoadingSignOut,
   notificationNavigationHandler,
   postRentalNavigationHandler,
-  postProfileNavigationHandler,
+  editProfileNavigationHandler,
   rentalListNavigationHandler,
   likeListNavigationHandler,
   paymentNavigationHandler,
@@ -237,7 +237,7 @@ const SettingTemplate = ({
               _pressed={{
                 opacity: 0.5,
               }}
-              onPress={postProfileNavigationHandler}
+              onPress={editProfileNavigationHandler}
             >
               <HStack alignItems="center" justifyContent="space-between">
                 <HStack p="2" space="2" alignItems="center" rounded="md">

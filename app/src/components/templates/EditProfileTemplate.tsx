@@ -20,10 +20,10 @@ import { useTranslation } from "react-i18next";
 import { GetUserResponse } from "../../hooks/user/query";
 import Input from "../molecules/Input";
 
-type PostProfileTemplateProps = {
+type EditProfileTemplateProps = {
   user: GetUserResponse | undefined;
-  isLoadingPostProfile: boolean;
-  postProfile: (name: string, profile: string) => Promise<void>;
+  isLoadingUpdateProfile: boolean;
+  updateProfile: (name: string, profile: string) => Promise<void>;
   goBackNavigationHandler: () => void;
 };
 
@@ -32,12 +32,12 @@ type FormValues = {
   profile: string;
 };
 
-const PostProfileTemplate = ({
+const EditProfileTemplate = ({
   user,
-  isLoadingPostProfile,
-  postProfile,
+  isLoadingUpdateProfile,
+  updateProfile,
   goBackNavigationHandler,
-}: PostProfileTemplateProps) => {
+}: EditProfileTemplateProps) => {
   const { t } = useTranslation("setting");
 
   const textColor = useColorModeValue("muted.600", "muted.300");
@@ -201,9 +201,9 @@ const PostProfileTemplate = ({
           size="lg"
           rounded="xl"
           colorScheme="brand"
-          isLoading={isLoadingPostProfile}
+          isLoading={isLoadingUpdateProfile}
           onPress={handleSubmit(async (data) => {
-            await postProfile(data.name, data.profile);
+            await updateProfile(data.name, data.profile);
           })}
         >
           <Text bold color="white" fontSize="md">
@@ -215,4 +215,4 @@ const PostProfileTemplate = ({
   );
 };
 
-export default PostProfileTemplate;
+export default EditProfileTemplate;

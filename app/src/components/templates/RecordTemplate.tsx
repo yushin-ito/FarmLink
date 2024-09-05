@@ -103,6 +103,7 @@ const FarmList = ({
         )}
         ListEmptyComponent={
           <Text
+            mt="5"
             bold
             lineHeight="2xl"
             fontSize="md"

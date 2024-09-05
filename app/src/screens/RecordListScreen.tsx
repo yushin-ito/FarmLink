@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { RouteProp, useFocusEffect, useRoute } from "@react-navigation/native";
 import { useToast } from "native-base";
@@ -47,6 +47,10 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"RecordList">) => {
     }, [])
   );
 
+  useEffect(() => {
+    refetchRecords();
+  }, [asc]);
+
   const {
     mutateAsync: mutateAsyncDeleteRecord,
     isPending: isLoadingDeleteRecord,
@@ -86,12 +90,9 @@ const RecordScreen = ({ navigation }: FarmStackScreenProps<"RecordList">) => {
     navigation.navigate("PostRecord", { farmId: params.farmId });
   }, [params]);
 
-  const editRecordNavigationHandler = useCallback(
-    (recordId: number) => {
-      navigation.navigate("EditRecord", { recordId });
-    },
-    [navigation]
-  );
+  const editRecordNavigationHandler = useCallback((recordId: number) => {
+    navigation.navigate("EditRecord", { recordId });
+  }, []);
 
   const goBackNavigationHandler = useCallback(() => {
     navigation.goBack();

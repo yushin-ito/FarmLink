@@ -30,23 +30,18 @@ const FilterRentalScreen = ({
 
   const rentalGridNavigationHandler = useCallback(
     ({
-      fee,
-      area,
-      rate,
-      equipment,
-      prefecture,
-      city,
+      option,
     }: {
-      fee?: { min: string; max: string };
-      area?: { min: string; max: string };
-      rate?: Rate;
-      equipment?: Equipment[];
-      prefecture?: string;
-      city?: string;
+      option?: {
+        fee?: { min: string; max: string };
+        area?: { min: string; max: string };
+        rate?: Rate;
+        equipment?: Equipment[];
+        prefecture?: string;
+        city?: string;
+      };
     }) => {
-      navigation.navigate("RentalGrid", {
-        option: { fee, area, rate, equipment, prefecture, city },
-      });
+      navigation.navigate("RentalGrid", { option });
     },
     []
   );

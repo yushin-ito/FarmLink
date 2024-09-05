@@ -32,19 +32,16 @@ type FilterRentalProps = {
   getCities: (prefectureId: number) => Promise<void>;
   isLoadingCities: boolean;
   rentalGridNavigationHandler: ({
-    fee,
-    area,
-    rate,
-    equipment,
-    prefecture,
-    city,
+    option,
   }: {
-    fee?: { min: string; max: string };
-    area?: { min: string; max: string };
-    rate?: Rate;
-    equipment?: Equipment[];
-    prefecture?: string;
-    city?: string;
+    option?: {
+      fee?: { min: string; max: string };
+      area?: { min: string; max: string };
+      rate?: Rate;
+      equipment?: Equipment[];
+      prefecture?: string;
+      city?: string;
+    };
   }) => void;
   goBackNavigationHandler: () => void;
 };
@@ -328,18 +325,20 @@ const FilterRentalTemplate = memo(
                 colorScheme="brand"
                 onPress={handleSubmit((data) => {
                   rentalGridNavigationHandler({
-                    fee: {
-                      min: data.fee.min ?? "0",
-                      max: data.fee.max ?? "999999",
+                    option: {
+                      fee: {
+                        min: data.fee.min ?? "0",
+                        max: data.fee.max ?? "999999",
+                      },
+                      area: {
+                        min: data.area.min ?? "0",
+                        max: data.area.max ?? "999999",
+                      },
+                      rate: rate === "all" ? undefined : rate,
+                      prefecture:
+                        prefecture.id === -1 ? undefined : prefecture.name,
+                      city: city.id === -1 ? undefined : city.name,
                     },
-                    area: {
-                      min: data.area.min ?? "0",
-                      max: data.area.max ?? "999999",
-                    },
-                    rate: rate === "all" ? undefined : rate,
-                    prefecture:
-                      prefecture.id === -1 ? undefined : prefecture.name,
-                    city: city.id === -1 ? undefined : city.name,
                   });
                 })}
               >
@@ -353,21 +352,8 @@ const FilterRentalTemplate = memo(
                 colorScheme="brand"
                 variant="outline"
                 borderColor="brand.600"
-                onPress={handleSubmit((data) => {
-                  rentalGridNavigationHandler({
-                    fee: {
-                      min: data.fee.min ?? "0",
-                      max: data.fee.max ?? "999999",
-                    },
-                    area: {
-                      min: data.area.min ?? "0",
-                      max: data.area.max ?? "999999",
-                    },
-                    rate: rate === "all" ? undefined : rate,
-                    prefecture:
-                      prefecture.id === -1 ? undefined : prefecture.name,
-                    city: city.id === -1 ? undefined : city.name,
-                  });
+                onPress={handleSubmit(() => {
+                  rentalGridNavigationHandler({option: undefined});
                 })}
               >
                 <Text bold color="brand.600" fontSize="md">

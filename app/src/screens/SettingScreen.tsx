@@ -153,8 +153,8 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
     navigation.navigate("Notification");
   }, []);
 
-  const postProfileNavigationHandler = useCallback(() => {
-    navigation.navigate("PostProfile");
+  const editProfileNavigationHandler = useCallback(() => {
+    navigation.navigate("EditProfile");
   }, []);
 
   const postRentalNavigationHandler = useCallback(() => {
@@ -201,7 +201,7 @@ const SettingScreen = ({ navigation }: SettingStackScreenProps<"Setting">) => {
       isLoadingSignOut={isLoadingSignOut}
       notificationNavigationHandler={notificationNavigationHandler}
       postRentalNavigationHandler={postRentalNavigationHandler}
-      postProfileNavigationHandler={postProfileNavigationHandler}
+      editProfileNavigationHandler={editProfileNavigationHandler}
       rentalListNavigationHandler={rentalListNavigationHandler}
       likeListNavigationHandler={likeListNavigationHandler}
       paymentNavigationHandler={paymentNavigationHandler}

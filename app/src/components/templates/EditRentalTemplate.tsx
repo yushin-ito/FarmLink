@@ -104,7 +104,7 @@ const EditRentalTemplate = ({
       setValue("name", rental.name);
       setValue("description", rental.description);
       setValue("fee", rental.fee.toString());
-      rental.equipment && setValue("equipment", rental.equipment);
+      rental.equipment && setValue("equipment", rental.equipment[0]);
       rental.area && setValue("area", rental.area.toString());
       setRate(rental.rate as Rate);
     }

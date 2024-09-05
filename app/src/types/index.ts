@@ -145,7 +145,7 @@ export type SettingStackParamList = {
   Setting: undefined;
   RentalList: undefined;
   PostRental: undefined;
-  PostProfile: undefined;
+  EditProfile: undefined;
   LikeList: undefined;
   Payment: undefined;
   Notification: undefined;

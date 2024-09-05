@@ -53,6 +53,7 @@ const PostCommunityScreen = ({
           description,
           category,
           ownerId: user.userId,
+          memberIds: [],
           color: `hsl(${Math.floor(Math.random() * 360)}, 60%, 60%)`,
         });
       }
