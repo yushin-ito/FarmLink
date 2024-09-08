@@ -1,8 +1,9 @@
-import React from "react";
+import React, { ReactNode, useState } from "react";
 import { LogBox } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import * as Splash from "expo-splash-screen";
 import {
   extendTheme,
   ColorMode,
@@ -15,11 +16,12 @@ import "./i18n";
 import RootComponent from "./components/RootComponent";
 import { AuthProvider } from "./contexts/AuthProvider";
 import useColorScheme from "./hooks/sdk/useColorScheme";
+import SplashScreen from "./screens/SplashScreen";
 
 LogBox.ignoreAllLogs();
-// Splash.preventAutoHideAsync();
+Splash.preventAutoHideAsync();
 
-/*const AppLoader = ({ children }: { children: ReactNode }) => {
+const AppLoader = ({ children }: { children: ReactNode }) => {
   const [isReady, setIsReady] = useState(false);
 
   if (isReady) {
@@ -27,7 +29,7 @@ LogBox.ignoreAllLogs();
   }
 
   return <SplashScreen setIsReady={setIsReady} />;
-};*/
+};
 
 const App = () => {
   const theme = extendTheme({
@@ -84,9 +86,11 @@ const App = () => {
   return (
     <NativeBaseProvider theme={theme} colorModeManager={colorModeManager}>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <RootComponent />
-        </AuthProvider>
+        <AppLoader>
+          <AuthProvider>
+            <RootComponent />
+          </AuthProvider>
+        </AppLoader>
       </QueryClientProvider>
     </NativeBaseProvider>
   );

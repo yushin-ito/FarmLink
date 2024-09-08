@@ -131,7 +131,7 @@ const ChatBar = memo(
                   icon={
                     <Icon
                       as={<Ionicons />}
-                      name="ios-send"
+                      name="send"
                       size="6"
                       color="brand.600"
                       opacity={isLoading ? 0.5 : 1}

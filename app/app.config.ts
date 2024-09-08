@@ -17,6 +17,8 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
   ...config,
   name: "FarmLink",
   slug: "FarmLink",
+  currentFullName: "@farmlink/FarmLink",
+  originalFullName: "@farmlink/FarmLink",
   scheme: "farmlink",
   owner: "farmlink",
   version: "1.0.0",
@@ -27,6 +29,8 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
   userInterfaceStyle: "automatic",
   assetBundlePatterns: ["**/*"],
   updates: {
+    fallbackToCacheTimeout: 0,
+    checkAutomatically: "ON_ERROR_RECOVERY",
     url: "https://u.expo.dev/df9e736c-f430-41d3-9968-20058477c49c",
   },
   runtimeVersion: {
@@ -41,7 +45,9 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
       googleMapsApiKey: process.env.GOOGLE_MAP_KEY_IOS,
     },
     splash: {
-      backgroundColor: "#ffffff",
+      backgroundColor: "#75a43b",
+      image: "./assets/splash.png",
+      resizeMode: "cover",
       dark: {
         backgroundColor: "#171717",
       },
@@ -66,7 +72,9 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
       },
     },
     splash: {
-      backgroundColor: "#ffffff",
+      backgroundColor: "#75a43b",
+      image: "./assets/splash.png",
+      resizeMode: "cover",
       dark: {
         backgroundColor: "#171717",
       },
@@ -77,6 +85,8 @@ export default ({ config }: ConfigContext): ExtendedExpoConfig => ({
     "expo-image-picker",
     "expo-location",
     "expo-media-library",
+    "expo-asset",
+    "expo-secure-store",
     [
       "@stripe/stripe-react-native",
       {

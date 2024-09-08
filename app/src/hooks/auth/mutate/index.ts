@@ -43,6 +43,8 @@ const signInWithProvider = async (provider: string) => {
     projectNameForProxy: "farmlink",
   });
 
+  // console.log(redirectUrl);
+
   const authResponse = await startAsync({
     authUrl: `${supabaseUrl}/auth/v1/authorize?provider=${provider}&redirect_to=${redirectUrl}`,
     returnUrl: redirectUrl,
