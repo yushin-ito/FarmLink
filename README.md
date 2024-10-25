@@ -1,4 +1,4 @@
-<img src="https://github.com/yushin-ito/farmlink/assets/75526539/4223d233-95f3-4d54-8424-b5f6d42c176a" >
+
 
 <div align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-red.svg">
