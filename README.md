@@ -16,7 +16,7 @@ FarmLink は <strong>「人と人を農業でつなぐ」</strong>ことをコ�
 
 <br>
 
-<h2>👀 Members</h2>
+<h2>👀 Author</h2>
 <a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
 <a href="https://github.com/chibana-kit"><img src="https://avatars.githubusercontent.com/u/108317630?v=4" width="64px"></a>
 <a href="https://github.com/r02i31"><img src="https://avatars.githubusercontent.com/u/108317588?v=4" width="64px"></a>
