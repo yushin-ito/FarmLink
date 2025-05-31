@@ -33,6 +33,8 @@ FarmLink は <strong>「人と人を農業でつなぐ」</strong>ことをコ�
 このままでは日本の食料自給率や地域経済に深刻な影響を及ぼす可能性があります。
 このような現状の裏には、いくつもの問題が絡み合っています。
 
+<br>
+
 <strong>1. 農業を始めたいけど農地がない</strong> <br/>
 新規就農者にとって、農地探しのハードルがとても高く、始めたくても始められない現状があります。
 
@@ -94,7 +96,7 @@ GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
 <br>
 
 <div align="center">
-  <video controls src="https://github.com/user-attachments/assets/ab8db972-e0b6-406e-9354-379267b76e3e" muted="false"></video>
+  <video autoPlay muted loop src="https://github.com/user-attachments/assets/ab8db972-e0b6-406e-9354-379267b76e3e" muted="false"></video>
 </div>
 
 <br>
@@ -118,7 +120,7 @@ GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
 <br>
 
 <div align="center">
-  <video controls src="https://github.com/user-attachments/assets/11b0128e-9b2f-49b5-a9a5-671687209a2d" muted="false"></video>
+  <video autoPlay muted loop src="https://github.com/user-attachments/assets/11b0128e-9b2f-49b5-a9a5-671687209a2d" muted="false"></video>
 </div>
 
 <br>
@@ -150,7 +152,7 @@ GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
 <br>
 
 <div align="center">
-  <video controls src="https://github.com/user-attachments/assets/91697c9c-ad8b-425f-8511-a36fc5991193" muted="false"></video>
+  <video autoPlay muted loop src="https://github.com/user-attachments/assets/91697c9c-ad8b-425f-8511-a36fc5991193" muted="false"></video>
 </div>
 
 <br>
