@@ -96,7 +96,7 @@ GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
 <br>
 
 <div align="center">
-  <video autoPlay muted loop src="https://github.com/user-attachments/assets/ab8db972-e0b6-406e-9354-379267b76e3e" muted="false"></video>
+  <video controls src="https://github.com/user-attachments/assets/ab8db972-e0b6-406e-9354-379267b76e3e" muted="false"></video>
 </div>
 
 <br>
@@ -120,7 +120,7 @@ GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
 <br>
 
 <div align="center">
-  <video autoPlay muted loop src="https://github.com/user-attachments/assets/11b0128e-9b2f-49b5-a9a5-671687209a2d" muted="false"></video>
+  <video controls src="https://github.com/user-attachments/assets/11b0128e-9b2f-49b5-a9a5-671687209a2d" muted="false"></video>
 </div>
 
 <br>
@@ -152,7 +152,7 @@ GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
 <br>
 
 <div align="center">
-  <video autoPlay muted loop src="https://github.com/user-attachments/assets/91697c9c-ad8b-425f-8511-a36fc5991193" muted="false"></video>
+  <video controls src="https://github.com/user-attachments/assets/91697c9c-ad8b-425f-8511-a36fc5991193" muted="false"></video>
 </div>
 
 <br>
@@ -163,6 +163,17 @@ GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
 <br>
 
 <h2>🛠️ Tech Stack</h2>
+<ul>
+  <li><strong>React Native</strong></li>
+  <li><strong>Expo</strong></li>
+  <li><strong>TypeScript</strong> </li>
+  <li><strong>Supabase</strong></li>
+  <li><strong>Stripe</strong></li>
+  <li><strong>NativeBase</strong></li>
+  <li><strong>React Query</strong></li>
+  <li><strong>React Navigation</strong></li>
+  <li><strong>i18next</strong></li>
+</ul>
 
 <br>
 
