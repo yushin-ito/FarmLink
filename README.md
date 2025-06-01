@@ -1,3 +1,5 @@
+<h1>FarmLink</h1>
+
 <div align="left">
   <img src="https://img.shields.io/badge/version-1.0.0-red.svg">
   <img src="https://img.shields.io/badge/platform-ios%20|%20android-orange.svg">
@@ -14,18 +16,6 @@
 農業を始める方に、農業の知識や経験がなくても、安心して農業に始められる環境を提供します。
 FarmLink は <strong>「人と人を農業でつなぐ」</strong>ことをコンセプトに、地域社会とのつながりを深める新たなプラットフォームとして日本の農業の衰退を食い止めます。</p>
 
-<br>
-
-<h2>👀 Author</h2>
-<a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
-<a href="https://github.com/chibana-kit"><img src="https://avatars.githubusercontent.com/u/108317630?v=4" width="64px"></a>
-<a href="https://github.com/r02i31"><img src="https://avatars.githubusercontent.com/u/108317588?v=4" width="64px"></a>
-<a href="https://github.com/HipsMaro"><img src="https://avatars.githubusercontent.com/u/108317599?v=4" width="64px"></a>
-<a href="https://github.com/ihsikawa"><img src="https://avatars.githubusercontent.com/u/108317813?v=4" width="64px"></a>
-<a href="https://github.com/Keisuke373"><img src="https://avatars.githubusercontent.com/u/108318002?v=4" width="64px"></a>
-<a href="https://github.com/rikuma77"><img src="https://avatars.githubusercontent.com/u/108317556?v=4" width="64px"></a>
-
-<br>
 <br>
 
 <h2>🔍 Background</h2>
@@ -52,31 +42,6 @@ FarmLink は <strong>「人と人を農業でつなぐ」</strong>ことをコ�
 
 FarmLink は、<strong>農業における「入口」から「出口」までをシームレスに支える</strong>ことで、これらの問題を一気通貫で解決することができます。
 
-<br>
-
-<h2>🔧 Build</h2>
-<a href="https://open.vscode.dev/yushin-ito/farmlink">
-  <img src="https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc">
-</a>
-<br>
-<br>
-<ol>
-  <li>リポジトリをクローンする</li>
-  <p><pre><code>git clone https://github.com/yushin-ito/farmlink.git</code></pre></p>
-  <li>リポジトリに移動する</li>
-  <p><pre><code>cd app</code></pre></p>
-  <li>.envを作成する</li>
-  <p><pre><code>SUPABASE_URL=
-SUPABASE_KEY=
-GOOGLE_MAP_API_KEY_IOS=
-GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
-  <li>依存関係をインストールする</li>
-  <p><pre><code>npm install</code></pre></p>
-  <li>開発サーバーを起動する</li>
-  <p><pre><code>npx expo start</code></pre></p>
-</ol>
-
-<br>
 <br>
 
 <h2>🚀 Features</h2>
@@ -162,6 +127,32 @@ GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
 
 <br>
 
+<h2>🔧 Usage</h2>
+<a href="https://open.vscode.dev/yushin-ito/farmlink">
+  <img src="https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc">
+</a>
+<br>
+<br>
+<ol>
+  <li>リポジトリをクローンする</li>
+  <p><pre><code>git clone https://github.com/yushin-ito/farmlink.git</code></pre></p>
+  <li>リポジトリに移動する</li>
+  <p><pre><code>cd app</code></pre></p>
+  <li>.envを作成する</li>
+  <p><pre><code>
+    SUPABASE_URL=
+    SUPABASE_KEY=
+    GOOGLE_MAP_API_KEY_IOS=
+    GOOGLE_MAP_API_KEY_ANDROID=
+  </code></pre></p>
+  <li>依存関係をインストールする</li>
+  <p><pre><code>npm install</code></pre></p>
+  <li>開発サーバーを起動する</li>
+  <p><pre><code>npx expo start</code></pre></p>
+</ol>
+
+<br>
+
 <h2>🛠️ Tech Stack</h2>
 <ul>
   <li><strong>React Native</strong></li>
@@ -174,6 +165,17 @@ GOOGLE_MAP_API_KEY_ANDROID=</code></pre></p>
   <li><strong>React Navigation</strong></li>
   <li><strong>i18next</strong></li>
 </ul>
+
+<br>
+
+<h2>👀 Author</h2>
+<a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
+<a href="https://github.com/chibana-kit"><img src="https://avatars.githubusercontent.com/u/108317630?v=4" width="64px"></a>
+<a href="https://github.com/r02i31"><img src="https://avatars.githubusercontent.com/u/108317588?v=4" width="64px"></a>
+<a href="https://github.com/HipsMaro"><img src="https://avatars.githubusercontent.com/u/108317599?v=4" width="64px"></a>
+<a href="https://github.com/ihsikawa"><img src="https://avatars.githubusercontent.com/u/108317813?v=4" width="64px"></a>
+<a href="https://github.com/Keisuke373"><img src="https://avatars.githubusercontent.com/u/108318002?v=4" width="64px"></a>
+<a href="https://github.com/rikuma77"><img src="https://avatars.githubusercontent.com/u/108317556?v=4" width="64px"></a>
 
 <br>
 
