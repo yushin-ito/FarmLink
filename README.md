@@ -174,7 +174,7 @@ farmlink/
 
 <br>
 
-## 👀 Author
+## 🤝 Contributer
 
 <a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
 <a href="https://github.com/chibana-kit"><img src="https://avatars.githubusercontent.com/u/108317630?v=4" width="64px"></a>
