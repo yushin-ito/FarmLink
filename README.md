@@ -159,7 +159,7 @@ FarmLink は、**農業における「入口」から「出口」までをシー
 
 ```
 farmlink/
-├── assets/             # アセット
+├── assets/
 ├── src/
 │   ├── components/     # コンポーネント
 │   ├── contexts/       # コンテキスト
@@ -176,16 +176,16 @@ farmlink/
 
 ## 👀 Author
 
-[![yushin-ito](https://avatars.githubusercontent.com/u/75526539?s=48&v=4)](https://github.com/yushin-ito)
-[![chibana-kit](https://avatars.githubusercontent.com/u/108317630?v=4)](https://github.com/chibana-kit)
-[![r02i31](https://avatars.githubusercontent.com/u/108317588?v=4)](https://github.com/r02i31)
-[![HipsMaro](https://avatars.githubusercontent.com/u/108317599?v=4)](https://github.com/HipsMaro)
-[![ihsikawa](https://avatars.githubusercontent.com/u/108317813?v=4)](https://github.com/ihsikawa)
-[![Keisuke373](https://avatars.githubusercontent.com/u/108318002?v=4)](https://github.com/Keisuke373)
-[![rikuma77](https://avatars.githubusercontent.com/u/108317556?v=4)](https://github.com/rikuma77)
+<a href="https://github.com/yushin-ito"><img  src="https://avatars.githubusercontent.com/u/75526539?s=48&v=4" width="64px"></a>
+<a href="https://github.com/chibana-kit"><img src="https://avatars.githubusercontent.com/u/108317630?v=4" width="64px"></a>
+<a href="https://github.com/r02i31"><img src="https://avatars.githubusercontent.com/u/108317588?v=4" width="64px"></a>
+<a href="https://github.com/HipsMaro"><img src="https://avatars.githubusercontent.com/u/108317599?v=4" width="64px"></a>
+<a href="https://github.com/ihsikawa"><img src="https://avatars.githubusercontent.com/u/108317813?v=4" width="64px"></a>
+<a href="https://github.com/Keisuke373"><img src="https://avatars.githubusercontent.com/u/108318002?v=4" width="64px"></a>
+<a href="https://github.com/rikuma77"><img src="https://avatars.githubusercontent.com/u/108317556?v=4" width="64px"></a>
 
----
+<br>
 
-## 📜 License
+## 📜 LICENSE
 
-[MIT License](https://github.com/yushin-ito/farmlink/blob/main/LICENSE)
+[MIT LICENSE](LICENSE)
